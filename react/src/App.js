@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const user = {
   name: "bob",
@@ -81,17 +81,33 @@ function ListItems() {
   );
 }
 
-function GetData() {
-  const fetchData = async () => {
-    try {
-      const response = await fetch("/test");
-      const data = await response.json();
-      console.log(data)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  fetchData();
+function GetStrings() {
+  const [strings, setStrings] = useState([])
+  const fetchStringData = () => {
+    fetch("/url")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setStrings(data)
+      })
+  }
+
+  useEffect(() => {
+    fetchStringData()
+  }, [])
+
+  return(
+    <div>
+      {strings.length > 0 && (
+        <ul>
+          {strings.map(string => (
+            <li>{string}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export default function MyApp() {
@@ -102,7 +118,7 @@ export default function MyApp() {
       <DisplayProfile />
       <ListItems />
       <MyTwoButtons />
-      <GetData />
+      <GetStrings />
       <AboutPage />
     </div>
   );
