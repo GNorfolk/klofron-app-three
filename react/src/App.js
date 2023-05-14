@@ -3,9 +3,9 @@ import './App.css';
 import { useState, useEffect } from 'react';
 
 const user = {
-  name: "bob",
+  name: "Bob",
   imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-  imageSize: 90
+  imageSize: 180
 }
 
 const products = [
@@ -31,7 +31,10 @@ function MyButton() {
     setCount(count + 1);
   }
   return (
-    <button onClick={HandleClick}>Clicked {count} times thus far!</button>
+    <div>
+      <h1>MyButton</h1>
+      <button onClick={HandleClick}>Clicked {count} times thus far!</button>
+    </div>
   );
 }
 
@@ -42,6 +45,7 @@ function MyTwoButtons() {
   }
   return(
     <div>
+      <h1>MyTwoButtons</h1>
       <button onClick={HandleClick}>Button One Count: {count}</button>
       <button onClick={HandleClick}>Button Two Count: {count}</button>
     </div>
@@ -50,19 +54,18 @@ function MyTwoButtons() {
 
 function AboutPage() {
   return (
-    <>
-      <h1>About</h1>
+    <div>
+      <h1>AboutPage</h1>
       <p>Hello there.<br />How do you do?</p>
-    </>
+    </div>
   );
 }
 
 function DisplayProfile() {
   return (
-    <>
-      <h1>
-        {user.name}
-      </h1>
+    <div>
+      <h1>DisplayProfile</h1>
+      <h2>{user.name}</h2>
       <img 
         className="avatar" 
         src={user.imageUrl}
@@ -71,13 +74,16 @@ function DisplayProfile() {
           height: user.imageSize
         }}
       />
-    </>
+    </div>
   );
 }
 
 function ListItems() {
   return(
-    <ul>{listItems}</ul>
+    <div>
+      <h1>ListItems</h1>
+      <ul>{listItems}</ul>
+    </div>
   );
 }
 
@@ -99,6 +105,7 @@ function GetStrings() {
 
   return(
     <div>
+      <h1>GetStrings</h1>
       {strings.length > 0 && (
         <ul>
           {strings.map(string => (
@@ -128,6 +135,7 @@ function GetSingleString() {
 
   return(
     <div>
+      <h1>GetSingleString</h1>
       <p>{string}</p>
     </div>
   );
