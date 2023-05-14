@@ -73,3 +73,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Setup doc: https://www.tutorialspoint.com/reactjs/reactjs_environment_setup.htm
 - SSH key setup: https://www.baeldung.com/linux/ssh-private-key-git-command
 - React learning: https://react.dev/learn
+- Food lookup repo: https://github.com/fullstackreact/food-lookup-demo/tree/master
