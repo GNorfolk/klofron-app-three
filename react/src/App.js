@@ -102,10 +102,33 @@ function GetStrings() {
       {strings.length > 0 && (
         <ul>
           {strings.map(string => (
-            <li>{string}</li>
+            <li key={string}>{string}</li>
           ))}
         </ul>
       )}
+    </div>
+  );
+}
+
+function GetSingleString() {
+  const [string, setString] = useState('frontend response');
+  const fetchSingleString = () => {
+    fetch("/test")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setString(data);
+      })
+  }
+
+  useEffect(() => {
+    fetchSingleString()
+  })
+
+  return(
+    <div>
+      <p>{string}</p>
     </div>
   );
 }
@@ -119,6 +142,7 @@ export default function MyApp() {
       <ListItems />
       <MyTwoButtons />
       <GetStrings />
+      <GetSingleString />
       <AboutPage />
     </div>
   );
