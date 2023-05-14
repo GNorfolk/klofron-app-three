@@ -81,6 +81,19 @@ function ListItems() {
   );
 }
 
+function GetData() {
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/test");
+      const data = await response.json();
+      console.log(data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  fetchData();
+}
+
 export default function MyApp() {
   return (
     <div>
@@ -89,6 +102,7 @@ export default function MyApp() {
       <DisplayProfile />
       <ListItems />
       <MyTwoButtons />
+      <GetData />
       <AboutPage />
     </div>
   );
