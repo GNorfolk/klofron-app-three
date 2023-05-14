@@ -90,7 +90,7 @@ function ListItems() {
 function GetStrings() {
   const [strings, setStrings] = useState([])
   const fetchStringData = () => {
-    fetch("/url")
+    fetch("/users")
       .then(response => {
         return response.json()
       })
@@ -109,7 +109,7 @@ function GetStrings() {
       {strings.length > 0 && (
         <ul>
           {strings.map(string => (
-            <li key={string}>{string}</li>
+            <li key={string.id}>{string.name}: {string.email}</li>
           ))}
         </ul>
       )}
@@ -120,7 +120,7 @@ function GetStrings() {
 function GetSingleString() {
   const [string, setString] = useState('frontend response');
   const fetchSingleString = () => {
-    fetch("/test")
+    fetch("/health-check")
       .then(response => {
         return response.json()
       })
