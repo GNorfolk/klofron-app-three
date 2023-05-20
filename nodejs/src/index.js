@@ -1,9 +1,13 @@
 const express = require("express");
 const connection = require('./database.js')
+const serverless = require('serverless-http')
 
-const app = express();app.listen(3001, () => {
-  console.log("Server running on port 3001");
-});
+const app = express()
+// app.listen(3001, () => {
+//   console.log("Server running on port 3001");
+// });
+
+exports.handler = serverless(app);
 
 app.get("/health-check", (req, res, next) => {
   res.json("backend response")
@@ -19,5 +23,3 @@ app.get("/users", (req, res, next) => {
     }
   })
 })
-
-module.exports = app

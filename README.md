@@ -77,10 +77,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - AWS serverless tutorials: https://aws.amazon.com/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/
 - AWS SAM and tf: https://aws.amazon.com/blogs/compute/better-together-aws-sam-cli-and-hashicorp-terraform/
 - Lambda API repo: https://github.com/aws-samples/aws-sam-terraform-examples/tree/main/zip_based_lambda_functions/api-lambda-dynamodb-example
+- Easy how-to-deploy nodejs on lambda: https://awstip.com/deploying-express-js-in-aws-lambda-b99c99ca7ad0
 
 # Development
-How to setup a basic database:
+**How to setup a basic database:**
 - mysql.server start
 - mysql -h localhost -u root
 - CREATE TABLE `users` (`id` int(20) NOT NULL, `name` varchar(155) NOT NULL, `email` varchar(155) NOT NULL, `created_at` timestamp NOT NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 - insert into users (id, name, email) VALUES (42, 'Dwight', 'dwight@example.com');
+
+**How to create a new nodejs zip file:**
+- zip -r ../nodejs.zip .
