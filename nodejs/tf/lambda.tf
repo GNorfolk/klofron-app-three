@@ -1,10 +1,11 @@
 resource "aws_lambda_function" "main" {
-    filename = "build/publishBookReview.zip"
+    filename = "../nodejs.zip"
     handler = "index.lambda_handler"
-    runtime = "python3.8"
+    runtime = "nodejs18.x"
     function_name = "backend-service"
     role = aws_iam_role.main.arn
     timeout = 30
+    source_code_hash = filebase64sha256("../nodejs.zip")
 }
 
 resource "aws_lambda_permission" "main" {

@@ -74,6 +74,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - SSH key setup: https://www.baeldung.com/linux/ssh-private-key-git-command
 - React learning: https://react.dev/learn
 - Food lookup repo: https://github.com/fullstackreact/food-lookup-demo/tree/master
+- AWS serverless tutorials: https://aws.amazon.com/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/
+- AWS SAM and tf: https://aws.amazon.com/blogs/compute/better-together-aws-sam-cli-and-hashicorp-terraform/
+- Lambda API repo: https://github.com/aws-samples/aws-sam-terraform-examples/tree/main/zip_based_lambda_functions/api-lambda-dynamodb-example
 
 # Development
 How to setup a basic database:
