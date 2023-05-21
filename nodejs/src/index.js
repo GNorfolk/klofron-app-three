@@ -9,11 +9,11 @@ const app = express()
 
 exports.handler = serverless(app);
 
-app.get("/health-check", (req, res, next) => {
+app.get("/api/health-check", (req, res, next) => {
   res.json("backend response")
 })
 
-app.get("/users", (req, res, next) => {
+app.get("/api/users", (req, res, next) => {
   connection.query('SELECT * FROM users ORDER BY id asc', function (err, rows) {
     if (err) {
       console.log("err: ", err)

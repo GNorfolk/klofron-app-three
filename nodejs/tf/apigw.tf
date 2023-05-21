@@ -1,11 +1,11 @@
 resource "aws_apigatewayv2_api" "main" {
-    name = "backend-service"
+    name = "api"
     protocol_type = "HTTP"
 }
 
 resource "aws_apigatewayv2_stage" "main" {
     api_id = aws_apigatewayv2_api.main.id
-    name = "backend-service"
+    name = "api"
     auto_deploy = true
 }
 
@@ -16,8 +16,14 @@ resource "aws_apigatewayv2_integration" "main" {
     integration_method = "POST"
 }
 
-resource "aws_apigatewayv2_route" "main" {
+resource "aws_apigatewayv2_route" "users" {
     api_id = aws_apigatewayv2_api.main.id
     route_key = "GET /users"
+    target = "integrations/${aws_apigatewayv2_integration.main.id}"
+}
+
+resource "aws_apigatewayv2_route" "health-check" {
+    api_id = aws_apigatewayv2_api.main.id
+    route_key = "GET /health-check"
     target = "integrations/${aws_apigatewayv2_integration.main.id}"
 }

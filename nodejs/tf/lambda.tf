@@ -7,6 +7,14 @@ resource "aws_lambda_function" "main" {
     timeout = 30
     source_code_hash = filebase64sha256("../nodejs.zip")
     architectures = ["arm64"]
+    environment {
+        variables = {
+            DB_HOST = "localhost"
+            DB_USER = "root"
+            DB_PASS = "password"
+            DB_NAME = "my-database"
+        }
+    }
 }
 
 resource "aws_lambda_permission" "main" {
