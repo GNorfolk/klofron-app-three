@@ -9,7 +9,7 @@ resource "aws_lambda_function" "main" {
     architectures = ["arm64"]
     environment {
         variables = {
-            DB_HOST = "localhost"
+            DB_HOST = "react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com"
             DB_USER = "root"
             DB_PASS = "password"
             DB_NAME = "my-database"

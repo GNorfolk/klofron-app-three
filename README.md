@@ -83,6 +83,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 **How to setup a basic database:**
 - mysql.server start
 - mysql -h localhost -u root
+- create database `my-database`;
+- use my-database;
 - CREATE TABLE `users` (`id` int(20) NOT NULL, `name` varchar(155) NOT NULL, `email` varchar(155) NOT NULL, `created_at` timestamp NOT NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 - insert into users (id, name, email) VALUES (42, 'Dwight', 'dwight@example.com');
 
