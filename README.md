@@ -78,6 +78,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - AWS SAM and tf: https://aws.amazon.com/blogs/compute/better-together-aws-sam-cli-and-hashicorp-terraform/
 - Lambda API repo: https://github.com/aws-samples/aws-sam-terraform-examples/tree/main/zip_based_lambda_functions/api-lambda-dynamodb-example
 - Easy how-to-deploy nodejs on lambda: https://awstip.com/deploying-express-js-in-aws-lambda-b99c99ca7ad0
+- NextJS serverless repo: https://github.com/serverless-nextjs/serverless-next.js
 
 # Development
 **How to setup a basic database:**
