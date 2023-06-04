@@ -82,6 +82,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS startup guide: https://nextjs.org/learn/basics/create-nextjs-app
 
 # Development
+**How to setup next server:**
+- npx create-next-app@latest next --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"
+
 **How to setup a basic database:**
 - mysql.server start
 - mysql -h localhost -u root
@@ -89,6 +92,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - use my-database;
 - CREATE TABLE `users` (`id` int(20) NOT NULL, `name` varchar(155) NOT NULL, `email` varchar(155) NOT NULL, `created_at` timestamp NOT NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 - insert into users (id, name, email) VALUES (42, 'Dwight', 'dwight@example.com');
+
+**How to start next server:**
+- Next: npm run dev
+- Node: npm start
 
 **How to create a new nodejs zip file:**
 - zip -r ../nodejs.zip .
