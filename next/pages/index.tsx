@@ -41,6 +41,10 @@ export default function Home({
           ))}
         </ul>
       </section>
+      <section>
+        <h2 className={utilStyles.headingLg}>Health Check</h2>
+        <Link href={`/health-check`}>Health Check</Link>
+      </section>
     </Layout>
   )
 }
