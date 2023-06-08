@@ -1,11 +1,15 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link'
+import styles from '../../styles/healthcheck.module.css'
 
 export default function Backend({ backend }: { backend: {message: string }}) {
   return(
-    <div>
+    <div className={styles.container}>
+      <h2 className={styles.headingLg}>Health Check</h2>
       <p>Health check: {backend.message}</p>
-      <Link href="/">← Back to home</Link>
+      <div className={styles.backToHome}>
+        <Link href="/">← Back to home</Link>
+      </div>
     </div>
   )
 }
