@@ -80,6 +80,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Easy how-to-deploy nodejs on lambda: https://awstip.com/deploying-express-js-in-aws-lambda-b99c99ca7ad0
 - NextJS serverless repo: https://github.com/serverless-nextjs/serverless-next.js
 - NextJS startup guide: https://nextjs.org/learn/basics/create-nextjs-app
+- NextJS getServerSideProps guide: https://www.slingacademy.com/article/next-js-using-getserversideprops-with-typescript/#The_Code
 
 # Development
 **How to setup next server:**
