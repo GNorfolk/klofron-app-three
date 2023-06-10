@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link'
 import styles from '../../styles/users.module.css'
+import { getSomething } from '../../lib/users'
 
 export default function Users({ users }: { users: Users}) {
   return(
@@ -9,9 +10,7 @@ export default function Users({ users }: { users: Users}) {
       <ul className={styles.list}>
         {users.map(({ id, name, email }) => (
           <li className={styles.listItem} key={id}>
-            <p>ID: {id}</p>
-            <p>Name: {name}</p>
-            <p>Email: {email}</p>
+            <Link href={`/users/${id}`}>{name}: {email}</Link>
           </li>
         ))}
       </ul>
@@ -28,11 +27,8 @@ type Users = {
   email: string;
 }[]
 
-export const getServerSideProps: GetServerSideProps<{
-  users: Users;
-}> = async (context) => {
-  const res = await fetch("http://localhost:3001/api/users")
-  const users = await res.json();
+export const getServerSideProps: GetServerSideProps<{ users: Users }> = async (context) => {
+  const users = await getSomething();
   return {
     props: {
       users

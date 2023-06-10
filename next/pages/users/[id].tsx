@@ -1,37 +1,32 @@
-import Layout from '../../components/layout'
-import { getAllPostIds, getPostData } from '../../lib/posts'
-import Head from 'next/head'
-import Date from '../../components/date'
-import utilStyles from '../../styles/utils.module.css'
-import { GetStaticProps, GetStaticPaths } from 'next'
+import { getAllUserIds, getUserData } from '../../lib/users'
+import Link from 'next/link'
+import styles from '../../styles/users.module.css'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
-export default function Post({
-  postData
+export default function User({
+  userData
 }: {
-  postData: {
-    title: string
-    date: string
-    contentHtml: string
+  userData: {
+    id: string
+    name: string
+    email: string
   }
 }) {
   return (
-    <Layout>
-      <Head>
-        <title>{postData.title}</title>
-      </Head>
-      <article>
-        <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-        <div className={utilStyles.lightText}>
-          <Date dateString={postData.date} />
-        </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-      </article>
-    </Layout>
+    <div className={styles.container}>
+      <h2 className={styles.headingLg}>User Info</h2>
+      <p>ID: {userData.id}</p>
+      <p>Name: {userData.name}</p>
+      <p>Email: {userData.email}</p>
+      <div className={styles.backToHome}>
+        <Link href="/">← Back to home</Link>
+      </div>
+    </div>
   )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostIds()
+  const paths = getAllUserIds()
   return {
     paths,
     fallback: false
@@ -39,10 +34,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const postData = await getPostData(params?.id as string)
+  const userData = await getUserData(params?.id as string)
   return {
     props: {
-      postData
+      userData
     }
   }
 }
