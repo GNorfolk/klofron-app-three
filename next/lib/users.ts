@@ -16,10 +16,10 @@ export function getAllUserIds() {
 }
 
 export async function getUserData(id: string) {
-  const res = await fetch("http://localhost:3001/api/users")
-  const users = await res.json();
-  const name = "temp"
-  const email = "temp@temp.uk"
+  const res = await fetch("http://localhost:3001/api/users/get-user/" + id)
+  const user = await res.json();
+  const name = user[0].name
+  const email = user[0].email
   return {
     id, name, email
   }

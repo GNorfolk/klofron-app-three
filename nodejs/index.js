@@ -26,3 +26,25 @@ app.get("/api/users", (req, res, next) => {
     }
   })
 })
+
+app.get("/api/users/get-ids", (req, res, next) => {
+  connection.query('SELECT id FROM users ORDER BY id asc', function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      res.json(rows)
+    }
+  })
+})
+
+app.get("/api/users/get-user/:id", (req, res, next) => {
+  connection.query('SELECT * FROM users WHERE id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      res.json(rows)
+    }
+  })
+})
