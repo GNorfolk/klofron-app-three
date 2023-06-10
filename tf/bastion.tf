@@ -1,14 +1,14 @@
-resource "aws_instance" "main" {
-  ami = "ami-090b049bea4780001"
-  instance_type = "t4g.medium"
-  subnet_id = "subnet-0092be8418284d80a"
-  vpc_security_group_ids = [aws_security_group.bastion.id]
-  iam_instance_profile = aws_iam_instance_profile.bastion.id
-  user_data_base64 = "IyEvYmluL2Jhc2gKc3VkbyBhcHQgdXBkYXRlCnN1ZG8gYXB0IGluc3RhbGwgbXlzcWwtc2VydmVy"
-  tags = {
-    Name = "react-app-bastion"
-  }
-}
+# resource "aws_instance" "main" {
+#   ami = "ami-090b049bea4780001"
+#   instance_type = "t4g.medium"
+#   subnet_id = "subnet-0092be8418284d80a"
+#   vpc_security_group_ids = [aws_security_group.bastion.id]
+#   iam_instance_profile = aws_iam_instance_profile.bastion.id
+#   user_data_base64 = "IyEvYmluL2Jhc2gKc3VkbyBhcHQgdXBkYXRlCnN1ZG8gYXB0IGluc3RhbGwgbXlzcWwtc2VydmVy"
+#   tags = {
+#     Name = "react-app-bastion"
+#   }
+# }
 
 resource "aws_security_group" "bastion" {
   name = "react-app-bastion-sg"
