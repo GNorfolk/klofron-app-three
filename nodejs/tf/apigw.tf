@@ -16,14 +16,8 @@ resource "aws_apigatewayv2_integration" "main" {
     integration_method = "POST"
 }
 
-resource "aws_apigatewayv2_route" "users" {
+resource "aws_apigatewayv2_route" "proxy" {
     api_id = aws_apigatewayv2_api.main.id
-    route_key = "GET /users"
-    target = "integrations/${aws_apigatewayv2_integration.main.id}"
-}
-
-resource "aws_apigatewayv2_route" "health-check" {
-    api_id = aws_apigatewayv2_api.main.id
-    route_key = "GET /health-check"
+    route_key = "GET /{proxy+}"
     target = "integrations/${aws_apigatewayv2_integration.main.id}"
 }
