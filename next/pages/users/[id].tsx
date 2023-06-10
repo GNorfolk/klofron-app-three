@@ -15,6 +15,7 @@ export default function User({
   return (
     <div className={styles.container}>
       <h2 className={styles.headingLg}>User Info</h2>
+      <Link href={`/users`}>← User List</Link>
       <p>ID: {userData.id}</p>
       <p>Name: {userData.name}</p>
       <p>Email: {userData.email}</p>
