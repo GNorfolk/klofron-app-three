@@ -5,7 +5,7 @@ export async function getSomething() {
 }
 
 export function getAllUserIds() {
-  const tmpIds = ["12", "42"]
+  const tmpIds = ["42", "420"]
   return tmpIds.map(tmpId => {
     return {
       params: {
