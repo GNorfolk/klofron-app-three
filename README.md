@@ -101,3 +101,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 **How to create a new nodejs zip file:**
 - zip -r ../nodejs.zip .
 - zip -r ../react.zip .
+
+**How to deploy CFN app:**
+- aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-react-app --output-template-file packaged-template.yaml
+- aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
