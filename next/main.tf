@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-east-1"
 }
 
 terraform {
@@ -11,12 +11,13 @@ terraform {
 }
 
 resource "aws_lambda_function" "this" {
-  s3_bucket = "klofron-react-app"
+  s3_bucket = aws_s3_bucket.deployment.id
   s3_key = aws_s3_object.this.id
   function_name = "react-app-serverlessFunction-6gLfMjRn66wm"
   role = aws_iam_role.this.arn
   handler = "index.handler"
   runtime = "nodejs16.x"
+  publish = true
 }
 
 resource "aws_iam_role" "this" {
@@ -29,15 +30,54 @@ resource "aws_iam_role" "this" {
         Effect = "Allow"
         Sid    = ""
         Principal = {
-          Service = "lambda.amazonaws.com"
+          "Service": [
+            "lambda.amazonaws.com",
+            "edgelambda.amazonaws.com"
+          ]
         }
       },
     ]
   })
 }
 
+resource "aws_s3_bucket_policy" "this" {
+  bucket = aws_s3_bucket.this.id
+  policy = data.aws_iam_policy_document.this.json
+}
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.this.iam_arn]
+    }
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${aws_s3_bucket.this.arn}/*"
+    ]
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket = aws_s3_bucket.this.id
+  block_public_acls = false
+  block_public_policy = false
+  ignore_public_acls = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket" "deployment" {
+  bucket = "klofron-nextjs-deployment"
+}
+
+resource "aws_s3_bucket" "this" {
+  bucket = "klofron-nextjs-app"
+}
+
 resource "aws_s3_object" "this" {
-  bucket = "klofron-react-app"
+  bucket = aws_s3_bucket.deployment.id
   key = "react-app.zip"
   source = data.archive_file.this.output_path
   source_hash = filemd5(data.archive_file.this.output_path)
@@ -53,4 +93,57 @@ data "archive_file" "this" {
   output_file_mode = "0666"
   output_path = "react-app.zip"
   source_dir = ".serverless_nextjs/default-lambda"
+}
+
+resource "aws_cloudfront_origin_access_identity" "this" {}
+
+resource "aws_cloudfront_origin_access_control" "this" {
+  name = "react-app"
+  origin_access_control_origin_type = "s3"
+  signing_behavior = "always"
+  signing_protocol = "sigv4"
+}
+
+resource "aws_cloudfront_distribution" "this" {
+  enabled = true
+  price_class = "PriceClass_100"
+
+  origin {
+    domain_name              = aws_s3_bucket.this.bucket_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.this.id
+    origin_id                = aws_cloudfront_origin_access_identity.this.id
+  }
+
+  default_cache_behavior {
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    compress = false
+    min_ttl = 0
+    default_ttl = 3600
+    max_ttl = 86400
+    forwarded_values {
+      query_string = true
+      headers = ["Origin"]
+      cookies {
+        forward = "all"
+      }
+    }
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = aws_lambda_function.this.qualified_arn
+    }
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+      locations = []
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
 }

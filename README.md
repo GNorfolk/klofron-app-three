@@ -101,6 +101,15 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 **How to create a new nodejs zip file:**
 - zip -r nodejs.zip .
 
+**How to deploy nextjs app:**
+- npm install
+- npm run deploy
+- terraform init
+- terraform apply -auto-approve
+- aws s3 sync --acl private .next/serverless/pages/ s3://klofron-nextjs-app/static-pages/
+- aws s3 sync --acl private .next/static/ s3://klofron-nextjs-app/_next/static/
+- aws s3 sync --acl private public/ s3://klofron-nextjs-app/public/
+
 **How to deploy CFN app:**
-- aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-react-app --output-template-file packaged-template.yaml
+- aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
