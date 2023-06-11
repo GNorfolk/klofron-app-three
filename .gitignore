@@ -35,8 +35,10 @@
 # local env files
 .env*.local
 
-# vercel
+# deployment
 .vercel
+.serverless
+.serverless_nextjs
 
 # typescript
 *.tsbuildinfo
