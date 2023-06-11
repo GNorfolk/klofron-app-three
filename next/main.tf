@@ -10,8 +10,6 @@ terraform {
   }
 }
 
-
-
 resource "aws_lambda_function" "this" {
   s3_bucket = "klofron-react-app"
   s3_key = aws_s3_object.this.id
@@ -19,9 +17,6 @@ resource "aws_lambda_function" "this" {
   role = aws_iam_role.this.arn
   handler = "index.handler"
   runtime = "nodejs16.x"
-  tags = {
-    "lambda:createdBy" = "SAM"
-  }
 }
 
 resource "aws_iam_role" "this" {
@@ -39,15 +34,11 @@ resource "aws_iam_role" "this" {
       },
     ]
   })
-
-  tags = {
-    "lambda:createdBy" = "SAM"
-  }
 }
 
 resource "aws_s3_object" "this" {
   bucket = "klofron-react-app"
-  key = "${formatdate("YYYYMMDDhhmmss", timestamp())}.zip"
+  key = "react-app.zip"
   source = data.archive_file.this.output_path
   source_hash = filemd5(data.archive_file.this.output_path)
   bucket_key_enabled = false
@@ -60,6 +51,6 @@ resource "aws_s3_object" "this" {
 data "archive_file" "this" {
   type = "zip"
   output_file_mode = "0666"
-  output_path = "${formatdate("YYYYMMDDhhmmss", timestamp())}.zip"
+  output_path = "react-app.zip"
   source_dir = ".serverless_nextjs/default-lambda"
 }
