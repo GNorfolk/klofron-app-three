@@ -10,7 +10,7 @@ export default function Users({ users }: { users: Users}) {
       <ul className={styles.list}>
         {users.map(({ id, name, email }) => (
           <li className={styles.listItem} key={id}>
-            <Link href={`/users/${id}`}>{name}: {email}</Link>
+            <Link href={`/users/${id}`}>{name}</Link>: {email}
           </li>
         ))}
       </ul>
