@@ -68,6 +68,20 @@ resource "aws_s3_bucket_public_access_block" "this" {
   restrict_public_buckets = false
 }
 
+resource "aws_s3_bucket_website_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+  index_document {
+    suffix = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "this" {
+  bucket = aws_s3_bucket.this.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket" "deployment" {
   bucket = "klofron-nextjs-deployment"
 }
@@ -110,19 +124,21 @@ resource "aws_cloudfront_distribution" "this" {
 
   origin {
     domain_name              = aws_s3_bucket.this.bucket_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.this.id
     origin_id                = aws_cloudfront_origin_access_identity.this.id
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
+    }
   }
 
   default_cache_behavior {
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods = ["GET", "HEAD"]
     cached_methods = ["GET", "HEAD"]
     target_origin_id = aws_cloudfront_origin_access_identity.this.id
     compress = false
     min_ttl = 0
     default_ttl = 3600
-    max_ttl = 86400
+    max_ttl = 31536000
     forwarded_values {
       query_string = true
       headers = ["Origin"]
@@ -133,6 +149,60 @@ resource "aws_cloudfront_distribution" "this" {
     lambda_function_association {
       event_type = "origin-request"
       lambda_arn = aws_lambda_function.this.qualified_arn
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern = "_next/*"
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    min_ttl = 86400
+    default_ttl = 86400
+    max_ttl = 86400
+    compress = true
+    viewer_protocol_policy = "https-only"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern = "static/*"
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    min_ttl = 86400
+    default_ttl = 86400
+    max_ttl = 86400
+    compress = true
+    viewer_protocol_policy = "https-only"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern = "tests/*"
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    min_ttl = 0
+    default_ttl = 0
+    max_ttl = 0
+    compress = false
+    viewer_protocol_policy = "https-only"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
     }
   }
 
