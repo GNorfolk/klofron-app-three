@@ -107,7 +107,7 @@ data "archive_file" "this" {
   type = "zip"
   output_file_mode = "0666"
   output_path = "react-app.zip"
-  source_dir = ".serverless_nextjs/default-lambda"
+  source_dir = "../.serverless_nextjs/default-lambda"
 }
 
 resource "aws_cloudfront_origin_access_identity" "this" {}

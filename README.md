@@ -107,8 +107,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ```bash
 npm install
 npm run deploy
-terraform init
-terraform apply -auto-approve
+terraform -chdir=tf init
+terraform -chdir=tf apply -auto-approve
 aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-nextjs-app/
 ```
 
