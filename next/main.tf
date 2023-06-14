@@ -18,6 +18,7 @@ resource "aws_lambda_function" "this" {
   handler = "index.handler"
   runtime = "nodejs16.x"
   publish = true
+  source_code_hash = data.archive_file.this.output_base64sha256
 }
 
 resource "aws_iam_role" "this" {
