@@ -81,6 +81,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS serverless repo: https://github.com/serverless-nextjs/serverless-next.js
 - NextJS startup guide: https://nextjs.org/learn/basics/create-nextjs-app
 - NextJS getServerSideProps guide: https://www.slingacademy.com/article/next-js-using-getserversideprops-with-typescript/#The_Code
+- Image processing docs: https://aws.amazon.com/blogs/networking-and-content-delivery/image-optimization-using-amazon-cloudfront-and-aws-lambda/
+- Image processing repo: https://github.com/aws-samples/image-optimization
 
 # Development
 **How to setup next server:**
@@ -102,13 +104,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - zip -r nodejs.zip .
 
 **How to deploy nextjs app:**
-- npm install
-- npm run deploy
-- terraform init
-- terraform apply -auto-approve
-- aws s3 sync --acl private .next/serverless/pages/ s3://klofron-nextjs-app/static-pages/
-- aws s3 sync --acl private .next/static/ s3://klofron-nextjs-app/_next/static/
-- aws s3 sync --acl private public/ s3://klofron-nextjs-app/public/
+```bash
+npm install
+npm run deploy
+terraform init
+terraform apply -auto-approve
+aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-nextjs-app/
+```
 
 **How to deploy CFN app:**
 - aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
