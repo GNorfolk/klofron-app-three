@@ -107,9 +107,11 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ```bash
 npm install
 npm run deploy
+cp -R .next/serverless/ .serverless_nextjs/default-lambda/
 terraform -chdir=tf init
 terraform -chdir=tf apply -auto-approve
 aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-nextjs-app/
+rm -rf .next .serverless* node_modules tf/.terraform* tf/react-app.zip next-env.d.ts package-lock.json
 ```
 
 **How to deploy CFN app:**
