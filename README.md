@@ -83,6 +83,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS getServerSideProps guide: https://www.slingacademy.com/article/next-js-using-getserversideprops-with-typescript/#The_Code
 - Image processing docs: https://aws.amazon.com/blogs/networking-and-content-delivery/image-optimization-using-amazon-cloudfront-and-aws-lambda/
 - Image processing repo: https://github.com/aws-samples/image-optimization
+- NextJS serverless CDK code: https://github.com/serverless-nextjs/serverless-next.js/blob/master/packages/libs/lambda/src/deploy/cdktf/nextJsLambdaApp.ts
 
 # Development
 **How to setup next server:**
