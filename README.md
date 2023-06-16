@@ -105,7 +105,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 **How to deploy nextjs app:**
 ```bash
-rm -rf .next .serverless* node_modules tf/image/node_modules tf/.terraform* tf/react-app.zip tf/index.zip next-env.d.ts package-lock.json tf/image/package-lock.json
+rm -rf .next .serverless* node_modules tf/image/node_modules tf/.terraform tf/.terraform.lock.hcl tf/react-app.zip tf/index.zip next-env.d.ts package-lock.json tf/image/package-lock.json
 npm install
 npm run deploy
 npm --prefix tf/image install --platform=linux --arch=x64 tf/image
