@@ -105,13 +105,15 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 **How to deploy nextjs app:**
 ```bash
+rm -rf .next .serverless* node_modules tf/image/node_modules tf/.terraform* tf/react-app.zip tf/index.zip next-env.d.ts package-lock.json tf/image/package-lock.json
 npm install
 npm run deploy
+npm --prefix tf/image install --platform=linux --arch=x64 tf/image
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/
 terraform -chdir=tf init
 terraform -chdir=tf apply -auto-approve
 aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-nextjs-app/
-rm -rf .next .serverless* node_modules tf/.terraform* tf/react-app.zip next-env.d.ts package-lock.json
+aws s3 sync --acl private .serverless_nextjs/assets/public/images/ s3://klofron-nextjs-image-original/images/
 ```
 
 **How to deploy CFN app:**

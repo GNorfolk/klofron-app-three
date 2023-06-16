@@ -88,14 +88,15 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy = "redirect-to-https"
     forwarded_values {
       query_string = true
+      headers = []
       cookies {
-        forward = "none"
+        forward = "all"
       }
     }
-    # lambda_function_association {
-    #   event_type = "viewer-request"
-    #   lambda_arn = "${aws_cloudfront_function.this.arn}:1"
-    # }
+    function_association {
+      event_type = "viewer-request"
+      function_arn = aws_cloudfront_function.this.arn
+    }
   }
 
   ordered_cache_behavior {

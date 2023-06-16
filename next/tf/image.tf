@@ -5,6 +5,7 @@ resource "aws_lambda_function" "image" {
   handler = "index.handler"
   runtime = "nodejs16.x"
   timeout = 60
+  source_code_hash = data.archive_file.image.output_base64sha256
   environment {
     variables = {
       originalImageBucketName = aws_s3_bucket.original.id
@@ -23,7 +24,7 @@ resource "aws_lambda_function_url" "image" {
 
 data "archive_file" "image" {
   type = "zip"
-  source_file = "index.js"
+  source_dir = "image/"
   output_path = "index.zip"
 }
 
@@ -101,5 +102,5 @@ resource "aws_cloudfront_function" "this" {
   name = "url-rewrite"
   runtime = "cloudfront-js-1.0"
   publish = true
-  code = file("${path.module}/url-rewrite.js")
+  code = file("${path.module}/image/url-rewrite.js")
 }
