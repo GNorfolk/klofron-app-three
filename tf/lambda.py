@@ -1,11 +1,11 @@
 import json
 import boto3
 
-def lambda_handler(event, context):
-    the_thing()
+def handler(event, context):
+    body = the_thing()
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'body': body
     }
 
 def the_thing():
@@ -13,3 +13,6 @@ def the_thing():
     db = rds.describe_db_instances()['DBInstances'][0]
     if (db['DBInstanceStatus'] != 'stopped'):
         rds.stop_db_instance(DBInstanceIdentifier = db['DBInstanceIdentifier'])
+        return json.dumps('RDS stopping!')
+    else:
+        return json.dumps('RDS already stopped!')
