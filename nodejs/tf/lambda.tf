@@ -1,11 +1,11 @@
 resource "aws_lambda_function" "main" {
-    filename = "../nodejs.zip"
+    filename = data.archive_file.this.output_path
     handler = "index.handler"
     runtime = "nodejs18.x"
     function_name = "backend-service"
     role = aws_iam_role.main.arn
     timeout = 30
-    source_code_hash = filebase64sha256("../nodejs.zip")
+    source_code_hash = data.archive_file.this.output_base64sha256
     architectures = ["arm64"]
     vpc_config {
         subnet_ids         = [data.aws_subnet.main.id]
@@ -19,6 +19,13 @@ resource "aws_lambda_function" "main" {
             DB_NAME = "my-database"
         }
     }
+}
+
+data "archive_file" "this" {
+  type = "zip"
+  source_dir = ".."
+  output_path = "../nodejs.zip"
+  excludes = ["package.json", "package-lock.json", "nodejs.zip", "tf"]
 }
 
 data "aws_secretsmanager_secret" "rds" {

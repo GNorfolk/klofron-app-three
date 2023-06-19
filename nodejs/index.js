@@ -17,7 +17,7 @@ app.get("/api/health-check", (req, res, next) => {
 })
 
 app.get("/api/users", (req, res, next) => {
-  connection.query('SELECT * FROM users ORDER BY id asc', function (err, rows) {
+  connection.query('SELECT * FROM users', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -28,7 +28,7 @@ app.get("/api/users", (req, res, next) => {
 })
 
 app.get("/api/users/get-ids", (req, res, next) => {
-  connection.query('SELECT id FROM users ORDER BY id asc', function (err, rows) {
+  connection.query('SELECT id FROM users', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
