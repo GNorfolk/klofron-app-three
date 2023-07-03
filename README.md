@@ -86,6 +86,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS serverless CDK code: https://github.com/serverless-nextjs/serverless-next.js/blob/master/packages/libs/lambda/src/deploy/cdktf/nextJsLambdaApp.ts
 
 # Development
+**How to clone repo**:
+- git clone git@github-personal:GNorfolk/klofron-app-three.git
+Source: https://docs.github.com/en/repositories/creating-and-managing-repositories/duplicating-a-repository
+
 **How to setup next server:**
 - npx create-next-app@latest next --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"
 
