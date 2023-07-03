@@ -1,40 +1,6 @@
 export async function getSomething() {
-  // const res = await fetch("http://localhost:3001/api/users")
-  // const people = await res.json();
-  let people = [
-    {
-      "id":1,
-      "name":"Jim",
-      "family":"Halpert",
-      "gender": "male",
-      "age": "42",
-      "created_at":"2023-05-14T20:56:31.000Z"
-    },
-    {
-      "id":2,
-      "name":"Pam",
-      "email":"Halpert",
-      "gender": "female",
-      "age": "39",
-      "created_at":"2023-05-14T21:32:23.000Z"
-    },
-    {
-      "id":3,
-      "name":"Cecelia",
-      "email":"Halpert",
-      "gender": "female",
-      "age": "5",
-      "created_at":"2023-05-14T21:32:23.000Z"
-    },
-    {
-      "id":4,
-      "name":"Phillip",
-      "email":"Halpert",
-      "gender": "male",
-      "age": "2",
-      "created_at":"2023-05-14T21:32:23.000Z"
-    }
-  ]
+  const res = await fetch("http://localhost:3001/api/people")
+  const people = await res.json();
   return(people);
 }
 
