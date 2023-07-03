@@ -18,8 +18,9 @@ export default function Backend({ backend }: { backend: {message: string }}) {
 export const getServerSideProps: GetServerSideProps<{
   backend: {message: string };
 }> = async (context) => {
-  const res = await fetch("https://86tcye7aek.execute-api.eu-west-1.amazonaws.com/api/health-check")
+  const res = await fetch("http://localhost:3001/api/health-check")
   const data = await res.json();
+  // let data = null
   let backend:{message: string};
   if (data == null) {
     backend = { message: "frontend response" }
