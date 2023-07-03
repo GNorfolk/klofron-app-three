@@ -94,12 +94,17 @@ Source: https://docs.github.com/en/repositories/creating-and-managing-repositori
 - npx create-next-app@latest next --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"
 
 **How to setup a basic database:**
-- mysql.server start
-- mysql -h localhost -u root
-- create database `my-database`;
-- use my-database;
-- CREATE TABLE `users` (`id` int(20) NOT NULL, `name` varchar(155) NOT NULL, `email` varchar(155) NOT NULL, `created_at` timestamp NOT NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-- insert into users (id, name, email) VALUES (42, 'Dwight', 'dwight@example.com');
+```SQL
+mysql.server start
+mysql -h localhost -u root
+create database `klofron-app-three`;
+use klofron-app-three;
+CREATE TABLE `people` (`id` int(20) NOT NULL, `name` varchar(155) NOT NULL, `family` varchar(155) NOT NULL, `gender` varchar(155) NOT NULL, `age` varchar(155) NOT NULL, `created_at` timestamp NOT NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+insert into people (id, name, family, gender, age) VALUES (1, 'Jim', 'Halpert', 'male', "42");
+insert into people (id, name, family, gender, age) VALUES (2, 'Pam', 'Halpert', 'female', "39");
+insert into people (id, name, family, gender, age) VALUES (3, 'Cecelia', 'Halpert', 'female', "5");
+insert into people (id, name, family, gender, age) VALUES (4, 'Phillip', 'Halpert', 'male', "2");
+```
 
 **How to start next server:**
 - Next: npm run dev
