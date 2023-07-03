@@ -28,11 +28,14 @@ app.get("/api/users", (req, res, next) => {
 })
 
 app.get("/api/people", (req, res, next) => {
-  connection.query('SELECT * FROM people', function (err, rows) {
+  connection.query('SELECT * FROM person', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
+      rows.map(function(row) {
+        row['age'] = 12;
+      });
       res.json(rows)
     }
   })
