@@ -99,11 +99,34 @@ mysql.server start
 mysql -h localhost -u root
 create database `klofron-app-three`;
 use klofron-app-three;
-CREATE TABLE `people` (`id` int(20) NOT NULL, `name` varchar(155) NOT NULL, `family` varchar(155) NOT NULL, `gender` varchar(155) NOT NULL, `age` varchar(155) NOT NULL, `created_at` timestamp NOT NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into people (id, name, family, gender, age) VALUES (1, 'Jim', 'Halpert', 'male', "42");
-insert into people (id, name, family, gender, age) VALUES (2, 'Pam', 'Halpert', 'female', "39");
-insert into people (id, name, family, gender, age) VALUES (3, 'Cecelia', 'Halpert', 'female', "5");
-insert into people (id, name, family, gender, age) VALUES (4, 'Phillip', 'Halpert', 'male', "2");
+CREATE TABLE `family` (
+    `id` int(20) primary key NOT NULL AUTO_INCREMENT,
+    `name` varchar(155) NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+insert into family (name) VALUES ('Halpert');
+CREATE TABLE `household` (
+    `id` int(20) primary key NOT NULL AUTO_INCREMENT,
+    `name` varchar(155) NOT NULL,
+    `family_id` int(20) NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+    FOREIGN KEY (`family_id`) REFERENCES family(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+insert into household (name, family_id) VALUES ('The Office', 1);
+CREATE TABLE `person` (
+    `id` int(20) primary key NOT NULL AUTO_INCREMENT,
+    `name` varchar(155) NOT NULL,
+    `family_id` int(20) NOT NULL,
+    `gender` varchar(155) NOT NULL,
+    `household_id` int(20) NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+    FOREIGN KEY (`family_id`) REFERENCES family(`id`),
+    FOREIGN KEY (`household_id`) REFERENCES household(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Jim', 1, 'male', 1, date_sub(now(), interval 42 day));
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Pam', 1, 'female', 1, date_sub(now(), interval 39 day));
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Cecelia', 1, 'female', 1, date_sub(now(), interval 5 day));
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Phillip', 1, 'male', 1, date_sub(now(), interval 2 day));
 ```
 
 **How to start next server:**
