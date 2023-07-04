@@ -1,5 +1,5 @@
 export async function getSomething() {
-  const res = await fetch("http://localhost:3001/api/people")
+  const res = await fetch("http://localhost:3001/api/people/list-people")
   const people = await res.json();
   return(people);
 }
