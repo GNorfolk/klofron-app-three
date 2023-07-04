@@ -8,9 +8,9 @@ export default function People({ people }: { people: People}) {
     <div className={styles.container}>
       <h2 className={styles.headingLg}>People</h2>
       <ul className={styles.list}>
-        {people.map(({ id, name, gender, age }) => (
+        {people.map(({ id, name, gender, age, family_name, household_name }) => (
           <li className={styles.listItem} key={id}>
-            <p>{name} is {gender} and {age} years old.</p>
+            <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
           </li>
         ))}
       </ul>
@@ -26,6 +26,8 @@ type People = {
   name: string;
   gender: string;
   age: number;
+  family_name: string;
+  household_name: string;
 }[]
 
 export const getServerSideProps: GetServerSideProps<{ people: People }> = async (context) => {

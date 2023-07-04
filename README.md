@@ -105,6 +105,7 @@ CREATE TABLE `family` (
     `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 insert into family (name) VALUES ('Halpert');
+insert into family (name) VALUES ('Schrute');
 CREATE TABLE `household` (
     `id` int(20) primary key NOT NULL AUTO_INCREMENT,
     `name` varchar(155) NOT NULL,
@@ -113,6 +114,8 @@ CREATE TABLE `household` (
     FOREIGN KEY (`family_id`) REFERENCES family(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 insert into household (name, family_id) VALUES ('The Office', 1);
+insert into household (name, family_id) VALUES ('Jims Parents', 1);
+insert into household (name, family_id) VALUES ('Shrute Farms', 2);
 CREATE TABLE `person` (
     `id` int(20) primary key NOT NULL AUTO_INCREMENT,
     `name` varchar(155) NOT NULL,
@@ -127,6 +130,9 @@ insert into person (name, family_id, gender, household_id, created_at) VALUES ('
 insert into person (name, family_id, gender, household_id, created_at) VALUES ('Pam', 1, 'female', 1, date_sub(now(), interval 39 day));
 insert into person (name, family_id, gender, household_id, created_at) VALUES ('Cecelia', 1, 'female', 1, date_sub(now(), interval 5 day));
 insert into person (name, family_id, gender, household_id, created_at) VALUES ('Phillip', 1, 'male', 1, date_sub(now(), interval 2 day));
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Dwight', 2, 'male', 3, date_sub(now(), interval 48 day));
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Angela', 2, 'female', 3, date_sub(now(), interval 39 day));
+insert into person (name, family_id, gender, household_id, created_at) VALUES ('Philip', 2, 'male', 3, date_sub(now(), interval 2 day));
 ```
 
 **How to start next server:**
