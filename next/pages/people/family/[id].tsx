@@ -21,17 +21,20 @@ export default function Family() {
 export function listFamilyHouseholds() {
   const router = useRouter();
   if (router.isReady) {
-    const { data, error } = useSWR('/api/people/list-family-households/' + router.query.id, fetcher)
+    const { data, error } = useSWR('/api/people/describe-family-households/' + router.query.id, fetcher)
     if (error) return <div className={styles.container}>Failed to load</div>
     if (!data) return <div className={styles.container}>Loading...</div>
     return (
       <div className={styles.container}>
         <h2 className={styles.headingLg}>Household Info</h2>
-        {data.map(({ id, name, family_name }) => (
-          <li className={styles.listItem} key={id}>
-            <p>The {family_name} family own household {name}.</p>
-          </li>
-        ))}
+        <ul className={styles.list}>
+          {data.map(({ id, name, family_name, food, wood, coin }) => (
+            <li className={styles.listItem} key={id}>
+              <p>The {family_name} family own household {name}.</p>
+              <p>Household {name} holds {food} food, {wood} wood, and {coin} coin.</p>
+            </li>
+          ))}
+        </ul>
       </div>
     )
   }
@@ -47,12 +50,29 @@ export function listFamilyMembers() {
     return (
       <div className={styles.container}>
         <h2 className={styles.headingLg}>Person Info</h2>
-        {data.map(({ id, name, family_name, gender, age, household_name }) => (
-          <li className={styles.listItem} key={id}>
-            <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
-          </li>
-        ))}
+        <ul className={styles.list}>
+          {data.map(({ id, name, family_name, gender, age, household_name }) => (
+            <li className={styles.listItem} key={id}>
+              <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
+              <button onClick={handleFoodClick}>Get Food</button>
+              <button onClick={handleWoodClick}>Get Wood</button>
+              <button onClick={handleCoinClick}>Get Coin</button>
+            </li>
+          ))}
+        </ul>
       </div>
     )
   }
+}
+
+export function handleFoodClick() {
+  console.log('food')
+}
+
+export function handleWoodClick() {
+  console.log('wood')
+}
+
+export function handleCoinClick() {
+  console.log('coin')
 }
