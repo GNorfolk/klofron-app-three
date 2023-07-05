@@ -21,29 +21,13 @@ export default function Home({
         <title>{siteTitle}</title>
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>Its'a me Mario!</p>
+        <p>Welcome to the website!</p>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>{title}</Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className={utilStyles.headingLg}>Health Check</h2>
-        <Link href={`/health-check`}>Health Check</Link>
-      </section>
-      <section>
-        <h2 className={utilStyles.headingLg}>Users</h2>
-        <Link href={`/users`}>User List</Link>
+      <section className={utilStyles.headingMd}>
+        <h2 className={utilStyles.headingLg}>People</h2>
+        <Link href={`/people`}>People</Link>
+        <br />
+        <small className={utilStyles.lightText}>June 2, 2020</small>
       </section>
     </Layout>
   )
