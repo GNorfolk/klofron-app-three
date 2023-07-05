@@ -14,7 +14,8 @@
     "react-dom": "^18.2.0",
     "remark": "^14.0.3",
     "remark-html": "^15.0.2",
-    "serverless": "^1.74.1"
+    "serverless": "^1.74.1",
+    "swr": "^2.2.0"
   },
   "devDependencies": {
     "@types/node": "20.2.5",
