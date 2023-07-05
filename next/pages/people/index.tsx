@@ -1,14 +1,19 @@
-import { GetServerSideProps } from 'next';
 import Link from 'next/link'
 import styles from '../../styles/people.module.css'
-import { getSomething } from '../../lib/people'
+import useSWR from 'swr'
 
-export default function People({ people }: { people: People}) {
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
+
+export default function People() {
+  const { data, error } = useSWR('/api/people/list-people', fetcher)
+
+  if (error) return <div>Failed to load</div>
+  if (!data) return <div>Loading...</div>
   return(
     <div className={styles.container}>
       <h2 className={styles.headingLg}>People</h2>
       <ul className={styles.list}>
-        {people.map(({ id, name, gender, age, family_name, household_name }) => (
+        {data.map(({ id, name, family_name, gender, age, household_name }) => (
           <li className={styles.listItem} key={id}>
             <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
           </li>
@@ -19,22 +24,4 @@ export default function People({ people }: { people: People}) {
       </div>
     </div>
   )
-}
-
-type People = {
-  id: number;
-  name: string;
-  gender: string;
-  age: number;
-  family_name: string;
-  household_name: string;
-}[]
-
-export const getServerSideProps: GetServerSideProps<{ people: People }> = async (context) => {
-  const people = await getSomething();
-  return {
-    props: {
-      people
-    }
-  }
 }
