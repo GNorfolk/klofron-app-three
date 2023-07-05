@@ -74,6 +74,17 @@ app.get("/api/people/list-family-households/:id", (req, res, next) => {
   })
 })
 
+app.get("/api/people/describe-family-households/:id", (req, res, next) => {
+  connection.query('select household.id, household.name, family.name as family_name, household.food, household.coin, household.wood from household inner join family on family_id = family.id where household.family_id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      res.json(rows)
+    }
+  })
+})
+
 app.get("/api/people/describe-family-members/:id", (req, res, next) => {
   connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, household.name as household_name from person inner join family on person.family_id = family.id inner join household on person.household_id = household.id where person.family_id = ' + req.params.id, function (err, rows) {
     if (err) {

@@ -15,7 +15,7 @@ export default function People() {
       <ul className={styles.list}>
         {data.map(({ id, name, family_name, family_id, gender, age, household_name }) => (
           <li className={styles.listItem} key={id}>
-            <p>{name} <Link href={`/people/family/${family_id}`}>{family_name}</Link> is {gender} and {age} years old and lives at {household_name}.</p>
+            <p>{name} <Link href={`/people/family/${family_id}`}>{family_name}</Link> is {gender} and {age} years old and is part of {household_name}.</p>
           </li>
         ))}
       </ul>
