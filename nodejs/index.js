@@ -107,8 +107,15 @@ app.get("/api/people/describe-household-members/:id", (req, res, next) => {
   })
 })
 
-app.post('/api/people/hunt', function(req, res) {
-  connection.query("UPDATE household SET food = food + (?) where id = 1;", 2, function(err, result) {
+app.post('/api/people/get-food/:id', function(req, res) {
+  connection.query("UPDATE household SET food = food + (?) where id = " + req.params.id, 2, function(err, result) {
+    if(err) throw err
+  })
+  res.send("success")
+});
+
+app.post('/api/people/get-wood/:id', function(req, res) {
+  connection.query("UPDATE household SET wood = wood + 1, food = food - 1 where id = " + req.params.id, function(err, result) {
     if(err) throw err
   })
   res.send("success")
