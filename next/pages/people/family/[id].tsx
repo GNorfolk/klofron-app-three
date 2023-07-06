@@ -1,38 +1,18 @@
 import Link from 'next/link'
 import styles from '../../../styles/people.module.css'
-import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import useSWRMutation from 'swr/mutation'
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 
-async function sendRequest(url, { arg }: { arg: { username: string }}) {
-  return fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(arg)
-  }).then(res => res.json())
-}
-
-function Button() {
-  const { trigger, isMutating } = useSWRMutation('/api/people/hunt', sendRequest)
-  return (
-    <button
-      disabled={isMutating}
-      onClick={async () => {
-        try {
-          const result = await trigger({ username: 'why' })
-        } catch (e) {
-          console.log("error")
-        }
-      }}
-    >Get Food</button>
-  )
-}
+const queryClient = new QueryClient()
 
 export default function Family() {
   return (
     <div className={styles.container}>
       <Link href={`/people`}>← People List</Link>
-      {listFamilyHouseholds()}
-      {listFamilyMembers()}
+      <QueryClientProvider client={queryClient}>
+        <ListFamilyMembers />
+        <ListFamilyHouseholds />
+      </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
       </div>
@@ -40,13 +20,20 @@ export default function Family() {
   )
 }
 
-export function listFamilyHouseholds() {
+function ListFamilyHouseholds() {
   const router = useRouter()
-  const fetcher = (...args) => fetch(...args).then((res) => res.json())
   if (router.isReady) {
-    const { data, error } = useSWR('/api/people/describe-family-households/' + router.query.id, fetcher)
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['familyHouseholdData'],
+      queryFn: () =>
+        fetch('/api/people/describe-family-households/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
+
+    if (isLoading) return <div className={styles.container}>Loading...</div>
     if (error) return <div className={styles.container}>Failed to load</div>
-    if (!data) return <div className={styles.container}>Loading...</div>
+
     return (
       <div className={styles.container}>
         <h2 className={styles.headingLg}>Household Info</h2>
@@ -63,14 +50,20 @@ export function listFamilyHouseholds() {
   }
 }
 
-export function listFamilyMembers() {
-  const router = useRouter();
-  const fetcher = (...args) => fetch(...args).then((res) => res.json())
+function ListFamilyMembers() {
+  const router = useRouter()
   if (router.isReady) {
-    const { data, error } = useSWR('/api/people/describe-family-members/' + router.query.id, fetcher)
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['familyMemberData'],
+      queryFn: () =>
+        fetch('/api/people/describe-family-members/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
 
+    if (isLoading) return <div className={styles.container}>Loading...</div>
     if (error) return <div className={styles.container}>Failed to load</div>
-    if (!data) return <div className={styles.container}>Loading...</div>
+
     return (
       <div className={styles.container}>
         <h2 className={styles.headingLg}>Person Info</h2>
