@@ -84,8 +84,20 @@ function ListFamilyMembers() {
           {data.map(({ id, name, family_name, gender, age, house_name }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
-              <button onClick={() => { getFood.mutate(id) }} >Get Food</button>
-              <button onClick={() => { getWood.mutate(id) }} >Get Wood</button>
+              <button onClick={
+                () => {
+                  getFood.mutate(id, { onSuccess: (res) => {
+                    queryClient.invalidateQueries({ queryKey: ['familyHouseData'] })
+                  }})
+                }
+              } >Get Food</button>
+              <button onClick={
+                () => {
+                  getWood.mutate(id, { onSuccess: (res) => {
+                    queryClient.invalidateQueries({ queryKey: ['familyHouseData'] })
+                  }})
+                }
+              } >Get Wood</button>
             </li>
           ))}
         </ul>
