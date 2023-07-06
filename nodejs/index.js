@@ -107,6 +107,13 @@ app.get("/api/people/describe-household-members/:id", (req, res, next) => {
   })
 })
 
+app.post('/api/people/hunt', function(req, res) {
+  connection.query("UPDATE household SET food = food + (?) where id = 1;", 2, function(err, result) {
+    if(err) throw err
+  })
+  res.send("success")
+});
+
 app.get("/api/users/get-ids", (req, res, next) => {
   connection.query('SELECT id FROM users', function (err, rows) {
     if (err) {
