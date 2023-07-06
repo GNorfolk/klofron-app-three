@@ -4,6 +4,7 @@ const connection = mysql.createConnection({
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASS || "password",
   database: process.env.DB_NAME || "klofron-app-three",
+  multipleStatements: true
 })
 connection.connect((err) => {
   if (err) {

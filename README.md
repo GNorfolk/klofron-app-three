@@ -134,6 +134,7 @@ CREATE TABLE `person` (
     `family_id` int NOT NULL,
     `gender` varchar(155) NOT NULL,
     `household_id` int NOT NULL,
+    `last_action` timestamp NOT NULL DEFAULT current_timestamp(),
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`household_id`) REFERENCES household(`id`)

@@ -63,14 +63,14 @@ function ListFamilyMembers() {
     })
 
     const getFood = useMutation({
-      mutationFn: () => {
-        return axios.post('/api/people/get-food/' + router.query.id)
+      mutationFn: (id) => {
+        return axios.post('/api/people/get-food/' + id)
       },
     })
 
     const getWood = useMutation({
-      mutationFn: () => {
-        return axios.post('/api/people/get-wood/' + router.query.id)
+      mutationFn: (id) => {
+        return axios.post('/api/people/get-wood/' + id)
       },
     })
 
@@ -84,8 +84,8 @@ function ListFamilyMembers() {
           {data.map(({ id, name, family_name, gender, age, household_name }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
-              <button onClick={() => { getFood.mutate() }} >Get Food</button>
-              <button onClick={() => { getWood.mutate() }} >Get Wood</button>
+              <button onClick={() => { getFood.mutate(id) }} >Get Food</button>
+              <button onClick={() => { getWood.mutate(id) }} >Get Wood</button>
             </li>
           ))}
         </ul>

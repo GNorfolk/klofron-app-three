@@ -108,17 +108,41 @@ app.get("/api/people/describe-household-members/:id", (req, res, next) => {
 })
 
 app.post('/api/people/get-food/:id', function(req, res) {
-  connection.query("UPDATE household SET food = food + (?) where id = " + req.params.id, 2, function(err, result) {
-    if(err) throw err
+  connection.query('SELECT last_action FROM person WHERE id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      let time_delta = new Date() - new Date(rows[0].last_action)
+      if (time_delta > 480000) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE household SET food = food + 2 where id = (SELECT household_id from person where id = ' + req.params.id + ');', function(err, result) {
+          if(err) throw err
+        })
+        res.send("success")
+      } else {
+        res.send(time_delta.toString())
+      }
+    }
   })
-  res.send("success")
 });
 
 app.post('/api/people/get-wood/:id', function(req, res) {
-  connection.query("UPDATE household SET wood = wood + 1, food = food - 1 where id = " + req.params.id, function(err, result) {
-    if(err) throw err
+  connection.query('SELECT last_action FROM person WHERE id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      let time_delta = new Date() - new Date(rows[0].last_action)
+      if (time_delta > 480000) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE household SET wood = wood + 1, food = food - 1 where id = (SELECT household_id from person where id = ' + req.params.id + ');', function(err, result) {
+        if(err) throw err
+      })
+      res.send("success")
+    } else {
+      res.send(time_delta.toString())
+      }
+    }
   })
-  res.send("success")
 });
 
 app.get("/api/users/get-ids", (req, res, next) => {
