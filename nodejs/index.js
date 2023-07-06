@@ -12,21 +12,6 @@ if (process.env.ENVIRONMENT === 'local') {
   exports.handler = serverless(app);
 }
 
-app.get("/api/health-check", (req, res, next) => {
-  res.json("backend response")
-})
-
-app.get("/api/users", (req, res, next) => {
-  connection.query('SELECT * FROM users', function (err, rows) {
-    if (err) {
-      console.log("err: ", err)
-      res.json({error: err})
-    } else {
-      res.json(rows)
-    }
-  })
-})
-
 app.get("/api/people/list-people", (req, res, next) => {
   connection.query('select person.id, person.name, person.gender, person.created_at, person.family_id, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id', function (err, rows) {
     if (err) {
@@ -147,25 +132,3 @@ app.post('/api/people/get-wood/:id', function(req, res) {
     }
   })
 });
-
-app.get("/api/users/get-ids", (req, res, next) => {
-  connection.query('SELECT id FROM users', function (err, rows) {
-    if (err) {
-      console.log("err: ", err)
-      res.json({error: err})
-    } else {
-      res.json(rows)
-    }
-  })
-})
-
-app.get("/api/users/get-user/:id", (req, res, next) => {
-  connection.query('SELECT * FROM users WHERE id = ' + req.params.id, function (err, rows) {
-    if (err) {
-      console.log("err: ", err)
-      res.json({error: err})
-    } else {
-      res.json(rows)
-    }
-  })
-})
