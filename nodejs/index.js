@@ -130,19 +130,19 @@ app.post('/api/people/get-food/:id', function(req, res) {
 });
 
 app.post('/api/people/get-wood/:id', function(req, res) {
-  connection.query('SELECT last_action FROM person WHERE id = ' + req.params.id, function (err, rows) {
+  connection.query('select person.last_action, house.food from person join house on person.house_id = house.id where person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 480000) {
+      if (time_delta > 480000 && rows[0].food > 0) {
         connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE house SET wood = wood + 1, food = food - 1 where id = (SELECT house_id from person where id = ' + req.params.id + ');', function(err, result) {
-        if(err) throw err
-      })
-      res.send("success")
-    } else {
-      res.send(time_delta.toString())
+          if(err) throw err
+        })
+        res.send({"success": true,"time_delta": time_delta, "food": rows[0].food})
+      } else {
+        res.send({"success": false,"time_delta": time_delta, "food": rows[0].food})
       }
     }
   })
