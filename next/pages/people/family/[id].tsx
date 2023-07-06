@@ -1,9 +1,31 @@
 import Link from 'next/link'
 import styles from '../../../styles/people.module.css'
 import useSWR from 'swr'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
+import useSWRMutation from 'swr/mutation'
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
+async function sendRequest(url, { arg }: { arg: { username: string }}) {
+  return fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg)
+  }).then(res => res.json())
+}
+
+function Button() {
+  const { trigger, isMutating } = useSWRMutation('/api/people/hunt', sendRequest)
+  return (
+    <button
+      disabled={isMutating}
+      onClick={async () => {
+        try {
+          const result = await trigger({ username: 'why' })
+        } catch (e) {
+          console.log("error")
+        }
+      }}
+    >Get Food</button>
+  )
+}
 
 export default function Family() {
   return (
@@ -19,7 +41,8 @@ export default function Family() {
 }
 
 export function listFamilyHouseholds() {
-  const router = useRouter();
+  const router = useRouter()
+  const fetcher = (...args) => fetch(...args).then((res) => res.json())
   if (router.isReady) {
     const { data, error } = useSWR('/api/people/describe-family-households/' + router.query.id, fetcher)
     if (error) return <div className={styles.container}>Failed to load</div>
@@ -42,6 +65,7 @@ export function listFamilyHouseholds() {
 
 export function listFamilyMembers() {
   const router = useRouter();
+  const fetcher = (...args) => fetch(...args).then((res) => res.json())
   if (router.isReady) {
     const { data, error } = useSWR('/api/people/describe-family-members/' + router.query.id, fetcher)
 
@@ -54,25 +78,10 @@ export function listFamilyMembers() {
           {data.map(({ id, name, family_name, gender, age, household_name }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
-              <button onClick={handleFoodClick}>Get Food</button>
-              <button onClick={handleWoodClick}>Get Wood</button>
-              <button onClick={handleCoinClick}>Get Coin</button>
             </li>
           ))}
         </ul>
       </div>
     )
   }
-}
-
-export function handleFoodClick() {
-  console.log('food')
-}
-
-export function handleWoodClick() {
-  console.log('wood')
-}
-
-export function handleCoinClick() {
-  console.log('coin')
 }
