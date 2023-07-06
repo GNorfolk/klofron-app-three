@@ -28,7 +28,7 @@ app.get("/api/users", (req, res, next) => {
 })
 
 app.get("/api/people/list-people", (req, res, next) => {
-  connection.query('select person.id, person.name, person.gender, person.created_at, person.family_id, family.name as family_name, household.name as household_name from person inner join family on person.family_id = family.id inner join household on person.household_id = household.id', function (err, rows) {
+  connection.query('select person.id, person.name, person.gender, person.created_at, person.family_id, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -52,8 +52,8 @@ app.get("/api/people/list-families", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-households", (req, res, next) => {
-  connection.query('select household.id, household.name, family.name as family_name from household inner join family on family_id = family.id', function (err, rows) {
+app.get("/api/people/list-houses", (req, res, next) => {
+  connection.query('select house.id, house.name, family.name as family_name from house inner join family on family_id = family.id', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -63,8 +63,8 @@ app.get("/api/people/list-households", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-family-households/:id", (req, res, next) => {
-  connection.query('select household.id, household.name, family.name as family_name from household inner join family on family_id = family.id where household.family_id = ' + req.params.id, function (err, rows) {
+app.get("/api/people/list-family-houses/:id", (req, res, next) => {
+  connection.query('select house.id, house.name, family.name as family_name from house inner join family on family_id = family.id where house.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -74,8 +74,8 @@ app.get("/api/people/list-family-households/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/describe-family-households/:id", (req, res, next) => {
-  connection.query('select household.id, household.name, family.name as family_name, household.food, household.coin, household.wood from household inner join family on family_id = family.id where household.family_id = ' + req.params.id, function (err, rows) {
+app.get("/api/people/describe-family-houses/:id", (req, res, next) => {
+  connection.query('select house.id, house.name, family.name as family_name, house.food, house.wood from house inner join family on family_id = family.id where house.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -86,18 +86,21 @@ app.get("/api/people/describe-family-households/:id", (req, res, next) => {
 })
 
 app.get("/api/people/describe-family-members/:id", (req, res, next) => {
-  connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, household.name as household_name from person inner join family on person.family_id = family.id inner join household on person.household_id = household.id where person.family_id = ' + req.params.id, function (err, rows) {
+  connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id where person.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
+      rows.map(function(row) {
+        row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
+      });
       res.json(rows)
     }
   })
 })
 
-app.get("/api/people/describe-household-members/:id", (req, res, next) => {
-  connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, household.name as household_name from person inner join family on person.family_id = family.id inner join household on person.household_id = household.id where person.household_id = ' + req.params.id, function (err, rows) {
+app.get("/api/people/describe-house-members/:id", (req, res, next) => {
+  connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id where person.house_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -115,7 +118,7 @@ app.post('/api/people/get-food/:id', function(req, res) {
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
       if (time_delta > 480000) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE household SET food = food + 2 where id = (SELECT household_id from person where id = ' + req.params.id + ');', function(err, result) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE house SET food = food + 2 where id = (SELECT house_id from person where id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send("success")
@@ -134,7 +137,7 @@ app.post('/api/people/get-wood/:id', function(req, res) {
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
       if (time_delta > 480000) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE household SET wood = wood + 1, food = food - 1 where id = (SELECT household_id from person where id = ' + req.params.id + ');', function(err, result) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE house SET wood = wood + 1, food = food - 1 where id = (SELECT house_id from person where id = ' + req.params.id + ');', function(err, result) {
         if(err) throw err
       })
       res.send("success")
