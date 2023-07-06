@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import styles from '../../../styles/people.module.css'
 import { useRouter } from 'next/router'
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import axios from 'axios'
 
 const queryClient = new QueryClient()
 
@@ -61,6 +62,18 @@ function ListFamilyMembers() {
         ),
     })
 
+    const getFood = useMutation({
+      mutationFn: () => {
+        return axios.post('/api/people/get-food/' + router.query.id)
+      },
+    })
+
+    const getWood = useMutation({
+      mutationFn: () => {
+        return axios.post('/api/people/get-wood/' + router.query.id)
+      },
+    })
+
     if (isLoading) return <div className={styles.container}>Loading...</div>
     if (error) return <div className={styles.container}>Failed to load</div>
 
@@ -71,6 +84,8 @@ function ListFamilyMembers() {
           {data.map(({ id, name, family_name, gender, age, household_name }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
+              <button onClick={() => { getFood.mutate() }} >Get Food</button>
+              <button onClick={() => { getWood.mutate() }} >Get Wood</button>
             </li>
           ))}
         </ul>

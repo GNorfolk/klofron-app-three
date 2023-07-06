@@ -85,7 +85,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Image processing repo: https://github.com/aws-samples/image-optimization
 - NextJS serverless CDK code: https://github.com/serverless-nextjs/serverless-next.js/blob/master/packages/libs/lambda/src/deploy/cdktf/nextJsLambdaApp.ts
 - Buttons interacting with state: https://nextjs.org/learn/foundations/from-javascript-to-react/adding-interactivity-with-state
-- Mutation (post data to api) docs: https://swr.vercel.app/docs/mutation
+- Tanstack React Query Docs: https://tanstack.com/query/latest/docs/react/overview
 
 # Development
 **How to clone repo**:
