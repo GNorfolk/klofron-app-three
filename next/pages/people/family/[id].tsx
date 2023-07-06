@@ -12,7 +12,7 @@ export default function Family() {
       <Link href={`/people`}>← People List</Link>
       <QueryClientProvider client={queryClient}>
         <ListFamilyMembers />
-        <ListFamilyHouseholds />
+        <ListFamilyHouses />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
@@ -21,13 +21,13 @@ export default function Family() {
   )
 }
 
-function ListFamilyHouseholds() {
+function ListFamilyHouses() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyHouseholdData'],
+      queryKey: ['familyHouseData'],
       queryFn: () =>
-        fetch('/api/people/describe-family-households/' + router.query.id).then(
+        fetch('/api/people/describe-family-houses/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -37,12 +37,12 @@ function ListFamilyHouseholds() {
 
     return (
       <div className={styles.container}>
-        <h2 className={styles.headingLg}>Household Info</h2>
+        <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, food, wood, coin }) => (
+          {data.map(({ id, name, family_name, food, wood }) => (
             <li className={styles.listItem} key={id}>
-              <p>The {family_name} family own household {name}.</p>
-              <p>Household {name} holds {food} food, {wood} wood, and {coin} coin.</p>
+              <p>The {family_name} family own house {name}.</p>
+              <p>House {name} holds {food} food and {wood} wood.</p>
             </li>
           ))}
         </ul>
@@ -81,9 +81,9 @@ function ListFamilyMembers() {
       <div className={styles.container}>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, gender, age, household_name }) => (
+          {data.map(({ id, name, family_name, gender, age, house_name }) => (
             <li className={styles.listItem} key={id}>
-              <p>{name} {family_name} is {gender} and {age} years old and lives at {household_name}.</p>
+              <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
               <button onClick={() => { getFood.mutate(id) }} >Get Food</button>
               <button onClick={() => { getWood.mutate(id) }} >Get Wood</button>
             </li>

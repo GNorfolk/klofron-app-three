@@ -101,6 +101,7 @@ mysql.server start
 mysql -h localhost -u root
 create database `klofron-app-three`;
 use klofron-app-three;
+-- -- -- -- -- FAMILY -- -- -- -- --
 CREATE TABLE `family` (
     `id` int primary key NOT NULL AUTO_INCREMENT,
     `name` varchar(155) NOT NULL,
@@ -108,44 +109,39 @@ CREATE TABLE `family` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 insert into family (name) VALUES ('Halpert');
 insert into family (name) VALUES ('Schrute');
-CREATE TABLE `household` (
+-- -- -- -- -- HOUSE -- -- -- -- --
+CREATE TABLE `house` (
     `id` int primary key NOT NULL AUTO_INCREMENT,
     `name` varchar(155) NOT NULL,
+    `rooms` int NOT NULL,
+    `storage` int NOT NULL,
     `food` int NOT NULL DEFAULT 0,
-    `coin` int NOT NULL DEFAULT 0,
     `wood` int NOT NULL DEFAULT 0,
     `family_id` int NOT NULL,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`family_id`) REFERENCES family(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into household (name, family_id) VALUES ('The Halperts', 1);
-insert into household (name, family_id) VALUES ('The Schrutes', 2);
-
-CREATE TABLE `house` (
-    `id` int primary key NOT NULL AUTO_INCREMENT,
-    `name` varchar(155) NOT NULL,
-    `storage` int NOT NULL DEFAULT 0,
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+insert into house (name, rooms, storage, family_id) VALUES ('Jims Parents', 5, 100, 1);
+insert into house (name, rooms, storage, family_id) VALUES ('Schrute Farms', 5, 100, 2);
+-- -- -- -- -- PERSON -- -- -- -- --
 CREATE TABLE `person` (
     `id` int primary key NOT NULL AUTO_INCREMENT,
     `name` varchar(155) NOT NULL,
     `family_id` int NOT NULL,
     `gender` varchar(155) NOT NULL,
-    `household_id` int NOT NULL,
+    `house_id` int,
     `last_action` timestamp NOT NULL DEFAULT current_timestamp(),
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
-    FOREIGN KEY (`household_id`) REFERENCES household(`id`)
+    FOREIGN KEY (`house_id`) REFERENCES house(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Jim', 1, 'male', 1, date_sub(now(), interval 42 day));
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Pam', 1, 'female', 1, date_sub(now(), interval 39 day));
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Cecelia', 1, 'female', 1, date_sub(now(), interval 5 day));
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Phillip', 1, 'male', 1, date_sub(now(), interval 2 day));
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Dwight', 2, 'male', 2, date_sub(now(), interval 48 day));
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Angela', 2, 'female', 2, date_sub(now(), interval 39 day));
-insert into person (name, family_id, gender, household_id, created_at) VALUES ('Philip', 2, 'male', 2, date_sub(now(), interval 2 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Jim', 1, 'male', 1, date_sub(now(), interval 42 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Pam', 1, 'female', 1, date_sub(now(), interval 39 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Cecelia', 1, 'female', 1, date_sub(now(), interval 5 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Phillip', 1, 'male', 1, date_sub(now(), interval 2 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Dwight', 2, 'male', 2, date_sub(now(), interval 48 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Angela', 2, 'female', 2, date_sub(now(), interval 39 day));
+insert into person (name, family_id, gender, house_id, created_at) VALUES ('Philip', 2, 'male', 2, date_sub(now(), interval 2 day));
 ```
 
 **How to start next server:**
