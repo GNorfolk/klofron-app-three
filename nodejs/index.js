@@ -106,9 +106,9 @@ app.post('/api/people/get-food/:id', function(req, res) {
         connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE house SET food = food + 2 where id = (SELECT house_id from person where id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
-        res.send("success")
+        res.send({"success": true,"time_delta": time_delta})
       } else {
-        res.send(time_delta.toString())
+        res.send({"success": false,"time_delta": time_delta})
       }
     }
   })
