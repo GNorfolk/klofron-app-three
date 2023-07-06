@@ -3,6 +3,7 @@ import styles from '../../../styles/people.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import utilStyles from '../../../styles/utils.module.css'
 
 const queryClient = new QueryClient()
 
@@ -41,7 +42,7 @@ function ListFamilyHouses() {
         <ul className={styles.list}>
           {data.map(({ id, name, family_name, food, wood }) => (
             <li className={styles.listItem} key={id}>
-              <p>The {family_name} family own house {name}.</p>
+              <p>The {family_name} family own {name}.</p>
               <p>House {name} holds {food} food and {wood} wood.</p>
             </li>
           ))}
@@ -86,18 +87,31 @@ function ListFamilyMembers() {
               <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
               <button onClick={
                 () => {
-                  getFood.mutate(id, { onSuccess: (res) => {
-                    queryClient.invalidateQueries({ queryKey: ['familyHouseData'] })
+                  getFood.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                    if (!res.data.success && res.data.time_delta < 480000) {
+                      document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
+                    } else {
+                      document.getElementById(`${id}`).innerText = ' '
+                    }
                   }})
                 }
               } >Get Food</button>
               <button onClick={
                 () => {
-                  getWood.mutate(id, { onSuccess: (res) => {
-                    queryClient.invalidateQueries({ queryKey: ['familyHouseData'] })
+                  getWood.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                    if (!res.data.success && res.data.time_delta < 480000) {
+                      document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
+                    } else if (!res.data.success && res.data.food < 1) {
+                      document.getElementById(`${id}`).innerText = 'food too low: ' + res.data.food
+                    } else {
+                      document.getElementById(`${id}`).innerText = ' '
+                    }
                   }})
                 }
               } >Get Wood</button>
+              <small className={utilStyles.lightText} id={id}></small>
             </li>
           ))}
         </ul>
