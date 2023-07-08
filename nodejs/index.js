@@ -84,6 +84,17 @@ app.get("/api/people/describe-family-members/:id", (req, res, next) => {
   })
 })
 
+app.get("/api/people/describe-house/:id", (req, res, next) => {
+  connection.query('select house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, count(person.house_id) as people from house inner join person on person.house_id = house.id where house.id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      res.json(rows)
+    }
+  })
+})
+
 app.get("/api/people/describe-house-members/:id", (req, res, next) => {
   connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id where person.house_id = ' + req.params.id, function (err, rows) {
     if (err) {
