@@ -7,12 +7,12 @@ import utilStyles from '../../styles/utils.module.css'
 
 const queryClient = new QueryClient()
 
-export default function Family() {
+export default function House() {
   return (
     <div className={styles.container}>
       <QueryClientProvider client={queryClient}>
-        <ListFamilyMembers />
-        <ListFamilyHouses />
+        <DescribeHouse />
+        <ListHouseMembers />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
@@ -21,13 +21,13 @@ export default function Family() {
   )
 }
 
-function ListFamilyHouses() {
+function DescribeHouse() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyHouseData'],
+      queryKey: ['houseData'],
       queryFn: () =>
-        fetch('/api/people/describe-family-houses/' + router.query.id).then(
+        fetch('/api/people/describe-house/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -39,10 +39,10 @@ function ListFamilyHouses() {
       <div className={styles.container}>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, food, wood }) => (
+          {data.map(({ id, name, rooms, storage, food, wood, people }) => (
             <li className={styles.listItem} key={id}>
-              <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link>.</p>
-              <p>House {name} holds {food} food and {wood} wood.</p>
+              <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
+              <p>{name} has {food} food and {wood} wood in storage. It can hold {storage} items so has {storage - food - wood} space for more items.</p>
             </li>
           ))}
         </ul>
@@ -51,13 +51,14 @@ function ListFamilyHouses() {
   }
 }
 
-function ListFamilyMembers() {
+
+function ListHouseMembers() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData'],
       queryFn: () =>
-        fetch('/api/people/describe-family-members/' + router.query.id).then(
+        fetch('/api/people/describe-house-members/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
