@@ -1,16 +1,15 @@
 import Link from 'next/link'
-import styles from '../../../styles/people.module.css'
+import styles from '../../styles/people.module.css'
 import { useRouter } from 'next/router'
-import { QueryClient, QueryClientProvider, useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import utilStyles from '../../../styles/utils.module.css'
+import utilStyles from '../../styles/utils.module.css'
 
 const queryClient = new QueryClient()
 
 export default function Family() {
   return (
     <div className={styles.container}>
-      <Link href={`/people`}>← People List</Link>
       <QueryClientProvider client={queryClient}>
         <ListFamilyMembers />
         <ListFamilyHouses />
