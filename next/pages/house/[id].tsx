@@ -91,6 +91,8 @@ function ListHouseMembers() {
                     queryClient.invalidateQueries()
                     if (!res.data.success && res.data.time_delta < 480000) {
                       document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
+                    } else if (!res.data.success && (res.data.storage < res.data.food + res.data.wood + 2)) {
+                      document.getElementById(`${id}`).innerText = 'Not enough storage!'
                     } else {
                       document.getElementById(`${id}`).innerText = ' '
                     }

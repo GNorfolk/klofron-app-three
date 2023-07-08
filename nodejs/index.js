@@ -13,7 +13,7 @@ if (process.env.ENVIRONMENT === 'local') {
 }
 
 app.get("/api/people/list-people", (req, res, next) => {
-  connection.query('select person.id, person.name, person.gender, person.created_at, person.family_id, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id', function (err, rows) {
+  connection.query('SELECT person.id, person.name, person.gender, person.created_at, person.family_id, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -27,7 +27,7 @@ app.get("/api/people/list-people", (req, res, next) => {
 })
 
 app.get("/api/people/list-families", (req, res, next) => {
-  connection.query('select id, name from family', function (err, rows) {
+  connection.query('SELECT id, name FROM family', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -38,7 +38,7 @@ app.get("/api/people/list-families", (req, res, next) => {
 })
 
 app.get("/api/people/list-houses", (req, res, next) => {
-  connection.query('select house.id, house.name, family.name as family_name from house inner join family on family_id = family.id', function (err, rows) {
+  connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id', function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -49,7 +49,7 @@ app.get("/api/people/list-houses", (req, res, next) => {
 })
 
 app.get("/api/people/list-family-houses/:id", (req, res, next) => {
-  connection.query('select house.id, house.name, family.name as family_name from house inner join family on family_id = family.id where house.family_id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -60,7 +60,7 @@ app.get("/api/people/list-family-houses/:id", (req, res, next) => {
 })
 
 app.get("/api/people/describe-family-houses/:id", (req, res, next) => {
-  connection.query('select house.id, house.name, family.name as family_name, house.food, house.wood from house inner join family on family_id = family.id where house.family_id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT house.id, house.name, family.name AS family_name, house.food, house.wood FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -71,7 +71,7 @@ app.get("/api/people/describe-family-houses/:id", (req, res, next) => {
 })
 
 app.get("/api/people/describe-family-members/:id", (req, res, next) => {
-  connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id where person.family_id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -85,7 +85,7 @@ app.get("/api/people/describe-family-members/:id", (req, res, next) => {
 })
 
 app.get("/api/people/describe-house/:id", (req, res, next) => {
-  connection.query('select house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, count(person.house_id) as people from house inner join person on person.house_id = house.id where house.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, COUNT(person.house_id) AS people FROM house INNER JOIN person ON person.house_id = house.id WHERE house.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -96,7 +96,7 @@ app.get("/api/people/describe-house/:id", (req, res, next) => {
 })
 
 app.get("/api/people/describe-house-members/:id", (req, res, next) => {
-  connection.query('select person.id, person.name, person.gender, person.created_at, family.name as family_name, house.name as house_name from person inner join family on person.family_id = family.id inner join house on person.house_id = house.id where person.house_id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.house_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -107,33 +107,33 @@ app.get("/api/people/describe-house-members/:id", (req, res, next) => {
 })
 
 app.post('/api/people/get-food/:id', function(req, res) {
-  connection.query('SELECT last_action FROM person WHERE id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT person.last_action, house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 480000) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE house SET food = food + 2 where id = (SELECT house_id from person where id = ' + req.params.id + ');', function(err, result) {
+      if (time_delta > 480000 && (rows[0].storage > rows[0].food + rows[0].wood + 2)) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET food = food + 2 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
-        res.send({"success": true,"time_delta": time_delta})
+        res.send({"success": true, "time_delta": time_delta, "storage": rows[0].storage, "food": rows[0].food, "wood": rows[0].wood})
       } else {
-        res.send({"success": false,"time_delta": time_delta})
+        res.send({"success": false, "time_delta": time_delta, "storage": rows[0].storage, "food": rows[0].food, "wood": rows[0].wood})
       }
     }
   })
 });
 
 app.post('/api/people/get-wood/:id', function(req, res) {
-  connection.query('select person.last_action, house.food from person join house on person.house_id = house.id where person.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT person.last_action, house.food FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
       if (time_delta > 480000 && rows[0].food > 0) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP where id = ' + req.params.id + '; UPDATE house SET wood = wood + 1, food = food - 1 where id = (SELECT house_id from person where id = ' + req.params.id + ');', function(err, result) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood + 1, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true,"time_delta": time_delta, "food": rows[0].food})
