@@ -64,13 +64,13 @@ function ListFamilyMembers() {
 
     const getFood = useMutation({
       mutationFn: (id) => {
-        return axios.post('/api/people/get-food/' + id)
+        return axios.post('/api/people/increase-food/' + id)
       },
     })
 
     const getWood = useMutation({
       mutationFn: (id) => {
-        return axios.post('/api/people/get-wood/' + id)
+        return axios.post('/api/people/increase-wood/' + id)
       },
     })
 
@@ -88,8 +88,8 @@ function ListFamilyMembers() {
                 () => {
                   getFood.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
-                    if (!res.data.success && res.data.time_delta < 480000) {
-                      document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
+                    if (!res.data.success) {
+                      document.getElementById(`${id}`).innerText = res.data.error
                     } else {
                       document.getElementById(`${id}`).innerText = ' '
                     }
@@ -100,10 +100,8 @@ function ListFamilyMembers() {
                 () => {
                   getWood.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
-                    if (!res.data.success && res.data.time_delta < 480000) {
-                      document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
-                    } else if (!res.data.success && res.data.food < 1) {
-                      document.getElementById(`${id}`).innerText = 'food too low: ' + res.data.food
+                    if (!res.data.success) {
+                      document.getElementById(`${id}`).innerText = res.data.error
                     } else {
                       document.getElementById(`${id}`).innerText = ' '
                     }

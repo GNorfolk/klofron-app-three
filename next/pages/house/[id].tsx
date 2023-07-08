@@ -63,15 +63,21 @@ function ListHouseMembers() {
         ),
     })
 
-    const getFood = useMutation({
+    const  increaseFood  = useMutation({
       mutationFn: (id) => {
-        return axios.post('/api/people/get-food/' + id)
+        return axios.post('/api/people/increase-food/' + id)
       },
     })
 
-    const getWood = useMutation({
+    const  increaseWood  = useMutation({
       mutationFn: (id) => {
-        return axios.post('/api/people/get-wood/' + id)
+        return axios.post('/api/people/increase-wood/' + id)
+      },
+    })
+
+    const increaseStorage = useMutation({
+      mutationFn: (id) => {
+        return axios.post('/api/people/modify-house/increase-storage/' + id)
       },
     })
 
@@ -87,12 +93,10 @@ function ListHouseMembers() {
               <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
               <button onClick={
                 () => {
-                  getFood.mutate(id, { onSettled: (res) => {
+                   increaseFood.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
-                    if (!res.data.success && res.data.time_delta < 480000) {
-                      document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
-                    } else if (!res.data.success && (res.data.storage < res.data.food + res.data.wood + 2)) {
-                      document.getElementById(`${id}`).innerText = 'Not enough storage!'
+                    if (!res.data.success) {
+                      document.getElementById(`${id}`).innerText = res.data.error
                     } else {
                       document.getElementById(`${id}`).innerText = ' '
                     }
@@ -101,18 +105,28 @@ function ListHouseMembers() {
               } >Get Food</button>
               <button onClick={
                 () => {
-                  getWood.mutate(id, { onSettled: (res) => {
+                   increaseWood.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
-                    if (!res.data.success && res.data.time_delta < 480000) {
-                      document.getElementById(`${id}`).innerText = 'time_delta too low: ' + Math.floor((480000 - res.data.time_delta)/60000) + 'min ' + Math.floor(((480000 - res.data.time_delta) % 60000)/1000) + 'sec.'
-                    } else if (!res.data.success && res.data.food < 1) {
-                      document.getElementById(`${id}`).innerText = 'food too low: ' + res.data.food
+                    if (!res.data.success) {
+                      document.getElementById(`${id}`).innerText = res.data.error
                     } else {
                       document.getElementById(`${id}`).innerText = ' '
                     }
                   }})
                 }
               } >Get Wood</button>
+              <button onClick={
+                () => {
+                   increaseStorage.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                    if (!res.data.success) {
+                      document.getElementById(`${id}`).innerText = res.data.error
+                    } else {
+                      document.getElementById(`${id}`).innerText = ' '
+                    }
+                  }})
+                }
+              } >Increase Storage</button>
               <small className={utilStyles.lightText} id={id}></small>
             </li>
           ))}
