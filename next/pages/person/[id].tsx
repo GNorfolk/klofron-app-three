@@ -11,8 +11,7 @@ export default function House() {
   return (
     <div className={styles.container}>
       <QueryClientProvider client={queryClient}>
-        <DescribeHouse />
-        <ListHousePeople />
+        <DescribePerson />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
@@ -21,44 +20,13 @@ export default function House() {
   )
 }
 
-function DescribeHouse() {
+function DescribePerson() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['houseData'],
+      queryKey: ['personData'],
       queryFn: () =>
-        fetch('/api/people/describe-house/' + router.query.id).then(
-          (res) => res.json(),
-        ),
-    })
-
-    if (isLoading) return <div className={styles.container}>Loading...</div>
-    if (error) return <div className={styles.container}>Failed to load</div>
-
-    return (
-      <div className={styles.container}>
-        <h2 className={styles.headingLg}>House Info</h2>
-        <ul className={styles.list}>
-          {data.map(({ id, name, rooms, storage, food, wood, people }) => (
-            <li className={styles.listItem} key={id}>
-              <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
-              <p>{name} has {food} food and {wood} wood in storage. It can hold {storage} items so has {storage - food - wood} space for more items.</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
-}
-
-
-function ListHousePeople() {
-  const router = useRouter()
-  if (router.isReady) {
-    const { isLoading, error, data } = useQuery({
-      queryKey: ['familyMemberData'],
-      queryFn: () =>
-        fetch('/api/people/list-house-people/' + router.query.id).then(
+        fetch('/api/people/describe-person/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -86,11 +54,13 @@ function ListHousePeople() {
 
     return (
       <div className={styles.container}>
+        {/* <h1 className={utilStyles.heading2Xl}>{name}</h1> */}
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, gender, age, house_name }) => (
+          {data.map(({ id, name, family_name, gender, age, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
+              <p>{name}'s father is <Link href={"/person/" + father_id}><a onClick={(e) => queryClient.invalidateQueries()}>{father_name + ' ' + father_family_name}</a></Link> and their mother is <Link href={"/person/" + mother_id}><a onClick={(e) => queryClient.invalidateQueries()}>{mother_name + ' ' + mother_family_name}</a></Link>.</p>
               <button onClick={
                 () => {
                    increaseFood.mutate(id, { onSettled: (res) => {
