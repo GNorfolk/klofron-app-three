@@ -59,7 +59,7 @@ app.get("/api/people/list-family-houses/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-family-members/:id", (req, res, next) => {
+app.get("/api/people/list-family-people/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -84,8 +84,22 @@ app.get("/api/people/describe-house/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-house-members/:id", (req, res, next) => {
+app.get("/api/people/list-house-people/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.house_id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      rows.map(function(row) {
+        row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
+      });
+      res.json(rows)
+    }
+  })
+})
+
+app.get("/api/people/describe-person/:id", (req, res, next) => {
+  connection.query('SELECT person.id, person.name, person.gender, father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name, mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id INNER JOIN person AS father ON person.father_id = father.id INNER JOIN person AS mother ON person.mother_id = mother.id INNER JOIN family AS father_family ON father.family_id = father_family.id INNER JOIN family AS mother_family ON mother.family_id = mother_family.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})

@@ -11,7 +11,7 @@ export default function Family() {
   return (
     <div className={styles.container}>
       <QueryClientProvider client={queryClient}>
-        <ListFamilyMembers />
+        <ListFamilyPeople />
         <ListFamilyHouses />
       </QueryClientProvider>
       <div className={styles.backToHome}>
@@ -51,13 +51,13 @@ function ListFamilyHouses() {
   }
 }
 
-function ListFamilyMembers() {
+function ListFamilyPeople() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData'],
       queryFn: () =>
-        fetch('/api/people/list-family-members/' + router.query.id).then(
+        fetch('/api/people/list-family-people/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
