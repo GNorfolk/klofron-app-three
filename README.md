@@ -128,6 +128,8 @@ CREATE TABLE `person` (
     `id` int primary key NOT NULL AUTO_INCREMENT,
     `name` varchar(155) NOT NULL,
     `family_id` int NOT NULL,
+    `father_id` int NOT NULL REFERENCES person,
+    `mother_id` int NOT NULL REFERENCES person,
     `gender` varchar(155) NOT NULL,
     `house_id` int,
     `last_action` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -135,13 +137,13 @@ CREATE TABLE `person` (
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`house_id`) REFERENCES house(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Jim', 1, 'male', 1, date_sub(now(), interval 42 day));
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Pam', 1, 'female', 1, date_sub(now(), interval 39 day));
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Cecelia', 1, 'female', 1, date_sub(now(), interval 5 day));
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Phillip', 1, 'male', 1, date_sub(now(), interval 2 day));
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Dwight', 2, 'male', 2, date_sub(now(), interval 48 day));
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Angela', 2, 'female', 2, date_sub(now(), interval 39 day));
-insert into person (name, family_id, gender, house_id, created_at) VALUES ('Philip', 2, 'male', 2, date_sub(now(), interval 2 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Jim', 1, 0, 0, 'male', 1, date_sub(now(), interval 42 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Pam', 1, 0, 0, 'female', 1, date_sub(now(), interval 39 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Cecelia', 1, 1, 2, 'female', 1, date_sub(now(), interval 5 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Phillip', 1, 1, 2, 'male', 1, date_sub(now(), interval 2 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Dwight', 2, 0, 0, 'male', 2, date_sub(now(), interval 48 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Angela', 2, 0, 0, 'female', 2, date_sub(now(), interval 39 day));
+insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Philip', 2, 5, 6, 'male', 2, date_sub(now(), interval 2 day));
 ```
 
 **How to start next server:**

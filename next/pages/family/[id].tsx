@@ -27,7 +27,7 @@ function ListFamilyHouses() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyHouseData'],
       queryFn: () =>
-        fetch('/api/people/describe-family-houses/' + router.query.id).then(
+        fetch('/api/people/list-family-houses/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -57,21 +57,9 @@ function ListFamilyMembers() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData'],
       queryFn: () =>
-        fetch('/api/people/describe-family-members/' + router.query.id).then(
+        fetch('/api/people/list-family-members/' + router.query.id).then(
           (res) => res.json(),
         ),
-    })
-
-    const getFood = useMutation({
-      mutationFn: (id) => {
-        return axios.post('/api/people/increase-food/' + id)
-      },
-    })
-
-    const getWood = useMutation({
-      mutationFn: (id) => {
-        return axios.post('/api/people/increase-wood/' + id)
-      },
     })
 
     if (isLoading) return <div className={styles.container}>Loading...</div>
@@ -83,32 +71,7 @@ function ListFamilyMembers() {
         <ul className={styles.list}>
           {data.map(({ id, name, family_name, gender, age, house_name }) => (
             <li className={styles.listItem} key={id}>
-              <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
-              <button onClick={
-                () => {
-                  getFood.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById(`${id}`).innerText = res.data.error
-                    } else {
-                      document.getElementById(`${id}`).innerText = ' '
-                    }
-                  }})
-                }
-              } >Get Food</button>
-              <button onClick={
-                () => {
-                  getWood.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById(`${id}`).innerText = res.data.error
-                    } else {
-                      document.getElementById(`${id}`).innerText = ' '
-                    }
-                  }})
-                }
-              } >Get Wood</button>
-              <small className={utilStyles.lightText} id={id}></small>
+              <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
             </li>
           ))}
         </ul>
