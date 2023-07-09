@@ -49,17 +49,6 @@ app.get("/api/people/list-houses", (req, res, next) => {
 })
 
 app.get("/api/people/list-family-houses/:id", (req, res, next) => {
-  connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
-    if (err) {
-      console.log("err: ", err)
-      res.json({error: err})
-    } else {
-      res.json(rows)
-    }
-  })
-})
-
-app.get("/api/people/describe-family-houses/:id", (req, res, next) => {
   connection.query('SELECT house.id, house.name, family.name AS family_name, house.food, house.wood FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -70,7 +59,7 @@ app.get("/api/people/describe-family-houses/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/describe-family-members/:id", (req, res, next) => {
+app.get("/api/people/list-family-members/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -95,12 +84,15 @@ app.get("/api/people/describe-house/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/describe-house-members/:id", (req, res, next) => {
+app.get("/api/people/list-house-members/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.house_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
+      rows.map(function(row) {
+        row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
+      });
       res.json(rows)
     }
   })

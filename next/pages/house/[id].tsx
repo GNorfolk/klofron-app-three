@@ -58,7 +58,7 @@ function ListHouseMembers() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData'],
       queryFn: () =>
-        fetch('/api/people/describe-house-members/' + router.query.id).then(
+        fetch('/api/people/list-house-members/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -96,9 +96,9 @@ function ListHouseMembers() {
                    increaseFood.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById(`${id}`).innerText = res.data.error
+                      document.getElementById("change-me-" + id).innerText = res.data.error
                     } else {
-                      document.getElementById(`${id}`).innerText = ' '
+                      document.getElementById("change-me-" + id).innerText = ' '
                     }
                   }})
                 }
@@ -108,9 +108,9 @@ function ListHouseMembers() {
                    increaseWood.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById(`${id}`).innerText = res.data.error
+                      document.getElementById("change-me-" + id).innerText = res.data.error
                     } else {
-                      document.getElementById(`${id}`).innerText = ' '
+                      document.getElementById("change-me-" + id).innerText = ' '
                     }
                   }})
                 }
@@ -120,14 +120,14 @@ function ListHouseMembers() {
                    increaseStorage.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById(`${id}`).innerText = res.data.error
+                      document.getElementById("change-me-" + id).innerText = res.data.error
                     } else {
-                      document.getElementById(`${id}`).innerText = ' '
+                      document.getElementById("change-me-" + id).innerText = ' '
                     }
                   }})
                 }
               } >Increase Storage</button>
-              <small className={utilStyles.lightText} id={id}></small>
+              <small className={utilStyles.lightText} id={'change-me-' + id}></small>
             </li>
           ))}
         </ul>
