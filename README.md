@@ -99,51 +99,24 @@ Source: https://docs.github.com/en/repositories/creating-and-managing-repositori
 ```SQL
 mysql.server start
 mysql -h localhost -u root
-create database `klofron-app-three`;
-use klofron-app-three;
--- -- -- -- -- FAMILY -- -- -- -- --
-CREATE TABLE `family` (
-    `id` int primary key NOT NULL AUTO_INCREMENT,
-    `name` varchar(155) NOT NULL,
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into family (name) VALUES ('Halpert');
-insert into family (name) VALUES ('Schrute');
--- -- -- -- -- HOUSE -- -- -- -- --
-CREATE TABLE `house` (
-    `id` int primary key NOT NULL AUTO_INCREMENT,
-    `name` varchar(155) NOT NULL,
-    `rooms` int NOT NULL,
-    `storage` int NOT NULL,
-    `food` int NOT NULL DEFAULT 0,
-    `wood` int NOT NULL DEFAULT 0,
-    `family_id` int NOT NULL,
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    FOREIGN KEY (`family_id`) REFERENCES family(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into house (name, rooms, storage, family_id) VALUES ('Jims Parents', 5, 100, 1);
-insert into house (name, rooms, storage, family_id) VALUES ('Schrute Farms', 5, 100, 2);
--- -- -- -- -- PERSON -- -- -- -- --
-CREATE TABLE `person` (
-    `id` int primary key NOT NULL AUTO_INCREMENT,
-    `name` varchar(155) NOT NULL,
-    `family_id` int NOT NULL,
-    `father_id` int NOT NULL REFERENCES person,
-    `mother_id` int NOT NULL REFERENCES person,
-    `gender` varchar(155) NOT NULL,
-    `house_id` int,
-    `last_action` timestamp NOT NULL DEFAULT current_timestamp(),
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    FOREIGN KEY (`family_id`) REFERENCES family(`id`),
-    FOREIGN KEY (`house_id`) REFERENCES house(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Jim', 1, 0, 0, 'male', 1, date_sub(now(), interval 42 day));
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Pam', 1, 0, 0, 'female', 1, date_sub(now(), interval 39 day));
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Cecelia', 1, 1, 2, 'female', 1, date_sub(now(), interval 5 day));
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Phillip', 1, 1, 2, 'male', 1, date_sub(now(), interval 2 day));
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Dwight', 2, 0, 0, 'male', 2, date_sub(now(), interval 48 day));
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Angela', 2, 0, 0, 'female', 2, date_sub(now(), interval 39 day));
-insert into person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Philip', 2, 5, 6, 'male', 2, date_sub(now(), interval 2 day));
+CREATE DATABASE `klofron-app-three`;
+USE klofron-app-three;
+```
+
+**How to reset database:**
+```bash
+mysql -u root -p klofron-app-three < starter-data.sql
+mysql -u root -p klofron-app-three
+```
+
+**How to increment time for testing:**
+- Make people older:
+```sql
+UPDATE person SET created_at = created_at - INTERVAL 1 DAY;
+```
+- Move forwards in time:
+```sql
+UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 ```
 
 **How to start next server:**
