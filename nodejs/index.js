@@ -119,12 +119,12 @@ app.post('/api/people/increase-food/:id', function(req, res) {
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 480000 && (rows[0].storage >= rows[0].food + rows[0].wood + 2)) {
+      if (time_delta > 28800000 && (rows[0].storage >= rows[0].food + rows[0].wood + 2)) {
         connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET food = food + 2 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
-      } else if (time_delta < 480000) {
+      } else if (time_delta < 28800000) {
         res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
       } else if (rows[0].storage < rows[0].food + rows[0].wood + 2) {
         res.send({"success": false, "error": "Not enough storage, only " + (rows[0].storage - rows[0].food - rows[0].wood) + " space remaining!"})
@@ -142,12 +142,12 @@ app.post('/api/people/increase-wood/:id', function(req, res) {
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 480000 && rows[0].food > 0) {
+      if (time_delta > 28800000 && rows[0].food > 0) {
         connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood + 1, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
-      } else if (time_delta < 480000) {
+      } else if (time_delta < 28800000) {
         res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
       } else if (rows[0].food < 1) {
         res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
@@ -165,17 +165,52 @@ app.post('/api/people/modify-house/increase-storage/:id', function(req, res) {
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 480000 && rows[0].food > 0 && rows[0].wood >= 10) {
+      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 10) {
         connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 10, food = food - 1, storage = storage + 10 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
-      } else if (time_delta < 480000) {
+      } else if (time_delta < 28800000) {
         res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
       } else if (rows[0].food < 1) {
         res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
       } else if (rows[0].wood < 10) {
         res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 10 required!"})
+      } else {
+        res.send({"success": false, "error": "Unknown API error occurred!"})
+      }
+    }
+  })
+});
+
+// Parents: SELECT * FROM person WHERE house_id = 2 AND father_id NOT IN (SELECT id FROM person WHERE house_id = 2) AND mother_id NOT IN (SELECT id FROM person WHERE house_id = 2);
+// Children: SELECT * FROM person WHERE house_id = 2 AND father_id IN (SELECT id FROM person WHERE house_id = 2) OR mother_id IN (SELECT id FROM person WHERE house_id = 2);
+
+app.post('/api/people/create-person/:id', function(req, res) {
+  connection.query('SELECT * FROM person WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') ORDER BY gender DESC;', function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      const father = rows[0]
+      const mother = rows[1]
+      if (rows.length == 2 && father.gender == 'male' && mother.gender == 'female' && father.family_id == mother.family_id && father.house_id == mother.house_id) {
+        connection.query("INSERT INTO person (name, family_id, father_id, mother_id, gender, house_id) VALUES ('Clarence', " + father.family_id + ", " + father.id + ", " + mother.id + ", " +  "'male'" + ", " + father.house_id + ")", function(err, result) {
+          if(err) throw err
+        })
+        res.send({"success": true})
+      } else if (rows.length > 2) {
+        res.send({"success": false, "error": "Too many parents, there are " + rows.length + " of them!"})
+      } else if (rows.length < 2) {
+        res.send({"success": false, "error": "Not enough parents, there are " + rows.length + " of them!"})
+      } else if (father.gender != 'male') {
+        res.send({"success": false, "error": "Incorrect father gender, father with id " + father.id + " has gender " + father.gender + "!"})
+      } else if (father.gender != 'female') {
+        res.send({"success": false, "error": "Incorrect mother gender, mother with id " + mother.id + " has gender " + mother.gender + "!"})
+      } else if (father.family_id != mother.family_id) {
+        res.send({"success": false, "error": "Not matching family_id, father family_id is " + father.family_id + " and mother family_id is " + mother.family_id + "!"})
+      } else if (father.house_id != mother.house_id) {
+        res.send({"success": false, "error": "Not matching house_id, father house_id is " + father.house_id + " and mother house_id is " + mother.house_id + "!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }
