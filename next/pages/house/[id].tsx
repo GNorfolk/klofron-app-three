@@ -99,6 +99,12 @@ function ListHousePeople() {
       },
     })
 
+    const increaseRooms = useMutation({
+      mutationFn: (id) => {
+        return axios.post('/api/people/modify-house/increase-rooms/' + id)
+      },
+    })
+
     if (isLoading) return <div className={styles.container}>Loading...</div>
     if (error) return <div className={styles.container}>Failed to load</div>
 
@@ -145,6 +151,18 @@ function ListHousePeople() {
                   }})
                 }
               } >Increase Storage</button>
+              <button onClick={
+                () => {
+                   increaseRooms.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                    if (!res.data.success) {
+                      document.getElementById("change-me-" + id).innerText = res.data.error
+                    } else {
+                      document.getElementById("change-me-" + id).innerText = ' '
+                    }
+                  }})
+                }
+              } >Increase Rooms</button>
               <small className={utilStyles.lightText} id={'change-me-' + id}></small>
             </li>
           ))}

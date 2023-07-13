@@ -99,7 +99,7 @@ app.get("/api/people/list-house-people/:id", (req, res, next) => {
 })
 
 app.get("/api/people/describe-person/:id", (req, res, next) => {
-  connection.query('SELECT person.id, person.name, person.gender, father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name, mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id INNER JOIN person AS father ON person.father_id = father.id INNER JOIN person AS mother ON person.mother_id = mother.id INNER JOIN family AS father_family ON father.family_id = father_family.id INNER JOIN family AS mother_family ON mother.family_id = mother_family.id WHERE person.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT person.id, person.name, person.gender, father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name, mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name, person.created_at, family.name AS family_name, house.id AS house_id, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id INNER JOIN person AS father ON person.father_id = father.id INNER JOIN person AS mother ON person.mother_id = mother.id INNER JOIN family AS father_family ON father.family_id = father_family.id INNER JOIN family AS mother_family ON mother.family_id = mother_family.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
@@ -167,6 +167,31 @@ app.post('/api/people/modify-house/increase-storage/:id', function(req, res) {
       let time_delta = new Date() - new Date(rows[0].last_action)
       if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 10) {
         connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 10, food = food - 1, storage = storage + 10 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+          if(err) throw err
+        })
+        res.send({"success": true})
+      } else if (time_delta < 28800000) {
+        res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
+      } else if (rows[0].food < 1) {
+        res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
+      } else if (rows[0].wood < 10) {
+        res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 10 required!"})
+      } else {
+        res.send({"success": false, "error": "Unknown API error occurred!"})
+      }
+    }
+  })
+});
+
+app.post('/api/people/modify-house/increase-rooms/:id', function(req, res) {
+  connection.query('SELECT person.last_action, house.rooms, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      let time_delta = new Date() - new Date(rows[0].last_action)
+      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 10) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 10, food = food - 1, rooms = rooms + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
