@@ -32,6 +32,12 @@ function DescribeHouse() {
         ),
     })
 
+    const createPerson = useMutation({
+      mutationFn: (id) => {
+        return axios.post('/api/people/create-person/' + id)
+      },
+    })
+
     if (isLoading) return <div className={styles.container}>Loading...</div>
     if (error) return <div className={styles.container}>Failed to load</div>
 
@@ -43,6 +49,19 @@ function DescribeHouse() {
             <li className={styles.listItem} key={id}>
               <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
               <p>{name} has {food} food and {wood} wood in storage. It can hold {storage} items so has {storage - food - wood} space for more items.</p>
+              <button onClick={
+                () => {
+                  createPerson.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                    if (!res.data.success) {
+                      document.getElementById("change-me-two" + id).innerText = res.data.error
+                    } else {
+                      document.getElementById("change-me-two" + id).innerText = ' '
+                    }
+                  }})
+                }
+              } >Create Person</button>
+              <small className={utilStyles.lightText} id={'change-me-two' + id}></small>
             </li>
           ))}
         </ul>
@@ -50,7 +69,6 @@ function DescribeHouse() {
     )
   }
 }
-
 
 function ListHousePeople() {
   const router = useRouter()
