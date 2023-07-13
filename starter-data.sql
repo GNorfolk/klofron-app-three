@@ -29,15 +29,15 @@ CREATE TABLE `house` (
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`family_id`) REFERENCES family(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Heaven', 2, 20, 1);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Jims Parents', 4, 20, 2);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Schrute Farms', 3, 20, 3);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('The Condo', 2, 20, 4);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Temps House', 3, 20, 5);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Nardville', 2, 20, 6);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('The Crib', 3, 20, 7);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Refrigeration Inc', 2, 20, 8);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('Florida', 3, 20, 9);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Heaven', 2, 12, 1);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Jims Parents', 4, 12, 2);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Schrute Farms', 3, 12, 3);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('The Condo', 2, 12, 4);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Temps House', 3, 12, 5);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Nardville', 2, 12, 6);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('The Crib', 3, 12, 7);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Refrigeration Inc', 2, 12, 8);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Florida', 3, 12, 9);
 -- -- -- -- -- PERSON -- -- -- -- --
 CREATE TABLE `person` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

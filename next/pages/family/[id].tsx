@@ -11,6 +11,7 @@ export default function Family() {
   return (
     <div className={styles.container}>
       <QueryClientProvider client={queryClient}>
+        <DescribeFamily />
         <ListFamilyPeople />
         <ListFamilyHouses />
       </QueryClientProvider>
@@ -19,6 +20,30 @@ export default function Family() {
       </div>
     </div>
   )
+}
+
+function DescribeFamily() {
+  const router = useRouter()
+  if (router.isReady) {
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['familyData'],
+      queryFn: () =>
+        fetch('/api/people/describe-family/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
+
+    if (isLoading) return <div className={styles.container}>Loading...</div>
+    if (error) return <div className={styles.container}>Failed to load</div>
+
+    return (
+      <div className={styles.container}>
+        {data.map(({ name }) => (
+          <h1 className={styles.heading2Xl}>The {name} family.</h1>
+        ))}
+      </div>
+    )
+  }
 }
 
 function ListFamilyHouses() {
