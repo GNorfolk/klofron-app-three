@@ -73,6 +73,17 @@ app.get("/api/people/list-family-people/:id", (req, res, next) => {
   })
 })
 
+app.get("/api/people/describe-family/:id", (req, res, next) => {
+  connection.query('SELECT id, name FROM family WHERE id = ' + req.params.id, function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      res.json(rows)
+    }
+  })
+})
+
 app.get("/api/people/describe-house/:id", (req, res, next) => {
   connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, COUNT(person.house_id) AS people FROM house INNER JOIN person ON person.house_id = house.id WHERE house.id = ' + req.params.id, function (err, rows) {
     if (err) {
@@ -127,7 +138,7 @@ app.post('/api/people/increase-food/:id', function(req, res) {
       } else if (time_delta < 28800000) {
         res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
       } else if (rows[0].storage < rows[0].food + rows[0].wood + 2) {
-        res.send({"success": false, "error": "Not enough storage, only " + (rows[0].storage - rows[0].food - rows[0].wood) + " space remaining!"})
+        res.send({"success": false, "error": "Not enough storage, only " + (rows[0].storage - rows[0].food - rows[0].wood) + " space remaining and 2 required!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }
@@ -165,8 +176,8 @@ app.post('/api/people/modify-house/increase-storage/:id', function(req, res) {
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 10) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 10, food = food - 1, storage = storage + 10 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 3) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 3, food = food - 1, storage = storage + 3 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
@@ -174,8 +185,8 @@ app.post('/api/people/modify-house/increase-storage/:id', function(req, res) {
         res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
       } else if (rows[0].food < 1) {
         res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
-      } else if (rows[0].wood < 10) {
-        res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 10 required!"})
+      } else if (rows[0].wood < 3) {
+        res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 3 required!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }
@@ -190,8 +201,8 @@ app.post('/api/people/modify-house/increase-rooms/:id', function(req, res) {
       res.json({error: err})
     } else {
       let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 10) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 10, food = food - 1, rooms = rooms + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 6) {
+        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 6, food = food - 1, rooms = rooms + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
@@ -199,8 +210,8 @@ app.post('/api/people/modify-house/increase-rooms/:id', function(req, res) {
         res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
       } else if (rows[0].food < 1) {
         res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
-      } else if (rows[0].wood < 10) {
-        res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 10 required!"})
+      } else if (rows[0].wood < 6) {
+        res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 6 required!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }
@@ -242,6 +253,28 @@ app.post('/api/people/create-person/:id', function(req, res) {
         res.send({"success": false, "error": "Mother's time delta value of " + mother_time_delta + " is too low!"})
       } else if (father.rooms <= father.people) {
         res.send({"success": false, "error": "Not enough rooms, there are " + father.rooms + " rooms occupied by " + father.rooms + " people!"})
+      } else {
+        res.send({"success": false, "error": "Unknown API error occurred!"})
+      }
+    }
+  })
+});
+
+app.post('/api/people/create-house/:id', function(req, res) {
+  connection.query('SELECT wood, food FROM house WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function (err, rows) {
+    if (err) {
+      console.log("err: ", err)
+      res.json({error: err})
+    } else {
+      if (rows[0].wood >= 12 && rows[0].food >= 3) {
+        connection.query("UPDATE house SET wood = wood - 12, food = food - 3 WHERE id = (SELECT house_id FROM person WHERE id = " + req.params.id + "); INSERT INTO house (name, rooms, storage, family_id) VALUES ('House', 1, 6, (SELECT family_id FROM person WHERE id = " + req.params.id + "));", function(err, result) {
+          if(err) throw err
+        })
+        res.send({"success": true})
+      } else if (rows[0].wood < 12) {
+        res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 12 required!"})
+      } else if (rows[0].food < 3) {
+        res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining and 3 required!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }

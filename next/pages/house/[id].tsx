@@ -54,14 +54,14 @@ function DescribeHouse() {
                   createPerson.mutate(id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById("change-me-two" + id).innerText = res.data.error
+                      document.getElementById("change-me-two-" + id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-two" + id).innerText = ' '
+                      document.getElementById("change-me-two-" + id).innerText = ' '
                     }
                   }})
                 }
               } >Create Person</button>
-              <small className={utilStyles.lightText} id={'change-me-two' + id}></small>
+              <small className={utilStyles.lightText} id={'change-me-two-' + id}></small>
             </li>
           ))}
         </ul>
@@ -102,6 +102,12 @@ function ListHousePeople() {
     const increaseRooms = useMutation({
       mutationFn: (id) => {
         return axios.post('/api/people/modify-house/increase-rooms/' + id)
+      },
+    })
+
+    const createHouse = useMutation({
+      mutationFn: (id) => {
+        return axios.post('/api/people/create-house/' + id)
       },
     })
 
@@ -163,6 +169,18 @@ function ListHousePeople() {
                   }})
                 }
               } >Increase Rooms</button>
+              <button onClick={
+              () => {
+                  createHouse.mutate(id, { onSettled: (res) => {
+                  queryClient.invalidateQueries()
+                  if (!res.data.success) {
+                    document.getElementById("change-me-" + id).innerText = res.data.error
+                  } else {
+                    document.getElementById("change-me-" + id).innerText = ' '
+                  }
+                }})
+              }
+            } >Create House</button>
               <small className={utilStyles.lightText} id={'change-me-' + id}></small>
             </li>
           ))}
