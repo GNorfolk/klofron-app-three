@@ -86,6 +86,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS serverless CDK code: https://github.com/serverless-nextjs/serverless-next.js/blob/master/packages/libs/lambda/src/deploy/cdktf/nextJsLambdaApp.ts
 - Buttons interacting with state: https://nextjs.org/learn/foundations/from-javascript-to-react/adding-interactivity-with-state
 - Tanstack React Query Docs: https://tanstack.com/query/latest/docs/react/overview
+- Docs for default-lambda build: https://www.npmjs.com/package/@sls-next/lambda-at-edge
 
 # Development
 **How to clone repo**:
@@ -130,7 +131,7 @@ UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 ```bash
 rm -rf .next .serverless* node_modules tf/image/node_modules tf/.terraform tf/.terraform.lock.hcl tf/react-app.zip tf/index.zip next-env.d.ts package-lock.json tf/image/package-lock.json
 npm install
-npm run deploy
+npm run build
 npm --prefix tf/image install --platform=linux --arch=x64 tf/image
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/
 terraform -chdir=tf init
