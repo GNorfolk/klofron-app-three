@@ -90,7 +90,23 @@ app.get("/api/people/describe-house/:id", (req, res, next) => {
       console.log("err: ", err)
       res.json({error: err})
     } else {
-      res.json(rows)
+      rows.map(function(row) {
+        if (row['people'] == 0) {
+          connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id FROM house WHERE house.id = ' + req.params.id, function (err, rows) {
+            if (err) {
+              console.log("err: ", err)
+              res.json({error: err})
+            } else {
+              rows.map(function(row) {
+                row['people'] = 0;
+              })
+              res.json(rows)
+            }
+          })
+        } else {
+          res.json(rows)
+        }
+      })
     }
   })
 })
