@@ -1,5 +1,5 @@
 resource "aws_iam_role" "main" {
-    name = "iam_for_lambda"
+    name = "${var.app_name}-nodejs-lambda"
     assume_role_policy = jsonencode({
         Version = "2012-10-17"
         Statement = [

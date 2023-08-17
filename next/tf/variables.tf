@@ -1,3 +1,7 @@
+variable "app_name" {
+  default = "klofron-app-three"
+}
+
 variable "fqdn" {
-  default = "react-app.klofron.uk"
+  default = "klofron-app-three.klofron.uk"
 }

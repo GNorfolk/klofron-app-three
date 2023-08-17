@@ -41,16 +41,16 @@ resource "aws_s3_bucket_ownership_controls" "this" {
 }
 
 resource "aws_s3_bucket" "deployment" {
-  bucket = "klofron-nextjs-deployment"
+  bucket = "${var.app_name}-nextjs-deployment"
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket = "klofron-nextjs-app"
+  bucket = "${var.app_name}-nextjs-app"
 }
 
 resource "aws_s3_object" "this" {
   bucket = aws_s3_bucket.deployment.id
-  key = "react-app.zip"
+  key = "${var.app_name}-nextjs.zip"
   source = data.archive_file.this.output_path
   source_hash = filemd5(data.archive_file.this.output_path)
   bucket_key_enabled = false
@@ -63,6 +63,6 @@ resource "aws_s3_object" "this" {
 data "archive_file" "this" {
   type = "zip"
   output_file_mode = "0666"
-  output_path = "react-app.zip"
+  output_path = "${var.app_name}-nextjs.zip"
   source_dir = "../.serverless_nextjs/default-lambda"
 }

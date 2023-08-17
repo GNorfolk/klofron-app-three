@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "this" {
   s3_bucket = aws_s3_bucket.deployment.id
   s3_key = aws_s3_object.this.id
-  function_name = "react-app-serverless-function"
+  function_name = "${var.app_name}-nextjs"
   role = aws_iam_role.this.arn
   handler = "index.handler"
   runtime = "nodejs16.x"
@@ -11,7 +11,7 @@ resource "aws_lambda_function" "this" {
 }
 
 resource "aws_iam_role" "this" {
-  name = "react-app-serverless-function-role"
+  name = "${var.app_name}-nextjs-lambda"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

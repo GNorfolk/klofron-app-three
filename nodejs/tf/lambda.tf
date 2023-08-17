@@ -2,7 +2,7 @@ resource "aws_lambda_function" "main" {
     filename = data.archive_file.this.output_path
     handler = "index.handler"
     runtime = "nodejs18.x"
-    function_name = "backend-service"
+    function_name = "${var.app_name}-nodejs"
     role = aws_iam_role.main.arn
     timeout = 30
     source_code_hash = data.archive_file.this.output_base64sha256
@@ -16,7 +16,7 @@ resource "aws_lambda_function" "main" {
             DB_HOST = "react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com"
             DB_USER = "root"
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
-            DB_NAME = "my-database"
+            DB_NAME = var.app_name
         }
     }
 }
@@ -45,7 +45,7 @@ resource "aws_lambda_permission" "main" {
 }
 
 resource "aws_security_group" "lambda" {
-    name = "react-app-nodejs-lambda-sg"
+    name = "${var.app_name}-nodejs-lambda-sg"
     vpc_id = data.aws_vpc.main.id
     ingress {
         from_port        = 0
@@ -61,6 +61,6 @@ resource "aws_security_group" "lambda" {
         ipv6_cidr_blocks = ["::/0"]
     }
     tags = {
-        Name = "react-app-nodejs-lambda-sg"
+        Name = "${var.app_name}-nodejs-lambda-sg"
     }
 }
