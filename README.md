@@ -128,13 +128,13 @@ UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 
 **How to deploy nextjs app:**
 ```bash
-rm -rf .next .serverless* node_modules tf/image/node_modules tf/.terraform tf/.terraform.lock.hcl tf/react-app.zip tf/index.zip next-env.d.ts package-lock.json tf/image/package-lock.json
+rm -rf .next .serverless* node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nextjs.zip next-env.d.ts package-lock.json
 npm install
-npm run deploy
+export NEXT_PUBLIC_API_HOST=https://y1260ndm5b.execute-api.eu-west-1.amazonaws.com && npm run deploy
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/
-terraform -chdir=tf init
-terraform -chdir=tf apply -auto-approve
-aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-app-three-nextjs-app/
+AWS_PROFILE=react-app terraform -chdir=tf init
+AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
+AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-app-three-nextjs-app/
 ```
 
 **How to deploy CFN app:**

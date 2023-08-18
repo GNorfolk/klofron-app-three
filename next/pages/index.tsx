@@ -27,7 +27,7 @@ function ListFamilies() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familiesData'],
     queryFn: () =>
-      fetch('/api/people/list-families').then(
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/api/people/list-families').then(
         (res) => res.json(),
       ),
   })
