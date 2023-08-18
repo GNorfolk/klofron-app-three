@@ -27,14 +27,14 @@ function DescribeHouse() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['houseData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/api/people/describe-house/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/people/describe-house/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
 
     const createPerson = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/api/people/create-person/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/people/create-person/' + id)
       },
     })
 
@@ -76,38 +76,38 @@ function ListHousePeople() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/api/people/list-house-people/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/people/list-house-people/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
 
     const  increaseFood  = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/api/people/increase-food/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/people/increase-food/' + id)
       },
     })
 
     const  increaseWood  = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/api/people/increase-wood/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/people/increase-wood/' + id)
       },
     })
 
     const increaseStorage = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/api/people/modify-house/increase-storage/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/people/modify-house/increase-storage/' + id)
       },
     })
 
     const increaseRooms = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/api/people/modify-house/increase-rooms/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/people/modify-house/increase-rooms/' + id)
       },
     })
 
     const createHouse = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/api/people/create-house/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/people/create-house/' + id)
       },
     })
 

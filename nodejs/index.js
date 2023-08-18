@@ -12,7 +12,7 @@ if (process.env.ENVIRONMENT === 'local') {
   exports.handler = serverless(app);
 }
 
-app.get("/api/people/list-people", (req, res, next) => {
+app.get("/people/list-people", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, person.family_id, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id', function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -26,7 +26,7 @@ app.get("/api/people/list-people", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-families", (req, res, next) => {
+app.get("/people/list-families", (req, res, next) => {
   connection.query('SELECT id, name FROM family', function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -37,7 +37,7 @@ app.get("/api/people/list-families", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-houses", (req, res, next) => {
+app.get("/people/list-houses", (req, res, next) => {
   connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id', function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -48,7 +48,7 @@ app.get("/api/people/list-houses", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-family-houses/:id", (req, res, next) => {
+app.get("/people/list-family-houses/:id", (req, res, next) => {
   connection.query('SELECT house.id, house.name, family.name AS family_name, house.food, house.wood FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -59,7 +59,7 @@ app.get("/api/people/list-family-houses/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-family-people/:id", (req, res, next) => {
+app.get("/people/list-family-people/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.family_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -73,7 +73,7 @@ app.get("/api/people/list-family-people/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/describe-family/:id", (req, res, next) => {
+app.get("/people/describe-family/:id", (req, res, next) => {
   connection.query('SELECT id, name FROM family WHERE id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -84,7 +84,7 @@ app.get("/api/people/describe-family/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/describe-house/:id", (req, res, next) => {
+app.get("/people/describe-house/:id", (req, res, next) => {
   connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, COUNT(person.house_id) AS people FROM house INNER JOIN person ON person.house_id = house.id WHERE house.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -111,7 +111,7 @@ app.get("/api/people/describe-house/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/list-house-people/:id", (req, res, next) => {
+app.get("/people/list-house-people/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.house_id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -125,7 +125,7 @@ app.get("/api/people/list-house-people/:id", (req, res, next) => {
   })
 })
 
-app.get("/api/people/describe-person/:id", (req, res, next) => {
+app.get("/people/describe-person/:id", (req, res, next) => {
   connection.query('SELECT person.id, person.name, person.gender, father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name, mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name, person.created_at, family.name AS family_name, house.id AS house_id, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id INNER JOIN person AS father ON person.father_id = father.id INNER JOIN person AS mother ON person.mother_id = mother.id INNER JOIN family AS father_family ON father.family_id = father_family.id INNER JOIN family AS mother_family ON mother.family_id = mother_family.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -139,7 +139,7 @@ app.get("/api/people/describe-person/:id", (req, res, next) => {
   })
 })
 
-app.post('/api/people/increase-food/:id', function(req, res) {
+app.post('/people/increase-food/:id', function(req, res) {
   connection.query('SELECT person.last_action, house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -162,7 +162,7 @@ app.post('/api/people/increase-food/:id', function(req, res) {
   })
 });
 
-app.post('/api/people/increase-wood/:id', function(req, res) {
+app.post('/people/increase-wood/:id', function(req, res) {
   connection.query('SELECT person.last_action, house.food FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -185,7 +185,7 @@ app.post('/api/people/increase-wood/:id', function(req, res) {
   })
 });
 
-app.post('/api/people/modify-house/increase-storage/:id', function(req, res) {
+app.post('/people/modify-house/increase-storage/:id', function(req, res) {
   connection.query('SELECT person.last_action, house.storage, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -210,7 +210,7 @@ app.post('/api/people/modify-house/increase-storage/:id', function(req, res) {
   })
 });
 
-app.post('/api/people/modify-house/increase-rooms/:id', function(req, res) {
+app.post('/people/modify-house/increase-rooms/:id', function(req, res) {
   connection.query('SELECT person.last_action, house.rooms, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -235,7 +235,7 @@ app.post('/api/people/modify-house/increase-rooms/:id', function(req, res) {
   })
 });
 
-app.post('/api/people/create-person/:id', function(req, res) {
+app.post('/people/create-person/:id', function(req, res) {
   connection.query('SELECT person.id, person.gender, person.family_id, person.house_id, person.last_action, house.rooms, (SELECT COUNT(*)FROM person WHERE house_id = ' + req.params.id + ') AS people FROM person INNER JOIN house ON person.house_id = house.id WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') ORDER BY gender DESC;', function (err, rows) {
     if (err) {
       console.log("err: ", err)
@@ -276,7 +276,7 @@ app.post('/api/people/create-person/:id', function(req, res) {
   })
 });
 
-app.post('/api/people/create-house/:id', function(req, res) {
+app.post('/people/create-house/:id', function(req, res) {
   connection.query('SELECT wood, food FROM house WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function (err, rows) {
     if (err) {
       console.log("err: ", err)

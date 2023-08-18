@@ -130,7 +130,7 @@ UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 ```bash
 rm -rf .next .serverless* node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nextjs.zip next-env.d.ts package-lock.json
 npm install
-export NEXT_PUBLIC_API_HOST=https://y1260ndm5b.execute-api.eu-west-1.amazonaws.com && npm run deploy
+npm run deploy
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve

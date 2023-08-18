@@ -4,7 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "deploy": "export NEXT_PUBLIC_API_HOST=https://y1260ndm5b.execute-api.eu-west-1.amazonaws.com && AWS_PROFILE=null serverless"
+    "deploy": "export NEXT_PUBLIC_API_HOST=https://klofron-app-three-api.klofron.uk && AWS_PROFILE=null serverless"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",

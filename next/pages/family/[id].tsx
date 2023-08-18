@@ -28,7 +28,7 @@ function DescribeFamily() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/api/people/describe-family/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/people/describe-family/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -52,7 +52,7 @@ function ListFamilyHouses() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyHouseData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/api/people/list-family-houses/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/people/list-family-houses/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -82,7 +82,7 @@ function ListFamilyPeople() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/api/people/list-family-people/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/people/list-family-people/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
