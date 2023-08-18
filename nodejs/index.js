@@ -1,8 +1,12 @@
 const express = require("express");
 const connection = require('./database.js')
 const serverless = require('serverless-http')
-
 const app = express()
+const cors = require('cors');
+
+app.use(
+  cors({ origin: 'https://klofron-app-three.klofron.uk' })
+);
 
 if (process.env.ENVIRONMENT === 'local') {
   app.listen(3001, () => {
