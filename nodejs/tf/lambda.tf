@@ -14,7 +14,7 @@ resource "aws_lambda_function" "main" {
     environment {
         variables = {
             DB_HOST = "react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com"
-            DB_USER = "root"
+            DB_USER = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["username"]
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
             DB_NAME = var.app_name
         }
@@ -29,7 +29,7 @@ data "archive_file" "this" {
 }
 
 data "aws_secretsmanager_secret" "rds" {
-    name = "rds!db-088ff7c4-30ef-4bc2-95c8-23ececf641eb"
+    name = "klofron-app-three-rds-db"
 }
 
 data "aws_secretsmanager_secret_version" "rds" {

@@ -140,3 +140,6 @@ AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://
 **How to deploy CFN app:**
 - aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
+
+**How to refresh nodejs lambda cache:**
+- AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description somevalueheere --region eu-west-1
