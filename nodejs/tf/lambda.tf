@@ -24,8 +24,8 @@ resource "aws_lambda_function" "main" {
 data "archive_file" "this" {
   type = "zip"
   source_dir = ".."
-  output_path = "../nodejs.zip"
-  excludes = ["package.json", "package-lock.json", "nodejs.zip", "tf"]
+  output_path = "klofron-app-three-nodejs.zip"
+  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-nodejs.zip", "tf"]
 }
 
 data "aws_secretsmanager_secret" "rds" {

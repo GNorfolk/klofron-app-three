@@ -137,6 +137,15 @@ AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-app-three-nextjs-app/
 ```
 
+**How to deploy nodejs app:**
+```bash
+rm -rf node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nodejs.zip package-lock.json
+npm install
+AWS_PROFILE=react-app terraform -chdir=tf init
+AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
+AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description (date +%s) --region eu-west-1
+```
+
 **How to deploy CFN app:**
 - aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM

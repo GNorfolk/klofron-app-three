@@ -18,12 +18,12 @@ resource "aws_apigatewayv2_integration" "main" {
 
 resource "aws_apigatewayv2_route" "get-people" {
     api_id = aws_apigatewayv2_api.main.id
-    route_key = "GET /people/{proxy+}"
+    route_key = "GET /v1/{proxy+}"
     target = "integrations/${aws_apigatewayv2_integration.main.id}"
 }
 
 resource "aws_apigatewayv2_route" "post-people" {
     api_id = aws_apigatewayv2_api.main.id
-    route_key = "POST /people/{proxy+}"
+    route_key = "POST /v1/{proxy+}"
     target = "integrations/${aws_apigatewayv2_integration.main.id}"
 }
