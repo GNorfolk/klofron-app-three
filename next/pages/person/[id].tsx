@@ -22,7 +22,7 @@ function DescribePerson() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['personData'],
+      queryKey: ['personData' + router.query.id],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-person/' + router.query.id).then(
           (res) => res.json(),

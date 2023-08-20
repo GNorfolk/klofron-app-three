@@ -25,7 +25,7 @@ function DescribeHouse() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['houseData'],
+      queryKey: ['houseData' + router.query.id],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-house/' + router.query.id).then(
           (res) => res.json(),
@@ -74,7 +74,7 @@ function ListHousePeople() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyMemberData'],
+      queryKey: ['familyMemberData' + router.query.id],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-house-people/' + router.query.id).then(
           (res) => res.json(),
