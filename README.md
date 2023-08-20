@@ -128,7 +128,7 @@ UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 
 **How to deploy nextjs app:**
 ```bash
-rm -rf .next .serverless* node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nextjs.zip next-env.d.ts package-lock.json
+rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nextjs.zip next-env.d.ts package-lock.json
 npm install
 npm run deploy
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/

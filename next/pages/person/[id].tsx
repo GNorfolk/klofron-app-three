@@ -2,19 +2,24 @@ import Link from 'next/link'
 import styles from '../../styles/people.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
+import Layout, { siteTitle } from '../../components/layout'
+import Head from 'next/head'
 
 const queryClient = new QueryClient()
 
-export default function House() {
+export default function Person() {
   return (
-    <div className={styles.container}>
+    <Layout home>
+      <Head>
+        <title>{siteTitle}</title>
+      </Head>
       <QueryClientProvider client={queryClient}>
         <DescribePerson />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
       </div>
-    </div>
+    </Layout>
   )
 }
 
