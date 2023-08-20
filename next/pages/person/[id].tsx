@@ -29,11 +29,11 @@ function DescribePerson() {
         ),
     })
 
-    if (isLoading) return <div className={styles.container}>Loading...</div>
-    if (error) return <div className={styles.container}>Failed to load</div>
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
 
     return (
-      <div className={styles.container}>
+      <div>
         {/* <h1 className={utilStyles.heading2Xl}>{name}</h1> */}
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>

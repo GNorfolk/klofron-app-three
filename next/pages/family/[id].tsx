@@ -33,13 +33,13 @@ function DescribeFamily() {
         ),
     })
 
-    if (isLoading) return <div className={styles.container}>Loading...</div>
-    if (error) return <div className={styles.container}>Failed to load</div>
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
 
     return (
-      <div className={styles.container}>
-        {data.map(({ name }) => (
-          <h1 className={styles.heading2Xl}>The {name} family.</h1>
+      <div>
+        {data.map(({ id, name }) => (
+          <h1 className={styles.heading2Xl} key={id}>The {name} family.</h1>
         ))}
       </div>
     )
@@ -57,11 +57,11 @@ function ListFamilyHouses() {
         ),
     })
 
-    if (isLoading) return <div className={styles.container}>Loading...</div>
-    if (error) return <div className={styles.container}>Failed to load</div>
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
 
     return (
-      <div className={styles.container}>
+      <div>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
           {data.map(({ id, name, family_name, food, wood }) => (
@@ -87,11 +87,11 @@ function ListFamilyPeople() {
         ),
     })
 
-    if (isLoading) return <div className={styles.container}>Loading...</div>
-    if (error) return <div className={styles.container}>Failed to load</div>
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
 
     return (
-      <div className={styles.container}>
+      <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
           {data.map(({ id, name, family_name, gender, age, house_name }) => (

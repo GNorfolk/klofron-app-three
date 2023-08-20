@@ -32,8 +32,8 @@ function ListFamilies() {
       ),
   })
 
-  if (isLoading) return <div className={styles.container}>Loading...</div>
-  if (error) return <div className={styles.container}>Failed to load</div>
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Failed to load</div>
 
   return (
     <div>
