@@ -1,9 +1,8 @@
 import Link from 'next/link'
-import styles from '../../styles/people.module.css'
+import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import utilStyles from '../../styles/utils.module.css'
 import Layout, { siteTitle } from '../../components/layout'
 import Head from 'next/head'
 
@@ -66,7 +65,7 @@ function DescribeHouse() {
                   }})
                 }
               } >Create Person</button>
-              <small className={utilStyles.lightText} id={'change-me-two-' + id}></small>
+              <small className={styles.lightText} id={'change-me-two-' + id}></small>
             </li>
           ))}
         </ul>
@@ -186,7 +185,7 @@ function ListHousePeople() {
                 }})
               }
             } >Create House</button>
-              <small className={utilStyles.lightText} id={'change-me-' + id}></small>
+              <small className={styles.lightText} id={'change-me-' + id}></small>
             </li>
           ))}
         </ul>

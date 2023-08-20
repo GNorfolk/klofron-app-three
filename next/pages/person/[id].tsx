@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from '../../styles/people.module.css'
+import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Layout, { siteTitle } from '../../components/layout'
@@ -39,7 +39,6 @@ function DescribePerson() {
 
     return (
       <div>
-        {/* <h1 className={utilStyles.heading2Xl}>{name}</h1> */}
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
           {data.map(({ id, name, family_name, gender, age, house_id, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name }) => (

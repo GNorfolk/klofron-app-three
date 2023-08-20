@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
-import styles from '../styles/people.module.css'
+import styles from '../styles/main.module.css'
 import Link from 'next/link'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 
@@ -13,7 +12,7 @@ export default function Home() {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className={utilStyles.headingMd}>
+      <section className={styles.headingMd}>
         <p>Welcome to the website!</p>
       </section>
       <QueryClientProvider client={queryClient}>
