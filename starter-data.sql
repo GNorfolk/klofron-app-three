@@ -76,3 +76,13 @@ INSERT INTO person (name, family_id, father_id, mother_id, gender, house_id, cre
 INSERT INTO person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Stanley', 9, 1, 2, 'male', 9, date_sub(now(), interval 71 day));
 INSERT INTO person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Cynthia', 9, 1, 2, 'female', 9, date_sub(now(), interval 58 day));
 INSERT INTO person (name, family_id, father_id, mother_id, gender, house_id, created_at) VALUES ('Melissa', 9, 22, 23, 'female', 9, date_sub(now(), interval 24 day));
+-- -- -- -- -- ACTION -- -- -- -- --
+CREATE TABLE `action` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NOT NULL,
+    `type_id` INT NOT NULL,
+    `started_at` TIMESTAMP,
+    `completed_at` TIMESTAMP,
+    `cancelled_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO action (person_id, type_id, started_at) VALUES (3, 0, NOW());
