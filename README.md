@@ -143,7 +143,7 @@ rm -rf node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-no
 npm install
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description (date +%s) --region eu-west-1
+AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description $(date +%s) --region eu-west-1
 ```
 
 **How to deploy CFN app:**
@@ -152,3 +152,7 @@ AWS_PROFILE=react-app aws lambda update-function-configuration --function-name k
 
 **How to refresh nodejs lambda cache:**
 - AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description somevalueheere --region eu-west-1
+
+**How to open dev tools:**
+- Stack overflow: https://stackoverflow.com/questions/37256331/is-it-possible-to-open-developer-tools-console-in-chrome-on-android-phone
+- Chrome docs: https://developer.chrome.com/docs/devtools/remote-debugging/
