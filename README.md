@@ -86,6 +86,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS serverless CDK code: https://github.com/serverless-nextjs/serverless-next.js/blob/master/packages/libs/lambda/src/deploy/cdktf/nextJsLambdaApp.ts
 - Buttons interacting with state: https://nextjs.org/learn/foundations/from-javascript-to-react/adding-interactivity-with-state
 - Tanstack React Query Docs: https://tanstack.com/query/latest/docs/react/overview
+- Stack overflow open android dev tools: https://stackoverflow.com/questions/37256331/is-it-possible-to-open-developer-tools-console-in-chrome-on-android-phone
+- Chrome docs for android dev tools: https://developer.chrome.com/docs/devtools/remote-debugging/
 
 # Development
 **How to clone repo**:
@@ -135,6 +137,7 @@ cp -R .next/serverless/ .serverless_nextjs/default-lambda/
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-app-three-nextjs-app/
+AWS_PROFILE=react-app aws cloudfront create-invalidation --distribution-id E1E0J1WWG2KPUY --invalidation-batch "{ \"Paths\": { \"Quantity\": 2, \"Items\": [ \"/\", \"/*\" ] }, \"CallerReference\": \"$(date +%s)\" }"
 ```
 
 **How to deploy nodejs app:**
@@ -144,16 +147,13 @@ npm install
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description $(date +%s) --region eu-west-1
-AWS_PROFILE=react-app aws cloudfront create-invalidation --distribution-id E1E0J1WWG2KPUY --invalidation-batch '{ "Paths": { "Quantity": 2, "Items": [ "/", "/*" ] }, "CallerReference": "cli-example" }'
+```
+
+**How to run consumer app locally:**
+```bash
+watch -n5 node consumer.js
 ```
 
 **How to deploy CFN app:**
 - aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
-
-**How to refresh nodejs lambda cache:**
-- AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description somevalueheere --region eu-west-1
-
-**How to open dev tools:**
-- Stack overflow: https://stackoverflow.com/questions/37256331/is-it-possible-to-open-developer-tools-console-in-chrome-on-android-phone
-- Chrome docs: https://developer.chrome.com/docs/devtools/remote-debugging/
