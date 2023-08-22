@@ -144,6 +144,7 @@ npm install
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description $(date +%s) --region eu-west-1
+AWS_PROFILE=react-app aws cloudfront create-invalidation --distribution-id E1E0J1WWG2KPUY --invalidation-batch '{ "Paths": { "Quantity": 2, "Items": [ "/", "/*" ] }, "CallerReference": "cli-example" }'
 ```
 
 **How to deploy CFN app:**
