@@ -144,16 +144,18 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
 })
 
 app.post('/v1/increase-food/:id', function(req, res) {
-  connection.query('SELECT house.food FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT food, (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
-      if (rows[0].food >= 0) {
+      if (rows[0].count == 0) {
         connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 1, NOW())', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
+      } else if (rows[0].count != 0) {
+        res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }
