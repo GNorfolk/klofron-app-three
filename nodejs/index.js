@@ -144,21 +144,16 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
 })
 
 app.post('/v1/increase-food/:id', function(req, res) {
-  connection.query('SELECT person.last_action, house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT house.food FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
-      let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 28800000 && (rows[0].storage >= rows[0].food + rows[0].wood + 2)) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET food = food + 2 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+      if (rows[0].food >= 0) {
+        connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 1, NOW())', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
-      } else if (time_delta < 28800000) {
-        res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
-      } else if (rows[0].storage < rows[0].food + rows[0].wood + 2) {
-        res.send({"success": false, "error": "Not enough storage, only " + (rows[0].storage - rows[0].food - rows[0].wood) + " space remaining and 2 required!"})
       } else {
         res.send({"success": false, "error": "Unknown API error occurred!"})
       }
