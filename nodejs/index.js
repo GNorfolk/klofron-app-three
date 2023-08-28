@@ -186,19 +186,18 @@ app.post('/v1/increase-wood/:id', function(req, res) {
 });
 
 app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
-  connection.query('SELECT person.last_action, house.storage, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count, house.storage, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
-      let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 3) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 3, food = food - 1, storage = storage + 3 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+      if (rows[0].count == 0 && rows[0].food >= 1 && rows[0].wood >= 3) {
+        connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 3, NOW()); UPDATE house SET wood = wood - 3, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
-      } else if (time_delta < 28800000) {
-        res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
+      } else if (rows[0].count != 0) {
+        res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
       } else if (rows[0].food < 1) {
         res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
       } else if (rows[0].wood < 3) {
@@ -211,19 +210,18 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
 });
 
 app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
-  connection.query('SELECT person.last_action, house.rooms, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
+  connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count, house.rooms, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
     if (err) {
       console.log("err: ", err)
       res.json({error: err})
     } else {
-      let time_delta = new Date() - new Date(rows[0].last_action)
-      if (time_delta > 28800000 && rows[0].food > 0 && rows[0].wood >= 6) {
-        connection.query('UPDATE person SET last_action = CURRENT_TIMESTAMP WHERE id = ' + req.params.id + '; UPDATE house SET wood = wood - 6, food = food - 1, rooms = rooms + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+      if (rows[0].count == 0 && rows[0].food >= 1 && rows[0].wood >= 6) {
+        connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 4, NOW()); UPDATE house SET wood = wood - 6, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
-      } else if (time_delta < 28800000) {
-        res.send({"success": false, "error": "Time delta value of " + time_delta + " is too low!"})
+      } else if (rows[0].count != 0) {
+        res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
       } else if (rows[0].food < 1) {
         res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
       } else if (rows[0].wood < 6) {
