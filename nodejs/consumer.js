@@ -59,7 +59,7 @@ function checkQueue() {
               console.log("err: ", house_err)
               res.json({error: house_err})
             } else {
-              if (house_rows[0].storage >= house_rows[0].food + house_rows[0].wood + 2) {
+              if (house_rows[0].storage >= house_rows[0].food + house_rows[0].wood + 1) {
                 connection.query('UPDATE action SET completed_at = NOW() WHERE id = ' + row['id'] + '; UPDATE house SET wood = wood + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + row['person_id'] + ');', function (post_house_err, post_house_rows) {
                   if (post_house_err) {
                     console.log("err: ", post_house_err)
