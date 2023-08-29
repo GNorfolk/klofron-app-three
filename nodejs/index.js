@@ -281,7 +281,7 @@ app.post('/v1/create-house/:id', function(req, res) {
       res.json({error: err})
     } else {
       if (rows[0].wood >= 12 && rows[0].food >= 3) {
-        connection.query("UPDATE house SET wood = wood - 12, food = food - 3 WHERE id = (SELECT house_id FROM person WHERE id = " + req.params.id + "); INSERT INTO house (name, rooms, storage, family_id) VALUES ('House', 1, 6, (SELECT family_id FROM person WHERE id = " + req.params.id + "));", function(err, result) {
+        connection.query("INSERT INTO action (person_id, type_id, started_at) VALUES (" + req.params.id + ", 5, NOW()); UPDATE house SET wood = wood - 12, food = food - 3 WHERE id = (SELECT house_id FROM person WHERE id = " + req.params.id + ");", function(err, result) {
           if(err) throw err
         })
         res.send({"success": true})
