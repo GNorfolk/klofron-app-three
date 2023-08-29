@@ -16,3 +16,11 @@ data "aws_subnet" "main" {
     values = ["eu-west-1a"]
   }
 }
+
+data "aws_secretsmanager_secret" "rds" {
+    name = "klofron-app-three-rds-db"
+}
+
+data "aws_secretsmanager_secret_version" "rds" {
+    secret_id = data.aws_secretsmanager_secret.rds.id
+}

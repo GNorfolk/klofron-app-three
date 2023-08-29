@@ -1,15 +1,15 @@
-resource "aws_lambda_function" "main" {
-    filename = data.archive_file.this.output_path
-    handler = "index.handler"
+resource "aws_lambda_function" "consumer" {
+    filename = data.archive_file.consumer.output_path
+    handler = "consumer.handler"
     runtime = "nodejs18.x"
-    function_name = "${var.app_name}-nodejs"
+    function_name = "${var.app_name}-consumer"
     role = aws_iam_role.main.arn
-    timeout = 30
-    source_code_hash = data.archive_file.this.output_base64sha256
+    timeout = 10
+    source_code_hash = data.archive_file.consumer.output_base64sha256
     architectures = ["arm64"]
     vpc_config {
         subnet_ids         = [data.aws_subnet.main.id]
-        security_group_ids = [aws_security_group.lambda.id]
+        security_group_ids = [aws_security_group.consumer.id]
     }
     environment {
         variables = {
@@ -21,23 +21,15 @@ resource "aws_lambda_function" "main" {
     }
 }
 
-data "archive_file" "this" {
+data "archive_file" "consumer" {
   type = "zip"
   source_dir = ".."
-  output_path = "klofron-app-three-nodejs.zip"
-  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-nodejs.zip", "tf", "consumer.js"]
+  output_path = "klofron-app-three-consumer.zip"
+  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-consumer.zip", "tf", "index.js"]
 }
 
-resource "aws_lambda_permission" "main" {
-    statement_id = "AllowExecutionFromAPIGateway"
-    action = "lambda:InvokeFunction"
-    function_name = aws_lambda_function.main.function_name
-    principal = "apigateway.amazonaws.com"
-    source_arn = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
-}
-
-resource "aws_security_group" "lambda" {
-    name = "${var.app_name}-nodejs-lambda-sg"
+resource "aws_security_group" "consumer" {
+    name = "${var.app_name}-consumer-lambda-sg"
     vpc_id = data.aws_vpc.main.id
     ingress {
         from_port        = 0
@@ -53,6 +45,6 @@ resource "aws_security_group" "lambda" {
         ipv6_cidr_blocks = ["::/0"]
     }
     tags = {
-        Name = "${var.app_name}-nodejs-lambda-sg"
+        Name = "${var.app_name}-consumer-lambda-sg"
     }
 }

@@ -1,7 +1,7 @@
 const connection = require('./database.js')
 
 function checkQueue() {
-  connection.query('SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();', function (err, rows) {
+  connection.query('SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < now();', function (err, rows) {
     if (err) {
       console.log("err: ", err)
     } else {
@@ -145,4 +145,6 @@ function checkQueue() {
   })
 }
 
-checkQueue();
+exports.handler = function (event, context) {
+  checkQueue()
+}

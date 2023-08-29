@@ -88,6 +88,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Tanstack React Query Docs: https://tanstack.com/query/latest/docs/react/overview
 - Stack overflow open android dev tools: https://stackoverflow.com/questions/37256331/is-it-possible-to-open-developer-tools-console-in-chrome-on-android-phone
 - Chrome docs for android dev tools: https://developer.chrome.com/docs/devtools/remote-debugging/
+- Promises in nodejs lambda: https://stackoverflow.com/questions/54626183/whats-the-right-way-to-return-from-an-aws-lambda-function-in-node-js
 
 # Development
 **How to clone repo**:
@@ -147,6 +148,7 @@ npm install
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description $(date +%s) --region eu-west-1
+AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-consumer --description $(date +%s) --region eu-west-1
 ```
 
 **How to run consumer app locally:**
