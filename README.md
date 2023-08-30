@@ -88,6 +88,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Tanstack React Query Docs: https://tanstack.com/query/latest/docs/react/overview
 - Stack overflow open android dev tools: https://stackoverflow.com/questions/37256331/is-it-possible-to-open-developer-tools-console-in-chrome-on-android-phone
 - Chrome docs for android dev tools: https://developer.chrome.com/docs/devtools/remote-debugging/
+- Promises in nodejs: https://codeburst.io/node-js-mysql-and-promises-4c3be599909b
 - Promises in nodejs lambda: https://stackoverflow.com/questions/54626183/whats-the-right-way-to-return-from-an-aws-lambda-function-in-node-js
 
 # Development
