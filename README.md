@@ -90,6 +90,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Chrome docs for android dev tools: https://developer.chrome.com/docs/devtools/remote-debugging/
 - Promises in nodejs: https://codeburst.io/node-js-mysql-and-promises-4c3be599909b
 - Promises in nodejs lambda: https://stackoverflow.com/questions/54626183/whats-the-right-way-to-return-from-an-aws-lambda-function-in-node-js
+- Nested promises in nodejs: https://stackoverflow.com/questions/35805603/are-nested-promises-normal-in-node-js
+- If statements in promises: https://stackoverflow.com/questions/33257412/how-to-handle-the-if-else-in-promise-then
 
 # Development
 **How to clone repo**:

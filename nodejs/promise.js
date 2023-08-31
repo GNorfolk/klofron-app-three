@@ -34,30 +34,38 @@ const config = {
 
 const database = new Database( config );
 
-database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < now();' ).then( rows => {
-    console.log(rows)
-    database.close()
-} );
+database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 0 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();' )
+    .then( rows => {
+        console.log(rows)
+        return Promise.all(
+            rows.map(row => {
+                database.query( 'UPDATE action SET completed_at = NOW() WHERE id = ' + row['id'] )
+            } )
+        )
+    } )
+    .catch( err => {
+        console.log(err)
+    } )
+    // .finally( () => {
+    //     database.close()
+    // } )
 
-// database.query( 'SELECT * FROM some_table' )
-//     .then( rows => database.query( 'SELECT * FROM other_table' ) )
-//     .then( rows => database.close() );
-
-// let someRows, otherRows
-// database.query( 'SELECT * FROM some_table' )
-//     .then( rows => {
-//         someRows = rows;
-//         return database.query( 'SELECT * FROM other_table' )
-//     } )
-//     .then( rows => {
-//         otherRows = rows;
-//         return database.close()
-//     }, err => {
-//         return database.close().then( () => { throw err; } )
-//     } )
-//     .then( () => {
-//         // do something with someRows and otherRows
-//     } )
-//     .catch( err => {
-//         // handle the error
-//     } )
+database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 1 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();' )
+    .then( rows => {
+        console.log(rows)
+        return Promise.all(
+            rows.map(row => {
+                database.query( 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row['person_id'] )
+                    .then( rows => {
+                        if (rows[0].storage >= rows[0].food + rows[0].wood + 2) {
+                            return database.query( 'UPDATE action SET completed_at = NOW() WHERE id = ' + row['id'] + '; UPDATE house SET food = food + 2 WHERE id = (SELECT house_id FROM person WHERE id = ' + row['person_id'] + ');' )
+                        } else {
+                            return database.query( 'UPDATE action SET completed_at = NOW() WHERE id = ' + row['id'] )
+                        }
+                    } )
+            } )
+        )
+    } )
+    // .then( () => {
+    //     database.close()
+    // } )
