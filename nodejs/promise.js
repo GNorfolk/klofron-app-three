@@ -84,9 +84,9 @@ database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancel
     .catch( err => {
         console.log(err)
     } )
-    // .finally( () => {
-    //     database.close()
-    // } )
+    .finally( () => {
+        database.close()
+    } )
 
 // Query with type_id equal to 1
 database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 1 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();' )
@@ -105,6 +105,23 @@ database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancel
             } )
         )
     } )
-    // .then( () => {
-    //     database.close()
-    // } )
+    .then( () => {
+        database.close()
+    } )
+
+// Testing without if statement madness
+database.query( 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 1 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();' )
+    .then( rows => {
+        console.log(rows)
+        return Promise.all(
+            rows.map(row => {
+                database.query( 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row['person_id'] )
+                    .then( rows => {
+                        database.query( 'UPDATE action SET completed_at = NOW() WHERE id = ' + rows[0]['id'] )
+                    } )
+            } )
+        )
+    } )
+    .then( () => {
+        database.close()
+    } )
