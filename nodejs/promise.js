@@ -112,13 +112,13 @@ testPromise = new Promise((resolve1, reject1) => {
 // Query with type_id equal to 1
 connection1 = mysql.createConnection(config);
 promise1 = new Promise((resolve1, reject1) => {
-    const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 1 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();'
+    const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 1 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 SECOND < now();'
     connection1.query(query1, function(err1, rows1) {
         if (err1) {
             return reject1(err1)
         } else {
             console.log('Number of type one actions: ' + rows1.length)
-            Promise.all(
+            return Promise.all(
                 rows1.map(row1 => {
                     return new Promise((resolve2, reject2) => {
                         const query2 = 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
@@ -126,7 +126,7 @@ promise1 = new Promise((resolve1, reject1) => {
                             if (err2) {
                                 return reject2(err2)
                             } else {
-                                Promise.all(
+                                return Promise.all(
                                     rows2.map(row2 => {
                                         console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
                                         return new Promise((resolve3, reject3) => {
@@ -141,8 +141,9 @@ promise1 = new Promise((resolve1, reject1) => {
                                             })
                                         })
                                     })
-                                )
-                                resolve2(rows2)
+                                ).then(() => {
+                                    resolve2(rows2)
+                                })
                             }
                         })
                     })
@@ -157,8 +158,9 @@ promise1 = new Promise((resolve1, reject1) => {
                         }
                     })
                 })
+            }).then(() => {
+                resolve1()
             })
-            resolve1(rows1)
         }
     })
 })
