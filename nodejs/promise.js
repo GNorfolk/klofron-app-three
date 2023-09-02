@@ -121,13 +121,28 @@ promise1 = new Promise((resolve1, reject1) => {
             Promise.all(
                 rows1.map(row1 => {
                     return new Promise((resolve2, reject2) => {
-                        const query2 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
-                        connection1.query(query2, function(err2, res2) {
+                        const query2 = 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
+                        connection1.query(query2, function(err2, rows2) {
                             if (err2) {
                                 return reject2(err2)
                             } else {
-                                console.log(res2.message)
-                                resolve2(res2)
+                                console.log(rows2)
+                                Promise.all(
+                                    rows2.map(row2 => {
+                                        return new Promise((resolve3, reject3) => {
+                                            const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row2['id']
+                                            connection1.query(query3, function(err3, res3) {
+                                                if (err3) {
+                                                    return reject3(err3)
+                                                } else {
+                                                    console.log(res3.message)
+                                                    resolve3(res3)
+                                                }
+                                            })
+                                        })
+                                    })
+                                )
+                                resolve2(rows2)
                             }
                         })
                     })
