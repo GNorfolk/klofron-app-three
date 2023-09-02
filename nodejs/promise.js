@@ -71,43 +71,45 @@ const config = {
 //         database.close()
 //     } )
 
-// // Query with type_id equal to 0
-// connection0 = mysql.createConnection(config);
-// testPromise = new Promise((resolve1, reject1) => {
-//     const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 0 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();'
-//     connection0.query(query1, function(err1, rows1) {
-//         if (err1) {
-//             return reject1(err1)
-//         } else {
-//             console.log(rows1)
-//             Promise.all(
-//                 rows1.map(row1 => {
-//                     return new Promise((resolve2, reject2) => {
-//                         const query2 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
-//                         connection0.query(query2, function(err2, res2) {
-//                             if (err2) {
-//                                 return reject2(err2)
-//                             } else {
-//                                 console.log(res2.message)
-//                                 resolve2(res2)
-//                             }
-//                         })
-//                     })
-//                 })
-//             )
-//             new Promise((resolveEnd, rejectEnd) => {
-//                 connection0.end( errEnd => {
-//                     if ( errEnd ) {
-//                         return rejectEnd(errEnd)
-//                     } else {
-//                         resolveEnd()
-//                     }
-//                 })
-//             })
-//             resolve1(rows1)
-//         }
-//     })
-// })
+// Query with type_id equal to 0
+connection0 = mysql.createConnection(config);
+promise0 = new Promise((resolve1, reject1) => {
+    const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 0 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 SECOND < now();'
+    connection0.query(query1, function(err1, rows1) {
+        if (err1) {
+            return reject1(err1)
+        } else {
+            console.log('Number of type zero actions: ' + rows1.length)
+            return Promise.all(
+                rows1.map(row1 => {
+                    return new Promise((resolve2, reject2) => {
+                        const query2 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
+                        connection0.query(query2, function(err2, res2) {
+                            if (err2) {
+                                return reject2(err2)
+                            } else {
+                                console.log('Action with ID ' + row1['id'] + ' message: ' + res2.message)
+                                resolve2(res2)
+                            }
+                        })
+                    })
+                })
+            ).then(() => {
+                return new Promise((resolveEnd, rejectEnd) => {
+                    connection0.end( errEnd => {
+                        if ( errEnd ) {
+                            return rejectEnd(errEnd)
+                        } else {
+                            resolveEnd()
+                        }
+                    })
+                })
+            }).then(() => {
+                resolve1()
+            })
+        }
+    })
+})
 
 // Query with type_id equal to 1
 connection1 = mysql.createConnection(config);
@@ -180,50 +182,3 @@ promise1 = new Promise((resolve1, reject1) => {
         }
     })
 })
-
-// // Example code from the internet
-// var pool = mysql.createConnection( config )
-// const query = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE type_id = 0 AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 MINUTE < now();'
-// pool.query( query, function(err, rows, fields) {
-//     if (err) {
-//         console.log(err)
-//     } else {
-//         console.log(rows)
-//         const promises = rows.map(row => {
-//             return new Promise((resolve, reject) => {
-//                 const query2 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row['id']
-//                 pool.query(query2, function(err2, rows2, fields2) {
-//                     if (err2) {
-//                         console.log(err2) 
-//                     } else {
-//                         resolve(rows2)
-//                     }
-//                 })
-//             })
-//         })
-//         Promise.all(promises)
-//         .then((someResult) => {
-//             const anotherPromise = Promise.all(
-//                 someResult.map((someValues) => {
-//                     return Promise.all(
-//                         someValues.map(async (someValue) => {
-//                             const query3 = 'UPDATE action SET cancelled_at = NOW() WHERE id = ' + someValue['id']
-//                             let thirdPromise = new Promise((resolve3, reject3) => {
-//                                 pool.query(query3, function(err3, rows3, fields3) {
-//                                     if (err3) {
-//                                         console.log(err3)
-//                                     } else {
-//                                         resolve3(rows3)
-//                                     }
-//                                 })
-//                             })
-//                             return thirdPromise
-//                         })
-//                     )
-//                 })
-//             ).then((thirdResult) => {
-//                 console.log('I dunno bro')
-//             })
-//         })
-//     }
-// } )
