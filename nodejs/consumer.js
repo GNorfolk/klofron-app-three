@@ -1,14 +1,14 @@
 const mysql = require( 'mysql' );
 
-connection = mysql.createConnection({
+config = {
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "password",
     database: process.env.DB_NAME || "klofron-app-three",
     multipleStatements: true
-})
+}
 
-function checkQueue() {
+function checkQueue(connection) {
     new Promise((resolve1, reject1) => {
         const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 1 SECOND < now();'
         connection.query(query1, function(err1, rows1) {
@@ -95,9 +95,11 @@ function checkQueue() {
 }
 
 if (process.env.ENV === 'local') {
-    checkQueue()
+    connection = mysql.createConnection(config)
+    checkQueue(connection)
 } else {
     exports.handler = function (event, context) {
-        checkQueue()
+        connection = mysql.createConnection(config)
+        checkQueue(connection)
     }
 }
