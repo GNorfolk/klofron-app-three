@@ -117,7 +117,7 @@ promise1 = new Promise((resolve1, reject1) => {
         if (err1) {
             return reject1(err1)
         } else {
-            console.log(rows1)
+            console.log('Number of type one actions: ' + rows1.length)
             Promise.all(
                 rows1.map(row1 => {
                     return new Promise((resolve2, reject2) => {
@@ -126,16 +126,16 @@ promise1 = new Promise((resolve1, reject1) => {
                             if (err2) {
                                 return reject2(err2)
                             } else {
-                                console.log(rows2)
                                 Promise.all(
                                     rows2.map(row2 => {
+                                        console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
                                         return new Promise((resolve3, reject3) => {
-                                            const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row2['id']
+                                            const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
                                             connection1.query(query3, function(err3, res3) {
                                                 if (err3) {
                                                     return reject3(err3)
                                                 } else {
-                                                    console.log(res3.message)
+                                                    console.log('Action with ID ' + row1['id'] + ' message: ' + res3.message)
                                                     resolve3(res3)
                                                 }
                                             })
@@ -147,14 +147,15 @@ promise1 = new Promise((resolve1, reject1) => {
                         })
                     })
                 })
-            )
-            new Promise((resolveEnd, rejectEnd) => {
-                connection1.end( errEnd => {
-                    if ( errEnd ) {
-                        return rejectEnd(errEnd)
-                    } else {
-                        resolveEnd()
-                    }
+            ).then(() => {
+                return new Promise((resolveEnd, rejectEnd) => {
+                    connection1.end( errEnd => {
+                        if ( errEnd ) {
+                            return rejectEnd(errEnd)
+                        } else {
+                            resolveEnd()
+                        }
+                    })
                 })
             })
             resolve1(rows1)
