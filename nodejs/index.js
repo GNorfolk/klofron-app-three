@@ -8,7 +8,7 @@ app.use(
   cors({ origin: 'https://klofron-app-three.klofron.uk' })
 );
 
-if (process.env.ENVIRONMENT === 'local') {
+if (process.env.ENV === 'local') {
   app.listen(3001, () => {
     console.log("Server running on port 3001");
   });
