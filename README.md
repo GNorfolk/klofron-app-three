@@ -156,7 +156,7 @@ AWS_PROFILE=react-app aws lambda update-function-configuration --function-name k
 
 **How to run consumer app locally:**
 ```bash
-watch -n5 node consumer.js
+watch -n5 ENV=local node consumer.js
 ```
 
 **How to deploy CFN app:**
