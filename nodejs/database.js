@@ -12,6 +12,7 @@ function getConn() {
     let connection = mysql.createConnection(config)
     connection.connect((err) => {
         if (err) {
+            console.log("DBError: " + err)
             connection = getConn()
         }
         console.log('Database connected')
