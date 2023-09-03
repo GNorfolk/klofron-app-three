@@ -9,7 +9,7 @@ config = {
 }
 
 function getConn() {
-    const connection = mysql.createConnection(config)
+    let connection = mysql.createConnection(config)
     connection.connect((err) => {
         if (err) {
             connection = getConn()
