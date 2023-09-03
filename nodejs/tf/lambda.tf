@@ -25,7 +25,7 @@ data "archive_file" "this" {
   type = "zip"
   source_dir = ".."
   output_path = "klofron-app-three-nodejs.zip"
-  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-nodejs.zip", "tf", "consumer.js"]
+  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-nodejs.zip", "tf", "consumer.js","death.js"]
 }
 
 resource "aws_lambda_permission" "main" {

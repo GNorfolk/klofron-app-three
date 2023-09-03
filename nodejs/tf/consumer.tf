@@ -25,7 +25,7 @@ data "archive_file" "consumer" {
   type = "zip"
   source_dir = ".."
   output_path = "klofron-app-three-consumer.zip"
-  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-consumer.zip", "tf", "index.js"]
+  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-consumer.zip", "tf", "index.js", "death.js"]
 }
 
 resource "aws_security_group" "consumer" {

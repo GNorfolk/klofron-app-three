@@ -47,8 +47,8 @@ CREATE TABLE `person` (
     `mother_id` INT NOT NULL REFERENCES person,
     `gender` VARCHAR(155) NOT NULL,
     `house_id` INT,
-    `last_action` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`house_id`) REFERENCES house(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
