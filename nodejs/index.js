@@ -127,7 +127,7 @@ app.get("/v1/list-house-people/:id", (req, res, next) => {
             rows.map(function(row) {
                 row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
                 if (row['action_started_at']) {
-                    const hours = ((new Date()).valueOf() - (new Date(row['action_started_at'])).valueOf()) / hour_in_ms
+                    const hours = ((new Date(row['action_started_at'])).valueOf() - (new Date() - (8 * hour_in_ms)).valueOf()) / hour_in_ms
                     const minutes = hours > 1 ?  (hours - Math.floor(hours)) * 60 : hours * 60
                     row['action_time'] = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
                 } else {
