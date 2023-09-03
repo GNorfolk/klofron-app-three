@@ -122,9 +122,10 @@ function ListHousePeople() {
       <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, gender, age, house_name }) => (
+          {data.map(({ id, name, family_name, gender, age, house_name, action_time }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
+              <p>{name} is performing action with time {action_time}.</p>
               <button onClick={
                 () => {
                    increaseFood.mutate(id, { onSettled: (res) => {

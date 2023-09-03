@@ -1,19 +1,22 @@
-const express = require("express");
+const express = require("express")
 const connection = require('./database.js')
 const serverless = require('serverless-http')
 const app = express()
-const cors = require('cors');
+const cors = require('cors')
+
+const day_in_ms = 24 * 3600 * 1000
+const hour_in_ms = 3600 * 1000
 
 app.use(
     cors({ origin: 'https://klofron-app-three.klofron.uk' })
-);
+)
 
 if (process.env.ENV === 'local') {
     app.listen(3001, () => {
-        console.log("Server running on port 3001");
-    });
+        console.log("Server running on port 3001")
+    })
 } else {
-    exports.handler = serverless(app);
+    exports.handler = serverless(app)
 }
 
 app.get("/v1/list-people", (req, res, next) => {
@@ -23,8 +26,8 @@ app.get("/v1/list-people", (req, res, next) => {
             res.json({error: err})
         } else {
             rows.map(function(row) {
-                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
-            });
+                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
+            })
             res.json(rows)
         }
     })
@@ -70,8 +73,8 @@ app.get("/v1/list-family-people/:id", (req, res, next) => {
             res.json({error: err})
         } else {
             rows.map(function(row) {
-                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
-            });
+                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
+            })
             res.json(rows)
         }
     })
@@ -102,7 +105,7 @@ app.get("/v1/describe-house/:id", (req, res, next) => {
                             res.json({error: err})
                         } else {
                             rows.map(function(row) {
-                                row['people'] = 0;
+                                row['people'] = 0
                             })
                             res.json(rows)
                         }
@@ -116,14 +119,21 @@ app.get("/v1/describe-house/:id", (req, res, next) => {
 })
 
 app.get("/v1/list-house-people/:id", (req, res, next) => {
-    connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.house_id = ' + req.params.id, function (err, rows) {
+    connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name, (SELECT started_at FROM action where person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_started_at FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.house_id = ' + req.params.id, function (err, rows) {
         if (err) {
             console.log("err: ", err)
             res.json({error: err})
         } else {
             rows.map(function(row) {
-                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
-            });
+                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
+                if (row['action_started_at']) {
+                    const hours = ((new Date()).valueOf() - (new Date(row['action_started_at'])).valueOf()) / hour_in_ms
+                    const minutes = hours > 1 ?  (hours - Math.floor(hours)) * 60 : hours * 60
+                    row['action_time'] = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+                } else {
+                    row['action_time'] = null
+                }
+            })
             res.json(rows)
         }
     })
@@ -136,8 +146,8 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
             res.json({error: err})
         } else {
             rows.map(function(row) {
-                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / 86400000);
-            });
+                row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
+            })
             res.json(rows)
         }
     })
@@ -161,7 +171,7 @@ app.post('/v1/increase-food/:id', function(req, res) {
             }
         }
     })
-});
+})
 
 app.post('/v1/increase-wood/:id', function(req, res) {
     connection.query('SELECT house.food, (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
@@ -183,7 +193,7 @@ app.post('/v1/increase-wood/:id', function(req, res) {
             }
         }
     })
-});
+})
 
 app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
     connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count, house.storage, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
@@ -207,7 +217,7 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
             }
         }
     })
-});
+})
 
 app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
     connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count, house.rooms, house.food, house.wood FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
@@ -231,7 +241,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
             }
         }
     })
-});
+})
 
 app.post('/v1/create-person/:id', function(req, res) {
     connection.query('SELECT person.id, person.gender, person.family_id, person.house_id, person.last_action, house.rooms, (SELECT COUNT(*)FROM person WHERE house_id = ' + req.params.id + ') AS people FROM person INNER JOIN house ON person.house_id = house.id WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') ORDER BY gender DESC;', function (err, rows) {
@@ -272,7 +282,7 @@ app.post('/v1/create-person/:id', function(req, res) {
             }
         }
     })
-});
+})
 
 app.post('/v1/create-house/:id', function(req, res) {
     connection.query('SELECT wood, food FROM house WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function (err, rows) {
@@ -294,4 +304,4 @@ app.post('/v1/create-house/:id', function(req, res) {
             }
         }
     })
-});
+})
