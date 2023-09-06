@@ -20,4 +20,4 @@ function getConn() {
     return connection
 }
 
-module.exports = getConn()
+module.exports = getConn

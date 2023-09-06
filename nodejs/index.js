@@ -16,7 +16,7 @@ if (process.env.ENV === 'local') {
         console.log("Server running on port 3001")
     })
 } else {
-    exports.handler = serverless(app)
+    module.exports.handler = serverless(app);
 }
 
 app.get("/v1/list-people", (req, res, next) => {

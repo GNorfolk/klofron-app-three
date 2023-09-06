@@ -9,7 +9,7 @@ config = {
 }
 
 function checkQueue(connection) {
-    new Promise((resolve1, reject1) => {
+    return new Promise((resolve1, reject1) => {
         const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < now();'
         connection.query(query1, function(err1, rows1) {
             if (err1) {
