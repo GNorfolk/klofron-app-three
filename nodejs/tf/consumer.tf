@@ -17,6 +17,8 @@ resource "aws_lambda_function" "consumer" {
             DB_USER = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["username"]
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
             DB_NAME = var.app_name
+            API_HOST = "klofron-app-three-api.klofron.uk"
+            API_PORT = 443
         }
     }
 }

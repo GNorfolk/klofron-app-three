@@ -1,4 +1,5 @@
 const mysql = require( 'mysql' );
+const http = require('http')
 
 config = {
     host: process.env.DB_HOST || "localhost",
@@ -8,9 +9,13 @@ config = {
     multipleStatements: true
 }
 
+const apiHost = process.env.API_HOST | "localhost"
+const apiPort = process.env.API_PORT | 3001
+const apiMethod = "POST"
+
 function checkQueue(connection) {
     return new Promise((resolve1, reject1) => {
-        const query1 = 'SELECT id, person_id, type_id, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < now();'
+        const query1 = 'SELECT id, person_id, type_id, infinite, started_at, completed_at, cancelled_at FROM action WHERE started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < now();'
         connection.query(query1, function(err1, rows1) {
             if (err1) {
                 return reject1(err1)
@@ -35,6 +40,14 @@ function checkQueue(connection) {
                                                             if (err3) {
                                                                 return reject3(err3)
                                                             } else {
+                                                                if (row1['infinite'] == 1) {
+                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/increase-food/' + row1['person_id'] + '?infinite=1' }
+                                                                    http.request(options, function(res) {
+                                                                        res.on('data', function (body) {
+                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                                        })
+                                                                    }).end()
+                                                                }
                                                                 for (const msg of res3) {
                                                                     console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
                                                                 }
@@ -79,6 +92,14 @@ function checkQueue(connection) {
                                                             if (err3) {
                                                                 return reject3(err3)
                                                             } else {
+                                                                if (row1['infinite'] == 1) {
+                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/increase-wood/' + row1['person_id'] + '?infinite=1' }
+                                                                    http.request(options, function(res) {
+                                                                        res.on('data', function (body) {
+                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                                        })
+                                                                    }).end()
+                                                                }
                                                                 for (const msg of res3) {
                                                                     console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
                                                                 }
@@ -123,6 +144,14 @@ function checkQueue(connection) {
                                                             if (err3) {
                                                                 return reject3(err3)
                                                             } else {
+                                                                if (row1['infinite'] == 1) {
+                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-storage/' + row1['person_id'] + '?infinite=1' }
+                                                                    http.request(options, function(res) {
+                                                                        res.on('data', function (body) {
+                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                                        })
+                                                                    }).end()
+                                                                }
                                                                 for (const msg of res3) {
                                                                     console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
                                                                 }
@@ -167,6 +196,14 @@ function checkQueue(connection) {
                                                             if (err3) {
                                                                 return reject3(err3)
                                                             } else {
+                                                                if (row1['infinite'] == 1) {
+                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-rooms/' + row1['person_id'] + '?infinite=1' }
+                                                                    http.request(options, function(res) {
+                                                                        res.on('data', function (body) {
+                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                                        })
+                                                                    }).end()
+                                                                }
                                                                 for (const msg of res3) {
                                                                     console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
                                                                 }
@@ -211,6 +248,14 @@ function checkQueue(connection) {
                                                             if (err3) {
                                                                 return reject3(err3)
                                                             } else {
+                                                                if (row1['infinite'] == 1) {
+                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/create-house/' + row1['person_id'] + '?infinite=1' }
+                                                                    http.request(options, function(res) {
+                                                                        res.on('data', function (body) {
+                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                                        })
+                                                                    }).end()
+                                                                }
                                                                 for (const msg of res3) {
                                                                     console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
                                                                 }

@@ -82,6 +82,7 @@ CREATE TABLE `action` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `person_id` INT NOT NULL,
     `type_id` INT NOT NULL,
+    `infinite` BOOL NOT NULL DEFAULT 0,
     `started_at` TIMESTAMP,
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP

@@ -87,31 +87,31 @@ function ListHousePeople() {
 
     const  increaseFood  = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/increase-food/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/increase-food/' + id, null, { params: {infinite: 1} })
       },
     })
 
     const  increaseWood  = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/increase-wood/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/increase-wood/' + id, null, { params: {infinite: 1} })
       },
     })
 
     const increaseStorage = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/modify-house/increase-storage/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/modify-house/increase-storage/' + id, null, { params: {infinite: 1} })
       },
     })
 
     const increaseRooms = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/modify-house/increase-rooms/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/modify-house/increase-rooms/' + id, null, { params: {infinite: 1} })
       },
     })
 
     const createHouse = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/create-house/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/create-house/' + id, null, { params: {infinite: 1} })
       },
     })
 

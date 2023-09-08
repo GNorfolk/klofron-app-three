@@ -170,7 +170,8 @@ app.post('/v1/increase-food/:id', function(req, res) {
             res.json({error: err})
         } else {
             if (rows[0].count == 0) {
-                connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 1, NOW())', function(err, result) {
+                const infinite = req.query.infinite | 0
+                connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 1, NOW(), ' + infinite + ')', function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
@@ -191,7 +192,8 @@ app.post('/v1/increase-wood/:id', function(req, res) {
             res.json({error: err})
         } else {
             if (rows[0].food >= 1 && rows[0].count == 0) {
-                connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 2, NOW()); UPDATE house SET food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+                const infinite = req.query.infinite | 0
+                connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 2, NOW(), ' + infinite + '); UPDATE house SET food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
@@ -214,7 +216,8 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
             res.json({error: err})
         } else {
             if (rows[0].count == 0 && rows[0].food >= 1 && rows[0].wood >= 3) {
-                connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 3, NOW()); UPDATE house SET wood = wood - 3, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+                const infinite = req.query.infinite | 0
+                connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 3, NOW(), ' + infinite + '); UPDATE house SET wood = wood - 3, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
@@ -239,7 +242,8 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
             res.json({error: err})
         } else {
             if (rows[0].count == 0 && rows[0].food >= 1 && rows[0].wood >= 6) {
-                connection.query('INSERT INTO action (person_id, type_id, started_at) VALUES (' + req.params.id + ', 4, NOW()); UPDATE house SET wood = wood - 6, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
+                const infinite = req.query.infinite | 0
+                connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 4, NOW(), ' + infinite + '); UPDATE house SET wood = wood - 6, food = food - 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + req.params.id + ');', function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
@@ -310,7 +314,8 @@ app.post('/v1/create-house/:id', function(req, res) {
             res.json({error: err})
         } else {
             if (rows[0].wood >= 12 && rows[0].food >= 3) {
-                connection.query("INSERT INTO action (person_id, type_id, started_at) VALUES (" + req.params.id + ", 5, NOW()); UPDATE house SET wood = wood - 12, food = food - 3 WHERE id = (SELECT house_id FROM person WHERE id = " + req.params.id + ");", function(err, result) {
+                const infinite = req.query.infinite | 0
+                connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 5, NOW(), " + infinite + "); UPDATE house SET wood = wood - 12, food = food - 3 WHERE id = (SELECT house_id FROM person WHERE id = " + req.params.id + ");", function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
