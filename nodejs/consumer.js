@@ -18,19 +18,7 @@ function checkQueue(connection) {
                 console.log('Number of actions: ' + rows1.length)
                 return Promise.all(
                     rows1.map(row1 => {
-                        if (row1['type_id'] == 0) {
-                            return new Promise((resolve2, reject2) => {
-                                const query2 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
-                                connection.query(query2, function(err2, res2) {
-                                    if (err2) {
-                                        return reject2(err2)
-                                    } else {
-                                        console.log('Action with ID ' + row1['id'] + ' message: ' + res2.message)
-                                        resolve2(res2)
-                                    }
-                                })
-                            })
-                        } else if (row1['type_id'] == 1) {
+                        if (row1['type_id'] == 1) {
                             return new Promise((resolve2, reject2) => {
                                 const query2 = 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
                                 connection.query(query2, function(err2, rows2) {
@@ -247,6 +235,18 @@ function checkQueue(connection) {
                                         ).then(() => {
                                             resolve2(rows2)
                                         })
+                                    }
+                                })
+                            })
+                        } else if (row1['type_id'] == 6) {
+                            return new Promise((resolve2, reject2) => {
+                                const query2 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
+                                connection.query(query2, function(err2, res2) {
+                                    if (err2) {
+                                        return reject2(err2)
+                                    } else {
+                                        console.log('Action with ID ' + row1['id'] + ' message: ' + res2.message)
+                                        resolve2(res2)
                                     }
                                 })
                             })
