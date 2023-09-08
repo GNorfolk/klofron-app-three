@@ -8,16 +8,6 @@ config = {
     multipleStatements: true
 }
 
-function getConn() {
-    let connection = mysql.createConnection(config)
-    connection.connect((err) => {
-        if (err) {
-            console.log("DBError: " + err)
-            connection = getConn()
-        }
-        console.log('Database connected')
-    })
-    return connection
-}
+const pool = mysql.createPool(config)
 
-module.exports = getConn()
+module.exports = pool
