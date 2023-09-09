@@ -9,8 +9,8 @@ config = {
     multipleStatements: true
 }
 
-const apiHost = process.env.API_HOST | "localhost"
-const apiPort = process.env.API_PORT | 3001
+const apiHost = process.env.API_HOST || "localhost"
+const apiPort = process.env.API_PORT || 3001
 const apiMethod = "POST"
 
 function checkQueue(connection) {
