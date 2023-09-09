@@ -92,6 +92,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Promises in nodejs lambda: https://stackoverflow.com/questions/54626183/whats-the-right-way-to-return-from-an-aws-lambda-function-in-node-js
 - Nested promises in nodejs: https://stackoverflow.com/questions/35805603/are-nested-promises-normal-in-node-js
 - If statements in promises: https://stackoverflow.com/questions/33257412/how-to-handle-the-if-else-in-promise-then
+- Next Auth credentials tutorial: https://www.youtube.com/watch?v=EFucgPdjeNg
 
 # Development
 **How to clone repo**:

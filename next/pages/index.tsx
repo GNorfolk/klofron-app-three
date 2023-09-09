@@ -3,6 +3,7 @@ import Layout, { siteTitle } from '../components/layout'
 import styles from '../styles/main.module.css'
 import Link from 'next/link'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { signIn } from "next-auth/react"
 
 const queryClient = new QueryClient()
 
@@ -18,6 +19,11 @@ export default function Home() {
       <QueryClientProvider client={queryClient}>
         <ListFamilies />
       </QueryClientProvider>
+      <main>
+        <button onClick={() => {
+          signIn()
+        }}>Login</button>
+      </main>
     </Layout>
   )
 }
