@@ -88,3 +88,22 @@ CREATE TABLE `action` (
     `cancelled_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 INSERT INTO action (person_id, type_id, started_at) VALUES (3, 0, NOW());
+-- -- -- -- -- USER -- -- -- -- --
+CREATE TABLE `user` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(155) NOT NULL UNIQUE,
+    `email` VARCHAR(155) NOT NULL UNIQUE,
+    `password` VARCHAR(155) NOT NULL,
+    `family_id` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`family_id`) REFERENCES family(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO user (username, email, password, family_id) VALUES ('halpert', 'halpert@klofron.uk', 'password', 2);
+INSERT INTO user (username, email, password, family_id) VALUES ('schrute', 'schrute@klofron.uk', 'password', 3);
+INSERT INTO user (username, email, password, family_id) VALUES ('scott', 'scott@klofron.uk', 'password', 4);
+INSERT INTO user (username, email, password, family_id) VALUES ('howard', 'howard@klofron.uk', 'password', 5);
+INSERT INTO user (username, email, password, family_id) VALUES ('bernard', 'berndard@klofron.uk', 'password', 6);
+INSERT INTO user (username, email, password, family_id) VALUES ('philbin', 'philbin@klofron.uk', 'password', 7);
+INSERT INTO user (username, email, password, family_id) VALUES ('vance', 'vance@klofron.uk', 'password', 8);
+INSERT INTO user (username, email, password, family_id) VALUES ('hudson', 'hudson@klofron.uk', 'password', 9);
