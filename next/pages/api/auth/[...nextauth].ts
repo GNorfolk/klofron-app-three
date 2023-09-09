@@ -2,6 +2,20 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const authOptions: NextAuthOptions = {
+    callbacks: {
+        session: async ({ session, token }) => {
+            if (session?.user) {
+                session.user.id = token.uid;
+            }
+            return session;
+        },
+        jwt: async ({ user, token }) => {
+            if (user) {
+                token.uid = user.id;
+            }
+            return token;
+        },
+    },
     session: {
         strategy: "jwt"
     },
@@ -13,24 +27,15 @@ const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password", placeholder: "********"}
             },
             authorize(credentials, req) {
-                // Add logic here to look up the user from the credentials supplied
-                const user = { id: "1", name: "Some Body", email: credentials.email }
+                const user = { id: 1, name: "Some Body", email: credentials.email, family_id: 2 }
                 if (user) {
-                    // Any object returned will be saved in `user` property of the JWT
                     return user
                 } else {
-                    // If you return null then an error will be displayed advising the user to check their details.
                     return null
-                    // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
                 }
             }
         })
-    ],
-    pages: {
-        // signIn: '/auth/signin',
-        // error: '/auth/error',
-        // signOut: '/auth/signout',
-    }
+    ]
 }
 
 export default NextAuth(authOptions);

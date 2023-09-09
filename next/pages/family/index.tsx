@@ -3,6 +3,9 @@ import styles from '../../styles/main.module.css'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import Layout, { siteTitle } from '../../components/layout'
 import Head from 'next/head'
+import { useSession } from 'next-auth/react'
+import Router from "next/router"
+import { useEffect } from "react"
 
 const queryClient = new QueryClient()
 const familyId = 2;
@@ -17,6 +20,7 @@ export default function Family() {
         <DescribeFamily />
         <ListFamilyPeople />
         <ListFamilyHouses />
+        <GetSession />
       </QueryClientProvider>
     <div className={styles.backToHome}>
       <Link href="/">← Back to home</Link>
@@ -97,4 +101,21 @@ function ListFamilyPeople() {
       </ul>
     </div>
   )
+}
+
+function GetSession() {
+  const { status, data } = useSession()
+  useEffect(() => {
+    if (status === "unauthenticated") Router.replace("/api/auth/signin")
+  }, [status])
+  if (status === "authenticated") {
+    return (
+      <div>
+        <h2>Get Session</h2>
+        This page is protected for special people like{"\n"}
+        {JSON.stringify(data.user, null, 2)}
+      </div>
+    )
+  }
+  return <div>Loading...</div>
 }

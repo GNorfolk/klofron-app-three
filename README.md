@@ -93,6 +93,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Nested promises in nodejs: https://stackoverflow.com/questions/35805603/are-nested-promises-normal-in-node-js
 - If statements in promises: https://stackoverflow.com/questions/33257412/how-to-handle-the-if-else-in-promise-then
 - Next Auth credentials tutorial: https://www.youtube.com/watch?v=EFucgPdjeNg
+- Next Auth credentials docs: https://next-auth.js.org/providers/credentials
+- Alternative Next Auth credentials docs: https://next-auth.js.org/configuration/providers/credentials
 
 # Development
 **How to clone repo**:
