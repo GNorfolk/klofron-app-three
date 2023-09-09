@@ -6,12 +6,14 @@ const authOptions: NextAuthOptions = {
         session: async ({ session, token }) => {
             if (session?.user) {
                 session.user.id = token.uid;
+                session.user.family_id = token.family_id;
             }
             return session;
         },
         jwt: async ({ user, token }) => {
             if (user) {
                 token.uid = user.id;
+                token.family_id = user.family_id
             }
             return token;
         },

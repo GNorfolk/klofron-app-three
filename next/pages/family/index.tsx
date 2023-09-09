@@ -8,25 +8,32 @@ import Router from "next/router"
 import { useEffect } from "react"
 
 const queryClient = new QueryClient()
-const familyId = 2;
+let familyId
 
 export default function Family() {
-  return (
-    <Layout home>
-    <Head>
-      <title>{siteTitle}</title>
-    </Head>
-    <QueryClientProvider client={queryClient}>
-        <DescribeFamily />
-        <ListFamilyPeople />
-        <ListFamilyHouses />
-        <GetSession />
-      </QueryClientProvider>
-    <div className={styles.backToHome}>
-      <Link href="/">← Back to home</Link>
-    </div>
-  </Layout>
-  )
+  const { status, data } = useSession()
+  useEffect(() => {
+    if (status === "unauthenticated") Router.replace("/api/auth/signin")
+  }, [status])
+  if (status === "authenticated") {
+    familyId = data.user.family_id
+    return (
+      <Layout home>
+      <Head>
+        <title>{siteTitle}</title>
+      </Head>
+      <QueryClientProvider client={queryClient}>
+          <DescribeFamily />
+          <ListFamilyPeople />
+          <ListFamilyHouses />
+        </QueryClientProvider>
+      <div className={styles.backToHome}>
+        <Link href="/">← Back to home</Link>
+      </div>
+    </Layout>
+    )
+  }
+  return <div>Loading...</div>
 }
 
 function DescribeFamily() {
@@ -101,21 +108,4 @@ function ListFamilyPeople() {
       </ul>
     </div>
   )
-}
-
-function GetSession() {
-  const { status, data } = useSession()
-  useEffect(() => {
-    if (status === "unauthenticated") Router.replace("/api/auth/signin")
-  }, [status])
-  if (status === "authenticated") {
-    return (
-      <div>
-        <h2>Get Session</h2>
-        This page is protected for special people like{"\n"}
-        {JSON.stringify(data.user, null, 2)}
-      </div>
-    )
-  }
-  return <div>Loading...</div>
 }
