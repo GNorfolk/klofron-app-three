@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "export NEXT_PUBLIC_API_HOST=http://localhost:3000 && next dev",
+    "dev": "export NEXT_PUBLIC_API_HOST=http://localhost:3000 NEXTAUTH_SECRET=say_lalisa_love_me_lalisa_love_me_hey && next dev",
     "build": "next build",
     "start": "next start",
     "deploy": "export NEXT_PUBLIC_API_HOST=https://klofron-app-three-api.klofron.uk && AWS_PROFILE=null serverless"

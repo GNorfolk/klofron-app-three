@@ -7,7 +7,7 @@ const Protected: NextPage = (): JSX.Element => {
     const { status, data } = useSession()
 
     useEffect(() => {
-        if (status === "unauthenticated") Router.replace("/auth/signin")
+        if (status === "unauthenticated") Router.replace("/api/auth/signin")
     }, [status])
 
     if (status === "authenticated") {
