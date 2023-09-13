@@ -2,13 +2,14 @@ const express = require("express")
 const serverless = require('serverless-http')
 const app = express()
 const cors = require('cors')
+const bcrypt = require("bcrypt")
 const day_in_ms = 24 * 3600 * 1000
 const hour_in_ms = 3600 * 1000
 let connection = require('./database.js')
+const saltRounds = 10;
 
-app.use(
-    cors({ origin: 'https://klofron-app-three.klofron.uk' })
-)
+app.use(cors({ origin: 'https://klofron-app-three.klofron.uk' }))
+app.use(express.json())
 
 if (process.env.ENV === 'local') {
     app.listen(3001, () => {
@@ -326,6 +327,25 @@ app.post('/v1/create-house/:id', function(req, res) {
             } else {
                 res.send({"success": false, "error": "Unknown API error occurred!"})
             }
+        }
+    })
+})
+
+// curl --request POST localhost:3001/v1/login --header "Content-Type: application/json" --data '{"email":"halpert@klofron.uk","password":"password"}'
+
+app.post("/v1/login", (req, res)=> {
+    connection.query("SELECT username, email, password FROM user WHERE email = '" + req.body.email + "';", async (err, result) => {
+        if (result.length == 0) {
+            res.send("Login Unsuccessful")
+        } else if (result.length > 1) {
+            res.send("Login Unsuccessful")
+        } else if (await bcrypt.compare(req.body.password, result[0].password)) {
+            res.send("Login Successful")
+        } else {
+            // bcrypt.hash(result[0].password, saltRounds, (err, hash) => {
+            //     console.log(hash)
+            //   });
+            res.send("Login Unsuccessful")
         }
     })
 })

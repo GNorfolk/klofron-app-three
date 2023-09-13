@@ -4,7 +4,7 @@ resource "aws_lambda_function" "death" {
     runtime = "nodejs18.x"
     function_name = "${var.app_name}-death"
     role = aws_iam_role.main.arn
-    timeout = 10
+    timeout = 30
     source_code_hash = data.archive_file.death.output_base64sha256
     architectures = ["arm64"]
     vpc_config {
