@@ -9,7 +9,7 @@ const queryClient = new QueryClient()
 
 export default function Family() {
   return (
-    <Layout home>
+    <Layout>
     <Head>
       <title>{siteTitle}</title>
     </Head>

@@ -1,5 +1,4 @@
-import Head from 'next/head'
-import Layout, { siteTitle } from '../components/layout'
+import Layout from '../components/layout'
 import styles from '../styles/main.module.css'
 import Link from 'next/link'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'

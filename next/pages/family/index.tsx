@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import styles from '../../styles/main.module.css'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
-import Layout, { siteTitle } from '../../components/layout'
-import Head from 'next/head'
+import Layout from '../../components/layout'
 
 const queryClient = new QueryClient()
 

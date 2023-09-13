@@ -10,7 +10,7 @@ const queryClient = new QueryClient()
 
 export default function House() {
   return (
-    <Layout home>
+    <Layout>
       <Head>
         <title>{siteTitle}</title>
       </Head>

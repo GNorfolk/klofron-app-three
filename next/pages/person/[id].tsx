@@ -9,7 +9,7 @@ const queryClient = new QueryClient()
 
 export default function Person() {
   return (
-    <Layout home>
+    <Layout>
       <Head>
         <title>{siteTitle}</title>
       </Head>
