@@ -181,7 +181,7 @@ function checkQueue(connection) {
                             })
                         } else if (row1['type_id'] == 4) {
                             return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
+                                const query2 = 'SELECT house.storage, house.wood, house.food FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
                                 connection.query(query2, function(err2, rows2) {
                                     if (err2) {
                                         return reject2(err2)

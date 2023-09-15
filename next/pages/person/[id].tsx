@@ -13,7 +13,7 @@ export default function Person() {
         <DescribePerson />
       </QueryClientProvider>
       <div className={styles.backToHome}>
-        <Link href="/">← Back to home</Link>
+        <Link href="/family">← Back to home</Link>
       </div>
     </Layout>
   )

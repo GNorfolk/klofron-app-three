@@ -7,10 +7,10 @@ export default function Layout({ children } : { children: React.ReactNode }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>ka3</title>
+        <title>klofron</title>
       </Head>
       <header className={styles.header}>
-        <h1 className={styles.heading2Xl}>ka3</h1>
+        <h1 className={styles.heading2Xl}>klofron</h1>
         { status === "authenticated" ? (
           <button onClick={(e) => { e.preventDefault(); signOut() }}>Logout</button>
         ) : (

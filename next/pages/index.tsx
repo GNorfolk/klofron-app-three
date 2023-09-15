@@ -12,7 +12,7 @@ let familyId
 export default function Family() {
   const { status, data } = useSession()
   useEffect(() => {
-    if (status === "unauthenticated") Router.replace("/api/auth/signin")
+    if (status === "unauthenticated") Router.replace("/family")
   }, [status])
   if (status === "authenticated") {
     familyId = data.user.family_id
