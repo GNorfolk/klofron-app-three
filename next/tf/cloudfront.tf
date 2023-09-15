@@ -32,7 +32,7 @@ resource "aws_cloudfront_distribution" "this" {
     forwarded_values {
       query_string = false
       cookies {
-        forward = "none"
+        forward = "all"
       }
     }
     lambda_function_association {
@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "this" {
     forwarded_values {
       query_string = false
       cookies {
-        forward = "none"
+        forward = "all"
       }
     }
   }

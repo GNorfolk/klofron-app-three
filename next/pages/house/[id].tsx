@@ -3,17 +3,13 @@ import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import Layout, { siteTitle } from '../../components/layout'
-import Head from 'next/head'
+import Layout from '../../components/layout'
 
 const queryClient = new QueryClient()
 
 export default function House() {
   return (
     <Layout>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
       <QueryClientProvider client={queryClient}>
         <DescribeHouse />
         <ListHousePeople />

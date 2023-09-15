@@ -141,6 +141,7 @@ rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terra
 npm install
 npm run deploy
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/
+cp .env.local .serverless_nextjs/default-lambda/.env.production.local
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-app-three-nextjs-app/

@@ -26,6 +26,8 @@ const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt"
     },
+    secret: "say_lalisa_love_me_lalisa_love_me_hey",
+    debug: true,
     providers: [
         CredentialsProvider({
             type: 'credentials',
