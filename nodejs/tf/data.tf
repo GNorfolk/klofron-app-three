@@ -24,3 +24,9 @@ data "aws_secretsmanager_secret" "rds" {
 data "aws_secretsmanager_secret_version" "rds" {
     secret_id = data.aws_secretsmanager_secret.rds.id
 }
+
+data "aws_acm_certificate" "this" {
+    domain = "klofron.uk"
+    types = ["AMAZON_ISSUED"]
+    most_recent = true
+}

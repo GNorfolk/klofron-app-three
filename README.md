@@ -137,25 +137,25 @@ UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 
 **How to deploy nextjs app:**
 ```bash
-rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nextjs.zip next-env.d.ts package-lock.json
+rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nextjs.zip next-env.d.ts package-lock.json
 npm install
 npm run deploy
 cp -R .next/serverless/ .serverless_nextjs/default-lambda/
 cp .env.local .serverless_nextjs/default-lambda/.env.production.local
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://klofron-app-three-nextjs-app/
-AWS_PROFILE=react-app aws cloudfront create-invalidation --distribution-id E1E0J1WWG2KPUY --invalidation-batch "{ \"Paths\": { \"Quantity\": 2, \"Items\": [ \"/\", \"/*\" ] }, \"CallerReference\": \"$(date +%s)\" }"
+AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://ka3-nextjs-app/
+AWS_PROFILE=react-app aws cloudfront create-invalidation --distribution-id E15HWCISMEGS57 --invalidation-batch "{ \"Paths\": { \"Quantity\": 2, \"Items\": [ \"/\", \"/*\" ] }, \"CallerReference\": \"$(date +%s)\" }"
 ```
 
 **How to deploy nodejs app:**
 ```bash
-rm -rf node_modules tf/.terraform tf/.terraform.lock.hcl tf/klofron-app-three-nodejs.zip package-lock.json
+rm -rf node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nodejs.zip package-lock.json
 npm install
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-nodejs --description $(date +%s) --region eu-west-1
-AWS_PROFILE=react-app aws lambda update-function-configuration --function-name klofron-app-three-consumer --description $(date +%s) --region eu-west-1
+AWS_PROFILE=react-app aws lambda update-function-configuration --function-name ka3-nodejs --description $(date +%s) --region eu-west-1
+AWS_PROFILE=react-app aws lambda update-function-configuration --function-name ka3-consumer --description $(date +%s) --region eu-west-1
 ```
 
 **How to run consumer app locally:**

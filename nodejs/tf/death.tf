@@ -16,7 +16,7 @@ resource "aws_lambda_function" "death" {
             DB_HOST = "react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com"
             DB_USER = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["username"]
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
-            DB_NAME = var.app_name
+            DB_NAME = "klofron-app-three"
         }
     }
 }
@@ -24,8 +24,8 @@ resource "aws_lambda_function" "death" {
 data "archive_file" "death" {
   type = "zip"
   source_dir = ".."
-  output_path = "klofron-app-three-death.zip"
-  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-death.zip", "tf", "index.js", "consumer.js"]
+  output_path = "ka3-death.zip"
+  excludes = ["package.json", "package-lock.json", "tf/ka3-death.zip", "tf", "index.js", "consumer.js"]
 }
 
 resource "aws_security_group" "death" {

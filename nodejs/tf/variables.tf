@@ -1,3 +1,3 @@
 variable "app_name" {
-  default = "klofron-app-three"
+  default = "ka3"
 }

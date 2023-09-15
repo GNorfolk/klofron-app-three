@@ -1,7 +1,7 @@
 variable "app_name" {
-  default = "klofron-app-three"
+  default = "ka3"
 }
 
 variable "fqdn" {
-  default = "klofron-app-three.klofron.uk"
+  default = "www.klofron.uk"
 }

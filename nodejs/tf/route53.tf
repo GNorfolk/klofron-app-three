@@ -3,22 +3,16 @@ data "aws_route53_zone" "this" {
   private_zone = false
 }
 
-resource "aws_acm_certificate" "this" {
-  domain_name = "klofron.uk"
-  subject_alternative_names = ["*.klofron.uk"]
-  validation_method = "DNS"
-}
-
 resource "aws_apigatewayv2_domain_name" "this" {
-  domain_name = "klofron-app-three-api.klofron.uk"
+  domain_name = "api.klofron.uk"
   domain_name_configuration {
-    certificate_arn = aws_acm_certificate.this.arn
+    certificate_arn = data.aws_acm_certificate.this.arn
     endpoint_type = "REGIONAL"
     security_policy = "TLS_1_2"
   }
 }
 
-resource "aws_apigatewayv2_api_mapping" "example" {
+resource "aws_apigatewayv2_api_mapping" "this" {
   api_id = aws_apigatewayv2_api.main.id
   domain_name = aws_apigatewayv2_domain_name.this.id
   stage = aws_apigatewayv2_stage.main.id

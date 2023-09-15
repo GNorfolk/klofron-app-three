@@ -16,8 +16,8 @@ resource "aws_lambda_function" "consumer" {
             DB_HOST = "react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com"
             DB_USER = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["username"]
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
-            DB_NAME = var.app_name
-            API_HOST = "klofron-app-three-api.klofron.uk"
+            DB_NAME = "klofron-app-three"
+            API_HOST = "api.klofron.uk"
             API_PORT = 443
         }
     }
@@ -26,8 +26,8 @@ resource "aws_lambda_function" "consumer" {
 data "archive_file" "consumer" {
   type = "zip"
   source_dir = ".."
-  output_path = "klofron-app-three-consumer.zip"
-  excludes = ["package.json", "package-lock.json", "tf/klofron-app-three-consumer.zip", "tf", "index.js", "death.js"]
+  output_path = "ka3-consumer.zip"
+  excludes = ["package.json", "package-lock.json", "tf/ka3-consumer.zip", "tf", "index.js", "death.js"]
 }
 
 resource "aws_security_group" "consumer" {

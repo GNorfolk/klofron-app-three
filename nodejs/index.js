@@ -8,7 +8,7 @@ const hour_in_ms = 3600 * 1000
 let connection = require('./database.js')
 const saltRounds = 10;
 
-app.use(cors({ origin: 'https://klofron-app-three.klofron.uk' }))
+app.use(cors({ origin: 'https://www.klofron.uk' }))
 app.use(express.json())
 
 if (process.env.ENV === 'local') {
