@@ -423,3 +423,25 @@ app.post("/v1/cancel-person-action/:id", (req, res, next) => {
         }
     })
 })
+
+// curl --request POST localhost:3001/v1/rename-person/29 --header "Content-Type: application/json" --data '{"name":"Garry"}'
+
+app.post("/v1/rename-person/:id", (req, res, next) => {
+    connection.query('SELECT id, name FROM person WHERE id = ' + req.params.id, function (err, rows) {
+        if (err) {
+            console.log("RenamePersonError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else if (req.body.name.length == 0) {
+            res.send({"success": false, "error": "Name too short!"})
+        } else {
+            connection.query("UPDATE person SET name = '" + req.body.name + "' WHERE id = " + rows[0].id, function(err, result) {
+                if(err) {
+                    throw err
+                } else {
+                    res.send({"success": true})
+                }
+            })
+        }
+    })
+})

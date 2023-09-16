@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Layout from '../../components/layout'
 import axios from 'axios'
+import { FormEventHandler, useState } from "react"
 
 const queryClient = new QueryClient()
 
@@ -13,6 +14,7 @@ export default function Person() {
       <QueryClientProvider client={queryClient}>
         <DescribePerson />
         <DescribePersonActions />
+        <RenamePerson />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/family">← Back to home</Link>
@@ -71,7 +73,6 @@ function DescribePersonActions() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    console.log("uhh: " + data.success)
     if (data.success) {
       return (
         <div>
@@ -110,5 +111,38 @@ function DescribePersonActions() {
         </div>
       )
     }
+  }
+}
+
+function RenamePerson() {
+  const router = useRouter()
+  if (router.isReady) {
+    const [personInfo, setpersonInfo] = useState({ name: "" })
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+      e.preventDefault();
+      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/rename-person/' + router.query.id, {
+        name: personInfo.name
+      }).then((value) => {
+        queryClient.invalidateQueries()
+      })
+    };
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Rename Person</h2>
+        <ul className={styles.list}>
+          <form onSubmit={handleSubmit}>
+            <input
+              value={personInfo.name}
+              onChange={({ target }) =>
+                setpersonInfo({ ...personInfo, name: target.value })
+              }
+              placeholder="Insert name here"
+            />
+            <input type="submit" value="Rename" />
+          </form>
+        </ul>
+      </div>
+    )
   }
 }
