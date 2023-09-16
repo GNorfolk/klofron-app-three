@@ -177,7 +177,6 @@ app.get("/v1/describe-person-actions/:id", (req, res, next) => {
             res.send({"success": false, "error": "Less than six actions returned!"})
         } else {
             const latest_action = rows[0]
-            console.log(latest_action)
             if (latest_action.completed_at == null && latest_action.cancelled_at == null) {
                 res.send({
                     "success": true,

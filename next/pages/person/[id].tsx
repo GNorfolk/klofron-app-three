@@ -64,26 +64,35 @@ function DescribePersonActions() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Actions Info</h2>
-        <h3 className={styles.headingMd}>Curent Action</h3>
-        <ul className={styles.list}>
-          {data.current_action.map(({ id, type_id, started_at }) => (
-            <li className={styles.listItem} key={id}>
+    if (data.success == "true") {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Actions Info</h2>
+          <h3 className={styles.headingMd}>Curent Action</h3>
+          <ul className={styles.list}>
+            {data.current_action.map(({ id, type_id, started_at }) => (
+              <li className={styles.listItem} key={id}>
+                <p>Action with id {id} and type {type_id} was started at {started_at}</p>
+              </li>
+            ))}
+          </ul>
+          <h3 className={styles.headingMd}>Previous Actions</h3>
+          <ul className={styles.list}>
+            {data.previous_actions.map(({ id, type_id, started_at }) => (
+              <li className={styles.listItem} key={id}>
               <p>Action with id {id} and type {type_id} was started at {started_at}</p>
-            </li>
-          ))}
-        </ul>
-        <h3 className={styles.headingMd}>Previous Actions</h3>
-        <ul className={styles.list}>
-          {data.previous_actions.map(({ id, type_id, started_at }) => (
-            <li className={styles.listItem} key={id}>
-            <p>Action with id {id} and type {type_id} was started at {started_at}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Actions Info</h2>
+          <p>Backend call failed with error: {data.error}</p>
+        </div>
+      )
+    }
   }
 }
