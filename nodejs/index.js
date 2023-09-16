@@ -163,6 +163,50 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
     })
 })
 
+// curl localhost:3001/v1/describe-person-actions/25
+
+app.get("/v1/describe-person-actions/:id", (req, res, next) => {
+    connection.query('SELECT * FROM action WHERE person_id = ' + req.params.id + ' ORDER BY started_at DESC LIMIT 6;', function (err, rows) {
+        if (err) {
+            console.log("DescribePersonActionsError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else if (rows.length == 0) {
+            res.send({"success": false, "error": "No actions returned!"})
+        } else if (rows.length < 6) {
+            res.send({"success": false, "error": "Less than six actions returned!"})
+        } else {
+            const latest_action = rows[0]
+            console.log(latest_action)
+            if (latest_action.completed_at == null && latest_action.cancelled_at == null) {
+                res.send({
+                    "success": true,
+                    "current_action": [rows[0]],
+                    "previous_actions": [
+                        rows[1],
+                        rows[2],
+                        rows[3],
+                        rows[4],
+                        rows[5]
+                    ]
+                })
+            } else {
+                res.send({
+                    "success": true,
+                    "current_action": [],
+                    "previous_actions": [
+                        rows[0],
+                        rows[1],
+                        rows[2],
+                        rows[3],
+                        rows[4]
+                    ]
+                })
+            }
+        }
+    })
+})
+
 app.post('/v1/increase-food/:id', function(req, res) {
     connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
         if (err) {
