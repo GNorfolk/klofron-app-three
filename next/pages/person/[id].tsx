@@ -3,6 +3,7 @@ import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Layout from '../../components/layout'
+import axios from 'axios'
 
 const queryClient = new QueryClient()
 
@@ -61,20 +62,35 @@ function DescribePersonActions() {
         ),
     })
 
+    const cancelAction = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/cancel-person-action/' + id)
+      },
+    })
+
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    if (data.success == "true") {
+    console.log("uhh: " + data.success)
+    if (data.success) {
       return (
         <div>
           <h2 className={styles.headingLg}>Actions Info</h2>
           <h3 className={styles.headingMd}>Curent Action</h3>
           <ul className={styles.list}>
-            {data.current_action.map(({ id, type_id, started_at }) => (
-              <li className={styles.listItem} key={id}>
-                <p>Action with id {id} and type {type_id} was started at {started_at}</p>
-              </li>
-            ))}
+            { data.current_action.length > 0 ? 
+              data.current_action.map(({ id, type_id, started_at }) => (
+                <li className={styles.listItem} key={id}>
+                  <p>Action with id {id} and type {type_id} was started at {started_at}</p>
+                  <button onClick={
+                    () => {
+                        cancelAction.mutate(id, { onSettled: (res) => {
+                        queryClient.invalidateQueries()
+                      }})
+                    }
+                  } >Cancel Action</button>
+                </li>
+              )) : <p>No actions currently in progress!</p> }
           </ul>
           <h3 className={styles.headingMd}>Previous Actions</h3>
           <ul className={styles.list}>
