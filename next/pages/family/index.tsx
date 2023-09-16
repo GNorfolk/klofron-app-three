@@ -6,9 +6,7 @@ import Layout from '../../components/layout'
 const queryClient = new QueryClient()
 console.log("NODE_ENV: " + JSON.stringify(process.env.NODE_ENV))
 console.log("NEXTAUTH_URL: " + JSON.stringify(process.env.NEXTAUTH_URL))
-console.log("NEXTAUTH_SECRET: " + JSON.stringify(process.env.NEXTAUTH_SECRET))
 console.log("NEXT_PUBLIC_NEXTAUTH_URL: " + JSON.stringify(process.env.NEXT_PUBLIC_NEXTAUTH_URL))
-console.log("NEXT_PUBLIC_NEXTAUTH_SECRET: " + JSON.stringify(process.env.NEXT_PUBLIC_NEXTAUTH_SECRET))
 
 export default function Home() {
   return (
