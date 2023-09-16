@@ -11,6 +11,7 @@ export default function Person() {
     <Layout>
       <QueryClientProvider client={queryClient}>
         <DescribePerson />
+        <DescribePersonActions />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/family">← Back to home</Link>
@@ -41,6 +42,44 @@ function DescribePerson() {
             <li className={styles.listItem} key={id}>
               <p>{name} {family_name} is {gender} and {age} years old and lives at <Link href={"/house/" + house_id}>{house_name}</Link>.</p>
               <p>{name}'s father is <Link href={"/person/" + father_id}><a onClick={(e) => queryClient.invalidateQueries()}>{father_name + ' ' + father_family_name}</a></Link> and their mother is <Link href={"/person/" + mother_id}><a onClick={(e) => queryClient.invalidateQueries()}>{mother_name + ' ' + mother_family_name}</a></Link>.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+}
+
+function DescribePersonActions() {
+  const router = useRouter()
+  if (router.isReady) {
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['personActionsData' + router.query.id],
+      queryFn: () =>
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-person-actions/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Actions Info</h2>
+        <h3 className={styles.headingMd}>Curent Action</h3>
+        <ul className={styles.list}>
+          {data.current_action.map(({ id, type_id, started_at }) => (
+            <li className={styles.listItem} key={id}>
+              <p>Action with id {id} and type {type_id} was started at {started_at}</p>
+            </li>
+          ))}
+        </ul>
+        <h3 className={styles.headingMd}>Previous Actions</h3>
+        <ul className={styles.list}>
+          {data.previous_actions.map(({ id, type_id, started_at }) => (
+            <li className={styles.listItem} key={id}>
+            <p>Action with id {id} and type {type_id} was started at {started_at}</p>
             </li>
           ))}
         </ul>
