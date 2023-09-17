@@ -80,9 +80,9 @@ function DescribePersonActions() {
           <h3 className={styles.headingMd}>Curent Action</h3>
           <ul className={styles.list}>
             { data.current_action.length > 0 ? 
-              data.current_action.map(({ id, type_id, started_at }) => (
+              data.current_action.map(({ id, type_name, started_time_ago, finish_reason }) => (
                 <li className={styles.listItem} key={id}>
-                  <p>Action with id {id} and type {type_id} was started at {started_at}</p>
+                  <p>Action with id {id} of type {type_name} was started {started_time_ago} ago.</p>
                   <button onClick={
                     () => {
                         cancelAction.mutate(id, { onSettled: (res) => {
@@ -95,9 +95,9 @@ function DescribePersonActions() {
           </ul>
           <h3 className={styles.headingMd}>Previous Actions</h3>
           <ul className={styles.list}>
-            {data.previous_actions.map(({ id, type_id, started_at }) => (
+            {data.previous_actions.map(({ id, type_name, started_time_ago, finish_reason }) => (
               <li className={styles.listItem} key={id}>
-              <p>Action with id {id} and type {type_id} was started at {started_at}</p>
+                <p>Action with id {id} of type {type_name} was started {started_time_ago} ago and finished with reason {finish_reason}.</p>
               </li>
             ))}
           </ul>

@@ -173,33 +173,35 @@ app.get("/v1/describe-person-actions/:id", (req, res, next) => {
             res.json({error: err})
         } else if (rows.length == 0) {
             res.send({"success": false, "error": "No actions returned!"})
-        } else if (rows.length < 6) {
-            res.send({"success": false, "error": "Less than six actions returned!"})
         } else {
             const latest_action = rows[0]
+            rows.map(function(row) {
+                row['finish_reason'] = row['completed_at'] != null ? "Completed" : row['cancelled_at'] != null ? "Cancelled" : null
+                const days = ( (new Date()).valueOf() - (new Date(row['started_at'])).valueOf()) / day_in_ms
+                const hours = days > 1 ? (days - Math.floor(days)) * 24 : days * 24
+                const minutes = hours > 1 ? (hours - Math.floor(hours)) * 60 : hours * 60
+                row['started_time_ago'] = Math.floor(days) + "days " + Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+                switch(row['type_id']) {
+                    case 1: { row['type_name'] = "Get Food"; break }
+                    case 2: { row['type_name'] = "Get Wood"; break }
+                    case 3: { row['type_name'] = "Increase Storage"; break }
+                    case 4: { row['type_name'] = "Increase Rooms"; break }
+                    case 5: { row['type_name'] = "Create House"; break }
+                    case 6: { row['type_name'] = "Create Baby"; break }
+                    default: { row['type_name'] = "Unknown"; break }
+                }
+            })
             if (latest_action.completed_at == null && latest_action.cancelled_at == null) {
                 res.send({
                     "success": true,
                     "current_action": [rows[0]],
-                    "previous_actions": [
-                        rows[1],
-                        rows[2],
-                        rows[3],
-                        rows[4],
-                        rows[5]
-                    ]
+                    "previous_actions": rows.splice(1, 5)
                 })
             } else {
                 res.send({
                     "success": true,
                     "current_action": [],
-                    "previous_actions": [
-                        rows[0],
-                        rows[1],
-                        rows[2],
-                        rows[3],
-                        rows[4]
-                    ]
+                    "previous_actions": rows.splice(0, 5)
                 })
             }
         }
