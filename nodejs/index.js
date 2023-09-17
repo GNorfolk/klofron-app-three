@@ -195,6 +195,18 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
     })
 })
 
+app.get("/v1/describe-house-resources/:id", (req, res, next) => {
+    connection.query('SELECT id, name, food, wood FROM house WHERE house.id = ' + req.params.id, function (err, rows) {
+        if (err) {
+            console.log("DescribeHouseResourcesError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else {
+            res.json(rows)
+        }
+    })
+})
+
 // curl localhost:3001/v1/describe-person-actions/25
 
 app.get("/v1/describe-person-actions/:id", (req, res, next) => {
@@ -262,6 +274,27 @@ app.post('/v1/increase-food/:id', function(req, res) {
     })
 })
 
+app.post('/v1/decrease-food/:id', function(req, res) {
+    connection.query('SELECT food FROM house WHERE id = ' + req.params.id, function (err, rows) {
+        if (err) {
+            console.log("DecreaseFoodError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else {
+            if (rows[0].food > 0) {
+                connection.query('UPDATE house SET food = food - 1 WHERE id = ' + req.params.id, function (err, rows) {
+                    if(err) throw err
+                })
+                res.send({"success": true})
+            } else if (rows[0].food < 1) {
+                res.send({"success": false, "error": "There is " + rows[0].food + " food but at least 1 required!"})
+            } else {
+                res.send({"success": false, "error": "Unknown API error occurred!"})
+            }
+        }
+    })
+})
+
 app.post('/v1/increase-wood/:id', function(req, res) {
     connection.query('SELECT house.food, (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count FROM person join house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
         if (err) {
@@ -279,6 +312,27 @@ app.post('/v1/increase-wood/:id', function(req, res) {
                 res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
+            } else {
+                res.send({"success": false, "error": "Unknown API error occurred!"})
+            }
+        }
+    })
+})
+
+app.post('/v1/decrease-wood/:id', function(req, res) {
+    connection.query('SELECT wood FROM house WHERE id = ' + req.params.id, function (err, rows) {
+        if (err) {
+            console.log("DecreaseWoodError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else {
+            if (rows[0].wood > 0) {
+                connection.query('UPDATE house SET wood = wood - 1 WHERE id = ' + req.params.id, function (err, rows) {
+                    if(err) throw err
+                })
+                res.send({"success": true})
+            } else if (rows[0].wood < 1) {
+                res.send({"success": false, "error": "There is " + rows[0].wood + " wood but at least 1 required!"})
             } else {
                 res.send({"success": false, "error": "Unknown API error occurred!"})
             }

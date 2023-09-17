@@ -13,6 +13,7 @@ export default function House() {
       <QueryClientProvider client={queryClient}>
         <DescribeHouse />
         <ListHousePeople />
+        <ManageResources />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/family">← Back to home</Link>
@@ -185,6 +186,63 @@ function ListHousePeople() {
               <small className={styles.lightText} id={'change-me-' + id}></small>
             </li>
           ))}
+        </ul>
+      </div>
+    )
+  }
+}
+
+function ManageResources() {
+  const router = useRouter()
+  if (router.isReady) {
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['resourceData' + router.query.id],
+      queryFn: () =>
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-house-resources/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
+
+    const decreaseWood = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/decrease-wood/' + id)
+      },
+    })
+
+    const decreaseFood = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/decrease-food/' + id)
+      },
+    })
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Manage Resources</h2>
+        <p>{data[0].name} has {data[0].food} food and {data[0].wood} wood in storage!</p>
+        <ul className={styles.list}>
+        <li className={styles.listItem}>
+            <p>Wood: {data[0].wood} in storage!</p>
+            <button onClick={
+              () => {
+                  decreaseWood.mutate(data[0].id, { onSettled: (res) => {
+                  queryClient.invalidateQueries()
+                }})
+              }
+            } >Decrease Wood</button>
+          </li>
+          <li className={styles.listItem}>
+            <p>Food: {data[0].food} in storage!</p>
+            <button onClick={
+              () => {
+                  decreaseFood.mutate(data[0].id, { onSettled: (res) => {
+                  queryClient.invalidateQueries()
+                }})
+              }
+            } >Decrease Food</button>
+          </li>
         </ul>
       </div>
     )
