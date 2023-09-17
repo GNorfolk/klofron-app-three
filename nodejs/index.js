@@ -47,7 +47,31 @@ app.get("/v1/list-families", (req, res, next) => {
 })
 
 app.get("/v1/list-houses", (req, res, next) => {
-    connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id', function (err, rows) {
+    connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id WHERE type_id = 0', function (err, rows) {
+        if (err) {
+            console.log("ListHousesError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else {
+            res.json(rows)
+        }
+    })
+})
+
+app.get("/v1/list-markets", (req, res, next) => {
+    connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id WHERE type_id = 1', function (err, rows) {
+        if (err) {
+            console.log("ListHousesError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else {
+            res.json(rows)
+        }
+    })
+})
+
+app.get("/v1/list-farms", (req, res, next) => {
+    connection.query('SELECT house.id, house.name, family.name AS family_name FROM house INNER JOIN family ON family_id = family.id WHERE type_id = 2', function (err, rows) {
         if (err) {
             console.log("ListHousesError: ", err)
             connection = require('./database.js')
@@ -59,12 +83,20 @@ app.get("/v1/list-houses", (req, res, next) => {
 })
 
 app.get("/v1/list-family-houses/:id", (req, res, next) => {
-    connection.query('SELECT house.id, house.name, family.name AS family_name, house.food, house.wood FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
+    connection.query('SELECT house.id, house.name, family.name AS family_name, house.food, house.wood, house.land, house.type_id FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
         if (err) {
             console.log("ListFamilyHousesError: ", err)
             connection = require('./database.js')
             res.json({error: err})
         } else {
+            rows.map(function(row) {
+                switch(row['type_id']) {
+                    case 0: { row['type_name'] = "House"; break }
+                    case 1: { row['type_name'] = "Market"; break }
+                    case 2: { row['type_name'] = "Farm"; break }
+                    default: { row['type_name'] = "Unknown"; break }
+                }
+            })
             res.json(rows)
         }
     })

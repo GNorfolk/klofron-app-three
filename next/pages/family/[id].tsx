@@ -63,10 +63,10 @@ function ListFamilyHouses() {
       <div>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, food, wood }) => (
+          {data.map(({ id, name, family_name, food, wood, type_name }) => (
             <li className={styles.listItem} key={id}>
-              <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link>.</p>
-              <p>House {name} holds {food} food and {wood} wood.</p>
+              <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link> which is a {type_name}.</p>
+              <p>{name} holds {food} food and {wood} wood.</p>
             </li>
           ))}
         </ul>
