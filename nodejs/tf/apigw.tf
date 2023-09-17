@@ -27,3 +27,9 @@ resource "aws_apigatewayv2_route" "post-people" {
     route_key = "POST /v1/{proxy+}"
     target = "integrations/${aws_apigatewayv2_integration.main.id}"
 }
+
+resource "aws_apigatewayv2_route" "options-people" {
+    api_id = aws_apigatewayv2_api.main.id
+    route_key = "OPTIONS /v1/{proxy+}"
+    target = "integrations/${aws_apigatewayv2_integration.main.id}"
+}
