@@ -37,7 +37,7 @@ INSERT INTO house (name, rooms, storage, family_id) VALUES ('Schrute Farms', 3, 
 INSERT INTO house (name, rooms, storage, family_id) VALUES ('The Condo', 2, 12, 4);
 INSERT INTO house (name, rooms, storage, family_id) VALUES ('Temps House', 3, 12, 5);
 INSERT INTO house (name, rooms, storage, family_id) VALUES ('Nardville', 2, 12, 6);
-INSERT INTO house (name, rooms, storage, family_id) VALUES ('The Crib', 3, 12, 7);
+INSERT INTO house (name, rooms, storage, family_id) VALUES ('Darryls', 3, 12, 7);
 INSERT INTO house (name, rooms, storage, family_id) VALUES ('Refrigeration Inc', 2, 12, 8);
 INSERT INTO house (name, rooms, storage, family_id) VALUES ('Florida', 3, 12, 9);
 -- -- -- -- -- PERSON -- -- -- -- --
@@ -109,3 +109,16 @@ INSERT INTO user (username, email, password, family_id) VALUES ('bernard', 'bern
 INSERT INTO user (username, email, password, family_id) VALUES ('philbin', 'philbin@klofron.uk', 'password', 7);
 INSERT INTO user (username, email, password, family_id) VALUES ('vance', 'vance@klofron.uk', 'password', 8);
 INSERT INTO user (username, email, password, family_id) VALUES ('hudson', 'hudson@klofron.uk', 'password', 9);
+-- -- -- -- -- TRADE -- -- -- -- --
+CREATE TABLE `trade` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `house_id` INT NOT NULL,
+    `offered_type_id` INT NOT NULL,
+    `offered_volume` INT NOT NULL,
+    `requested_type_id` INT NOT NULL,
+    `requested_volume` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `completed_at` TIMESTAMP,
+    `cancelled_at` TIMESTAMP,
+    FOREIGN KEY (`house_id`) REFERENCES house(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

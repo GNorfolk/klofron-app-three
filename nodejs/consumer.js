@@ -25,7 +25,7 @@ function checkQueue(connection) {
                     rows1.map(row1 => {
                         if (row1['type_id'] == 1) {
                             return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
+                                const query2 = 'SELECT house.storage, house.food, house.wood, (SELECT SUM(offered_volume) FROM trade WHERE house_id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ') AND offered_type_id IN (1, 2) AND completed_at IS NULL AND cancelled_at IS NULL) AS in_trade FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
                                 connection.query(query2, function(err2, rows2) {
                                     if (err2) {
                                         return reject2(err2)
@@ -33,7 +33,7 @@ function checkQueue(connection) {
                                         return Promise.all(
                                             rows2.map(row2 => {
                                                 console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
-                                                if (row2.storage >= row2.food + row2.wood + 2) {
+                                                if (row2.storage >= row2.food + row2.wood + row2.in_trade + 2) {
                                                     return new Promise((resolve3, reject3) => {
                                                         const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET food = food + 2 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
                                                         connection.query(query3, function(err3, res3) {
@@ -77,7 +77,7 @@ function checkQueue(connection) {
                             })
                         } else if (row1['type_id'] == 2) {
                             return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage, house.food, house.wood FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
+                                const query2 = 'SELECT house.storage, house.food, house.wood, (SELECT SUM(offered_volume) FROM trade WHERE house_id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ') AND offered_type_id IN (1, 2) AND completed_at IS NULL AND cancelled_at IS NULL) AS in_trade FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
                                 connection.query(query2, function(err2, rows2) {
                                     if (err2) {
                                         return reject2(err2)
@@ -85,7 +85,7 @@ function checkQueue(connection) {
                                         return Promise.all(
                                             rows2.map(row2 => {
                                                 console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
-                                                if (row2.storage >= row2.food + row2.wood + 1) {
+                                                if (row2.storage >= row2.food + row2.wood + row2.in_trade + 1) {
                                                     return new Promise((resolve3, reject3) => {
                                                         const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET wood = wood + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
                                                         connection.query(query3, function(err3, res3) {
@@ -128,158 +128,71 @@ function checkQueue(connection) {
                                 })
                             })
                         } else if (row1['type_id'] == 3) {
-                            return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
-                                connection.query(query2, function(err2, rows2) {
-                                    if (err2) {
-                                        return reject2(err2)
+                            console.log('Executing action with ID ' + row1['id'])
+                            return new Promise((resolve3, reject3) => {
+                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET storage = storage + 3 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
+                                connection.query(query3, function(err3, res3) {
+                                    if (err3) {
+                                        return reject3(err3)
                                     } else {
-                                        return Promise.all(
-                                            rows2.map(row2 => {
-                                                console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
-                                                if (row2.storage >= row2.food + row2.wood + 1) {
-                                                    return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET storage = storage + 3 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
-                                                        connection.query(query3, function(err3, res3) {
-                                                            if (err3) {
-                                                                return reject3(err3)
-                                                            } else {
-                                                                if (row1['infinite'] == 1) {
-                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-storage/' + row1['person_id'] + '?infinite=1' }
-                                                                    http.request(options, function(res) {
-                                                                        res.on('data', function (body) {
-                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
-                                                                        })
-                                                                    }).end()
-                                                                }
-                                                                for (const msg of res3) {
-                                                                    console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
-                                                                }
-                                                                resolve3(res3)
-                                                            }
-                                                        })
-                                                    })
-                                                } else {
-                                                    return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
-                                                        connection.query(query3, function(err3, res3) {
-                                                            if (err3) {
-                                                                return reject3(err3)
-                                                            } else {
-                                                                console.log('Action with ID ' + row1['id'] + ' message: ' + res3.message)
-                                                                resolve3(res3)
-                                                            }
-                                                        })
-                                                    })
-                                                }
-                                            })
-                                        ).then(() => {
-                                            resolve2(rows2)
-                                        })
+                                        if (row1['infinite'] == 1) {
+                                            const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-storage/' + row1['person_id'] + '?infinite=1' }
+                                            http.request(options, function(res) {
+                                                res.on('data', function (body) {
+                                                    console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                })
+                                            }).end()
+                                        }
+                                        for (const msg of res3) {
+                                            console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
+                                        }
+                                        resolve3(res3)
                                     }
                                 })
                             })
                         } else if (row1['type_id'] == 4) {
-                            return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage, house.wood, house.food FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
-                                connection.query(query2, function(err2, rows2) {
-                                    if (err2) {
-                                        return reject2(err2)
+                            return new Promise((resolve3, reject3) => {
+                                console.log('Executing action with ID ' + row1['id'])
+                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET rooms = rooms + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
+                                connection.query(query3, function(err3, res3) {
+                                    if (err3) {
+                                        return reject3(err3)
                                     } else {
-                                        return Promise.all(
-                                            rows2.map(row2 => {
-                                                console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
-                                                if (row2.storage >= row2.food + row2.wood + 1) {
-                                                    return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET rooms = rooms + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
-                                                        connection.query(query3, function(err3, res3) {
-                                                            if (err3) {
-                                                                return reject3(err3)
-                                                            } else {
-                                                                if (row1['infinite'] == 1) {
-                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-rooms/' + row1['person_id'] + '?infinite=1' }
-                                                                    http.request(options, function(res) {
-                                                                        res.on('data', function (body) {
-                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
-                                                                        })
-                                                                    }).end()
-                                                                }
-                                                                for (const msg of res3) {
-                                                                    console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
-                                                                }
-                                                                resolve3(res3)
-                                                            }
-                                                        })
-                                                    })
-                                                } else {
-                                                    return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
-                                                        connection.query(query3, function(err3, res3) {
-                                                            if (err3) {
-                                                                return reject3(err3)
-                                                            } else {
-                                                                console.log('Action with ID ' + row1['id'] + ' message: ' + res3.message)
-                                                                resolve3(res3)
-                                                            }
-                                                        })
-                                                    })
-                                                }
-                                            })
-                                        ).then(() => {
-                                            resolve2(rows2)
-                                        })
+                                        if (row1['infinite'] == 1) {
+                                            const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-rooms/' + row1['person_id'] + '?infinite=1' }
+                                            http.request(options, function(res) {
+                                                res.on('data', function (body) {
+                                                    console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                })
+                                            }).end()
+                                        }
+                                        for (const msg of res3) {
+                                            console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
+                                        }
+                                        resolve3(res3)
                                     }
                                 })
                             })
                         } else if (row1['type_id'] == 5) {
-                            return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
-                                connection.query(query2, function(err2, rows2) {
-                                    if (err2) {
-                                        return reject2(err2)
+                            return new Promise((resolve3, reject3) => {
+                                console.log('Executing action with ID: ' + row1['id'])
+                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; INSERT INTO house (name, rooms, storage, family_id) VALUES (\'House\', 1, 6, (SELECT family_id FROM person WHERE id = ' + row1['person_id'] + ');'
+                                connection.query(query3, function(err3, res3) {
+                                    if (err3) {
+                                        return reject3(err3)
                                     } else {
-                                        return Promise.all(
-                                            rows2.map(row2 => {
-                                                console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
-                                                if (row2.storage >= row2.food + row2.wood + 1) {
-                                                    return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; INSERT INTO house (name, rooms, storage, family_id) VALUES (\'House\', 1, 6, (SELECT family_id FROM person WHERE id = ' + row1['person_id'] + ');'
-                                                        connection.query(query3, function(err3, res3) {
-                                                            if (err3) {
-                                                                return reject3(err3)
-                                                            } else {
-                                                                if (row1['infinite'] == 1) {
-                                                                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/create-house/' + row1['person_id'] + '?infinite=1' }
-                                                                    http.request(options, function(res) {
-                                                                        res.on('data', function (body) {
-                                                                            console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
-                                                                        })
-                                                                    }).end()
-                                                                }
-                                                                for (const msg of res3) {
-                                                                    console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
-                                                                }
-                                                                resolve3(res3)
-                                                            }
-                                                        })
-                                                    })
-                                                } else {
-                                                    return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id']
-                                                        connection.query(query3, function(err3, res3) {
-                                                            if (err3) {
-                                                                return reject3(err3)
-                                                            } else {
-                                                                console.log('Action with ID ' + row1['id'] + ' message: ' + res3.message)
-                                                                resolve3(res3)
-                                                            }
-                                                        })
-                                                    })
-                                                }
-                                            })
-                                        ).then(() => {
-                                            resolve2(rows2)
-                                        })
+                                        if (row1['infinite'] == 1) {
+                                            const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/create-house/' + row1['person_id'] + '?infinite=1' }
+                                            http.request(options, function(res) {
+                                                res.on('data', function (body) {
+                                                    console.log('Kicked off infinite action with id ' + row1['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
+                                                })
+                                            }).end()
+                                        }
+                                        for (const msg of res3) {
+                                            console.log('Action with ID ' + row1['id'] + ' message: ' + msg.message)
+                                        }
+                                        resolve3(res3)
                                     }
                                 })
                             })
