@@ -13,6 +13,7 @@ export default function House() {
       <QueryClientProvider client={queryClient}>
         <DescribeHouse />
         <ListHousePeople />
+        <ListHouseTrades />
         <ManageResources />
       </QueryClientProvider>
       <div className={styles.backToHome}>
@@ -186,6 +187,37 @@ function ListHousePeople() {
               <small className={styles.lightText} id={'change-me-' + id}></small>
             </li>
           ))}
+        </ul>
+      </div>
+    )
+  }
+}
+
+function ListHouseTrades() {
+  const router = useRouter()
+  if (router.isReady) {
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['houseTradesData' + router.query.id],
+      queryFn: () =>
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-house-trades/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Trade Info</h2>
+        <ul className={styles.list}>
+          {
+            data.success ? data.data.map(({ id, offered_type_name, offered_volume, requested_type_name, requested_volume }) => (
+              <li className={styles.listItem} key={id}>
+                <p>Trade with id {id} offers {offered_volume} {offered_type_name} in return for {requested_volume} {requested_type_name}.</p>
+              </li>
+            )) : <li className={styles.listItem}><p>No trades for this house.</p></li>
+          }
         </ul>
       </div>
     )
