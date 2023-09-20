@@ -130,7 +130,7 @@ app.get("/v1/describe-family/:id", (req, res, next) => {
 })
 
 app.get("/v1/describe-house/:id", (req, res, next) => {
-    connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, COUNT(person.house_id) AS people FROM house INNER JOIN person ON person.house_id = house.id WHERE house.id = ' + req.params.id, function (err, rows) {
+    connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, COUNT(person.house_id) AS people, (SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 1 AND completed_at IS NULL AND cancelled_at IS NULL) AS food_in_trade, (SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 2 AND completed_at IS NULL AND cancelled_at IS NULL) AS wood_in_trade FROM house INNER JOIN person ON person.house_id = house.id WHERE house.id = ' + req.params.id, function (err, rows) {
         if (err) {
             console.log("DescribeHouseError: ", err)
             connection = require('./database.js')

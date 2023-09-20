@@ -46,10 +46,10 @@ function DescribeHouse() {
       <div>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, rooms, storage, food, wood, people }) => (
+          {data.map(({ id, name, rooms, storage, food, wood, food_in_trade, wood_in_trade, people }) => (
             <li className={styles.listItem} key={id}>
               <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
-              <p>{name} has {food} food and {wood} wood in storage. It can hold {storage} items so has {storage - food - wood} space for more items.</p>
+              <p>{name} has {food} food and {wood} wood in storage, and {food_in_trade} food and {wood_in_trade} wood in trade. It can hold {storage} items so has {storage - food - wood - food_in_trade - wood_in_trade} space for more items.</p>
               <button onClick={
                 () => {
                   createPerson.mutate(id, { onSettled: (res) => {
