@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "deploy": "export NEXT_PUBLIC_API_HOST=https://api.klofron.uk NEXT_PUBLIC_NEXTAUTH_URL=https://www.klofron.uk && AWS_PROFILE=null serverless",
-    "cdk": "cdk"
+    "cdk-diff": "AWS_PROFILE=react-app AWS_DEFAULT_REGION=us-east-1 cdk diff",
+    "cdk-deploy": "AWS_PROFILE=react-app AWS_DEFAULT_REGION=us-east-1 cdk deploy --require-approval never"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",
