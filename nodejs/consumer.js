@@ -176,7 +176,7 @@ function checkQueue(connection) {
                         } else if (row1['type_id'] == 5) {
                             return new Promise((resolve3, reject3) => {
                                 console.log('Executing action with ID: ' + row1['id'])
-                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; INSERT INTO house (name, rooms, storage, family_id) VALUES (\'House\', 1, 6, (SELECT family_id FROM person WHERE id = ' + row1['person_id'] + ');'
+                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; INSERT INTO house (name, rooms, storage, family_id) VALUES (\'House\', 1, 6, (SELECT family_id FROM person WHERE id = ' + row1['person_id'] + '));'
                                 connection.query(query3, function(err3, res3) {
                                     if (err3) {
                                         return reject3(err3)
