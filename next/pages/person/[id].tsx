@@ -15,6 +15,7 @@ export default function Person() {
         <DescribePerson />
         <DescribePersonActions />
         <RenamePerson />
+        <MoveHouse />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/family">← Back to home</Link>
@@ -141,6 +142,50 @@ function RenamePerson() {
             />
             <input type="submit" value="Rename" />
           </form>
+        </ul>
+      </div>
+    )
+  }
+}
+
+function MoveHouse() {
+  const router = useRouter()
+  if (router.isReady) {
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['moveHouseData' + router.query.id],
+      queryFn: () =>
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-person-houses/' + router.query.id).then(
+          (res) => res.json(),
+        ),
+    })
+
+    const movePersonHouse = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/move-person-house', {
+          person_id: router.query.id,
+          house_id: id
+        })
+      },
+    })
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Move House</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name }) => (
+            <li className={styles.listItem} key={id}>
+              Move into {name}: <button onClick={
+                () => {
+                  movePersonHouse.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Move</button>
+            </li>
+          ))}
         </ul>
       </div>
     )

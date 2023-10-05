@@ -117,6 +117,18 @@ app.get("/v1/list-family-people/:id", (req, res, next) => {
     })
 })
 
+app.get("/v1/list-person-houses/:id", (req, res, next) => {
+    connection.query('SELECT id, name FROM house WHERE family_id = (SELECT family_id FROM person WHERE id = ' + req.params.id + ') AND id != (SELECT house_id FROM person WHERE id = ' + req.params.id + ')', function (err, rows) {
+        if (err) {
+            console.log("ListPersonHousesError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else {
+            res.json(rows)
+        }
+    })
+})
+
 app.get("/v1/describe-family/:id", (req, res, next) => {
     connection.query('SELECT id, name FROM family WHERE id = ' + req.params.id, function (err, rows) {
         if (err) {
@@ -422,7 +434,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
 })
 
 app.post('/v1/create-person/:id', function(req, res) {
-    connection.query('SELECT person.id, person.partner_id, person.gender, person.family_id, person.house_id, house.rooms, house.food, (SELECT COUNT(*)FROM person WHERE house_id = ' + req.params.id + ') AS people, (SELECT count(id) FROM action WHERE person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND person.partner_id IS NOT NULL ORDER BY gender DESC;', function (err, rows) {
+    connection.query('SELECT person.id, person.partner_id, person.gender, person.family_id, person.house_id, house.rooms, house.food, (SELECT COUNT(*) FROM person WHERE house_id = ' + req.params.id + ') AS people, (SELECT count(id) FROM action WHERE person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND person.partner_id IS NOT NULL ORDER BY gender DESC;', function (err, rows) {
         if (err) {
             console.log("CreatePersonError: ", err)
             connection = require('./database.js')
@@ -555,6 +567,29 @@ app.post("/v1/rename-person/:id", (req, res, next) => {
             connection.query("UPDATE person SET name = '" + req.body.name + "' WHERE id = " + rows[0].id, function(err, result) {
                 if(err) {
                     throw err
+                } else {
+                    res.send({"success": true})
+                }
+            })
+        }
+    })
+})
+
+// curl --request POST localhost:3001/v1/move-person-house --header "Content-Type: application/json" --data '{"person_id":3, "house_id": 12}'
+
+app.post('/v1/move-person-house', function(req, res) {
+    connection.query('SELECT id FROM house WHERE family_id = (SELECT family_id FROM person WHERE id = ' + req.body.person_id + ')', function (err, rows) {
+        if (err) {
+            console.log("MovePersonHouseSelectError: ", err)
+            connection = require('./database.js')
+            res.json({error: err})
+        } else if (!(rows.map(a => a.id).indexOf(req.body.house_id) > -1)) {
+            res.send({"success": false, "error": "House with id " + req.body.house_id + " not in [" + rows.map(a => a.id) + "] array of family houses!"})
+        } else {
+            connection.query('UPDATE person SET house_id = ' + req.body.house_id + ' WHERE id = ' + req.body.person_id, function(err, result) {
+                if (err) {
+                    console.log("MovePersonHouseUpdateError: ", err)
+                    res.send({"success": false, "error": err})
                 } else {
                     res.send({"success": true})
                 }

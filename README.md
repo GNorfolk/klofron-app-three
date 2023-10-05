@@ -166,3 +166,7 @@ watch -n5 ENV=local node consumer.js
 **How to deploy CFN app:**
 - aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
+
+**How to backup and restore DB:**
+- mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u klofron-app-three -p klofron-app-three > dump.sql
+- mysql -u root -p klofron-app-three < dump.sql
