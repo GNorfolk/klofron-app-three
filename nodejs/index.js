@@ -578,13 +578,16 @@ app.post("/v1/rename-person/:id", (req, res, next) => {
 // curl --request POST localhost:3001/v1/move-person-house --header "Content-Type: application/json" --data '{"person_id":3, "house_id": 12}'
 
 app.post('/v1/move-person-house', function(req, res) {
-    connection.query('SELECT id FROM house WHERE family_id = (SELECT family_id FROM person WHERE id = ' + req.body.person_id + ')', function (err, rows) {
+    connection.query('SELECT id, rooms, (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people FROM house WHERE family_id = (SELECT family_id FROM person WHERE id = ' + req.body.person_id + ')', function (err, rows) {
+        const myIndex = rows.map(a => a.id).indexOf(req.body.house_id)
         if (err) {
             console.log("MovePersonHouseSelectError: ", err)
             connection = require('./database.js')
             res.json({error: err})
-        } else if (!(rows.map(a => a.id).indexOf(req.body.house_id) > -1)) {
+        } else if (myIndex == -1) {
             res.send({"success": false, "error": "House with id " + req.body.house_id + " not in [" + rows.map(a => a.id) + "] array of family houses!"})
+        } else if (rows[myIndex].rooms <= rows[myIndex].people) {
+            res.send({"success": false, "error": "House has " + rows[myIndex].people + " people and " + rows[myIndex].rooms + " rooms!"})
         } else {
             connection.query('UPDATE person SET house_id = ' + req.body.house_id + ' WHERE id = ' + req.body.person_id, function(err, result) {
                 if (err) {
