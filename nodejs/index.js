@@ -434,7 +434,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
 })
 
 app.post('/v1/create-person/:id', function(req, res) {
-    connection.query('SELECT person.id, person.partner_id, person.gender, person.family_id, person.house_id, house.rooms, house.food, (SELECT COUNT(*) FROM person WHERE house_id = ' + req.params.id + ') AS people, (SELECT count(id) FROM action WHERE person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND person.partner_id IS NOT NULL ORDER BY gender DESC;', function (err, rows) {
+    connection.query('SELECT person.id, person.partner_id, person.gender, person.family_id, person.house_id, person.created_at, house.rooms, house.food, (SELECT COUNT(*) FROM person WHERE house_id = ' + req.params.id + ') AS people, (SELECT count(id) FROM action WHERE person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE house_id = ' + req.params.id + ' AND father_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND mother_id NOT IN (SELECT id FROM person WHERE house_id = ' + req.params.id + ') AND person.partner_id IS NOT NULL ORDER BY gender DESC;', function (err, rows) {
         if (err) {
             console.log("CreatePersonError: ", err)
             connection = require('./database.js')
@@ -442,8 +442,9 @@ app.post('/v1/create-person/:id', function(req, res) {
         } else {
             const father = rows[0]
             const mother = rows[1]
+            mother['age'] = Math.floor(((new Date()).valueOf() - (new Date(mother['created_at'])).valueOf()) / day_in_ms)
             const gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
-            if (father.action_count == 0 && mother.action_count == 0 && rows.length == 2 && father.gender == 'male' && mother.gender == 'female' && father.family_id == mother.family_id && father.house_id == mother.house_id && mother.rooms > mother.people && mother.food >= 2 && father.partner_id == mother.id && mother.partner_id == father.id) {
+            if (father.action_count == 0 && mother.action_count == 0 && rows.length == 2 && father.gender == 'male' && mother.gender == 'female' && father.family_id == mother.family_id && father.house_id == mother.house_id && mother.rooms > mother.people && mother.food >= 2 && father.partner_id == mother.id && mother.partner_id == father.id && mother.age < 50) {
                 connection.query("INSERT INTO action (person_id, type_id, started_at) VALUES (" + mother.id + ", 6, NOW()), (" + father.id + ", 6, NOW()); UPDATE house SET food = food - 2 WHERE id = " + mother.house_id + "; INSERT INTO person (name, family_id, father_id, mother_id, gender, house_id) VALUES ('Baby', " + father.family_id + ", " + father.id + ", " + mother.id + ", '" + gender + "', " + father.house_id + ");", function(err, result) {
                     if(err) throw err
                 })
@@ -466,12 +467,14 @@ app.post('/v1/create-person/:id', function(req, res) {
                 res.send({"success": false, "error": "Not matching house_id, father house_id is " + father.house_id + " and mother house_id is " + mother.house_id + "!"})
             } else if (father.rooms <= father.people) {
                 res.send({"success": false, "error": "Not enough rooms, there are " + mother.rooms + " rooms occupied by " + mother.people + " people!"})
-            } else if (mother.food >= 2) {
+            } else if (mother.food < 2) {
                 res.send({"success": false, "error": "Not enough food, there is " + mother.food + " food but 2 are needed!"})
             } else if (father.partner_id != mother.id) {
                 res.send({"success": false, "error": "Not partners, father partner_id is " + father.partner_id + " but mother id is " + mother.id + "!"})
             } else if (mother.partner_id != father.id) {
                 res.send({"success": false, "error": "Not partners, mother partner_id is " + mother.partner_id + " but father id is " + father.id + "!"})
+            } else if (mother.age >= 50) {
+                res.send({"success": false, "error": "Mother too old, mother is " + mother.age + " years old but cannot be 50 or over!"})
             } else {
                 res.send({"success": false, "error": "Unknown API error occurred!"})
             }
