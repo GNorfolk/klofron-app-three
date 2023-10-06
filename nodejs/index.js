@@ -83,7 +83,15 @@ app.get("/v1/list-farms", (req, res, next) => {
 })
 
 app.get("/v1/list-family-houses/:id", (req, res, next) => {
-    connection.query('SELECT house.id, house.name, family.name AS family_name, house.food, house.wood, house.land, house.type_id FROM house INNER JOIN family ON family_id = family.id WHERE house.family_id = ' + req.params.id, function (err, rows) {
+    const connQuery = `
+        SELECT
+            house.id, house.name, family.name AS family_name, house.land, house.type_id,
+            COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
+            COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood
+        FROM house
+            INNER JOIN family ON family_id = family.id
+        WHERE house.family_id = ` + req.params.id
+    connection.query(connQuery, function (err, rows) {
         if (err) {
             console.log("ListFamilyHousesError: ", err)
             connection = require('./database.js')
@@ -142,7 +150,17 @@ app.get("/v1/describe-family/:id", (req, res, next) => {
 })
 
 app.get("/v1/describe-house/:id", (req, res, next) => {
-    connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id, COUNT(person.house_id) AS people, (SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 1 AND completed_at IS NULL AND cancelled_at IS NULL) AS food_in_trade, (SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 2 AND completed_at IS NULL AND cancelled_at IS NULL) AS wood_in_trade FROM house INNER JOIN person ON person.house_id = house.id WHERE house.id = ' + req.params.id, function (err, rows) {
+    const selectQuery = `
+        SELECT
+            house.id, house.name, house.rooms, house.storage, house.family_id, COUNT(person.house_id) AS people,
+            COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
+            COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood,
+            COALESCE((SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 1 AND completed_at IS NULL AND cancelled_at IS NULL), 0) AS food_in_trade,
+            COALESCE((SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 2 AND completed_at IS NULL AND cancelled_at IS NULL), 0) AS wood_in_trade 
+        FROM house
+            INNER JOIN person ON person.house_id = house.id
+        WHERE house.id = ` + req.params.id
+    connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("DescribeHouseError: ", err)
             connection = require('./database.js')
@@ -150,7 +168,16 @@ app.get("/v1/describe-house/:id", (req, res, next) => {
         } else {
             rows.map(function(row) {
                 if (row['people'] == 0) {
-                    connection.query('SELECT house.id, house.name, house.rooms, house.storage, house.food, house.wood, house.family_id FROM house WHERE house.id = ' + req.params.id, function (err, rows) {
+                    const nestedSelectQuery = `
+                        SELECT
+                            house.id, house.name, house.rooms, house.storage, house.family_id,
+                            COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
+                            COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood,
+                            COALESCE((SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 1 AND completed_at IS NULL AND cancelled_at IS NULL), 0) AS food_in_trade,
+                            COALESCE((SELECT SUM(offered_volume) FROM trade WHERE house_id = house.id AND offered_type_id = 2 AND completed_at IS NULL AND cancelled_at IS NULL), 0) AS wood_in_trade 
+                        FROM house
+                        WHERE house.id = ` + req.params.id
+                    connection.query(nestedSelectQuery, function (err, rows) {
                         if (err) {
                             console.log("DescribeHouseErrorTwo: ", err)
                             connection = require('./database.js')
@@ -237,7 +264,14 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
 })
 
 app.get("/v1/describe-house-resources/:id", (req, res, next) => {
-    connection.query('SELECT id, name, food, wood FROM house WHERE house.id = ' + req.params.id, function (err, rows) {
+    const selectQuery = `
+        SELECT
+            id, name,
+            COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
+            COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood
+        FROM house
+        WHERE house.id = ` + req.params.id
+    connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("DescribeHouseResourcesError: ", err)
             connection = require('./database.js')

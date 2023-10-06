@@ -122,3 +122,31 @@ CREATE TABLE `trade` (
     `cancelled_at` TIMESTAMP,
     FOREIGN KEY (`house_id`) REFERENCES house(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- -- -- -- -- RESOURCE -- -- -- -- --
+CREATE TABLE `resource` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `type_name` VARCHAR(155) NOT NULL,
+    `volume` INT NOT NULL,
+    `house_id` INT,
+    `person_id` INT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`house_id`) REFERENCES house(`id`),
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 12, 2);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 24, 2);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 5, 3);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 21, 3);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 17, 4);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 10, 4);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 19, 5);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 11, 5);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 8, 6);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 6, 6);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 5, 7);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 19, 7);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 11, 8);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 9, 8);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 9, 9);
+INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 9, 9);
