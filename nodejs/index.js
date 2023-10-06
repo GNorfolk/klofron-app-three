@@ -578,6 +578,29 @@ app.post("/v1/rename-person/:id", (req, res, next) => {
     })
 })
 
+// curl --request POST localhost:3001/v1/rename-house/12 --header "Content-Type: application/json" --data '{"name":"SomeHouseName"}'
+
+app.post("/v1/rename-house/:id", (req, res, next) => {
+    connection.query('SELECT id, name FROM house WHERE id = ' + req.params.id, function (err, rows) {
+        if (err) {
+            console.log("RenameHouseSelectError: ", err)
+            connection = require('./database.js')
+            res.send({"success": false, "error": "Unknown API error occurred!"})
+        } else if (req.body.name.length == 0) {
+            res.send({"success": false, "error": "Name too short!"})
+        } else {
+            connection.query("UPDATE house SET name = '" + req.body.name + "' WHERE id = " + rows[0].id, function(err, result) {
+                if (err) {
+                    console.log("RenameHouseUpdateError: ", err)
+                    res.send({"success": false, "error": "Unknown API error occurred!"})
+                } else {
+                    res.send({"success": true})
+                }
+            })
+        }
+    })
+})
+
 // curl --request POST localhost:3001/v1/move-person-house --header "Content-Type: application/json" --data '{"person_id":3, "house_id": 12}'
 
 app.post('/v1/move-person-house', function(req, res) {

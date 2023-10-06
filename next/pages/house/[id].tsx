@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import Layout from '../../components/layout'
+import { FormEventHandler, useState } from "react"
 
 const queryClient = new QueryClient()
 
@@ -15,6 +16,7 @@ export default function House() {
         <ListHousePeople />
         <ListHouseTrades />
         <ManageResources />
+        <RenameHouse />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/family">← Back to home</Link>
@@ -275,6 +277,39 @@ function ManageResources() {
               }
             } >Decrease Food</button>
           </li>
+        </ul>
+      </div>
+    )
+  }
+}
+
+function RenameHouse() {
+  const router = useRouter()
+  if (router.isReady) {
+    const [houseInfo, sethouseInfo] = useState({ name: "" })
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+      e.preventDefault();
+      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/rename-house/' + router.query.id, {
+        name: houseInfo.name
+      }).then((value) => {
+        queryClient.invalidateQueries()
+      })
+    };
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Rename House</h2>
+        <ul className={styles.list}>
+          <form onSubmit={handleSubmit}>
+            <input
+              value={houseInfo.name}
+              onChange={({ target }) =>
+                sethouseInfo({ ...houseInfo, name: target.value })
+              }
+              placeholder="Insert name here"
+            />
+            <input type="submit" value="Rename" />
+          </form>
         </ul>
       </div>
     )
