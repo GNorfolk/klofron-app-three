@@ -541,9 +541,9 @@ app.post('/v1/create-person/:id', function(req, res) {
                 })
                 res.send({"success": true})
             } else if (father.action_count > 0) {
-                res.send({"success": false, "error": "The father already has " + father.action_count + " actions in progress!"})
+                res.send({"success": false, "error": "The father already has " + father.action_count + " action in progress!"})
             } else if (mother.action_count > 0) {
-                res.send({"success": false, "error": "The mother already has " + mother.action_count + " actions in progress!"})
+                res.send({"success": false, "error": "The mother already has " + mother.action_count + " action in progress!"})
             } else if (rows.length > 2) {
                 res.send({"success": false, "error": "Too many parents, there are " + rows.length + " of them!"})
             } else if (rows.length < 2) {
@@ -576,9 +576,10 @@ app.post('/v1/create-person/:id', function(req, res) {
 app.post('/v1/create-house/:id', function(req, res) {
     const selectQuery = `
         SELECT
-            house_id,
+            id, house_id,
             (SELECT volume FROM resource WHERE type_name = 'food' AND house_id = person.house_id) AS food,
-            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = person.house_id) AS wood
+            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = person.house_id) AS wood,
+            (SELECT count(id) FROM action WHERE person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count
         FROM person
         WHERE id = ` + req.params.id
     connection.query(selectQuery, function (err, rows) {
@@ -587,7 +588,7 @@ app.post('/v1/create-house/:id', function(req, res) {
             connection = require('./database.js')
             res.json({error: err})
         } else {
-            if (rows[0].wood >= 12 && rows[0].food >= 3) {
+            if (rows[0].wood >= 12 && rows[0].food >= 3 && rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
                 const insertQuery = `
                     INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 5, NOW(), ` + infinite + `);
@@ -601,6 +602,8 @@ app.post('/v1/create-house/:id', function(req, res) {
                 res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 12 required!"})
             } else if (rows[0].food < 3) {
                 res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining and 3 required!"})
+            } else if (rows[0].action_count > 0) {
+                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else {
                 res.send({"success": false, "error": "Unknown API error occurred!"})
             }
