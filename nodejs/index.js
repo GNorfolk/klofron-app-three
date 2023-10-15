@@ -328,20 +328,20 @@ app.get("/v1/describe-person-actions/:id", (req, res, next) => {
 })
 
 app.post('/v1/increase-food/:id', function(req, res) {
-    connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
+    connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
         if (err) {
             console.log("IncreaseFoodError: ", err)
             connection = require('./database.js')
             res.json({error: err})
         } else {
-            if (rows[0].count == 0) {
+            if (rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
                 connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 1, NOW(), ' + infinite + ')', function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
-            } else if (rows[0].count != 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
+            } else if (rows[0].action_count != 0) {
+                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else {
                 res.send({"success": false, "error": "Unknown API error occurred!"})
             }
@@ -375,7 +375,7 @@ app.post('/v1/increase-wood/:id', function(req, res) {
         SELECT
             person.house_id,
             COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
-            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count
+            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count
         FROM person
             JOIN house ON person.house_id = house.id
         WHERE person.id = ` + req.params.id
@@ -385,14 +385,14 @@ app.post('/v1/increase-wood/:id', function(req, res) {
             connection = require('./database.js')
             res.json({error: err})
         } else {
-            if (rows[0].food >= 1 && rows[0].count == 0) {
+            if (rows[0].food >= 1 && rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
                 connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 2, NOW(), " + infinite + "); UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + rows[0].house_id, function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})
-            } else if (rows[0].count != 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
+            } else if (rows[0].action_count != 0) {
+                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
             } else {
@@ -427,7 +427,7 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
     const selectQuery = `
         SELECT
             house.storage, house.id,
-            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count,
+            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count,
             COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
             COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood
         FROM person
@@ -439,7 +439,7 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
             connection = require('./database.js')
             res.json({error: err})
         } else {
-            if (rows[0].count == 0 && rows[0].food >= 1 && rows[0].wood >= 3) {
+            if (rows[0].action_count == 0 && rows[0].food >= 1 && rows[0].wood >= 3) {
                 const infinite = req.query.infinite | 0
                 insertQuery = `
                     INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 3, NOW(), ` + infinite + `);
@@ -449,8 +449,8 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
                     if(err) throw err
                 })
                 res.send({"success": true})
-            } else if (rows[0].count != 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
+            } else if (rows[0].action_count != 0) {
+                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
             } else if (rows[0].wood < 3) {
@@ -466,7 +466,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
     selectQuery = `
         SELECT
             house.rooms, house.id,
-            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count,
+            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count,
             COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
             COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood
         FROM person
@@ -478,7 +478,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
             connection = require('./database.js')
             res.json({error: err})
         } else {
-            if (rows[0].count == 0 && rows[0].food >= 1 && rows[0].wood >= 6) {
+            if (rows[0].action_count == 0 && rows[0].food >= 1 && rows[0].wood >= 6) {
                 const infinite = req.query.infinite | 0
                 const insertQuery = `
                     INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 4, NOW(), ` + infinite + `);
@@ -488,8 +488,8 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
                     if(err) throw err
                 })
                 res.send({"success": true})
-            } else if (rows[0].count != 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].count + " action in progress!"})
+            } else if (rows[0].action_count != 0) {
+                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
             } else if (rows[0].wood < 6) {
@@ -710,7 +710,17 @@ app.post("/v1/rename-house/:id", (req, res, next) => {
 // curl --request POST localhost:3001/v1/move-person-house --header "Content-Type: application/json" --data '{"person_id":3, "house_id": 12}'
 
 app.post('/v1/move-person-house', function(req, res) {
-    connection.query('SELECT id, rooms, (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people FROM house WHERE family_id = (SELECT family_id FROM person WHERE id = ' + req.body.person_id + ')', function (err, rows) {
+    const selectQuery = `
+        SELECT
+            id, rooms,
+            (SELECT volume FROM resource WHERE type_name = 'food' AND house_id = ` + req.body.person_id + `) AS food,
+            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = ` + req.body.person_id + `) AS wood,
+            (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people,
+            (SELECT count(id) FROM action WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count
+        FROM house
+        WHERE 
+            family_id = (SELECT family_id FROM person WHERE id = ` + req.body.person_id + `);`
+    connection.query(selectQuery, function (err, rows) {
         const myIndex = rows.map(a => a.id).indexOf(req.body.house_id)
         if (err) {
             console.log("MovePersonHouseSelectError: ", err)
@@ -720,6 +730,8 @@ app.post('/v1/move-person-house', function(req, res) {
             res.send({"success": false, "error": "House with id " + req.body.house_id + " not in [" + rows.map(a => a.id) + "] array of family houses!"})
         } else if (rows[myIndex].rooms <= rows[myIndex].people) {
             res.send({"success": false, "error": "House has " + rows[myIndex].people + " people and " + rows[myIndex].rooms + " rooms!"})
+        } else if (rows[myIndex].action_count > 0) {
+            res.send({"success": false, "error": "There is already " + rows[myIndex].action_count + " action in progress!"})
         } else {
             connection.query('UPDATE person SET house_id = ' + req.body.house_id + ' WHERE id = ' + req.body.person_id, function(err, result) {
                 if (err) {
