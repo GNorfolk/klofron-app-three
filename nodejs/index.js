@@ -373,6 +373,7 @@ app.post('/v1/decrease-food/:id', function(req, res) {
 app.post('/v1/increase-wood/:id', function(req, res) {
     const selectQuery = `
         SELECT
+            person.house_id,
             COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
             (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS count
         FROM person
@@ -386,7 +387,7 @@ app.post('/v1/increase-wood/:id', function(req, res) {
         } else {
             if (rows[0].food >= 1 && rows[0].count == 0) {
                 const infinite = req.query.infinite | 0
-                connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 2, NOW(), " + infinite + "); UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function(err, result) {
+                connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 2, NOW(), " + infinite + "); UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + rows[0].house_id, function(err, result) {
                     if(err) throw err
                 })
                 res.send({"success": true})

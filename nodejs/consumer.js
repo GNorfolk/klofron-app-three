@@ -25,7 +25,23 @@ function checkQueue(connection) {
                     rows1.map(row1 => {
                         if (row1['type_id'] == 1) {
                             return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage, house.food, house.wood, (SELECT SUM(offered_volume) FROM trade WHERE house_id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ') AND offered_type_id IN (1, 2) AND completed_at IS NULL AND cancelled_at IS NULL) AS in_trade FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
+                                const query2 = `
+                                    SELECT
+                                        house.storage,
+                                        COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
+                                        COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood,
+                                        COALESCE((
+                                            SELECT SUM(offered_volume)
+                                            FROM trade
+                                            WHERE
+                                                house_id = (SELECT house_id FROM person WHERE id = ` + row1['person_id'] + `) AND
+                                                offered_type_id IN (1, 2) AND
+                                                completed_at IS NULL AND
+                                                cancelled_at IS NULL
+                                        ), 0) AS in_trade
+                                    FROM person
+                                        INNER JOIN house ON person.house_id = house.id
+                                    WHERE person.id = ` + row1['person_id']
                                 connection.query(query2, function(err2, rows2) {
                                     if (err2) {
                                         return reject2(err2)
@@ -35,7 +51,9 @@ function checkQueue(connection) {
                                                 console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
                                                 if (row2.storage >= row2.food + row2.wood + row2.in_trade + 2) {
                                                     return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET food = food + 2 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
+                                                        const query3 = `
+                                                            UPDATE action SET completed_at = NOW() WHERE id = ` + row1['id'] + `;
+                                                            UPDATE resource SET volume = volume + 2 WHERE type_name = 'food' AND house_id = (SELECT house_id FROM person WHERE id = ` + row1['person_id'] + `);`
                                                         connection.query(query3, function(err3, res3) {
                                                             if (err3) {
                                                                 return reject3(err3)
@@ -77,7 +95,23 @@ function checkQueue(connection) {
                             })
                         } else if (row1['type_id'] == 2) {
                             return new Promise((resolve2, reject2) => {
-                                const query2 = 'SELECT house.storage, house.food, house.wood, (SELECT SUM(offered_volume) FROM trade WHERE house_id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ') AND offered_type_id IN (1, 2) AND completed_at IS NULL AND cancelled_at IS NULL) AS in_trade FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + row1['person_id']
+                                const query2 = `
+                                    SELECT
+                                        house.storage,
+                                        COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
+                                        COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = house.id), 0) AS wood,
+                                        COALESCE((
+                                            SELECT SUM(offered_volume)
+                                            FROM trade
+                                            WHERE
+                                                house_id = (SELECT house_id FROM person WHERE id = ` + row1['person_id'] + `) AND
+                                                offered_type_id IN (1, 2) AND
+                                                completed_at IS NULL AND
+                                                cancelled_at IS NULL
+                                        ), 0) AS in_trade
+                                    FROM person
+                                        INNER JOIN house ON person.house_id = house.id
+                                    WHERE person.id = ` + row1['person_id']
                                 connection.query(query2, function(err2, rows2) {
                                     if (err2) {
                                         return reject2(err2)
@@ -87,7 +121,9 @@ function checkQueue(connection) {
                                                 console.log('Action with ID ' + row1['id'] + ' has house stats: ' + JSON.stringify(row2))
                                                 if (row2.storage >= row2.food + row2.wood + row2.in_trade + 1) {
                                                     return new Promise((resolve3, reject3) => {
-                                                        const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; UPDATE house SET wood = wood + 1 WHERE id = (SELECT house_id FROM person WHERE id = ' + row1['person_id'] + ');'
+                                                        const query3 = `
+                                                            UPDATE action SET completed_at = NOW() WHERE id = ` + row1['id'] + `;
+                                                            UPDATE resource SET volume = volume + 1 WHERE type_name = 'wood' AND house_id = (SELECT house_id FROM person WHERE id = ` + row1['person_id'] + `);`
                                                         connection.query(query3, function(err3, res3) {
                                                             if (err3) {
                                                                 return reject3(err3)
@@ -176,7 +212,7 @@ function checkQueue(connection) {
                         } else if (row1['type_id'] == 5) {
                             return new Promise((resolve3, reject3) => {
                                 console.log('Executing action with ID: ' + row1['id'])
-                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; INSERT INTO house (name, rooms, storage, family_id) VALUES (\'House\', 1, 6, (SELECT family_id FROM person WHERE id = ' + row1['person_id'] + '));'
+                                const query3 = 'UPDATE action SET completed_at = NOW() WHERE id = ' + row1['id'] + '; INSERT INTO house (name, type_id, rooms, storage, land, family_id) VALUES (\'House\', 0, 1, 6, 0, (SELECT family_id FROM person WHERE id = ' + row1['person_id'] + '));'
                                 connection.query(query3, function(err3, res3) {
                                     if (err3) {
                                         return reject3(err3)
