@@ -172,3 +172,14 @@ INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 1, 20);
 INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 0, 20);
 INSERT INTO resource (type_name, volume, house_id) VALUES ('food', 0, 21);
 INSERT INTO resource (type_name, volume, house_id) VALUES ('wood', 0, 21);
+-- -- -- -- -- MOVE HOUSE -- -- -- -- --
+CREATE TABLE `move_house` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NOT NULL,
+    `origin_house_id` INT NOT NULL,
+    `destination_house_id` INT NOT NULL,
+    `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `completed_at` TIMESTAMP,
+    `cancelled_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO move_house (person_id, origin_house_id, destination_house_id) VALUES (3, 2, 12);
