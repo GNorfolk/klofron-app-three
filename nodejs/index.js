@@ -713,10 +713,12 @@ app.post('/v1/move-person-house', function(req, res) {
     const selectQuery = `
         SELECT
             id, rooms,
-            (SELECT volume FROM resource WHERE type_name = 'food' AND house_id = ` + req.body.person_id + `) AS food,
-            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = ` + req.body.person_id + `) AS wood,
+            (SELECT house_id FROM person WHERE id = ` + req.body.person_id + `) AS origin_house_id,
+            (SELECT volume FROM resource WHERE type_name = 'food' AND house_id = ` + req.body.person_id + `) AS origin_house_food,
+            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = ` + req.body.person_id + `) AS origin_house_wood,
             (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people,
-            (SELECT count(id) FROM action WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count
+            (SELECT count(id) FROM action WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count,
+            (SELECT count(id) FROM move_house WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS move_count
         FROM house
         WHERE 
             family_id = (SELECT family_id FROM person WHERE id = ` + req.body.person_id + `);`
@@ -732,8 +734,17 @@ app.post('/v1/move-person-house', function(req, res) {
             res.send({"success": false, "error": "House has " + rows[myIndex].people + " people and " + rows[myIndex].rooms + " rooms!"})
         } else if (rows[myIndex].action_count > 0) {
             res.send({"success": false, "error": "There is already " + rows[myIndex].action_count + " action in progress!"})
+        } else if (rows[myIndex].move_count > 0) {
+            res.send({"success": false, "error": "There is already " + rows[myIndex].move_count + " move in progress!"})
+        } else if (rows[myIndex].origin_house_id == rows[myIndex].id) {
+            res.send({"success": false, "error": "Origin house with ID " + rows[myIndex].origin_house_id + " is identical to destination house with ID " + rows[myIndex].id + "!"})
         } else {
-            connection.query('UPDATE person SET house_id = ' + req.body.house_id + ' WHERE id = ' + req.body.person_id, function(err, result) {
+            insertQuery = `
+                INSERT INTO move_house
+                    (person_id, origin_house_id, destination_house_id)
+                VALUES
+                    (` + req.body.person_id + `, ` + rows[myIndex].origin_house_id + `, ` + rows[myIndex].id + `);`
+            connection.query(insertQuery, function(err, result) {
                 if (err) {
                     console.log("MovePersonHouseUpdateError: ", err)
                     res.send({"success": false, "error": err})
