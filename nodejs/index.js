@@ -126,7 +126,13 @@ app.get("/v1/list-family-people/:id", (req, res, next) => {
 })
 
 app.get("/v1/list-person-houses/:id", (req, res, next) => {
-    connection.query('SELECT id, name FROM house WHERE family_id = (SELECT family_id FROM person WHERE id = ' + req.params.id + ') AND id != (SELECT house_id FROM person WHERE id = ' + req.params.id + ')', function (err, rows) {
+    const selectQuery = `
+        SELECT id, name
+        FROM house
+        WHERE
+            family_id = (SELECT family_id FROM person WHERE id = ` + req.params.id + `) AND
+            id != (SELECT house_id FROM person WHERE id = ` + req.params.id + `);`
+    connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("ListPersonHousesError: ", err)
             connection = require('./database.js')
@@ -249,7 +255,21 @@ app.get("/v1/list-house-trades/:id", (req, res, next) => {
 })
 
 app.get("/v1/describe-person/:id", (req, res, next) => {
-    connection.query('SELECT person.id, person.name, person.gender, father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name, mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name, person.created_at, family.name AS family_name, house.id AS house_id, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id INNER JOIN person AS father ON person.father_id = father.id INNER JOIN person AS mother ON person.mother_id = mother.id INNER JOIN family AS father_family ON father.family_id = father_family.id INNER JOIN family AS mother_family ON mother.family_id = mother_family.id WHERE person.id = ' + req.params.id, function (err, rows) {
+    const selectQuery = `
+        SELECT
+            person.id, person.name, person.gender, person.created_at,
+            father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name,
+            mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name,
+            family.name AS family_name, house.id AS house_id, house.name AS house_name
+        FROM person
+            LEFT JOIN house ON person.house_id = house.id
+            INNER JOIN family ON person.family_id = family.id
+            INNER JOIN person AS father ON person.father_id = father.id
+            INNER JOIN person AS mother ON person.mother_id = mother.id
+            INNER JOIN family AS father_family ON father.family_id = father_family.id
+            INNER JOIN family AS mother_family ON mother.family_id = mother_family.id
+        WHERE person.id = ` + req.params.id
+    connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("DescribePersonError: ", err)
             connection = require('./database.js')
