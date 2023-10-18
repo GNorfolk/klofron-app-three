@@ -743,7 +743,8 @@ app.post('/v1/move-person-house', function(req, res) {
                 INSERT INTO move_house
                     (person_id, origin_house_id, destination_house_id)
                 VALUES
-                    (` + req.body.person_id + `, ` + rows[myIndex].origin_house_id + `, ` + rows[myIndex].id + `);`
+                    (` + req.body.person_id + `, ` + rows[myIndex].origin_house_id + `, ` + rows[myIndex].id + `);
+                UPDATE person SET house_id = NULL WHERE id = ` + req.body.person_id
             connection.query(insertQuery, function(err, result) {
                 if (err) {
                     console.log("MovePersonHouseUpdateError: ", err)
