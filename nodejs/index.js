@@ -111,7 +111,7 @@ app.get("/v1/list-family-houses/:id", (req, res, next) => {
 })
 
 app.get("/v1/list-family-people/:id", (req, res, next) => {
-    connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id INNER JOIN house ON person.house_id = house.id WHERE person.family_id = ' + req.params.id, function (err, rows) {
+    connection.query('SELECT person.id, person.name, person.gender, person.created_at, family.name AS family_name, house.name AS house_name FROM person INNER JOIN family ON person.family_id = family.id LEFT JOIN house ON person.house_id = house.id WHERE person.family_id = ' + req.params.id, function (err, rows) {
         if (err) {
             console.log("ListFamilyPeopleError: ", err)
             connection = require('./database.js')

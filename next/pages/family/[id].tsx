@@ -95,7 +95,12 @@ function ListFamilyPeople() {
         <ul className={styles.list}>
           {data.map(({ id, name, family_name, gender, age, house_name }) => (
             <li className={styles.listItem} key={id}>
-              <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
+              {
+                house_name ?
+                  <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
+                :
+                  <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and is of no fixed abode.</p>
+              }
             </li>
           ))}
         </ul>
