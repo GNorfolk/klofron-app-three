@@ -131,7 +131,7 @@ app.get("/v1/list-person-houses/:id", (req, res, next) => {
         FROM house
         WHERE
             family_id = (SELECT family_id FROM person WHERE id = ` + req.params.id + `) AND
-            id != (SELECT house_id FROM person WHERE id = ` + req.params.id + `);`
+            id != COALESCE((SELECT house_id FROM person WHERE id = ` + req.params.id + `), 0);`
     connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("ListPersonHousesError: ", err)
