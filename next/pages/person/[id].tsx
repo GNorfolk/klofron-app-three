@@ -164,7 +164,9 @@ function MoveHouse() {
       mutationFn: (id) => {
         return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/move-person-house', {
           person_id: router.query.id,
-          house_id: id
+          house_id: id,
+          food: 1,
+          wood: 1
         })
       },
     })
