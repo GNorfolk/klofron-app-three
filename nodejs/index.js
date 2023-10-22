@@ -738,7 +738,9 @@ app.post('/v1/move-person-house', function(req, res) {
             (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = COALESCE((SELECT house_id FROM person WHERE id = ` + req.body.person_id + `), -1)) AS origin_house_wood,
             (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people,
             (SELECT count(id) FROM action WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count,
-            (SELECT count(id) FROM move_house WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS move_count
+            (SELECT count(id) FROM move_house WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS move_count,
+            (SELECT volume FROM resource WHERE type_name = 'food' AND person_id = ` + req.body.person_id + `) AS person_food,
+            (SELECT volume FROM resource WHERE type_name = 'wood' AND person_id = ` + req.body.person_id + `) AS person_wood
         FROM house
         WHERE 
             family_id = (SELECT family_id FROM person WHERE id = ` + req.body.person_id + `);`
@@ -761,9 +763,11 @@ app.post('/v1/move-person-house', function(req, res) {
         } else if (rows[myIndex].origin_house_id == -1 && req.body.food + req.body.wood > 0 ) {
             res.send({"success": false, "error": "Person is of no fixed abode so cannot take " + req.body.food + " food and " + req.body.wood + " wood !"})
         } else if (req.body.food + 1 > rows[myIndex].origin_house_food) {
-            res.send({"success": false, "error": "Person requires " + req.body.food + 1 + " food but only " + rows[myIndex].origin_house_food + " food available!"})
+            res.send({"success": false, "error": "Person requires " + (req.body.food + 1) + " food but only " + rows[myIndex].origin_house_food + " food available!"})
         } else if (req.body.wood > rows[myIndex].origin_house_wood) {
             res.send({"success": false, "error": "Person is taking " + req.body.wood + " wood but only " + rows[myIndex].origin_house_wood + " wood available!"})
+        } else if (rows[myIndex].person_food + rows[myIndex].person_wood > 0) {
+            res.send({"success": false, "error": "Person already has  " + rows[myIndex].person_food + " food and " + rows[myIndex].person_wood + " wood on their person!"})
         } else {
             insertQuery = `
                 UPDATE person SET house_id = NULL WHERE id = ` + req.body.person_id + `;
