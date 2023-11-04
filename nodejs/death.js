@@ -10,7 +10,7 @@ config = {
 
 function checkQueue(connection) {
     new Promise((resolve1, reject1) => {
-        const query1 = 'SELECT * FROM person WHERE created_at + INTERVAL 100 DAY < NOW();'
+        const query1 = 'SELECT * FROM person WHERE deleted_at IS NULL AND created_at + INTERVAL 100 DAY < NOW();'
         connection.query(query1, function(err1, rows1) {
             if (err1) {
                 return reject1(err1)
