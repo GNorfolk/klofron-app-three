@@ -45,32 +45,41 @@ function DescribeHouse() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    return (
-      <div>
-        <h2 className={styles.headingLg}>House Info</h2>
-        <ul className={styles.list}>
-          {data.map(({ id, name, rooms, storage, food, wood, food_in_trade, wood_in_trade, people }) => (
-            <li className={styles.listItem} key={id}>
-              <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
-              <p>{name} has {food} food and {wood} wood in storage, and {food_in_trade} food and {wood_in_trade} wood in trade. It can hold {storage} items so has {storage - food - wood - food_in_trade - wood_in_trade} space for more items.</p>
-              <button onClick={
-                () => {
-                  createPerson.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById("change-me-two-" + id).innerText = res.data.error
-                    } else {
-                      document.getElementById("change-me-two-" + id).innerText = ' '
-                    }
-                  }})
-                }
-              } >Create Person</button>
-              <small className={styles.lightText} id={'change-me-two-' + id}></small>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
+    if (data.success) {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>House Info</h2>
+          <ul className={styles.list}>
+            {data.map(({ id, name, rooms, storage, food, wood, food_in_trade, wood_in_trade, people }) => (
+              <li className={styles.listItem} key={id}>
+                <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
+                <p>{name} has {food} food and {wood} wood in storage, and {food_in_trade} food and {wood_in_trade} wood in trade. It can hold {storage} items so has {storage - food - wood - food_in_trade - wood_in_trade} space for more items.</p>
+                <button onClick={
+                  () => {
+                    createPerson.mutate(id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                      if (!res.data.success) {
+                        document.getElementById("change-me-two-" + id).innerText = res.data.error
+                      } else {
+                        document.getElementById("change-me-two-" + id).innerText = ' '
+                      }
+                    }})
+                  }
+                } >Create Person</button>
+                <small className={styles.lightText} id={'change-me-two-' + id}></small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>House Info</h2>
+          <p>Backend call failed with error: {data.error}</p>
+        </div>
+      )
+    }
   }
 }
 
@@ -118,80 +127,89 @@ function ListHousePeople() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Person Info</h2>
-        <ul className={styles.list}>
-          {data.map(({ id, name, family_name, gender, age, house_name, action_time }) => (
-            <li className={styles.listItem} key={id}>
-              <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
-              { action_time ? (<><small className={styles.lightText}>{name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
-              <button onClick={
-                () => {
-                   increaseFood.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
-                    } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
-                    }
-                  }})
-                }
-              } >Get Food</button>
-              <button onClick={
-                () => {
-                   increaseWood.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
-                    } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
-                    }
-                  }})
-                }
-              } >Get Wood</button>
-              <button onClick={
-                () => {
-                   increaseStorage.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
-                    } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
-                    }
-                  }})
-                }
-              } >Increase Storage</button>
-              <button onClick={
-                () => {
-                   increaseRooms.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
-                    } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
-                    }
-                  }})
-                }
-              } >Increase Rooms</button>
-              <button onClick={
-              () => {
-                  createHouse.mutate(id, { onSettled: (res) => {
-                  queryClient.invalidateQueries()
-                  if (!res.data.success) {
-                    document.getElementById("change-me-" + id).innerText = res.data.error
-                  } else {
-                    document.getElementById("change-me-" + id).innerText = ' '
+    if (data.success) {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Person Info</h2>
+          <ul className={styles.list}>
+            {data.map(({ id, name, family_name, gender, age, house_name, action_time }) => (
+              <li className={styles.listItem} key={id}>
+                <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
+                { action_time ? (<><small className={styles.lightText}>{name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
+                <button onClick={
+                  () => {
+                    increaseFood.mutate(id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                      if (!res.data.success) {
+                        document.getElementById("change-me-" + id).innerText = res.data.error
+                      } else {
+                        document.getElementById("change-me-" + id).innerText = ' '
+                      }
+                    }})
                   }
-                }})
-              }
-            } >Create House</button>
-              <small className={styles.lightText} id={'change-me-' + id}></small>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
+                } >Get Food</button>
+                <button onClick={
+                  () => {
+                    increaseWood.mutate(id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                      if (!res.data.success) {
+                        document.getElementById("change-me-" + id).innerText = res.data.error
+                      } else {
+                        document.getElementById("change-me-" + id).innerText = ' '
+                      }
+                    }})
+                  }
+                } >Get Wood</button>
+                <button onClick={
+                  () => {
+                    increaseStorage.mutate(id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                      if (!res.data.success) {
+                        document.getElementById("change-me-" + id).innerText = res.data.error
+                      } else {
+                        document.getElementById("change-me-" + id).innerText = ' '
+                      }
+                    }})
+                  }
+                } >Increase Storage</button>
+                <button onClick={
+                  () => {
+                    increaseRooms.mutate(id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                      if (!res.data.success) {
+                        document.getElementById("change-me-" + id).innerText = res.data.error
+                      } else {
+                        document.getElementById("change-me-" + id).innerText = ' '
+                      }
+                    }})
+                  }
+                } >Increase Rooms</button>
+                <button onClick={
+                () => {
+                    createHouse.mutate(id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                    if (!res.data.success) {
+                      document.getElementById("change-me-" + id).innerText = res.data.error
+                    } else {
+                      document.getElementById("change-me-" + id).innerText = ' '
+                    }
+                  }})
+                }
+              } >Create House</button>
+                <small className={styles.lightText} id={'change-me-' + id}></small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Person Info</h2>
+          <p>Backend call failed with error: {data.error}</p>
+        </div>
+      )
+    }
   }
 }
 
@@ -252,34 +270,43 @@ function ManageResources() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Manage Resources</h2>
-        <p>{data[0].name} has {data[0].food} food and {data[0].wood} wood in storage!</p>
-        <ul className={styles.list}>
-        <li className={styles.listItem}>
-            <p>Wood: {data[0].wood} in storage!</p>
-            <button onClick={
-              () => {
-                  decreaseWood.mutate(data[0].id, { onSettled: (res) => {
-                  queryClient.invalidateQueries()
-                }})
-              }
-            } >Decrease Wood</button>
-          </li>
+    if (data.success) {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Manage Resources</h2>
+          <p>{data[0].name} has {data[0].food} food and {data[0].wood} wood in storage!</p>
+          <ul className={styles.list}>
           <li className={styles.listItem}>
-            <p>Food: {data[0].food} in storage!</p>
-            <button onClick={
-              () => {
-                  decreaseFood.mutate(data[0].id, { onSettled: (res) => {
-                  queryClient.invalidateQueries()
-                }})
-              }
-            } >Decrease Food</button>
-          </li>
-        </ul>
-      </div>
-    )
+              <p>Wood: {data[0].wood} in storage!</p>
+              <button onClick={
+                () => {
+                    decreaseWood.mutate(data[0].id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Decrease Wood</button>
+            </li>
+            <li className={styles.listItem}>
+              <p>Food: {data[0].food} in storage!</p>
+              <button onClick={
+                () => {
+                    decreaseFood.mutate(data[0].id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Decrease Food</button>
+            </li>
+          </ul>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Manage Resources</h2>
+          <p>Backend call failed with error: {data.error}</p>
+        </div>
+      )
+    }
   }
 }
 

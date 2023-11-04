@@ -62,19 +62,28 @@ function ListFamilyHouses() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>House Info</h2>
-      <ul className={styles.list}>
-        {data.map(({ id, name, family_name, food, wood }) => (
-          <li className={styles.listItem} key={id}>
-            <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link>.</p>
-            <p>House {name} holds {food} food and {wood} wood.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.success) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>House Info</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name, family_name, food, wood }) => (
+            <li className={styles.listItem} key={id}>
+              <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link>.</p>
+              <p>House {name} holds {food} food and {wood} wood.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>House Info</h2>
+        <p>Backend call failed with error: {data.error}</p>
+      </div>
+    )
+  }
 }
 
 function ListFamilyPeople() {
@@ -89,16 +98,25 @@ function ListFamilyPeople() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>Person Info</h2>
-      <ul className={styles.list}>
-        {data.map(({ id, name, family_name, gender, age, house_name }) => (
-          <li className={styles.listItem} key={id}>
-            <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.success) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Person Info</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name, family_name, gender, age, house_name }) => (
+            <li className={styles.listItem} key={id}>
+              <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Person Info</h2>
+        <p>Backend call failed with error: {data.error}</p>
+      </div>
+    )
+  }
 }

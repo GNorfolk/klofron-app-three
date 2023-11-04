@@ -33,16 +33,25 @@ function ListFamilies() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>Families</h2>
-      <ul className={styles.list}>
-        {data.map(({ id, name }) => (
-          <li className={styles.listItem} key={id}>
-            <p>The <Link href={`/family/${id}`}>{name}</Link> family.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.success) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Families</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name }) => (
+            <li className={styles.listItem} key={id}>
+              <p>The <Link href={`/family/${id}`}>{name}</Link> family.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Families</h2>
+        <p>Backend call failed with error: {data.error}</p>
+      </div>
+    )
+  }
 }

@@ -32,18 +32,27 @@ function ListHouses() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>Houses</h2>
-      <ul className={styles.list}>
-        {data.map(({ id, name }) => (
-          <li className={styles.listItem} key={id}>
-            <p>The {name}.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.success) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Houses</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name }) => (
+            <li className={styles.listItem} key={id}>
+              <p>The {name}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) 
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Houses</h2>
+        <p>Backend call failed with error: {data.error}</p>
+      </div>
+    )
+  }
 }
 
 function ListMarkets() {
@@ -58,18 +67,27 @@ function ListMarkets() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>Markets</h2>
-      <ul className={styles.list}>
-        {data.map(({ id, name }) => (
-          <li className={styles.listItem} key={id}>
-            <p>The {name}.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.success) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Markets</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name }) => (
+            <li className={styles.listItem} key={id}>
+              <p>The {name}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Markets</h2>
+        <p>Backend call failed with error: {data.error}</p>
+      </div>
+    )
+  }
 }
 
 function ListFarms() {
@@ -84,16 +102,25 @@ function ListFarms() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>Farms</h2>
-      <ul className={styles.list}>
-        {data.map(({ id, name }) => (
-          <li className={styles.listItem} key={id}>
-            <p>The {name}.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.success) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Farms</h2>
+        <ul className={styles.list}>
+          {data.map(({ id, name }) => (
+            <li className={styles.listItem} key={id}>
+              <p>The {name}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Farms</h2>
+        <p>Backend call failed with error: {data.error}</p>
+      </div>
+    )
+  }
 }
