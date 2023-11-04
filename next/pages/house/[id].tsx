@@ -227,20 +227,27 @@ function ListHouseTrades() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Trade Info</h2>
-        <ul className={styles.list}>
-          {
-            data.success ? data.data.map(({ id, offered_type_name, offered_volume, requested_type_name, requested_volume }) => (
+    if (data.success) {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Trade Info</h2>
+          <ul className={styles.list}>
+            {data.data.map(({ id, offered_type_name, offered_volume, requested_type_name, requested_volume }) => (
               <li className={styles.listItem} key={id}>
                 <p>Trade with id {id} offers {offered_volume} {offered_type_name} in return for {requested_volume} {requested_type_name}.</p>
               </li>
-            )) : <li className={styles.listItem}><p>No trades for this house.</p></li>
-          }
-        </ul>
-      </div>
-    )
+            ))}
+          </ul>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2 className={styles.headingLg}>Trade Info</h2>
+          <p>Backend call failed with error: {data.error}</p>
+        </div>
+      )
+    }
   }
 }
 
@@ -276,7 +283,7 @@ function ManageResources() {
           <h2 className={styles.headingLg}>Manage Resources</h2>
           <p>{data[0].name} has {data[0].food} food and {data[0].wood} wood in storage!</p>
           <ul className={styles.list}>
-          <li className={styles.listItem}>
+            <li className={styles.listItem}>
               <p>Wood: {data[0].wood} in storage!</p>
               <button onClick={
                 () => {
