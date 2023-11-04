@@ -19,7 +19,9 @@ function checkQueue(connection) {
                 return Promise.all(
                     rows1.map(row1 => {
                         return new Promise((resolve2, reject2) => {
-                            const query2 = 'UPDATE person SET deleted_at = NOW(), house_id = NULL WHERE id = ' + row1['id']
+                            const query2 = `
+                                UPDATE person SET deleted_at = NOW(), house_id = NULL WHERE id = ` + row1['id'] + `;
+                                UPDATE action SET cancelled_at = NOW() WHERE completed_at IS NULL AND cancelled_at IS NULL AND person_id = ` + row1['id']
                             connection.query(query2, function(err2, res2) {
                                 if (err2) {
                                     return reject2(err2)
