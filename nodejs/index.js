@@ -24,12 +24,12 @@ app.get("/v1/list-people", (req, res, next) => {
         if (err) {
             console.log("ListPeopleError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             rows.map(function(row) {
                 row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
             })
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -39,9 +39,9 @@ app.get("/v1/list-families", (req, res, next) => {
         if (err) {
             console.log("ListFamiliesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -51,9 +51,9 @@ app.get("/v1/list-houses", (req, res, next) => {
         if (err) {
             console.log("ListHousesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -63,9 +63,9 @@ app.get("/v1/list-markets", (req, res, next) => {
         if (err) {
             console.log("ListHousesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -75,9 +75,9 @@ app.get("/v1/list-farms", (req, res, next) => {
         if (err) {
             console.log("ListHousesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -95,7 +95,7 @@ app.get("/v1/list-family-houses/:id", (req, res, next) => {
         if (err) {
             console.log("ListFamilyHousesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             rows.map(function(row) {
                 switch(row['type_id']) {
@@ -105,7 +105,7 @@ app.get("/v1/list-family-houses/:id", (req, res, next) => {
                     default: { row['type_name'] = "Unknown"; break }
                 }
             })
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -115,12 +115,12 @@ app.get("/v1/list-family-people/:id", (req, res, next) => {
         if (err) {
             console.log("ListFamilyPeopleError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             rows.map(function(row) {
                 row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
             })
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -136,9 +136,9 @@ app.get("/v1/list-person-houses/:id", (req, res, next) => {
         if (err) {
             console.log("ListPersonHousesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -148,9 +148,9 @@ app.get("/v1/describe-family/:id", (req, res, next) => {
         if (err) {
             console.log("DescribeFamilyError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -170,7 +170,7 @@ app.get("/v1/describe-house/:id", (req, res, next) => {
         if (err) {
             console.log("DescribeHouseError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             rows.map(function(row) {
                 if (row['people'] == 0) {
@@ -187,16 +187,16 @@ app.get("/v1/describe-house/:id", (req, res, next) => {
                         if (err) {
                             console.log("DescribeHouseErrorTwo: ", err)
                             connection = require('./database.js')
-                            res.json({error: err})
+                            res.send({"success": false, "error": err})
                         } else {
                             rows.map(function(row) {
                                 row['people'] = 0
                             })
-                            res.json(rows)
+                            res.send({"success": true, "data": rows})
                         }
                     })
                 } else {
-                    res.json(rows)
+                    res.send({"success": true, "data": rows})
                 }
             })
         }
@@ -208,7 +208,7 @@ app.get("/v1/list-house-people/:id", (req, res, next) => {
         if (err) {
             console.log("ListHousePeopleError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             rows.map(function(row) {
                 row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
@@ -220,7 +220,7 @@ app.get("/v1/list-house-people/:id", (req, res, next) => {
                     row['action_time'] = null
                 }
             })
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -230,7 +230,7 @@ app.get("/v1/list-house-trades/:id", (req, res, next) => {
         if (err) {
             console.log("ListHouseTradesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else if (rows.length == 0) {
             res.send({"success": false, "error": "No Actions returned!"})
         } else {
@@ -246,10 +246,7 @@ app.get("/v1/list-house-trades/:id", (req, res, next) => {
                     default: { row['requested_type_name'] = "Unknown"; break }
                 }
             })
-            res.send({
-                "success": true,
-                "data": rows
-            })
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -273,12 +270,12 @@ app.get("/v1/describe-person/:id", (req, res, next) => {
         if (err) {
             console.log("DescribePersonError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             rows.map(function(row) {
                 row['age'] = Math.floor(((new Date()).valueOf() - (new Date(row['created_at'])).valueOf()) / day_in_ms)
             })
-            res.json(rows)
+            res.send({"success": true, "data": rows})
         }
     })
 })
@@ -295,9 +292,10 @@ app.get("/v1/describe-house-resources/:id", (req, res, next) => {
         if (err) {
             console.log("DescribeHouseResourcesError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
-            res.json(rows)
+            res.send({"success": true, "data": rows})
+            
         }
     })
 })
@@ -309,7 +307,7 @@ app.get("/v1/describe-person-actions/:id", (req, res, next) => {
         if (err) {
             console.log("DescribePersonActionsError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else if (rows.length == 0) {
             res.send({"success": false, "error": "No actions returned!"})
         } else {
@@ -352,7 +350,7 @@ app.post('/v1/increase-food/:id', function(req, res) {
         if (err) {
             console.log("IncreaseFoodError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
@@ -374,7 +372,7 @@ app.post('/v1/decrease-food/:id', function(req, res) {
         if (err) {
             console.log("DecreaseFoodError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].food > 0) {
                 connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function (err, rows) {
@@ -403,7 +401,7 @@ app.post('/v1/increase-wood/:id', function(req, res) {
         if (err) {
             console.log("IncreaseWoodError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].food >= 1 && rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
@@ -427,7 +425,7 @@ app.post('/v1/decrease-wood/:id', function(req, res) {
         if (err) {
             console.log("DecreaseWoodError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].wood > 0) {
                 connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'wood' AND house_id = " + req.params.id, function (err, rows) {
@@ -457,7 +455,7 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
         if (err) {
             console.log("IncreaseStorageError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].action_count == 0 && rows[0].food >= 1 && rows[0].wood >= 3) {
                 const infinite = req.query.infinite | 0
@@ -496,7 +494,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
         if (err) {
             console.log("IncreaseRoomsError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].action_count == 0 && rows[0].food >= 1 && rows[0].wood >= 6) {
                 const infinite = req.query.infinite | 0
@@ -540,7 +538,7 @@ app.post('/v1/create-person/:id', function(req, res) {
         if (err) {
             console.log("CreatePersonError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             const father = rows[0]
             const mother = rows[1]
@@ -607,7 +605,7 @@ app.post('/v1/create-house/:id', function(req, res) {
         if (err) {
             console.log("CreateHouseError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else {
             if (rows[0].wood >= 12 && rows[0].food >= 3 && rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
@@ -664,7 +662,7 @@ app.post("/v1/cancel-person-action/:id", (req, res, next) => {
         if (err) {
             console.log("CancelPersonActionError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else if (rows.length == 0) {
             res.send({"success": false, "error": "No current action returned!"})
         } else if (rows.length > 1) {
@@ -689,7 +687,7 @@ app.post("/v1/rename-person/:id", (req, res, next) => {
         if (err) {
             console.log("RenamePersonError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else if (req.body.name.length == 0) {
             res.send({"success": false, "error": "Name too short!"})
         } else {
@@ -749,7 +747,7 @@ app.post('/v1/move-person-house', function(req, res) {
         if (err) {
             console.log("MovePersonHouseSelectError: ", err)
             connection = require('./database.js')
-            res.json({error: err})
+            res.send({"success": false, "error": err})
         } else if (myIndex == -1) {
             res.send({"success": false, "error": "House with id " + req.body.house_id + " not in [" + rows.map(a => a.id) + "] array of family houses!"})
         } else if (rows[myIndex].rooms <= rows[myIndex].people) {
