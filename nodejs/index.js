@@ -231,8 +231,6 @@ app.get("/v1/list-house-trades/:id", (req, res, next) => {
             console.log("ListHouseTradesError: ", err)
             connection = require('./database.js')
             res.send({"success": false, "error": err})
-        } else if (rows.length == 0) {
-            res.send({"success": false, "error": "No Actions returned!"})
         } else {
             rows.map(function(row) {
                 switch(row['offered_type_id']) {
@@ -539,12 +537,16 @@ app.post('/v1/create-person/:id', function(req, res) {
             console.log("CreatePersonError: ", err)
             connection = require('./database.js')
             res.send({"success": false, "error": err})
+        } else if (rows.length > 2) {
+            res.send({"success": false, "error": "Too many parents, there are " + rows.length + " of them!"})
+        } else if (rows.length < 2) {
+            res.send({"success": false, "error": "Not enough parents, there are " + rows.length + " of them!"})
         } else {
             const father = rows[0]
             const mother = rows[1]
             mother['age'] = Math.floor(((new Date()).valueOf() - (new Date(mother['created_at'])).valueOf()) / day_in_ms)
             const gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
-            if (father.action_count == 0 && mother.action_count == 0 && rows.length == 2 && father.gender == 'male' && mother.gender == 'female' && father.family_id == mother.family_id && father.house_id == mother.house_id && mother.rooms > mother.people && mother.food >= 2 && father.partner_id == mother.id && mother.partner_id == father.id && mother.age < 50) {
+            if (father.action_count == 0 && mother.action_count == 0 && father.gender == 'male' && mother.gender == 'female' && father.family_id == mother.family_id && father.house_id == mother.house_id && mother.rooms > mother.people && mother.food >= 2 && father.partner_id == mother.id && mother.partner_id == father.id && mother.age < 50) {
                 insertQuery = `
                     INSERT INTO action
                         (person_id, type_id, started_at)
@@ -563,10 +565,6 @@ app.post('/v1/create-person/:id', function(req, res) {
                 res.send({"success": false, "error": "The father already has " + father.action_count + " action in progress!"})
             } else if (mother.action_count > 0) {
                 res.send({"success": false, "error": "The mother already has " + mother.action_count + " action in progress!"})
-            } else if (rows.length > 2) {
-                res.send({"success": false, "error": "Too many parents, there are " + rows.length + " of them!"})
-            } else if (rows.length < 2) {
-                res.send({"success": false, "error": "Not enough parents, there are " + rows.length + " of them!"})
             } else if (father.gender != 'male') {
                 res.send({"success": false, "error": "Incorrect father gender, father with id " + father.id + " has gender " + father.gender + "!"})
             } else if (mother.gender != 'female') {
