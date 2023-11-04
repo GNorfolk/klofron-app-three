@@ -37,7 +37,7 @@ function ListHouses() {
       <div>
         <h2 className={styles.headingLg}>Houses</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name }) => (
+          {data.data.map(({ id, name }) => (
             <li className={styles.listItem} key={id}>
               <p>The {name}.</p>
             </li>
@@ -72,7 +72,7 @@ function ListMarkets() {
       <div>
         <h2 className={styles.headingLg}>Markets</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name }) => (
+          {data.data.map(({ id, name }) => (
             <li className={styles.listItem} key={id}>
               <p>The {name}.</p>
             </li>
@@ -107,7 +107,7 @@ function ListFarms() {
       <div>
         <h2 className={styles.headingLg}>Farms</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name }) => (
+          {data.data.map(({ id, name }) => (
             <li className={styles.listItem} key={id}>
               <p>The {name}.</p>
             </li>

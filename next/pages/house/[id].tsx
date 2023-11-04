@@ -50,7 +50,7 @@ function DescribeHouse() {
         <div>
           <h2 className={styles.headingLg}>House Info</h2>
           <ul className={styles.list}>
-            {data.map(({ id, name, rooms, storage, food, wood, food_in_trade, wood_in_trade, people }) => (
+            {data.data.map(({ id, name, rooms, storage, food, wood, food_in_trade, wood_in_trade, people }) => (
               <li className={styles.listItem} key={id}>
                 <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
                 <p>{name} has {food} food and {wood} wood in storage, and {food_in_trade} food and {wood_in_trade} wood in trade. It can hold {storage} items so has {storage - food - wood - food_in_trade - wood_in_trade} space for more items.</p>
@@ -132,7 +132,7 @@ function ListHousePeople() {
         <div>
           <h2 className={styles.headingLg}>Person Info</h2>
           <ul className={styles.list}>
-            {data.map(({ id, name, family_name, gender, age, house_name, action_time }) => (
+            {data.data.map(({ id, name, family_name, gender, age, house_name, action_time }) => (
               <li className={styles.listItem} key={id}>
                 <p>{name} {family_name} is {gender} and {age} years old and lives at {house_name}.</p>
                 { action_time ? (<><small className={styles.lightText}>{name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
@@ -281,23 +281,23 @@ function ManageResources() {
       return (
         <div>
           <h2 className={styles.headingLg}>Manage Resources</h2>
-          <p>{data[0].name} has {data[0].food} food and {data[0].wood} wood in storage!</p>
+          <p>{data.data[0].name} has {data.data[0].food} food and {data.data[0].wood} wood in storage!</p>
           <ul className={styles.list}>
             <li className={styles.listItem}>
-              <p>Wood: {data[0].wood} in storage!</p>
+              <p>Wood: {data.data[0].wood} in storage!</p>
               <button onClick={
                 () => {
-                    decreaseWood.mutate(data[0].id, { onSettled: (res) => {
+                    decreaseWood.mutate(data.data[0].id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                   }})
                 }
               } >Decrease Wood</button>
             </li>
             <li className={styles.listItem}>
-              <p>Food: {data[0].food} in storage!</p>
+              <p>Food: {data.data[0].food} in storage!</p>
               <button onClick={
                 () => {
-                    decreaseFood.mutate(data[0].id, { onSettled: (res) => {
+                    decreaseFood.mutate(data.data[0].id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                   }})
                 }

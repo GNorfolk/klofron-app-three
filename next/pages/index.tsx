@@ -43,7 +43,7 @@ function DescribeFamily() {
 
   return (
     <div>
-      {data.map(({ id, name }) => (
+      {data.data.map(({ id, name }) => (
         <h1 className={styles.heading2Xl} key={id}>The {name} family.</h1>
       ))}
     </div>
@@ -67,7 +67,7 @@ function ListFamilyHouses() {
       <div>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, food, wood }) => (
+          {data.data.map(({ id, name, family_name, food, wood }) => (
             <li className={styles.listItem} key={id}>
               <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link>.</p>
               <p>House {name} holds {food} food and {wood} wood.</p>
@@ -103,7 +103,7 @@ function ListFamilyPeople() {
       <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, gender, age, house_name }) => (
+          {data.data.map(({ id, name, family_name, gender, age, house_name }) => (
             <li className={styles.listItem} key={id}>
               <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
             </li>

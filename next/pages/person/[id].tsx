@@ -43,7 +43,7 @@ function DescribePerson() {
         <div>
           <h2 className={styles.headingLg}>Person Info</h2>
           <ul className={styles.list}>
-            {data.map(({ id, name, family_name, gender, age, house_id, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name }) => (
+            {data.data.map(({ id, name, family_name, gender, age, house_id, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name }) => (
               <li className={styles.listItem} key={id}>
                 <p>{name} {family_name} is {gender} and {age} years old.</p>
                 <p>{name}'s father is <Link href={"/person/" + father_id}><a onClick={(e) => queryClient.invalidateQueries()}>{father_name + ' ' + father_family_name}</a></Link> and their mother is <Link href={"/person/" + mother_id}><a onClick={(e) => queryClient.invalidateQueries()}>{mother_name + ' ' + mother_family_name}</a></Link>.</p>
@@ -188,7 +188,7 @@ function MoveHouse() {
         <div>
           <h2 className={styles.headingLg}>Move House</h2>
           <ul className={styles.list}>
-            {data.map(({ id, name }) => (
+            {data.data.map(({ id, name }) => (
               <li className={styles.listItem} key={id}>
                 Move into {name}: <button onClick={
                   () => {
