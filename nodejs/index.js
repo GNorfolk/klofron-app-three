@@ -343,6 +343,48 @@ app.get("/v1/describe-person-actions/:id", (req, res, next) => {
     })
 })
 
+app.get("/v1/list-proposals", (req, res, next) => {
+    const selectQuery = `
+        SELECT
+            proposal.id, proposal.proposer_person_id,
+            person.name,
+            family.name AS family_name
+        FROM proposal
+            INNER JOIN person ON person.id = proposal.proposer_person_id
+            INNER JOIN family ON family.id = person.family_id
+        WHERE accepter_person_id IS NULL AND accepted_at IS NULL AND cancelled_at IS NULL;`
+    connection.query(selectQuery, function (err, rows) {
+        if (err) {
+            console.log("ListProposalsError: ", err)
+            connection = require('./database.js')
+            res.send({"success": false, "error": err})
+        } else {
+            res.send({"success": true, "data": rows})
+        }
+    })
+})
+
+app.get("/v1/list-proposals/:id", (req, res, next) => {
+    const selectQuery = `
+        SELECT
+            proposal.id, proposal.proposer_person_id,
+            person.name,
+            family.name AS family_name
+        FROM proposal
+            INNER JOIN person ON person.id = proposal.proposer_person_id
+            INNER JOIN family ON family.id = person.family_id
+        WHERE accepter_person_id IS NULL AND accepted_at IS NULL AND cancelled_at IS NULL;`
+    connection.query(selectQuery, function (err, rows) {
+        if (err) {
+            console.log("ListProposalsError: ", err)
+            connection = require('./database.js')
+            res.send({"success": false, "error": err})
+        } else {
+            res.send({"success": true, "data": rows})
+        }
+    })
+})
+
 app.post('/v1/increase-food/:id', function(req, res) {
     connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
         if (err) {
