@@ -827,7 +827,7 @@ app.post("/v1/create-proposal", (req, res, next) => {
     })
 })
 
-// curl --request POST localhost:3001/v1/accept-proposal/4 --header "Content-Type: application/json" --data '{"accepter_id": 42}'
+// curl --request POST localhost:3001/v1/accept-proposal --header "Content-Type: application/json" --data '{"proposer_id": 30, "accepter_id": 34}'
 app.post("/v1/accept-proposal", (req, res, next) => {
     selectQuery = `
         SELECT
@@ -837,7 +837,7 @@ app.post("/v1/accept-proposal", (req, res, next) => {
             accepter.house_id AS accepter_house_id
         FROM proposal
             INNER JOIN person accepter ON accepter.id = ` + req.body.accepter_id + `
-        WHERE proposal.id = ` + req.params.id
+        WHERE proposal.proposer_person_id = ` + req.body.proposer_id + ` AND cancelled_at IS NULL AND accepted_at IS NULL;`
     console.log("sel: " + selectQuery)
     connection.query(selectQuery, function (err, rows) {
         if (err) {
@@ -852,7 +852,7 @@ app.post("/v1/accept-proposal", (req, res, next) => {
                     house_id = ` + rows[0].accepter_house_id + `,
                     partner_id = ` + rows[0].accepter_person_id + `
                 WHERE id = ` + rows[0].proposer_person_id + `;
-                UPDATE proposal SET accepter_person_id = ` + rows[0].accepter_person_id + ` AND accepted_at = NOW() WHERE id = ` + req.params.id + `;`
+                UPDATE proposal SET accepter_person_id = ` + rows[0].accepter_person_id + ` AND accepted_at = NOW() WHERE id = ` + rows[0].id + `;`
             console.log("ins: " + insertQuery)
             connection.query(insertQuery, function(err, result) {
                 if (err) {
