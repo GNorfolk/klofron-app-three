@@ -707,14 +707,14 @@ app.post("/v1/rename-house/:id", (req, res, next) => {
         if (err) {
             console.log("RenameHouseSelectError: ", err)
             connection = require('./database.js')
-            res.send({"success": false, "error": "Unknown API error occurred!"})
+            res.send({"success": false, "error": err})
         } else if (req.body.name.length == 0) {
             res.send({"success": false, "error": "Name too short!"})
         } else {
             connection.query("UPDATE house SET name = '" + req.body.name + "' WHERE id = " + rows[0].id, function(err, result) {
                 if (err) {
                     console.log("RenameHouseUpdateError: ", err)
-                    res.send({"success": false, "error": "Unknown API error occurred!"})
+                    res.send({"success": false, "error": err})
                 } else {
                     res.send({"success": true})
                 }
@@ -778,6 +778,46 @@ app.post('/v1/move-person-house', function(req, res) {
             connection.query(insertQuery, function(err, result) {
                 if (err) {
                     console.log("MovePersonHouseUpdateError: ", err)
+                    res.send({"success": false, "error": err})
+                } else {
+                    res.send({"success": true})
+                }
+            })
+        }
+    })
+})
+
+// curl --request POST localhost:3001/v1/create-proposal/43
+app.post("/v1/create-proposal/:id", (req, res, next) => {
+    connection.query('SELECT id FROM person WHERE id = ' + req.params.id, function (err, rows) {
+        if (err) {
+            console.log("CreateProposalIdSelectError: ", err)
+            connection = require('./database.js')
+            res.send({"success": false, "error": err})
+        } else {
+            connection.query("INSERT INTO proposal (proposer_person_id) VALUES (" + req.params.id + ");", function(err, result) {
+                if (err) {
+                    console.log("CreateProposalIdUpdateError: ", err)
+                    res.send({"success": false, "error": err})
+                } else {
+                    res.send({"success": true})
+                }
+            })
+        }
+    })
+})
+
+// curl --request POST localhost:3001/v1/create-proposal --header "Content-Type: application/json" --data '{"proposer_id": 39, "accepter_id": 42}'
+app.post("/v1/create-proposal", (req, res, next) => {
+    connection.query('SELECT id FROM person WHERE id IN (' + req.body.proposer_id + ', ' + req.body.accepter_id + ');', function (err, rows) {
+        if (err) {
+            console.log("CreateProposalSelectError: ", err)
+            connection = require('./database.js')
+            res.send({"success": false, "error": err})
+        } else {
+            connection.query('INSERT INTO proposal (proposer_person_id, accepter_person_id) VALUES (' + req.body.proposer_id + ', ' + req.body.accepter_id + ');', function(err, result) {
+                if (err) {
+                    console.log("CreateProposalUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
                     res.send({"success": true})

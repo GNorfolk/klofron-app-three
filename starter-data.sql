@@ -183,3 +183,13 @@ CREATE TABLE `move_house` (
     `cancelled_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 INSERT INTO move_house (person_id, origin_house_id, destination_house_id) VALUES (3, 2, 12);
+-- -- -- -- -- PROPOSAL -- -- -- -- --
+CREATE TABLE `proposal` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `proposer_person_id` INT NOT NULL,
+    `accepter_person_id` INT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `accepted_at` TIMESTAMP,
+    `cancelled_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO proposal (proposer_person_id) VALUES (43);

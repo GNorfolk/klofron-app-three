@@ -262,7 +262,6 @@ function checkQueue(connection) {
                 FROM move_house mh
                     INNER JOIN house ON mh.destination_house_id = house.id
                 WHERE completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < NOW();`
-            console.log(query1)
             connection.query(query1, function(err1, rows1) {
                 if (err1) {
                     return reject1(err1)
