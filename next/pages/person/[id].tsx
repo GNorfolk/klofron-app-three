@@ -174,7 +174,7 @@ function MoveHouse() {
         return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/move-person-house', {
           person_id: router.query.id,
           house_id: id,
-          food: 2,
+          food: 0,
           wood: 0
         })
       },
