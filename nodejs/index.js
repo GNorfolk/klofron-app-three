@@ -826,3 +826,42 @@ app.post("/v1/create-proposal", (req, res, next) => {
         }
     })
 })
+
+// curl --request POST localhost:3001/v1/accept-proposal/4 --header "Content-Type: application/json" --data '{"accepter_id": 42}'
+app.post("/v1/accept-proposal/:id", (req, res, next) => {
+    selectQuery = `
+        SELECT
+            proposal.id, proposal.proposer_person_id,
+            accepter.id AS accepter_person_id,
+            accepter.family_id AS accepter_family_id,
+            accepter.house_id AS accepter_house_id
+        FROM proposal
+            INNER JOIN person accepter ON accepter.id = ` + req.body.accepter_id + `
+        WHERE proposal.id = ` + req.params.id
+    console.log("sel: " + selectQuery)
+    connection.query(selectQuery, function (err, rows) {
+        if (err) {
+            console.log("AcceptProposalIdSelectError: ", err)
+            connection = require('./database.js')
+            res.send({"success": false, "error": err})
+        } else {
+            insertQuery = `
+                UPDATE person SET partner_id = ` + rows[0].proposer_person_id + ` WHERE id = ` + rows[0].accepter_person_id + `;
+                UPDATE person SET
+                    family_id = ` + rows[0].accepter_family_id + `,
+                    house_id = ` + rows[0].accepter_house_id + `,
+                    partner_id = ` + rows[0].accepter_person_id + `
+                WHERE id = ` + rows[0].proposer_person_id + `;
+                UPDATE proposal SET accepter_person_id = ` + rows[0].accepter_person_id + ` AND accepted_at = NOW() WHERE id = ` + req.params.id + `;`
+            console.log("ins: " + insertQuery)
+            connection.query(insertQuery, function(err, result) {
+                if (err) {
+                    console.log("AcceptProposalIdUpdateError: ", err)
+                    res.send({"success": false, "error": err})
+                } else {
+                    res.send({"success": true})
+                }
+            })
+        }
+    })
+})
