@@ -355,7 +355,7 @@ app.post('/v1/increase-food/:id', function(req, res) {
                 connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 1, NOW(), ' + infinite + ')', function(err, result) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else {
@@ -376,7 +376,7 @@ app.post('/v1/decrease-food/:id', function(req, res) {
                 connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function (err, rows) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "There is " + rows[0].food + " food but at least 1 required!"})
             } else {
@@ -406,7 +406,7 @@ app.post('/v1/increase-wood/:id', function(req, res) {
                 connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 2, NOW(), " + infinite + "); UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + rows[0].house_id, function(err, result) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
@@ -429,7 +429,7 @@ app.post('/v1/decrease-wood/:id', function(req, res) {
                 connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'wood' AND house_id = " + req.params.id, function (err, rows) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].wood < 1) {
                 res.send({"success": false, "error": "There is " + rows[0].wood + " wood but at least 1 required!"})
             } else {
@@ -464,7 +464,7 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
                 connection.query(insertQuery, function(err, result) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
@@ -503,7 +503,7 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
                 connection.query(insertQuery, function(err, result) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
@@ -560,7 +560,7 @@ app.post('/v1/create-person/:id', function(req, res) {
                 connection.query(insertQuery, function(err, result) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (father.action_count > 0) {
                 res.send({"success": false, "error": "The father already has " + father.action_count + " action in progress!"})
             } else if (mother.action_count > 0) {
@@ -614,7 +614,7 @@ app.post('/v1/create-house/:id', function(req, res) {
                 connection.query(insertQuery, function(err, result) {
                     if(err) throw err
                 })
-                res.send({"success": true})
+                res.send({"success": true, "result": result})
             } else if (rows[0].wood < 12) {
                 res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 12 required!"})
             } else if (rows[0].food < 3) {
@@ -671,7 +671,7 @@ app.post("/v1/cancel-person-action/:id", (req, res, next) => {
                 if(err) {
                     throw err
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -693,7 +693,7 @@ app.post("/v1/rename-person/:id", (req, res, next) => {
                 if(err) {
                     throw err
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -716,7 +716,7 @@ app.post("/v1/rename-house/:id", (req, res, next) => {
                     console.log("RenameHouseUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -780,7 +780,7 @@ app.post('/v1/move-person-house', function(req, res) {
                     console.log("MovePersonHouseUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -800,7 +800,7 @@ app.post("/v1/create-proposal/:id", (req, res, next) => {
                     console.log("CreateProposalIdUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -820,7 +820,7 @@ app.post("/v1/create-proposal", (req, res, next) => {
                     console.log("CreateProposalUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -859,7 +859,7 @@ app.post("/v1/accept-proposal", (req, res, next) => {
                     console.log("AcceptProposalIdUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
@@ -897,7 +897,7 @@ app.post("/v1/accept-proposal/:id", (req, res, next) => {
                     console.log("AcceptProposalIdUpdateError: ", err)
                     res.send({"success": false, "error": err})
                 } else {
-                    res.send({"success": true})
+                    res.send({"success": true, "result": result})
                 }
             })
         }
