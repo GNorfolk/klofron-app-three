@@ -3,6 +3,7 @@ import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Layout from '../../components/layout'
+import axios from 'axios'
 
 const queryClient = new QueryClient()
 
@@ -30,6 +31,12 @@ function ListProposals() {
         ),
     })
 
+    const acceptProposal = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/accept-proposal/' + id)
+      },
+    })
+
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
@@ -40,7 +47,14 @@ function ListProposals() {
           <ul className={styles.list}>
             {data.data.map(({ id, name, family_name }) => (
               <li className={styles.listItem} key={id}>
-                <p>{name} {family_name}.</p>
+                {name} {family_name}. <button onClick={
+                  () => {
+                      acceptProposal.mutate(id, { onSettled: (res) => {
+                        queryClient.invalidateQueries()
+                      }
+                    })
+                  }
+                }>Accept Proposal</button>
               </li>
             ))}
           </ul>
