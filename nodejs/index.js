@@ -880,7 +880,6 @@ app.post("/v1/accept-proposal", (req, res, next) => {
         FROM proposal
             INNER JOIN person accepter ON accepter.id = ` + req.body.accepter_id + `
         WHERE proposal.proposer_person_id = ` + req.body.proposer_id + ` AND cancelled_at IS NULL AND accepted_at IS NULL;`
-    console.log("sel: " + selectQuery)
     connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("AcceptProposalIdSelectError: ", err)
@@ -894,8 +893,7 @@ app.post("/v1/accept-proposal", (req, res, next) => {
                     house_id = ` + rows[0].accepter_house_id + `,
                     partner_id = ` + rows[0].accepter_person_id + `
                 WHERE id = ` + rows[0].proposer_person_id + `;
-                UPDATE proposal SET accepter_person_id = ` + rows[0].accepter_person_id + ` AND accepted_at = NOW() WHERE id = ` + rows[0].id + `;`
-            console.log("ins: " + insertQuery)
+                UPDATE proposal SET accepter_person_id = ` + rows[0].accepter_person_id + `, accepted_at = NOW() WHERE id = ` + rows[0].id + `;`
             connection.query(insertQuery, function(err, result) {
                 if (err) {
                     console.log("AcceptProposalIdUpdateError: ", err)
@@ -918,7 +916,6 @@ app.post("/v1/accept-proposal/:id", (req, res, next) => {
         FROM proposal
             INNER JOIN person proposer ON proposer.id = proposal.proposer_person_id
         WHERE proposal.id = ` + req.params.id
-    console.log("sel: " + selectQuery)
     connection.query(selectQuery, function (err, rows) {
         if (err) {
             console.log("AcceptProposalIdSelectError: ", err)
@@ -933,7 +930,6 @@ app.post("/v1/accept-proposal/:id", (req, res, next) => {
                     partner_id = ` + rows[0].proposer_person_id + `
                 WHERE id = ` + rows[0].accepter_person_id + `;
                 UPDATE proposal SET accepted_at = NOW() WHERE id = ` + req.params.id + `;`
-            console.log("ins: " + insertQuery)
             connection.query(insertQuery, function(err, result) {
                 if (err) {
                     console.log("AcceptProposalIdUpdateError: ", err)

@@ -32,8 +32,11 @@ function ListProposals() {
     })
 
     const acceptProposal = useMutation({
-      mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/accept-proposal/' + id)
+      mutationFn: (proposer_person_id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/accept-proposal', {
+          proposer_id: proposer_person_id,
+          accepter_id: router.query.id
+        })
       },
     })
 
@@ -45,11 +48,11 @@ function ListProposals() {
         <div>
           <h2 className={styles.headingLg}>Proposal Info</h2>
           <ul className={styles.list}>
-            {data.data.map(({ id, name, family_name }) => (
+            {data.data.map(({ id, proposer_person_id, name, family_name }) => (
               <li className={styles.listItem} key={id}>
                 {name} {family_name}. <button onClick={
                   () => {
-                      acceptProposal.mutate(id, { onSettled: (res) => {
+                      acceptProposal.mutate(proposer_person_id, { onSettled: (res) => {
                         queryClient.invalidateQueries()
                       }
                     })
