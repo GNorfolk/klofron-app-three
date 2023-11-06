@@ -16,6 +16,7 @@ export default function Person() {
         <DescribePersonActions />
         <RenamePerson />
         <MoveHouse />
+        <CreateProposal />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/family">← Back to home</Link>
@@ -210,5 +211,32 @@ function MoveHouse() {
         </div>
       )
     }
+  }
+}
+
+function CreateProposal() {
+  const router = useRouter()
+  if (router.isReady) {
+    const id:any = router.query.id
+    const createProposal = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/create-proposal/' + id)
+      },
+    })
+
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Actions Info</h2>
+        <p>Go to <Link href={`/proposal/${router.query.id}`}>proposals</Link> page.</p>
+        <button onClick={
+          () => {
+              createProposal.mutate(id, { onSettled: (res) => {
+                queryClient.invalidateQueries()
+              }
+            })
+          }
+        }>Create Proposal</button>
+      </div>
+    )
   }
 }
