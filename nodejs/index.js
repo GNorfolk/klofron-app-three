@@ -395,9 +395,13 @@ app.post('/v1/increase-food/:id', function(req, res) {
             if (rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
                 connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 1, NOW(), ' + infinite + ')', function(err, result) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("IncreaseFoodInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else {
@@ -416,9 +420,13 @@ app.post('/v1/decrease-food/:id', function(req, res) {
         } else {
             if (rows[0].food > 0) {
                 connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function (err, rows) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("DecreaseFoodInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "There is " + rows[0].food + " food but at least 1 required!"})
             } else {
@@ -446,9 +454,13 @@ app.post('/v1/increase-wood/:id', function(req, res) {
             if (rows[0].food >= 1 && rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
                 connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 2, NOW(), " + infinite + "); UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + rows[0].house_id, function(err, result) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("IncreaseWoodInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
@@ -469,9 +481,13 @@ app.post('/v1/decrease-wood/:id', function(req, res) {
         } else {
             if (rows[0].wood > 0) {
                 connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'wood' AND house_id = " + req.params.id, function (err, rows) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("DecreaseWoodInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].wood < 1) {
                 res.send({"success": false, "error": "There is " + rows[0].wood + " wood but at least 1 required!"})
             } else {
@@ -504,9 +520,13 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
                     UPDATE resource SET volume = volume - 3 WHERE type_name = 'wood' AND house_id = ` + rows[0].id + `;
                     UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = ` + rows[0].id
                 connection.query(insertQuery, function(err, result) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("IncreaseStorageInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
@@ -543,7 +563,12 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
                     UPDATE resource SET volume = volume - 6 WHERE type_name = 'wood' AND house_id = ` + rows[0].id + `;
                     UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = ` + rows[0].id
                 connection.query(insertQuery, function(err, result) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("IncreaseRoomsInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
                 res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
@@ -600,9 +625,13 @@ app.post('/v1/create-person/:id', function(req, res) {
                     VALUES
                         ('Baby', ` + father.family_id + `, ` + father.id + `, ` + mother.id + `, '` + gender + `', ` + father.house_id + `);`
                 connection.query(insertQuery, function(err, result) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("CreatePersonInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (father.action_count > 0) {
                 res.send({"success": false, "error": "The father already has " + father.action_count + " action in progress!"})
             } else if (mother.action_count > 0) {
@@ -654,9 +683,13 @@ app.post('/v1/create-house/:id', function(req, res) {
                     UPDATE resource SET volume = volume - 12 WHERE type_name = 'wood' AND house_id = ` + rows[0].house_id + `;
                     UPDATE resource SET volume = volume - 3 WHERE type_name = 'food' AND house_id = ` + rows[0].house_id
                 connection.query(insertQuery, function(err, result) {
-                    if(err) throw err
+                    if(err) {
+                        console.log("CreateHouseInsertError: ", err)
+                        res.send({"success": false, "error": err})
+                    } else {
+                        res.send({"success": true, "result": result})
+                    }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].wood < 12) {
                 res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 12 required!"})
             } else if (rows[0].food < 3) {
@@ -711,7 +744,8 @@ app.post("/v1/cancel-person-action/:id", (req, res, next) => {
             const current_action = rows[0]
             connection.query("UPDATE action SET cancelled_at = NOW() WHERE id = " + current_action.id, function(err, result) {
                 if(err) {
-                    throw err
+                    console.log("CancelPersonActionInsertError: ", err)
+                    res.send({"success": false, "error": err})
                 } else {
                     res.send({"success": true, "result": result})
                 }
@@ -733,7 +767,8 @@ app.post("/v1/rename-person/:id", (req, res, next) => {
         } else {
             connection.query("UPDATE person SET name = '" + req.body.name + "' WHERE id = " + rows[0].id, function(err, result) {
                 if(err) {
-                    throw err
+                    console.log("RenamePersonInsertError: ", err)
+                    res.send({"success": false, "error": err})
                 } else {
                     res.send({"success": true, "result": result})
                 }
