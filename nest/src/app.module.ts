@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PersonModule } from './person/person.module';
 
 @Module({
   imports: [
@@ -12,9 +13,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: 'password',
       database: 'klofron-app-three',
-      entities: [],
-      synchronize: true,
-    })
+      autoLoadEntities: true,
+    }),
+    PersonModule
   ],
   controllers: [AppController],
   providers: [AppService],
