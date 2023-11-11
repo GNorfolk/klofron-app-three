@@ -7,15 +7,19 @@ import { Person } from './entities/person.entity';
 export class PersonService {
   constructor(@InjectRepository(Person) private personRepository: Repository<Person>) {}
 
+  async create(person: Person): Promise<Person> {
+    return await this.personRepository.save(person);
+  }
+
   async findAll(): Promise<Person[]> {
     return await this.personRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} person`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} person`;
+  async findOne(id: number): Promise<Person> {
+    return await this.personRepository.findOne({
+      where: {
+        id: id
+      }
+    });
   }
 }
