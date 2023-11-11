@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: NestJS on AWS Lambda
+
+Resources:
+  MyNestJSLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/serverless.handler
+      Runtime: nodejs16.x
+      Architectures:
+        - arm64
+      CodeUri: ./
+      MemorySize: 1024
+      Timeout: 30
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        RootPath:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY

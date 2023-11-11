@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "main" {
     filename = data.archive_file.this.output_path
-    handler = "index.handler"
-    runtime = "nodejs18.x"
+    handler = "main.handler"
+    runtime = "nodejs16.x"
     function_name = "${var.app_name}-nestjs"
     role = aws_iam_role.main.arn
     timeout = 30
@@ -23,7 +23,7 @@ resource "aws_lambda_function" "main" {
 
 data "archive_file" "this" {
   type = "zip"
-  source_dir = "../dist"
+  source_dir = "../.aws-sam/build/MyNestJSLambdaFunction"
   output_path = "ka3-nestjs.zip"
 }
 

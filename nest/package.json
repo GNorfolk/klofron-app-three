@@ -24,11 +24,14 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
-    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-express": "^10.2.8",
     "@nestjs/typeorm": "^10.0.0",
+    "aws-lambda": "^1.0.7",
+    "aws-serverless-express": "^3.4.0",
     "mysql2": "^3.6.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "serverless": "^3.36.0",
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
