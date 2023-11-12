@@ -1,5 +1,6 @@
 resource "aws_lambda_function" "main" {
-    filename = data.archive_file.this.output_path
+    s3_bucket = aws_s3_bucket.this.id
+    s3_key = aws_s3_object.this.key
     handler = "main.handler"
     runtime = "nodejs16.x"
     function_name = "${var.app_name}-nestjs"
@@ -22,9 +23,21 @@ resource "aws_lambda_function" "main" {
 }
 
 data "archive_file" "this" {
-  type = "zip"
-  source_dir = "../.aws-sam/build/MyNestJSLambdaFunction"
-  output_path = "ka3-nestjs.zip"
+    type = "zip"
+    source_dir = ".."
+    excludes = [ ".aws-sam", "src", "test", "tf", ".eslintrc.js", ".gitignore", ".prettierrc", "nest-cli.json", "package-lock.json", "package.json", "README.md", "serverless.yaml", "tsconfig.build.json", "tsconfig.json" ]
+    output_path = "ka3-nestjs.zip"
+}
+
+resource "aws_s3_bucket" "this" {
+    bucket = "ka3-nestjs-app"
+}
+
+resource "aws_s3_object" "this" {
+    bucket = aws_s3_bucket.this.id
+    key    = "ka3-nestjs.zip"
+    source = "ka3-nestjs.zip"
+    etag = data.archive_file.this.output_base64sha256
 }
 
 resource "aws_lambda_permission" "main" {
