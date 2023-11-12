@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "files": ["dist"],
   "scripts": {
     "dev": "clear && nest start --watch -b swc",
     "build": "nest build",

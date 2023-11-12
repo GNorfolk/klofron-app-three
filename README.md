@@ -163,10 +163,16 @@ AWS_PROFILE=react-app aws lambda update-function-configuration --function-name k
 rm -rf .aws-sam dist node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nestjs.zip
 npm install
 npm run build
-# AWS_PROFILE=react-app sam build --template serverless.yaml --manifest package.json
-# AWS_PROFILE=react-app sam local invoke
+AWS_PROFILE=react-app sam build --template serverless.yaml --manifest package.json
+AWS_PROFILE=react-app sam validate --lint --template serverless.yaml --region eu-west-1
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
+```
+
+**How to run sam template locally:**
+```bash
+AWS_PROFILE=react-app sam local invoke
+```
 
 **How to run consumer app locally:**
 ```bash
