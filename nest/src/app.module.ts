@@ -8,11 +8,11 @@ import { PersonModule } from './person/person.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: process.env.DB_HOST || 'localhost',
       port: 3306,
-      username: 'root',
-      password: 'password',
-      database: 'klofron-app-three',
+      username: process.env.DB_USER || 'root',
+      password: process.env.DB_PASS || 'password',
+      database: process.env.DB_NAME || 'klofron-app-three',
       autoLoadEntities: true,
     }),
     PersonModule
