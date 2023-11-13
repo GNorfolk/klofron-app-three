@@ -169,6 +169,11 @@ AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 ```
 
+**How to create new resource:**
+```bash
+nest generate resource family --no-spec
+```
+
 **How to run sam template locally:**
 ```bash
 AWS_PROFILE=react-app sam local invoke
