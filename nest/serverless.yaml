@@ -6,7 +6,7 @@ Resources:
   MyNestJSLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: dist/main.handler
+      Handler: dist/serverless.handler
       Runtime: nodejs16.x
       Architectures:
         - arm64

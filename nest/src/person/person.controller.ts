@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { PersonService } from './person.service';
 import { Person } from './entities/person.entity';
 
-@Controller('person')
+@Controller({
+  path: 'person',
+  version: '2'
+})
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
