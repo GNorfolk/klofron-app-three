@@ -13,9 +13,10 @@ resource "aws_apigatewayv2_domain_name" "this" {
 }
 
 resource "aws_apigatewayv2_api_mapping" "this" {
-  api_id = aws_apigatewayv2_api.main.id
+  api_id = data.aws_apigatewayv2_api.main.id
   domain_name = aws_apigatewayv2_domain_name.this.id
-  stage = aws_apigatewayv2_stage.main.id
+  # stage = aws_apigatewayv2_stage.main.id
+  stage = "api"
 }
 
 resource "aws_route53_record" "this" {
