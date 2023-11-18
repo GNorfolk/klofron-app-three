@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModule } from './person/person.module';
+import { FamilyModule } from './family/family.module';
+import { HouseModule } from './house/house.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { PersonModule } from './person/person.module';
       autoLoadEntities: true,
     }),
     PersonModule,
+    FamilyModule,
+    HouseModule,
   ],
   controllers: [],
   providers: [],
