@@ -13,7 +13,7 @@ import { PersonModule } from './person/person.module';
       database: process.env.DB_NAME || 'klofron-app-three',
       autoLoadEntities: true,
     }),
-    PersonModule
+    PersonModule,
   ],
   controllers: [],
   providers: [],

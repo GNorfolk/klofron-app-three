@@ -1,10 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { PersonService } from './person.service';
 import { Person } from './entities/person.entity';
 
 @Controller({
   path: 'person',
-  version: '2'
+  version: '2',
 })
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
