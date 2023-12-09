@@ -22,7 +22,8 @@ resource "aws_iam_role" "this" {
         Principal = {
           "Service": [
             "lambda.amazonaws.com",
-            "edgelambda.amazonaws.com"
+            "edgelambda.amazonaws.com",
+            "logger.cloudfront.amazonaws.com"
           ]
         }
       },
