@@ -419,7 +419,7 @@ app.post('/v1/decrease-food/:id', function(req, res) {
             res.send({"success": false, "error": err})
         } else {
             if (rows[0].food > 0) {
-                connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function (err, rows) {
+                connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function (err, result) {
                     if(err) {
                         console.log("DecreaseFoodInsertError: ", err)
                         res.send({"success": false, "error": err})
@@ -480,7 +480,7 @@ app.post('/v1/decrease-wood/:id', function(req, res) {
             res.send({"success": false, "error": err})
         } else {
             if (rows[0].wood > 0) {
-                connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'wood' AND house_id = " + req.params.id, function (err, rows) {
+                connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'wood' AND house_id = " + req.params.id, function (err, result) {
                     if(err) {
                         console.log("DecreaseWoodInsertError: ", err)
                         res.send({"success": false, "error": err})
@@ -515,11 +515,11 @@ app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
         } else {
             if (rows[0].action_count == 0 && rows[0].food >= 1 && rows[0].wood >= 3) {
                 const infinite = req.query.infinite | 0
-                insertQuery = `
+                postQuery = `
                     INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 3, NOW(), ` + infinite + `);
                     UPDATE resource SET volume = volume - 3 WHERE type_name = 'wood' AND house_id = ` + rows[0].id + `;
                     UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = ` + rows[0].id
-                connection.query(insertQuery, function(err, result) {
+                connection.query(postQuery, function(err, result) {
                     if(err) {
                         console.log("IncreaseStorageInsertError: ", err)
                         res.send({"success": false, "error": err})
@@ -558,11 +558,11 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
         } else {
             if (rows[0].action_count == 0 && rows[0].food >= 1 && rows[0].wood >= 6) {
                 const infinite = req.query.infinite | 0
-                const insertQuery = `
+                const postQuery = `
                     INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 4, NOW(), ` + infinite + `);
                     UPDATE resource SET volume = volume - 6 WHERE type_name = 'wood' AND house_id = ` + rows[0].id + `;
                     UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = ` + rows[0].id
-                connection.query(insertQuery, function(err, result) {
+                connection.query(postQuery, function(err, result) {
                     if(err) {
                         console.log("IncreaseRoomsInsertError: ", err)
                         res.send({"success": false, "error": err})
@@ -570,7 +570,6 @@ app.post('/v1/modify-house/increase-rooms/:id', function(req, res) {
                         res.send({"success": true, "result": result})
                     }
                 })
-                res.send({"success": true, "result": result})
             } else if (rows[0].action_count != 0) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
@@ -614,7 +613,7 @@ app.post('/v1/create-person/:id', function(req, res) {
             mother['age'] = Math.floor(((new Date()).valueOf() - (new Date(mother['created_at'])).valueOf()) / day_in_ms)
             const gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
             if (father.action_count == 0 && mother.action_count == 0 && father.gender == 'male' && mother.gender == 'female' && father.family_id == mother.family_id && father.house_id == mother.house_id && mother.rooms > mother.people && mother.food >= 2 && father.partner_id == mother.id && mother.partner_id == father.id && mother.age < 50) {
-                insertQuery = `
+                postQuery = `
                     INSERT INTO action
                         (person_id, type_id, started_at)
                     VALUES
@@ -624,7 +623,7 @@ app.post('/v1/create-person/:id', function(req, res) {
                         (name, family_id, father_id, mother_id, gender, house_id)
                     VALUES
                         ('Baby', ` + father.family_id + `, ` + father.id + `, ` + mother.id + `, '` + gender + `', ` + father.house_id + `);`
-                connection.query(insertQuery, function(err, result) {
+                connection.query(postQuery, function(err, result) {
                     if(err) {
                         console.log("CreatePersonInsertError: ", err)
                         res.send({"success": false, "error": err})
@@ -678,11 +677,11 @@ app.post('/v1/create-house/:id', function(req, res) {
         } else {
             if (rows[0].wood >= 12 && rows[0].food >= 3 && rows[0].action_count == 0) {
                 const infinite = req.query.infinite | 0
-                const insertQuery = `
+                const postQuery = `
                     INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 5, NOW(), ` + infinite + `);
                     UPDATE resource SET volume = volume - 12 WHERE type_name = 'wood' AND house_id = ` + rows[0].house_id + `;
                     UPDATE resource SET volume = volume - 3 WHERE type_name = 'food' AND house_id = ` + rows[0].house_id
-                connection.query(insertQuery, function(err, result) {
+                connection.query(postQuery, function(err, result) {
                     if(err) {
                         console.log("CreateHouseInsertError: ", err)
                         res.send({"success": false, "error": err})
@@ -706,21 +705,21 @@ app.post('/v1/create-house/:id', function(req, res) {
 // curl --request POST localhost:3001/v1/login --header "Content-Type: application/json" --data '{"email":"halpert@klofron.uk","password":"password"}'
 
 app.post("/v1/login", (req, res)=> {
-    connection.query("SELECT id, username, password, email, family_id FROM user WHERE email = '" + req.body.email + "';", async (err, result) => {
-        if (result.length == 0) {
+    connection.query("SELECT id, username, password, email, family_id FROM user WHERE email = '" + req.body.email + "';", async (err, rows) => {
+        if (rows.length == 0) {
             res.send({"success": false, "error": "User not found by email!"})
-        } else if (result.length > 1) {
+        } else if (rows.length > 1) {
             res.send({"success": false, "error": "Too many users found by email!"})
-        } else if (await bcrypt.compare(req.body.password, result[0].password)) {
+        } else if (await bcrypt.compare(req.body.password, rows[0].password)) {
             res.send({
                 "success": true,
-                "id": result[0].id,
-                "username": result[0].username,
-                "email": result[0].email,
-                "family_id": result[0].family_id
+                "id": rows[0].id,
+                "username": rows[0].username,
+                "email": rows[0].email,
+                "family_id": rows[0].family_id
             })
         } else {
-            // bcrypt.hash(result[0].password, saltRounds, (err, hash) => {
+            // bcrypt.hash(rows[0].password, saltRounds, (err, hash) => {
             //     console.log(hash)
             //   });
             res.send({"success": false, "error": "User password is incorrect!"})
@@ -842,7 +841,7 @@ app.post('/v1/move-person-house', function(req, res) {
         } else if (rows[myIndex].person_food + rows[myIndex].person_wood > 0) {
             res.send({"success": false, "error": "Person already has  " + rows[myIndex].person_food + " food and " + rows[myIndex].person_wood + " wood on their person!"})
         } else {
-            insertQuery = `
+            postQuery = `
                 UPDATE person SET house_id = NULL WHERE id = ` + req.body.person_id + `;
                 UPDATE resource SET volume = volume - ` + req.body.food + ` WHERE type_name = 'food' AND house_id = ` + rows[myIndex].origin_house_id + `;
                 UPDATE resource SET volume = volume - ` + req.body.wood + ` WHERE type_name = 'wood' AND house_id = ` + rows[myIndex].origin_house_id + `;
@@ -852,7 +851,7 @@ app.post('/v1/move-person-house', function(req, res) {
                     (person_id, origin_house_id, destination_house_id)
                 VALUES
                     (` + req.body.person_id + `, ` + rows[myIndex].origin_house_id + `, ` + rows[myIndex].id + `);`
-            connection.query(insertQuery, function(err, result) {
+            connection.query(postQuery, function(err, result) {
                 if (err) {
                     console.log("MovePersonHouseUpdateError: ", err)
                     res.send({"success": false, "error": err})
@@ -921,7 +920,7 @@ app.post("/v1/accept-proposal", (req, res, next) => {
             connection = require('./database.js')
             res.send({"success": false, "error": err})
         } else {
-            insertQuery = `
+            postQuery = `
                 UPDATE person SET partner_id = ` + rows[0].proposer_person_id + ` WHERE id = ` + rows[0].accepter_person_id + `;
                 UPDATE person SET
                     family_id = ` + rows[0].accepter_family_id + `,
@@ -929,7 +928,7 @@ app.post("/v1/accept-proposal", (req, res, next) => {
                     partner_id = ` + rows[0].accepter_person_id + `
                 WHERE id = ` + rows[0].proposer_person_id + `;
                 UPDATE proposal SET accepter_person_id = ` + rows[0].accepter_person_id + `, accepted_at = NOW() WHERE id = ` + rows[0].id + `;`
-            connection.query(insertQuery, function(err, result) {
+            connection.query(postQuery, function(err, result) {
                 if (err) {
                     console.log("AcceptProposalIdUpdateError: ", err)
                     res.send({"success": false, "error": err})
@@ -957,7 +956,7 @@ app.post("/v1/accept-proposal/:id", (req, res, next) => {
             connection = require('./database.js')
             res.send({"success": false, "error": err})
         } else {
-            insertQuery = `
+            postQuery = `
                 UPDATE person SET partner_id = ` + rows[0].accepter_person_id + ` WHERE id = ` + rows[0].proposer_person_id + `;
                 UPDATE person SET
                     family_id = ` + rows[0].proposer_family_id + `,
@@ -965,7 +964,7 @@ app.post("/v1/accept-proposal/:id", (req, res, next) => {
                     partner_id = ` + rows[0].proposer_person_id + `
                 WHERE id = ` + rows[0].accepter_person_id + `;
                 UPDATE proposal SET accepted_at = NOW() WHERE id = ` + req.params.id + `;`
-            connection.query(insertQuery, function(err, result) {
+            connection.query(postQuery, function(err, result) {
                 if (err) {
                     console.log("AcceptProposalIdUpdateError: ", err)
                     res.send({"success": false, "error": err})
