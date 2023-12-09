@@ -27,14 +27,14 @@ resource "aws_cloudfront_distribution" "this" {
   ordered_cache_behavior {
     path_pattern = "/api/auth/*"
     cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    origin_request_policy_id = "216adef6-5c7f-47e4-b989-5492eafa07d3"
-    allowed_methods = ["GET", "HEAD"]
+    origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
+    allowed_methods = ["GET", "HEAD", "DELETE" ,"OPTIONS" ,"PATCH" ,"POST" ,"PUT"]
     cached_methods = ["GET", "HEAD"]
     target_origin_id = aws_cloudfront_origin_access_identity.this.id
     min_ttl = 0
     default_ttl = 0
     max_ttl = 0
-    compress = true
+    compress = false
     viewer_protocol_policy = "https-only"
     lambda_function_association {
       event_type = "origin-request"

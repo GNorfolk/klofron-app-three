@@ -4,9 +4,6 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 import Layout from '../../components/layout'
 
 const queryClient = new QueryClient()
-console.log("NODE_ENV: " + JSON.stringify(process.env.NODE_ENV))
-console.log("NEXTAUTH_URL: " + JSON.stringify(process.env.NEXTAUTH_URL))
-console.log("NEXT_PUBLIC_NEXTAUTH_URL: " + JSON.stringify(process.env.NEXT_PUBLIC_NEXTAUTH_URL))
 
 export default function Home() {
   return (

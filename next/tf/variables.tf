@@ -3,5 +3,5 @@ variable "app_name" {
 }
 
 variable "fqdn" {
-  default = "www.klofron.uk"
+  default = "old.klofron.uk"
 }
