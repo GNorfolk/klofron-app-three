@@ -3,7 +3,6 @@ import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import { SessionProvider } from 'next-auth/react'
 
-process.env.NEXTAUTH_URL = process.env.NEXT_PUBLIC_NEXTAUTH_URL
 export default function App({ Component, pageProps }) {
   const router = useRouter()
 
