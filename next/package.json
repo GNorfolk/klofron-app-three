@@ -4,7 +4,7 @@
     "cdk": "bin/cdk.js"
   },
   "scripts": {
-    "dev": "clear && export NEXT_PUBLIC_API_HOST=http://localhost:3000 NEXTAUTH_SECRET=say_lalisa_love_me_lalisa_love_me_hey NEXTAUTH_URL=http://localhost:3000 && next dev",
+    "dev": "clear && export NEXT_PUBLIC_API_HOST=https://api.klofron.uk NEXTAUTH_SECRET=say_lalisa_love_me_lalisa_love_me_hey NEXTAUTH_URL=https://www.klofron.uk && next dev",
     "build": "next build",
     "start": "next start",
     "deploy": "export NEXT_PUBLIC_API_HOST=https://api.klofron.uk NEXT_PUBLIC_NEXTAUTH_URL=https://www.klofron.uk && AWS_PROFILE=null serverless",
