@@ -243,7 +243,7 @@ function CreateProposal() {
     return (
       <div>
         <h2 className={styles.headingLg}>Actions Info</h2>
-        <p>Go to <Link href={`/proposal/${router.query.id}`}>proposals</Link> page.</p>
+        <p>Go to <Link href={`/proposal/${router.query.id}`}>Proposals</Link> page.</p>
         <button onClick={
           () => {
               createProposal.mutate(id, { onSettled: (res) => {

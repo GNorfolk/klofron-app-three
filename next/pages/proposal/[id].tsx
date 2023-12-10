@@ -50,7 +50,7 @@ function ListProposals() {
           <ul className={styles.list}>
             {data.data.map(({ id, proposer_person_id, name, family_name }) => (
               <li className={styles.listItem} key={id}>
-                {name} {family_name}. <button onClick={
+                <Link href={"/person/" + proposer_person_id}>{name + " " + family_name}</Link>: <button onClick={
                   () => {
                       acceptProposal.mutate(proposer_person_id, { onSettled: (res) => {
                         queryClient.invalidateQueries()

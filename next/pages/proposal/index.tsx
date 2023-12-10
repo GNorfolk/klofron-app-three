@@ -37,7 +37,7 @@ function ListProposals() {
         <ul className={styles.list}>
           {data.data.map(({ id, name, family_name }) => (
             <li className={styles.listItem} key={id}>
-              <p>{name} {family_name}.</p>
+              <p><Link href={"/person/" + id}>{name + " " + family_name}</Link>.</p>
             </li>
           ))}
         </ul>
