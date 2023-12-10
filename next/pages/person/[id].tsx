@@ -5,24 +5,40 @@ import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tansta
 import Layout from '../../components/layout'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
+import { useSession } from 'next-auth/react'
 
 const queryClient = new QueryClient()
 
 export default function Person() {
-  return (
-    <Layout>
-      <QueryClientProvider client={queryClient}>
-        <DescribePerson />
-        <DescribePersonActions />
-        <RenamePerson />
-        <MoveHouse />
-        <CreateProposal />
-      </QueryClientProvider>
-      <div className={styles.backToHome}>
-        <Link href="/family">← Back to home</Link>
-      </div>
-    </Layout>
-  )
+  const { status, data } = useSession()
+  if (status === "authenticated" && data.user.family_id == 3) {
+    return (
+      <Layout>
+        <QueryClientProvider client={queryClient}>
+          <DescribePerson />
+          <DescribePersonActions />
+          <RenamePerson />
+          <MoveHouse />
+          <CreateProposal />
+        </QueryClientProvider>
+        <div className={styles.backToHome}>
+          <Link href="/family">← Back to home</Link>
+        </div>
+      </Layout>
+    )
+  } else {
+    return (
+      <Layout>
+        <QueryClientProvider client={queryClient}>
+          <DescribePerson />
+          <DescribePersonActions />
+        </QueryClientProvider>
+        <div className={styles.backToHome}>
+          <Link href="/family">← Back to home</Link>
+        </div>
+      </Layout>
+    )
+  }
 }
 
 function DescribePerson() {
