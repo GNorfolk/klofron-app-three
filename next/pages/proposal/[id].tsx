@@ -14,7 +14,7 @@ export default function Family() {
         <ListProposals />
       </QueryClientProvider>
     <div className={styles.backToHome}>
-      <Link href="/family">← Back to home</Link>
+      <Link href="/">← Back to home</Link>
     </div>
   </Layout>
   )

@@ -11,7 +11,7 @@ const queryClient = new QueryClient()
 
 export default function Person() {
   const { status, data } = useSession()
-  if (status === "authenticated" && data.user.family_id == 3) {
+  if (status === "authenticated" && data.user.family_id) {
     return (
       <Layout>
         <QueryClientProvider client={queryClient}>
@@ -22,7 +22,7 @@ export default function Person() {
           <CreateProposal />
         </QueryClientProvider>
         <div className={styles.backToHome}>
-          <Link href="/family">← Back to home</Link>
+          <Link href="/">← Back to home</Link>
         </div>
       </Layout>
     )
@@ -34,7 +34,7 @@ export default function Person() {
           <DescribePersonActions />
         </QueryClientProvider>
         <div className={styles.backToHome}>
-          <Link href="/family">← Back to home</Link>
+          <Link href="/">← Back to home</Link>
         </div>
       </Layout>
     )
