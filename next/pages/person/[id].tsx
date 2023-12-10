@@ -60,9 +60,14 @@ function DescribePerson() {
         <div>
           <h2 className={styles.headingLg}>Person Info</h2>
           <ul className={styles.list}>
-            {data.data.map(({ id, name, family_name, gender, age, house_id, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name }) => (
+            {data.data.map(({ id, name, family_name, gender, age, house_id, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name, partner_id }) => (
               <li className={styles.listItem} key={id}>
-                <p>{name} {family_name} is {gender} and {age} years old.</p>
+                {
+                  partner_id ?
+                    <p>{name} {family_name} is {gender} and {age} years old and is married to <Link href={"/person/" + partner_id}>{partner_id}</Link>.</p>
+                  :
+                  <p>{name} {family_name} is {gender} and {age} years old.</p>
+                }
                 <p>{name}'s father is <Link href={"/person/" + father_id}><a onClick={(e) => queryClient.invalidateQueries()}>{father_name + ' ' + father_family_name}</a></Link> and their mother is <Link href={"/person/" + mother_id}><a onClick={(e) => queryClient.invalidateQueries()}>{mother_name + ' ' + mother_family_name}</a></Link>.</p>
                 { house_id ? <p>{name} lives at <Link href={"/house/" + house_id}>{house_name}</Link>.</p> : <p>{name} is homeless.</p> }
               </li>
@@ -242,7 +247,7 @@ function CreateProposal() {
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Actions Info</h2>
+        <h2 className={styles.headingLg}>Proposal Info</h2>
         <p>Go to <Link href={`/proposal/${router.query.id}`}>Proposals</Link> page.</p>
         <button onClick={
           () => {

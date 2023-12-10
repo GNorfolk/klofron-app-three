@@ -252,7 +252,7 @@ app.get("/v1/list-house-trades/:id", (req, res, next) => {
 app.get("/v1/describe-person/:id", (req, res, next) => {
     const selectQuery = `
         SELECT
-            person.id, person.name, person.gender, person.created_at,
+            person.id, person.name, person.gender, person.created_at, person.partner_id,
             father.id AS father_id, father.name AS father_name, father_family.name AS father_family_name,
             mother.id AS mother_id, mother.name AS mother_name, mother_family.name AS mother_family_name,
             family.name AS family_name, house.id AS house_id, house.name AS house_name
