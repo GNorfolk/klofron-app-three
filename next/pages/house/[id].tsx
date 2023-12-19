@@ -3,7 +3,7 @@ import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import Layout from '../../components/layout'
+import Layout from '../../components/Layout'
 import { FormEventHandler, useState } from "react"
 
 const queryClient = new QueryClient()
@@ -185,17 +185,17 @@ function ListHousePeople() {
                   }
                 } >Increase Rooms</button>
                 <button onClick={
-                () => {
+                  () => {
                     createHouse.mutate(id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                    if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
-                    } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
-                    }
-                  }})
-                }
-              } >Create House</button>
+                      queryClient.invalidateQueries()
+                      if (!res.data.success) {
+                        document.getElementById("change-me-" + id).innerText = res.data.error
+                      } else {
+                        document.getElementById("change-me-" + id).innerText = ' '
+                      }
+                    }})
+                  }
+                } >Create House</button>
                 <small className={styles.lightText} id={'change-me-' + id}></small>
               </li>
             ))}
