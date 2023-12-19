@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import Layout from '../../components/Layout'
+import DescribeHouseV2 from '../../components/DescribeHouseV2'
 import { FormEventHandler, useState } from "react"
 
 const queryClient = new QueryClient()
@@ -17,6 +18,7 @@ export default function House() {
         <ListHouseTrades />
         <ManageResources />
         <RenameHouse />
+        <DescribeHouseV2 />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
