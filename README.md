@@ -95,6 +95,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Next Auth credentials tutorial: https://www.youtube.com/watch?v=EFucgPdjeNg
 - Next Auth credentials docs: https://next-auth.js.org/providers/credentials
 - Alternative Next Auth credentials docs: https://next-auth.js.org/configuration/providers/credentials
+- NestJS TypeORM Relations: https://github.com/typeorm/typeorm/blob/master/docs/relations.md
+- NestJS TypeORM Relations: https://orkhan.gitbook.io/typeorm/docs/relations
 
 # Development
 **How to clone repo**:
