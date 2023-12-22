@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModule } from './person/person.module';
 import { FamilyModule } from './family/family.module';
 import { HouseModule } from './house/house.module';
+import { ResourceModule } from './resource/resource.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { HouseModule } from './house/house.module';
     PersonModule,
     FamilyModule,
     HouseModule,
+    ResourceModule,
   ],
   controllers: [],
   providers: [],
