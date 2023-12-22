@@ -19,9 +19,10 @@ export class Resource {
   @Column()
   volume: number;
 
-  @OneToOne(() => House, {eager: true})
-  @JoinColumn({name: 'house_id'})
-  house_id: House;
+  // @OneToOne(() => House, (house) => house.resource) // specify inverse side as a second parameter
+  // @OneToOne('House', 'resource') // specify inverse side as a second parameter
+  // @JoinColumn()
+  // house: House
 
   @CreateDateColumn()
   created_at: Date;

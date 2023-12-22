@@ -26,8 +26,9 @@ export class House {
   @Column()
   family_id: number;
 
-  // @OneToOne(() => Resource)
-  // wood_volume: Resource
+  // @OneToOne(() => Resource, (resource) => resource.house) // specify inverse side as a second parameter
+  // @OneToOne('Resource', 'house') // specify inverse side as a second parameter
+  // resource: Resource
 
   @Column()
   type_id: number;
