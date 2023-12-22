@@ -3,7 +3,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { House } from '../../house/entities/house.entity';
 
 @Entity()
 export class Resource {
@@ -16,8 +19,9 @@ export class Resource {
   @Column()
   volume: number;
 
-  @Column()
-  house_id: number;
+  @OneToOne(() => House, {eager: true})
+  @JoinColumn({name: 'house_id'})
+  house_id: House;
 
   @CreateDateColumn()
   created_at: Date;

@@ -3,7 +3,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Resource } from '../../resource/entities/resource.entity';
+
 
 @Entity()
 export class House {
@@ -21,6 +25,9 @@ export class House {
 
   @Column()
   family_id: number;
+
+  // @OneToOne(() => Resource)
+  // wood_volume: Resource
 
   @Column()
   type_id: number;
