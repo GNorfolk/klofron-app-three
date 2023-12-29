@@ -9,8 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "clear && nest start --watch -b swc",
-    "testyboi": "clear && nest start",
+    "dev": "clear && nest start --watch",
+    "swc": "clear && nest start --watch -b swc",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

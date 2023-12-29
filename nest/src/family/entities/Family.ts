@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { House } from "../../house/entities/House";
 import { Person } from "../../person/entities/Person";
-import { User } from "../../../entities/User";
+import { User } from "../../user/entities/User";
 
 @Entity("family", { schema: "klofron-app-three" })
 export class Family {

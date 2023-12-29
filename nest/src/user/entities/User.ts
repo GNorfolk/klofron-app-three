@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Family } from "../src/family/entities/Family";
+import { Family } from "../../family/entities/Family";
 
 @Index("username", ["username"], { unique: true })
 @Index("email", ["email"], { unique: true })
