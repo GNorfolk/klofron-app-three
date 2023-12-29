@@ -7,10 +7,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Family } from "./Family";
-import { Person } from "./Person";
-import { Resource } from "./Resource";
-import { Trade } from "./Trade";
+import { Family } from "../../family/entities/Family";
+import { Person } from "../../person/entities/Person";
+import { Resource } from "../../resource/entities/Resource";
+import { Trade } from "../../../entities/Trade";
 
 @Index("family_id", ["familyId"], {})
 @Entity("house", { schema: "klofron-app-three" })

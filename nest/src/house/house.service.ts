@@ -3,7 +3,7 @@ import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { House } from './entities/house.entity';
+import { House } from './entities/House';
 
 @Injectable()
 export class HouseService {

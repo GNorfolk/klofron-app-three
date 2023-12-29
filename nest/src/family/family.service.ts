@@ -3,7 +3,7 @@ import { CreateFamilyDto } from './dto/create-family.dto';
 import { UpdateFamilyDto } from './dto/update-family.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Family } from './entities/family.entity';
+import { Family } from './entities/Family';
 
 @Injectable()
 export class FamilyService {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Resource } from './entities/resource.entity';
+import { Resource } from './entities/Resource';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ResourceService {
   async findByHouseId(house_id: number) {
     return await this.resourceRepository.find({
       where: {
-        house_id: house_id,
+        houseId: house_id,
       },
     });
   }

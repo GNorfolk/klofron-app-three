@@ -6,8 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { House } from "./House";
-import { Person } from "./Person";
+import { House } from "../../house/entities/House";
+import { Person } from "../../person/entities/Person";
 
 @Index("house_id", ["houseId"], {})
 @Index("person_id", ["personId"], {})

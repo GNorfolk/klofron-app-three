@@ -7,9 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Family } from "./Family";
-import { House } from "./House";
-import { Resource } from "./Resource";
+import { Family } from "../../family/entities/Family";
+import { House } from "../../house/entities/House";
+import { Resource } from "../../resource/entities/Resource";
 
 @Index("family_id", ["familyId"], {})
 @Index("house_id", ["houseId"], {})

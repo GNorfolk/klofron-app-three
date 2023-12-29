@@ -7,7 +7,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
-import { Person } from './entities/person.entity';
+import { Person } from './entities/Person';
 
 @Controller({
   path: 'person',
