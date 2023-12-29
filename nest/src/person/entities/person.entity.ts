@@ -13,29 +13,26 @@ const day_in_ms = 24 * 3600 * 1000
 export class Person {
   protected age: number;
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ type: "int" })
+  id?: number;
 
-  @Column()
-  name: string;
+  @Column({ type: "varchar", length: 155 })
+  name!: string;
 
-  @Column()
-  family_id: number;
+  @Column({ type: "int" })
+  family_id!: number;
 
-  @Column()
-  father_id: number;
+  @Column({ type: "int" })
+  father_id!: number;
 
-  @Column()
-  mother_id: number;
+  @Column({ type: "int" })
+  mother_id!: number;
 
-  @Column()
-  gender: string;
+  @Column({ type: "varchar", length: 155 })
+  gender!: string;
 
-  @Column()
-  house_id: number;
-
-  @Column()
-  partner_id: number;
+  @Column({ nullable: true, type: "int" })
+  house_id?: number;
 
   @AfterLoad()
   calculateAge(): void {
@@ -43,8 +40,11 @@ export class Person {
   }
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at?: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date;
+  deleted_at?: Date;
+
+  @Column({ nullable: true, type: "int" })
+  partner_id?: number;
 }

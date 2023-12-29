@@ -11,31 +11,39 @@ import { Resource } from '../../resource/entities/resource.entity';
 
 @Entity()
 export class House {
-  @PrimaryGeneratedColumn()
-  id: number;
+  // { type: "varchar", length: 200, unique: true, nullable: true, default: false }
 
-  @Column()
-  name: string;
+  @PrimaryGeneratedColumn({ type: "int" })
+  id?: number;
 
-  @Column()
-  rooms: number;
+  @Column({ type: "varchar", length: 155 })
+  name!: string;
 
-  @Column()
-  storage: number;
+  @Column({ type: "int" })
+  rooms!: number;
 
-  @Column()
-  family_id: number;
+  @Column({ type: "int" })
+  storage!: number;
 
   // @OneToOne(() => Resource, (resource) => resource.house) // specify inverse side as a second parameter
   // @OneToOne('Resource', 'house') // specify inverse side as a second parameter
   // resource: Resource
 
-  @Column()
-  type_id: number;
+  @Column({ type: "int", default: 0 })
+  food?: number;
 
-  @Column()
-  land: number;
+  @Column({ type: "int", default: 0 })
+  wood?: number;
+
+  @Column({ type: "int" })
+  family_id!: number;
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at?: Date;
+
+  @Column({ type: "int" })
+  type_id!: number;
+
+  @Column({ type: "int" })
+  land!: number;
 }

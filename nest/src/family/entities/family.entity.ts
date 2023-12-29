@@ -7,12 +7,12 @@ import {
 
 @Entity()
 export class Family {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ type: "int" })
+  id?: number;
 
-  @Column()
-  name: string;
+  @Column({ type: "varchar", length: 155 })
+  name!: string;
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at?: Date;
 }
