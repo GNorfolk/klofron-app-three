@@ -8,45 +8,36 @@ import {
   ForeignKey,
 } from 'sequelize-typescript';
 
-export interface tradeAttributes {
+export interface move_houseAttributes {
   id?: number;
-  house_id: number;
-  offered_type_id: number;
-  offered_volume: number;
-  requested_type_id: number;
-  requested_volume: number;
-  created_at?: Date;
+  person_id: number;
+  origin_house_id: number;
+  destination_house_id: number;
+  started_at?: Date;
   completed_at?: Date;
   cancelled_at?: Date;
 }
 
-@Table({ tableName: 'trade', timestamps: false })
-export class trade
-  extends Model<tradeAttributes, tradeAttributes>
-  implements tradeAttributes
+@Table({ tableName: 'move_house', timestamps: false })
+export class move_house
+  extends Model<move_houseAttributes, move_houseAttributes>
+  implements move_houseAttributes
 {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   @Index({ name: 'PRIMARY', using: 'BTREE', order: 'ASC', unique: true })
   id?: number;
 
   @Column({ type: DataType.INTEGER })
-  @Index({ name: 'house_id', using: 'BTREE', order: 'ASC', unique: false })
-  house_id!: number;
+  person_id!: number;
 
   @Column({ type: DataType.INTEGER })
-  offered_type_id!: number;
+  origin_house_id!: number;
 
   @Column({ type: DataType.INTEGER })
-  offered_volume!: number;
-
-  @Column({ type: DataType.INTEGER })
-  requested_type_id!: number;
-
-  @Column({ type: DataType.INTEGER })
-  requested_volume!: number;
+  destination_house_id!: number;
 
   @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
-  created_at?: Date;
+  started_at?: Date;
 
   @Column({ allowNull: true, type: DataType.DATE })
   completed_at?: Date;
