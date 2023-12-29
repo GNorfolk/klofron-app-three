@@ -190,4 +190,4 @@ watch -n5 ENV=local node consumer.js
 - mysql -u root -p klofron-app-three < dump.sql
 
 **How to generate NestJS models:**
-- stg -D mysql -h localhost -p 3306 -d klofron-app-three -u root -x password --indices --case camel --out-dir models --clean
+- stg -D mysql -h localhost -p 3306 -d klofron-app-three -u root -x password --indices --case snake --out-dir models --clean
