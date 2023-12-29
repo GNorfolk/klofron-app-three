@@ -188,3 +188,6 @@ watch -n5 ENV=local node consumer.js
 **How to backup and restore DB:**
 - mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u klofron-app-three -p klofron-app-three > dump.sql
 - mysql -u root -p klofron-app-three < dump.sql
+
+**How to generate NestJS models:**
+- stg -D mysql -h localhost -p 3306 -d klofron-app-three -u root -x password --indices --case camel --out-dir models --clean
