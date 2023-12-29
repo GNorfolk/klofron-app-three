@@ -39,7 +39,7 @@ export class Person {
     this.age = Math.floor(((new Date()).valueOf() - (new Date(this.created_at)).valueOf()) / day_in_ms);
   }
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "datetime" })
   created_at?: Date;
 
   @DeleteDateColumn()

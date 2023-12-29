@@ -31,9 +31,9 @@ export class Resource {
   @Column({ nullable: true, type: "int" })
   person_id?: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "datetime" })
   created_at?: Date;
 
-  @DeleteDateColumn({ nullable: true })
+  @DeleteDateColumn({ type: "datetime", nullable: true })
   deleted_at?: Date;
 }

@@ -13,6 +13,6 @@ export class Family {
   @Column({ type: "varchar", length: 155 })
   name!: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "datetime" })
   created_at?: Date;
 }

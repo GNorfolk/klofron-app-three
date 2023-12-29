@@ -38,7 +38,7 @@ export class House {
   @Column({ type: "int" })
   family_id!: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "datetime" })
   created_at?: Date;
 
   @Column({ type: "int" })
