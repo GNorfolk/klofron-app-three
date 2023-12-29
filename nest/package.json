@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "dev": "clear && nest start --watch -b swc",
+    "testyboi": "clear && nest start",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
