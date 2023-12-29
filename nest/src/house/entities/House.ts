@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
 } from "typeorm";
 import { Family } from "../../family/entities/Family";
 import { Person } from "../../person/entities/Person";
@@ -53,14 +54,14 @@ export class House {
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "family_id", referencedColumnName: "id" }])
-  family: Family;
+  family: Relation<Family>;
 
   @OneToMany(() => Person, (person) => person.house)
-  people: Person[];
+  people: Relation<Person>[];
 
   @OneToMany(() => Resource, (resource) => resource.house)
-  resources: Resource[];
+  resources: Relation<Resource>[];
 
   @OneToMany(() => Trade, (trade) => trade.house)
-  trades: Trade[];
+  trades: Relation<Trade>[];
 }

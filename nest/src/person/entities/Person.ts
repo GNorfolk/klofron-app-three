@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
 } from "typeorm";
 import { Family } from "../../family/entities/Family";
 import { House } from "../../house/entities/House";
@@ -53,15 +54,15 @@ export class Person {
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "family_id", referencedColumnName: "id" }])
-  family: Family;
+  family: Relation<Family>;
 
   @ManyToOne(() => House, (house) => house.people, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "house_id", referencedColumnName: "id" }])
-  house: House;
+  house: Relation<House>;
 
   @OneToMany(() => Resource, (resource) => resource.person)
-  resources: Resource[];
+  resources: Relation<Resource>[];
 }

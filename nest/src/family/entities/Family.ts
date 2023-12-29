@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { House } from "../../house/entities/House";
 import { Person } from "../../person/entities/Person";
 import { User } from "../../../entities/User";
@@ -18,11 +18,11 @@ export class Family {
   createdAt: Date;
 
   @OneToMany(() => House, (house) => house.family)
-  houses: House[];
+  houses: Relation<House>[];
 
   @OneToMany(() => Person, (person) => person.family)
-  people: Person[];
+  people: Relation<Person>[];
 
   @OneToMany(() => User, (user) => user.family)
-  users: User[];
+  users: Relation<User>[];
 }
