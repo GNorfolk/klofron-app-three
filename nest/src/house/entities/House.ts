@@ -11,7 +11,7 @@ import {
 import { Family } from "../../family/entities/Family";
 import { Person } from "../../person/entities/Person";
 import { Resource } from "../../resource/entities/Resource";
-import { Trade } from "../../../entities/Trade";
+import { Trade } from "../../trade/entities/Trade";
 
 @Index("family_id", ["familyId"], {})
 @Entity("house", { schema: "klofron-app-three" })

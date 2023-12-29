@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { House } from "../src/house/entities/House";
+import { House } from "../../house/entities/House";
 
 @Index("house_id", ["houseId"], {})
 @Entity("trade", { schema: "klofron-app-three" })

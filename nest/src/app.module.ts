@@ -4,6 +4,7 @@ import { PersonModule } from './person/person.module';
 import { FamilyModule } from './family/family.module';
 import { HouseModule } from './house/house.module';
 import { ResourceModule } from './resource/resource.module';
+import { TradeModule } from './trade/trade.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ResourceModule } from './resource/resource.module';
     FamilyModule,
     HouseModule,
     ResourceModule,
+    TradeModule,
   ],
   controllers: [],
   providers: [],
