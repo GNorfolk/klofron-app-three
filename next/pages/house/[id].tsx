@@ -13,12 +13,12 @@ export default function House() {
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>
+        <DescribeHouseV2 />
         <DescribeHouse />
         <ListHousePeople />
         <ListHouseTrades />
         <ManageResources />
         <RenameHouse />
-        <DescribeHouseV2 />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
@@ -50,12 +50,9 @@ function DescribeHouse() {
     if (data.success) {
       return (
         <div>
-          <h2 className={styles.headingLg}>House Info</h2>
           <ul className={styles.list}>
-            {data.data.map(({ id, name, rooms, storage, food, wood, food_in_trade, wood_in_trade, people }) => (
+            {data.data.map(({ id }) => (
               <li className={styles.listItem} key={id}>
-                <p>{name} has {rooms} rooms and contains {people} people, so has room for {rooms - people} more people.</p>
-                <p>{name} has {food} food and {wood} wood in storage, and {food_in_trade} food and {wood_in_trade} wood in trade. It can hold {storage} items so has {storage - food - wood - food_in_trade - wood_in_trade} space for more items.</p>
                 <button onClick={
                   () => {
                     createPerson.mutate(id, { onSettled: (res) => {

@@ -30,7 +30,9 @@ export class HouseService {
         "house.name AS name",
         "house.rooms AS rooms",
         "house.storage AS storage",
-        "house.family_id AS family_id"
+        "house.family_id AS family_id",
+        "0 AS food_in_trade",
+        "0 AS wood_in_trade"
       ])
       .innerJoin("house.people", "person").addSelect("COUNT(person.house_id)", "people")
       .innerJoin("house.resources", "food", "food.type_name = 'food'").addSelect("food.volume", "food")
