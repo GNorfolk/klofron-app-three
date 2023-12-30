@@ -32,9 +32,11 @@ export class HouseService {
         "house.storage AS storage",
         "house.family_id AS family_id"
       ])
-      .innerJoin("house.people", "person")
-      .addSelect("COUNT(person.house_id)", "people")
+      .innerJoin("house.people", "person").addSelect("COUNT(person.house_id)", "people")
+      .innerJoin("house.resources", "food", "food.type_name = 'food'").addSelect("food.volume", "food")
+      .innerJoin("house.resources", "wood", "wood.type_name = 'wood'").addSelect("wood.volume", "wood")
       .where("house.id = :id", { id: id })
+      .groupBy("food.id").addGroupBy("wood.id")
       .getRawOne();
     return house;
   }
