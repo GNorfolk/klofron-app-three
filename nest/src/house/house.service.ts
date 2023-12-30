@@ -25,11 +25,17 @@ export class HouseService {
   async findOne(id: number): Promise<House> {
     const house = await this.houseRepository
       .createQueryBuilder("house")
+      .select([
+        "house.id AS id",
+        "house.name AS name",
+        "house.rooms AS rooms",
+        "house.storage AS storage",
+        "house.family_id AS family_id"
+      ])
       .innerJoin("house.people", "person")
-      .addSelect("COUNT(person.house_id)", "house_people")
+      .addSelect("COUNT(person.house_id)", "people")
       .where("house.id = :id", { id: id })
       .getRawOne();
-    // console.log(house.getSql());
     return house;
   }
 
