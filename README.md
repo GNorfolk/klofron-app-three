@@ -187,8 +187,10 @@ watch -n5 ENV=local node consumer.js
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
 
 **How to backup and restore DB:**
-- mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u klofron-app-three -p klofron-app-three > dump.sql
-- mysql -u root -p klofron-app-three < dump.sql
+- mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p klofron-app-three > dump-2023-12-30.sql
+- aws s3 cp dump-2023-12-30.sql s3://ka3-db-dumps
+- AWS_PROFILE=react-app aws s3 cp s3://ka3-db-dumps/dump-2023-12-30.sql .
+- mysql -u root -p klofron-app-three < dump-2023-12-30.sql
 
 **How to generate NestJS resource:**
 - nest g resource my-resource-name
