@@ -16,15 +16,18 @@ export class HouseService {
   }
 
   async findAll(): Promise<House[]> {
-    return await this.houseRepository.find();
+    const houses = await this.houseRepository
+      .createQueryBuilder()
+      .getMany();
+    return houses;
   }
 
   async findOne(id: number): Promise<House> {
-    return await this.houseRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
+    const house = await this.houseRepository
+      .createQueryBuilder()
+      .where("house.id = :id", { id: id })
+      .getOne();
+    return house;
   }
 
   update(id: number, updateHouseDto: UpdateHouseDto) {
