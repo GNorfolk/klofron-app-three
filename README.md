@@ -97,6 +97,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Alternative Next Auth credentials docs: https://next-auth.js.org/configuration/providers/credentials
 - NestJS TypeORM Relations: https://github.com/typeorm/typeorm/blob/master/docs/relations.md
 - NestJS TypeORM Relations: https://orkhan.gitbook.io/typeorm/docs/relations
+- NestJS TypeORM Query Builder: https://orkhan.gitbook.io/typeorm/docs/select-query-builder
 
 # Development
 **How to clone repo**:
@@ -188,6 +189,9 @@ watch -n5 ENV=local node consumer.js
 **How to backup and restore DB:**
 - mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u klofron-app-three -p klofron-app-three > dump.sql
 - mysql -u root -p klofron-app-three < dump.sql
+
+**How to generate NestJS resource:**
+- nest g resource my-resource-name
 
 **How to generate NestJS models:**
 - stg -D mysql -h localhost -p 3306 -d klofron-app-three -u root -x password --indices --case snake --out-dir models --clean
