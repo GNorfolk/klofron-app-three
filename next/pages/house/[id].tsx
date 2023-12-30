@@ -3,7 +3,7 @@ import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import Layout from '../../components/Layout'
+import Layout from '../../components/MainLayout'
 import DescribeHouseV2 from '../../components/DescribeHouseV2'
 import { FormEventHandler, useState } from "react"
 
