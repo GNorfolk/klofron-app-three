@@ -1,4 +1,4 @@
-import Layout from '../components/MainLayout'
+import Layout from '../components/Layout'
 import styles from '../styles/main.module.css'
 import Link from 'next/link'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
