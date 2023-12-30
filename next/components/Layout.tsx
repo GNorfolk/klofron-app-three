@@ -17,7 +17,7 @@ export default function Layout({ children } : { children: React.ReactNode }) {
           <button onClick={(e) => { e.preventDefault(); signIn() }}>Login</button>
         )}
       </header>
-      <main>{children}</main>
+      <main className={styles.body}>{children}</main>
     </div>
   )
 }
