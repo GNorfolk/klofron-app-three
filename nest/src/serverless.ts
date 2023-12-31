@@ -21,6 +21,12 @@ async function bootstrapServer(): Promise<Server> {
       new ExpressAdapter(expressApp),
     );
     nestApp.enableVersioning();
+    nestApp.enableCors({
+      origin: [
+        'https://www.klofron.uk',
+        'https://old.klofron.uk'
+      ]
+    });
     nestApp.useGlobalPipes(new ValidationPipe());
     nestApp.use(eventContext());
     await nestApp.init();
