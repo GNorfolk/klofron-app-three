@@ -1,15 +1,13 @@
 import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
+import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import ListHousePeople from './ListHousePeople'
 import ListHouseTrades from './ListHouseTrades'
 import ListHouseResources from './ListHouseResources'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 
-const queryClient = new QueryClient()
-
-export default function DescribeHouseV2() {
+export default function DescribeHouseV2({ queryClient }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -38,9 +36,9 @@ export default function DescribeHouseV2() {
         <h1 className={styles.heading2Xl}>{data.name}</h1>
         <p className={styles.listItem}>{data.name} has {data.rooms} rooms and contains {data.people} people, so has room for {data.rooms - data.people} more people.</p>
         <p className={styles.listItem}>{data.name} has {data.food} food and {data.wood} wood in storage, and {data.food_in_trade} food and {data.wood_in_trade} wood in trade. It can hold {data.storage} items so has {data.storage - data.food - data.wood - data.food_in_trade - data.wood_in_trade} space for more items.</p>
-        <ListHousePeople />
+        <ListHousePeople queryClient={queryClient} />
         <ListHouseTrades />
-        <ListHouseResources />
+        <ListHouseResources queryClient={queryClient} />
         <h3 className={styles.headingMd}>Rename House</h3>
         <ul className={styles.list}>
           <form onSubmit={handleSubmit}>

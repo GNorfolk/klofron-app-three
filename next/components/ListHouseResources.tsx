@@ -1,11 +1,9 @@
 import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
-const queryClient = new QueryClient()
-
-export default function ListHouseTrades() {
+export default function ListHouseTrades({ queryClient }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
