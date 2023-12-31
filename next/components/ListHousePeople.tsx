@@ -13,6 +13,13 @@ export default function ListHousePeople({ queryClient }) {
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-house-people/' + router.query.id).then(
           (res) => res.json(),
         ),
+        // fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person', {
+        //   body: JSON.stringify({
+        //     house_id: router.query.id
+        //   })
+        // }).then(
+        //   (res) => res.json(),
+        // ),
     })
 
     const  increaseFood  = useMutation({

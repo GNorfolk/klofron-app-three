@@ -14,7 +14,10 @@ export class PersonService {
   }
 
   async findAll(): Promise<Person[]> {
-    return await this.personRepository.find();
+    const people = await this.personRepository
+      .createQueryBuilder()
+      .getMany();
+    return people;
   }
 
   async findOne(id: number): Promise<Person> {
