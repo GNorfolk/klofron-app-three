@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { Person } from './entities/Person';
@@ -22,8 +23,8 @@ export class PersonController {
   }
 
   @Get()
-  async findAll(): Promise<Person[]> {
-    return await this.personService.findAll();
+  async findAll(@Req() req): Promise<Person[]> {
+    return await this.personService.findAll(req.query);
   }
 
   @Get(':id')

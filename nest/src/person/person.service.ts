@@ -13,9 +13,10 @@ export class PersonService {
     return await this.personRepository.save(person);
   }
 
-  async findAll(): Promise<Person[]> {
+  async findAll(query): Promise<Person[]> {
     const people = await this.personRepository
       .createQueryBuilder()
+      .where("person.house_id = :house_id", { house_id: query.house_id })
       .getMany();
     return people;
   }
