@@ -15,10 +15,13 @@ export class PersonService {
 
   async findAll(query): Promise<Person[]> {
     const people = await this.personRepository
-      .createQueryBuilder()
+      .createQueryBuilder("person")
       .where("person.house_id = :house_id", { house_id: query.house_id })
-      .getMany();
-    return people;
+      .innerJoin("person.family", "family").addSelect("family.name", "person_family_name")
+      .innerJoin("person.house", "house").addSelect("house.name", "person_house_name")
+      // .getRawMany();
+    console.log(people.getSql())
+    return people.getRawMany();
   }
 
   async findOne(id: number): Promise<Person> {

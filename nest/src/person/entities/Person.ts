@@ -7,15 +7,20 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
+  AfterLoad,
 } from "typeorm";
 import { Family } from "../../family/entities/Family";
 import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
 
+const day_in_ms = 24 * 3600 * 1000
+
 @Index("family_id", ["familyId"], {})
 @Index("house_id", ["houseId"], {})
 @Entity("person", { schema: "klofron-app-three" })
 export class Person {
+  protected age: number;
+
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
@@ -65,4 +70,9 @@ export class Person {
 
   @OneToMany(() => Resource, (resource) => resource.person)
   resources: Relation<Resource>[];
+
+  @AfterLoad()
+  calculateAge(): void {
+    this.age = Math.floor(((new Date()).valueOf() - (new Date(this.createdAt)).valueOf()) / day_in_ms);
+  }
 }

@@ -52,71 +52,71 @@ export default function ListHousePeople({ queryClient }) {
       <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ id, name, family_name, gender, age, house_name, action_time }) => (
-            <li className={styles.listItem} key={id}>
-              <p><Link href={"/person/" + id}>{name + " " + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
-              { action_time ? (<><small className={styles.lightText}>{name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
+          {data.map(({ person_id, person_name, person_family_name, person_gender, age, person_house_name, action_time }) => (
+            <li className={styles.listItem} key={person_id}>
+              <p><Link href={"/person/" + person_id}>{person_name + " " + person_family_name}</Link> is {person_gender} and {age} years old and lives at {person_house_name}.</p>
+              { action_time ? (<><small className={styles.lightText}>{person_name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
               <button onClick={
                 () => {
-                  increaseFood.mutate(id, { onSettled: (res) => {
+                  increaseFood.mutate(person_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
+                      document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
+                      document.getElementById("change-me-" + person_id).innerText = ' '
                     }
                   }})
                 }
               } >Get Food</button>
               <button onClick={
                 () => {
-                  increaseWood.mutate(id, { onSettled: (res) => {
+                  increaseWood.mutate(person_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
+                      document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
+                      document.getElementById("change-me-" + person_id).innerText = ' '
                     }
                   }})
                 }
               } >Get Wood</button>
               <button onClick={
                 () => {
-                  increaseStorage.mutate(id, { onSettled: (res) => {
+                  increaseStorage.mutate(person_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
+                      document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
+                      document.getElementById("change-me-" + person_id).innerText = ' '
                     }
                   }})
                 }
               } >Increase Storage</button>
               <button onClick={
                 () => {
-                  increaseRooms.mutate(id, { onSettled: (res) => {
+                  increaseRooms.mutate(person_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
+                      document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
+                      document.getElementById("change-me-" + person_id).innerText = ' '
                     }
                   }})
                 }
               } >Increase Rooms</button>
               <button onClick={
                 () => {
-                  createHouse.mutate(id, { onSettled: (res) => {
+                  createHouse.mutate(person_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                     if (!res.data.success) {
-                      document.getElementById("change-me-" + id).innerText = res.data.error
+                      document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + id).innerText = ' '
+                      document.getElementById("change-me-" + person_id).innerText = ' '
                     }
                   }})
                 }
               } >Create House</button>
-              <small className={styles.lightText} id={'change-me-' + id}></small>
+              <small className={styles.lightText} id={'change-me-' + person_id}></small>
             </li>
           ))}
         </ul>
