@@ -16,7 +16,7 @@ export class ResourceService {
   async findByHouseId(house_id: number) {
     return await this.resourceRepository.find({
       where: {
-        houseId: house_id,
+        resource_house_id: house_id,
       },
     });
   }

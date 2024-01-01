@@ -10,33 +10,33 @@ import {
 import { House } from "../../house/entities/House";
 import { Person } from "../../person/entities/Person";
 
-@Index("house_id", ["houseId"], {})
-@Index("person_id", ["personId"], {})
+@Index("resource_ouse_id", ["resource_house_id"], {})
+@Index("resource_person_id", ["resource_person_id"], {})
 @Entity("resource", { schema: "klofron-app-three" })
 export class Resource {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
-  id: number;
+  resource_id: number;
 
   @Column("varchar", { name: "type_name", length: 155 })
-  typeName: string;
+  resource_type_name: string;
 
   @Column("int", { name: "volume" })
-  volume: number;
+  resource_volume: number;
 
   @Column("int", { name: "house_id", nullable: true })
-  houseId: number | null;
+  resource_house_id: number | null;
 
   @Column("int", { name: "person_id", nullable: true })
-  personId: number | null;
+  resource_person_id: number | null;
 
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdAt: Date;
+  resource_created_at: Date;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })
-  deletedAt: Date | null;
+  resource_deleted_at: Date | null;
 
   @ManyToOne(() => House, (house) => house.resources, {
     onDelete: "NO ACTION",

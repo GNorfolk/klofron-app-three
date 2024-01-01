@@ -8,38 +8,38 @@ import {
 } from "typeorm";
 import { House } from "../../house/entities/House";
 
-@Index("house_id", ["houseId"], {})
+@Index("trade_house_id", ["trade_house_id"], {})
 @Entity("trade", { schema: "klofron-app-three" })
 export class Trade {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
-  id: number;
+  trade_id: number;
 
   @Column("int", { name: "house_id" })
-  houseId: number;
+  trade_house_id: number;
 
   @Column("int", { name: "offered_type_id" })
-  offeredTypeId: number;
+  trade_offered_type_id: number;
 
   @Column("int", { name: "offered_volume" })
-  offeredVolume: number;
+  trade_offered_volume: number;
 
   @Column("int", { name: "requested_type_id" })
-  requestedTypeId: number;
+  trade_requested_type_id: number;
 
   @Column("int", { name: "requested_volume" })
-  requestedVolume: number;
+  trade_requested_volume: number;
 
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdAt: Date;
+  trade_created_at: Date;
 
   @Column("timestamp", { name: "completed_at", nullable: true })
-  completedAt: Date | null;
+  trade_completed_at: Date | null;
 
   @Column("timestamp", { name: "cancelled_at", nullable: true })
-  cancelledAt: Date | null;
+  trade_cancelled_at: Date | null;
 
   @ManyToOne(() => House, (house) => house.trades, {
     onDelete: "NO ACTION",
