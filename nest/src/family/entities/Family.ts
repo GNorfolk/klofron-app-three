@@ -6,16 +6,16 @@ import { User } from "../../user/entities/User";
 @Entity("family", { schema: "klofron-app-three" })
 export class Family {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
-  id: number;
+  family_id: number;
 
   @Column("varchar", { name: "name", length: 155 })
-  name: string;
+  family_name: string;
 
   @Column("timestamp", {
     name: "created_at",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdAt: Date;
+  family_created_at: Date;
 
   @OneToMany(() => House, (house) => house.family)
   houses: Relation<House>[];

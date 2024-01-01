@@ -58,7 +58,7 @@ export class Person {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
-  @JoinColumn([{ name: "family_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
   family: Relation<Family>;
 
   @ManyToOne(() => House, (house) => house.people, {

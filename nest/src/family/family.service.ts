@@ -18,7 +18,7 @@ export class FamilyService {
   async findOne(id: number): Promise<Family> {
     return await this.familyRepository.findOne({
       where: {
-        id: id,
+        family_id: id,
       },
     });
   }

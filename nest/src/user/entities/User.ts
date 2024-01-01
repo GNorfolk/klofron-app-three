@@ -41,6 +41,6 @@ export class User {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
-  @JoinColumn([{ name: "family_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
   family: Family;
 }
