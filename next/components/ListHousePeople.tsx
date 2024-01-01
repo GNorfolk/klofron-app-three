@@ -52,9 +52,9 @@ export default function ListHousePeople({ queryClient }) {
       <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ person_id, person_name, person_family_name, person_gender, age, person_house_name, action_time }) => (
+          {data.map(({ person_id, person_name, person_family, person_gender, person_age, person_house, action_time }) => (
             <li className={styles.listItem} key={person_id}>
-              <p><Link href={"/person/" + person_id}>{person_name + " " + person_family_name}</Link> is {person_gender} and {age} years old and lives at {person_house_name}.</p>
+              <p><Link href={"/person/" + person_id}>{person_name + " " + person_family.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
               { action_time ? (<><small className={styles.lightText}>{person_name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
               <button onClick={
                 () => {

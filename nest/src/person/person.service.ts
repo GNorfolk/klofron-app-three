@@ -17,11 +17,11 @@ export class PersonService {
     const people = await this.personRepository
       .createQueryBuilder("person")
       .where("person.house_id = :house_id", { house_id: query.house_id })
-      .innerJoin("person.family", "family").addSelect("family.name", "person_family_name")
-      .innerJoin("person.house", "house").addSelect("house.name", "person_house_name")
+      .innerJoinAndSelect("person.family", "family")
+      .innerJoinAndSelect("person.house", "house")
       // .getRawMany();
     console.log(people.getSql())
-    return people.getRawMany();
+    return people.getMany();
   }
 
   async findOne(id: number): Promise<Person> {
