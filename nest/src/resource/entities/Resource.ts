@@ -42,7 +42,7 @@ export class Resource {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
-  @JoinColumn([{ name: "house_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: "house_id", referencedColumnName: "house_id" }])
   house: Relation<House>;
 
   @ManyToOne(() => Person, (person) => person.resources, {

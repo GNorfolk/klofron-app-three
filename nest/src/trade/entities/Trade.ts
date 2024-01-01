@@ -45,6 +45,6 @@ export class Trade {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
-  @JoinColumn([{ name: "house_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: "house_id", referencedColumnName: "house_id" }])
   house: House;
 }
