@@ -27,7 +27,7 @@ export class PersonService {
   async findOne(id: number): Promise<Person> {
     return await this.personRepository.findOne({
       where: {
-        id: id,
+        person_id: id,
       },
     });
   }

@@ -49,6 +49,6 @@ export class Resource {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
-  @JoinColumn([{ name: "person_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   person: Relation<Person>;
 }
