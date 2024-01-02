@@ -62,12 +62,12 @@ function DescribePerson() {
           <li className={styles.listItem} key={data.person_id}>
             {
               data.person_partner_id ?
-                <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old and is married to <Link href={"/person/" + data.person_partner_id}>{data.person_partner_id}</Link>.</p>
+                <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old and is married to <Link href={"/person/" + data.person_partner_id}>{data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</Link>.</p>
               :
               <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old.</p>
             }
             <p>{data.person_name}'s father is <Link href={"/person/" + data.person_father.person_id}><a onClick={(e) => queryClient.invalidateQueries()}>{data.person_father.person_name + ' ' + data.person_father.person_family.family_name}</a></Link> and their mother is <Link href={"/person/" + data.person_mother.person_id}><a onClick={(e) => queryClient.invalidateQueries()}>{data.person_mother.person_name + ' ' + data.person_mother.person_family.family_name}</a></Link>.</p>
-            { data.person_house_id ? <p>{data.person_name} lives at <Link href={"/house/" + data.person_house_id}>{data.person_house_id}</Link>.</p> : <p>{data.person_name} is homeless.</p> }
+            { data.person_house_id ? <p>{data.person_name} lives at <Link href={"/house/" + data.person_house_id}>{data.person_house.house_name}</Link>.</p> : <p>{data.person_name} is homeless.</p> }
           </li>
         </ul>
       </div>

@@ -171,6 +171,15 @@ AWS_PROFILE=react-app sam validate --lint --template serverless.yaml --region eu
 AWS_PROFILE=react-app terraform -chdir=tf init
 AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
 ```
+Or
+```bash
+rm -rf .aws-sam dist tf/.terraform tf/.terraform.lock.hcl tf/ka3-nestjs.zip
+npm run build
+AWS_PROFILE=react-app sam build --template serverless.yaml --manifest package.json
+AWS_PROFILE=react-app sam validate --lint --template serverless.yaml --region eu-west-1
+AWS_PROFILE=react-app terraform -chdir=tf init
+AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
+```
 
 **How to run sam template locally:**
 ```bash

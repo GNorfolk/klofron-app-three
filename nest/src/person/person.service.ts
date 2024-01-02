@@ -27,11 +27,13 @@ export class PersonService {
   async findOne(id: number): Promise<Person> {
     const person = await this.personRepository
       .createQueryBuilder("person")
-      // .innerJoinAndSelect("person.person_house", "house")
       .innerJoinAndSelect("person.person_father", "father")
       .innerJoinAndSelect("person.person_mother", "mother")
       .innerJoinAndSelect("father.person_family", "father_family")
       .innerJoinAndSelect("mother.person_family", "mother_family")
+      .leftJoinAndSelect("person.person_house", "house")
+      .innerJoinAndSelect("person.person_partner", "partner")
+      .innerJoinAndSelect("partner.person_family", "partner_family")
       .where("person.person_id = :person_id", { person_id: id })
     console.log(person.getSql())
     return person.getOne();
