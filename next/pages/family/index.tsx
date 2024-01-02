@@ -33,7 +33,7 @@ function ListFamilies() {
   if (data.success) {
     return (
       <div>
-        <h2 className={styles.headingLg}>Families</h2>
+        <h2 className={styles.headingLg}>Families!!!</h2>
         <ul className={styles.list}>
           {data.data.map(({ id, name }) => (
             <li className={styles.listItem} key={id}>
