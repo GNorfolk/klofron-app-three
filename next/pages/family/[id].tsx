@@ -27,7 +27,7 @@ function DescribeFamily() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyData' + router.query.id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-family/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -37,9 +37,7 @@ function DescribeFamily() {
 
     return (
       <div>
-        {data.data.map(({ id, name }) => (
-          <h1 className={styles.heading2Xl} key={id}>The {name} family.</h1>
-        ))}
+        <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family.</h1>
       </div>
     )
   }
