@@ -25,10 +25,15 @@ export class PersonService {
   }
 
   async findOne(id: number): Promise<Person> {
-    return await this.personRepository.findOne({
-      where: {
-        person_id: id,
-      },
-    });
+    const person = await this.personRepository
+      .createQueryBuilder("person")
+      // .innerJoinAndSelect("person.person_house", "house")
+      .innerJoinAndSelect("person.person_father", "father")
+      .innerJoinAndSelect("person.person_mother", "mother")
+      .innerJoinAndSelect("father.person_family", "father_family")
+      .innerJoinAndSelect("mother.person_family", "mother_family")
+      .where("person.person_id = :person_id", { person_id: id })
+    console.log(person.getSql())
+    return person.getOne();
   }
 }

@@ -71,6 +71,20 @@ export class Person {
   @OneToMany(() => Resource, (resource) => resource.resource_person)
   person_resources: Relation<Resource>[];
 
+  @ManyToOne(() => Person, (person) => person.person_id, { // Note: person.person_id can be person.person_father_id or person.person_family_id and it doesn't make a difference
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "father_id", referencedColumnName: "person_id" }])
+  person_father: Relation<Person>;
+
+  @ManyToOne(() => Person, (person) => person.person_id, { // Note: person.person_id can be person.person_mother_id or person.person_family_id and it doesn't make a difference
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "mother_id", referencedColumnName: "person_id" }])
+  person_mother: Relation<Person>;
+
   @AfterLoad()
   calculateAge(): void {
     this.person_age = Math.floor(((new Date()).valueOf() - (new Date(this.person_created_at)).valueOf()) / day_in_ms);

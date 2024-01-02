@@ -47,7 +47,7 @@ function DescribePerson() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['personData' + router.query.id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-person/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -55,34 +55,23 @@ function DescribePerson() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    if (data.success) {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>Person Info</h2>
-          <ul className={styles.list}>
-            {data.data.map(({ id, name, family_name, gender, age, house_id, house_name, father_id, father_name, father_family_name, mother_id, mother_name, mother_family_name, partner_id }) => (
-              <li className={styles.listItem} key={id}>
-                {
-                  partner_id ?
-                    <p>{name} {family_name} is {gender} and {age} years old and is married to <Link href={"/person/" + partner_id}>{partner_id}</Link>.</p>
-                  :
-                  <p>{name} {family_name} is {gender} and {age} years old.</p>
-                }
-                <p>{name}'s father is <Link href={"/person/" + father_id}><a onClick={(e) => queryClient.invalidateQueries()}>{father_name + ' ' + father_family_name}</a></Link> and their mother is <Link href={"/person/" + mother_id}><a onClick={(e) => queryClient.invalidateQueries()}>{mother_name + ' ' + mother_family_name}</a></Link>.</p>
-                { house_id ? <p>{name} lives at <Link href={"/house/" + house_id}>{house_name}</Link>.</p> : <p>{name} is homeless.</p> }
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>Person Info</h2>
-          <p>Backend call failed with error: {data.error}</p>
-        </div>
-      )
-    }
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Person Info</h2>
+        <ul className={styles.list}>
+          <li className={styles.listItem} key={data.person_id}>
+            {
+              data.person_partner_id ?
+                <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old and is married to <Link href={"/person/" + data.person_partner_id}>{data.person_partner_id}</Link>.</p>
+              :
+              <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old.</p>
+            }
+            <p>{data.person_name}'s father is <Link href={"/person/" + data.person_father.person_id}><a onClick={(e) => queryClient.invalidateQueries()}>{data.person_father.person_name + ' ' + data.person_father.person_family.family_name}</a></Link> and their mother is <Link href={"/person/" + data.person_mother.person_id}><a onClick={(e) => queryClient.invalidateQueries()}>{data.person_mother.person_name + ' ' + data.person_mother.person_family.family_name}</a></Link>.</p>
+            { data.person_house_id ? <p>{data.person_name} lives at <Link href={"/house/" + data.person_house_id}>{data.person_house_id}</Link>.</p> : <p>{data.person_name} is homeless.</p> }
+          </li>
+        </ul>
+      </div>
+    )
   }
 }
 
