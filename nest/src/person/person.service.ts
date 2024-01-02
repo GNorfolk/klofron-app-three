@@ -14,13 +14,13 @@ export class PersonService {
   }
 
   async findAll(query): Promise<Person[]> {
-    const people = await this.personRepository
+    let people = await this.personRepository
       .createQueryBuilder("person")
-      .where("person.person_house_id = :house_id", { house_id: query.house_id })
       .innerJoinAndSelect("person.person_family", "family")
       .innerJoinAndSelect("person.person_house", "house")
-      // .getRawMany();
-    console.log(people.getSql())
+    if (query?.house_id) {
+      people = people.where("person.person_house_id = :house_id", { house_id: query.house_id })
+    }
     return people.getMany();
   }
 

@@ -17,9 +17,8 @@ export class HouseService {
 
   async findAll(): Promise<House[]> {
     const houses = await this.houseRepository
-      .createQueryBuilder()
-      .getMany();
-    return houses;
+      .createQueryBuilder();
+    return houses.getMany();
   }
 
   async findOne(id: number): Promise<House> {
@@ -38,9 +37,8 @@ export class HouseService {
       .innerJoin("house.house_resources", "food", "food.type_name = 'food'").addSelect("food.volume", "house_food")
       .innerJoin("house.house_resources", "wood", "wood.type_name = 'wood'").addSelect("wood.volume", "house_wood")
       .where("house.house_id = :id", { id: id })
-      .groupBy("food.id").addGroupBy("wood.id")
-      .getRawOne();
-    return house;
+      .groupBy("food.id").addGroupBy("wood.id");
+    return house.getRawOne();
   }
 
   update(id: number, updateHouseDto: UpdateHouseDto) {
