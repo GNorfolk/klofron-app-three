@@ -22,7 +22,7 @@ function ListFamilies() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familiesData'],
     queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-families').then(
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family').then(
         (res) => res.json(),
       ),
   })
@@ -30,25 +30,16 @@ function ListFamilies() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  if (data.success) {
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Families!!!</h2>
-        <ul className={styles.list}>
-          {data.data.map(({ id, name }) => (
-            <li className={styles.listItem} key={id}>
-              <p>The <Link href={`/family/${id}`}>{name}</Link> family.</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Families</h2>
-        <p>Backend call failed with error: {data.error}</p>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <h2 className={styles.headingLg}>Families</h2>
+      <ul className={styles.list}>
+        {data.data.map(({ family_id, family_name }) => (
+          <li className={styles.listItem} key={family_id}>
+            <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
