@@ -41,10 +41,10 @@ export class Trade {
   @Column("timestamp", { name: "cancelled_at", nullable: true })
   trade_cancelled_at: Date | null;
 
-  @ManyToOne(() => House, (house) => house.trades, {
+  @ManyToOne(() => House, (house) => house.house_trades, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "house_id", referencedColumnName: "house_id" }])
-  house: House;
+  trade_house: House;
 }

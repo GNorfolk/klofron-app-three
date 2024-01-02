@@ -37,10 +37,10 @@ export class User {
   @Column("timestamp", { name: "deleted_at", nullable: true })
   user_deleted_at: Date | null;
 
-  @ManyToOne(() => Family, (family) => family.users, {
+  @ManyToOne(() => Family, (family) => family.family_users, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
-  family: Family;
+  user_family: Family;
 }

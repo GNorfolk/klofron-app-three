@@ -16,9 +16,9 @@ export class PersonService {
   async findAll(query): Promise<Person[]> {
     const people = await this.personRepository
       .createQueryBuilder("person")
-      .where("person.house_id = :house_id", { house_id: query.house_id })
-      .innerJoinAndSelect("person.family", "family")
-      .innerJoinAndSelect("person.house", "house")
+      .where("person.person_house_id = :house_id", { house_id: query.house_id })
+      .innerJoinAndSelect("person.person_family", "family")
+      .innerJoinAndSelect("person.person_house", "house")
       // .getRawMany();
     console.log(people.getSql())
     return people.getMany();

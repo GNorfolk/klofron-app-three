@@ -49,19 +49,19 @@ export class House {
   @Column("int", { name: "land" })
   house_land: number;
 
-  @ManyToOne(() => Family, (family) => family.houses, {
+  @ManyToOne(() => Family, (family) => family.family_houses, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
-  family: Relation<Family>;
+  house_family: Relation<Family>;
 
-  @OneToMany(() => Person, (person) => person.house)
-  people: Relation<Person>[];
+  @OneToMany(() => Person, (person) => person.person_house)
+  house_people: Relation<Person>[];
 
-  @OneToMany(() => Resource, (resource) => resource.house)
-  resources: Relation<Resource>[];
+  @OneToMany(() => Resource, (resource) => resource.resource_house)
+  house_resources: Relation<Resource>[];
 
-  @OneToMany(() => Trade, (trade) => trade.house)
-  trades: Relation<Trade>[];
+  @OneToMany(() => Trade, (trade) => trade.trade_house)
+  house_trades: Relation<Trade>[];
 }

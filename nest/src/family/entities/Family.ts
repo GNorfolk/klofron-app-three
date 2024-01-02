@@ -17,12 +17,12 @@ export class Family {
   })
   family_created_at: Date;
 
-  @OneToMany(() => House, (house) => house.family)
-  houses: Relation<House>[];
+  @OneToMany(() => House, (house) => house.house_family)
+  family_houses: Relation<House>[];
 
-  @OneToMany(() => Person, (person) => person.family)
-  people: Relation<Person>[];
+  @OneToMany(() => Person, (person) => person.person_family)
+  family_people: Relation<Person>[];
 
-  @OneToMany(() => User, (user) => user.family)
-  users: Relation<User>[];
+  @OneToMany(() => User, (user) => user.user_family)
+  family_users: Relation<User>[];
 }

@@ -54,22 +54,22 @@ export class Person {
   @Column("int", { name: "partner_id", nullable: true })
   person_partner_id: number | null;
 
-  @ManyToOne(() => Family, (family) => family.people, {
+  @ManyToOne(() => Family, (family) => family.family_people, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
-  family: Relation<Family>;
+  person_family: Relation<Family>;
 
-  @ManyToOne(() => House, (house) => house.people, {
+  @ManyToOne(() => House, (house) => house.house_people, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "house_id", referencedColumnName: "house_id" }])
-  house: Relation<House>;
+  person_house: Relation<House>;
 
-  @OneToMany(() => Resource, (resource) => resource.person)
-  resources: Relation<Resource>[];
+  @OneToMany(() => Resource, (resource) => resource.resource_person)
+  person_resources: Relation<Resource>[];
 
   @AfterLoad()
   calculateAge(): void {

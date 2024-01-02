@@ -38,17 +38,17 @@ export class Resource {
   @Column("timestamp", { name: "deleted_at", nullable: true })
   resource_deleted_at: Date | null;
 
-  @ManyToOne(() => House, (house) => house.resources, {
+  @ManyToOne(() => House, (house) => house.house_resources, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "house_id", referencedColumnName: "house_id" }])
-  house: Relation<House>;
+  resource_house: Relation<House>;
 
-  @ManyToOne(() => Person, (person) => person.resources, {
+  @ManyToOne(() => Person, (person) => person.person_resources, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
-  person: Relation<Person>;
+  resource_person: Relation<Person>;
 }

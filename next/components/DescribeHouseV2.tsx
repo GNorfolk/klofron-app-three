@@ -39,9 +39,9 @@ export default function DescribeHouseV2({ queryClient }) {
 
     return (
       <QueryClientProvider client={queryClient}>
-        <h1 className={styles.heading2Xl}>{data.name}</h1>
-        <p className={styles.listItem}>{data.name} has {data.rooms} rooms and contains {data.people} people, so has room for {data.rooms - data.people} more people.</p>
-        <p className={styles.listItem}>{data.name} has {data.food} food and {data.wood} wood in storage, and {data.food_in_trade} food and {data.wood_in_trade} wood in trade. It can hold {data.storage} items so has {data.storage - data.food - data.wood - data.food_in_trade - data.wood_in_trade} space for more items.</p>
+        <h1 className={styles.heading2Xl}>{data.house_name}</h1>
+        <p className={styles.listItem}>{data.house_name} has {data.house_rooms} rooms and contains {data.house_people} people, so has room for {data.house_rooms - data.house_people} more people.</p>
+        <p className={styles.listItem}>{data.house_name} has {data.house_food} food and {data.house_wood} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p>
         <button onClick={
           () => {
             createPerson.mutate(data.id, { onSettled: (res) => {

@@ -26,18 +26,18 @@ export class HouseService {
     const house = await this.houseRepository
       .createQueryBuilder("house")
       .select([
-        "house.id AS id",
-        "house.name AS name",
-        "house.rooms AS rooms",
-        "house.storage AS storage",
-        "house.family_id AS family_id",
-        "0 AS food_in_trade",
-        "0 AS wood_in_trade"
+        "house.house_id",
+        "house.house_name",
+        "house.house_rooms",
+        "house.house_storage",
+        "house.house_family_id",
+        "0 AS house_food_in_trade",
+        "0 AS house_wood_in_trade"
       ])
-      .innerJoin("house.people", "person").addSelect("COUNT(person.house_id)", "people")
-      .innerJoin("house.resources", "food", "food.type_name = 'food'").addSelect("food.volume", "food")
-      .innerJoin("house.resources", "wood", "wood.type_name = 'wood'").addSelect("wood.volume", "wood")
-      .where("house.id = :id", { id: id })
+      .innerJoin("house.house_people", "person").addSelect("COUNT(person.house_id)", "house_people")
+      .innerJoin("house.house_resources", "food", "food.type_name = 'food'").addSelect("food.volume", "house_food")
+      .innerJoin("house.house_resources", "wood", "wood.type_name = 'wood'").addSelect("wood.volume", "house_wood")
+      .where("house.house_id = :id", { id: id })
       .groupBy("food.id").addGroupBy("wood.id")
       .getRawOne();
     return house;
