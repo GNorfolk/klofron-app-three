@@ -34,7 +34,7 @@ function ListFamilies() {
     <div>
       <h2 className={styles.headingLg}>Families</h2>
       <ul className={styles.list}>
-        {data.data.map(({ family_id, family_name }) => (
+        {data.map(({ family_id, family_name }) => (
           <li className={styles.listItem} key={family_id}>
             <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
           </li>
