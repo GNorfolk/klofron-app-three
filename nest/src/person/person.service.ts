@@ -14,18 +14,18 @@ export class PersonService {
   }
 
   async findAll(query): Promise<Person[]> {
-    let people = await this.personRepository
+    let people = this.personRepository
       .createQueryBuilder("person")
       .innerJoinAndSelect("person.person_family", "family")
       .innerJoinAndSelect("person.person_house", "house")
     if (query?.house_id) {
       people = people.where("person.person_house_id = :house_id", { house_id: query.house_id })
     }
-    return people.getMany();
+    return await people.getMany();
   }
 
   async findOne(id: number): Promise<Person> {
-    const person = await this.personRepository
+    const person = this.personRepository
       .createQueryBuilder("person")
       .innerJoinAndSelect("person.person_father", "father")
       .innerJoinAndSelect("person.person_mother", "mother")
@@ -36,6 +36,6 @@ export class PersonService {
       .innerJoinAndSelect("partner.person_family", "partner_family")
       .where("person.person_id = :person_id", { person_id: id })
     console.log(person.getSql())
-    return person.getOne();
+    return await person.getOne();
   }
 }
