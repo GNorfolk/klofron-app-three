@@ -21,6 +21,9 @@ export class PersonService {
     if (query?.house_id) {
       people = people.where("person.person_house_id = :house_id", { house_id: query.house_id })
     }
+    if (query?.family_id) {
+      people = people.where("person.person_family_id = :family_id", { family_id: query.family_id })
+    }
     return await people.getMany();
   }
 

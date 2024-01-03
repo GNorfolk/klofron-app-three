@@ -78,7 +78,7 @@ function ListFamilyPeople() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyMemberData' + router.query.id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-family-people/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person?family_id=' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -86,31 +86,17 @@ function ListFamilyPeople() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    if (data.success) {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>Person Info</h2>
-          <ul className={styles.list}>
-            {data.data.map(({ id, name, family_name, gender, age, house_name }) => (
-              <li className={styles.listItem} key={id}>
-                {
-                  house_name ?
-                    <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and lives at {house_name}.</p>
-                  :
-                    <p><Link href={"/person/" + id}>{name + ' ' + family_name}</Link> is {gender} and {age} years old and is of no fixed abode.</p>
-                }
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>Person Info</h2>
-          <p>Backend call failed with error: {data.error}</p>
-        </div>
-      )
-    }
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Person Info</h2>
+        <ul className={styles.list}>
+          {data.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
+            <li className={styles.listItem} key={person_id}>
+              <p><Link href={"/person/" + person_id}>{person_name + ' ' + person_family.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
   }
 }
