@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req
 } from '@nestjs/common';
 import { HouseService } from './house.service';
 import { CreateHouseDto } from './dto/create-house.dto';
@@ -24,8 +25,8 @@ export class HouseController {
   }
 
   @Get()
-  findAll() {
-    return this.houseService.findAll();
+  findAll(@Req() req) {
+    return this.houseService.findAll(req.query);
   }
 
   @Get(':id')

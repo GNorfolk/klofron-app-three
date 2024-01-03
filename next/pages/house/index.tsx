@@ -34,9 +34,9 @@ function ListHouses() {
     <div>
       <h2 className={styles.headingLg}>Houses</h2>
       <ul className={styles.list}>
-        {data.map(({ house_id, house_name, house_rooms, house_storage }) => (
+        {data.map(({ house_id, house_name, house_rooms, house_storage, house_food, house_wood }) => (
           <li className={styles.listItem} key={house_id}>
-            <p>The {house_name} house has {house_rooms} rooms and {house_storage} storage.</p>
+            <p>The {house_name} house has {house_rooms} rooms and {house_storage} storage. It has {house_food.resource_volume} food and {house_wood.resource_volume} wood in storage.</p>
           </li>
         ))}
       </ul>

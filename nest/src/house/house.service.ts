@@ -15,9 +15,15 @@ export class HouseService {
     return 'This action adds a new house';
   }
 
-  async findAll(): Promise<House[]> {
-    const houses = this.houseRepository
-      .createQueryBuilder();
+  async findAll(query): Promise<House[]> {
+    let houses = this.houseRepository
+      .createQueryBuilder("house")
+      .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+      .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+      .innerJoinAndSelect("house.house_family", "family")
+      if (query?.family_id) {
+        houses = houses.where("house.house_family_id = :family_id", { family_id: query.family_id })
+      }
     return await houses.getMany();
   }
 

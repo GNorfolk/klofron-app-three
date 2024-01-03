@@ -49,7 +49,7 @@ function ListFamilyHouses() {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyHouseData' + router.query.id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-family-houses/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house?family_id=' + router.query.id).then(
           (res) => res.json(),
         ),
     })
@@ -57,28 +57,18 @@ function ListFamilyHouses() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    if (data.success) {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>House Info</h2>
-          <ul className={styles.list}>
-            {data.data.map(({ id, name, family_name, food, wood, type_name }) => (
-              <li className={styles.listItem} key={id}>
-                <p>The {family_name} family own <Link href={`/house/${id}`}>{name}</Link> which is a {type_name}.</p>
-                <p>{name} holds {food} food and {wood} wood.</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>House Info</h2>
-          <p>Backend call failed with error: {data.error}</p>
-        </div>
-      )
-    }
+    return (
+      <div>
+        <h2 className={styles.headingLg}>House Info</h2>
+        <ul className={styles.list}>
+          {data.map(({ house_id, house_name, house_family, house_food, house_wood }) => (
+            <li className={styles.listItem} key={house_id}>
+              <p>The {house_family.family_name} family own <Link href={`/house/${house_id}`}>{house_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
   }
 }
 

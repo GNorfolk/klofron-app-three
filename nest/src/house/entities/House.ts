@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
+  OneToOne,
 } from "typeorm";
 import { Family } from "../../family/entities/Family";
 import { Person } from "../../person/entities/Person";
@@ -28,12 +29,6 @@ export class House {
   @Column("int", { name: "storage" })
   house_storage: number;
 
-  @Column("int", { name: "food", default: () => "'0'" })
-  house_food: number;
-
-  @Column("int", { name: "wood", default: () => "'0'" })
-  house_wood: number;
-
   @Column("int", { name: "family_id" })
   house_family_id: number;
 
@@ -43,11 +38,11 @@ export class House {
   })
   house_created_at: Date;
 
-  @Column("int", { name: "type_id" })
-  house_type_id: number;
+  // @Column("int", { name: "type_id" })
+  // house_type_id: number;
 
-  @Column("int", { name: "land" })
-  house_land: number;
+  // @Column("int", { name: "land" })
+  // house_land: number;
 
   @ManyToOne(() => Family, (family) => family.family_houses, {
     onDelete: "NO ACTION",
@@ -61,6 +56,12 @@ export class House {
 
   @OneToMany(() => Resource, (resource) => resource.resource_house)
   house_resources: Relation<Resource>[];
+
+  @OneToOne(() => Resource, (resource) => resource.resource_house)
+  house_wood: Relation<Resource>;
+
+  @OneToOne(() => Resource, (resource) => resource.resource_house)
+  house_food: Relation<Resource>;
 
   @OneToMany(() => Trade, (trade) => trade.trade_house)
   house_trades: Relation<Trade>[];
