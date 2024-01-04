@@ -1,25 +1,57 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, AfterLoad } from "typeorm";
+
+const day_in_ms = 24 * 3600 * 1000
 
 @Entity("action", { schema: "klofron-app-three" })
 export class Action {
+  protected action_started_time_ago: string;
+  protected action_finish_reason: string;
+  protected action_type_name: string;
+
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
-  id: number;
+  action_id: number;
 
   @Column("int", { name: "person_id" })
-  personId: number;
+  action_person_id: number;
 
   @Column("int", { name: "type_id" })
-  typeId: number;
+  action_type_id: number;
 
   @Column("timestamp", { name: "started_at", nullable: true })
-  startedAt: Date | null;
+  action_started_at: Date | null;
 
   @Column("timestamp", { name: "completed_at", nullable: true })
-  completedAt: Date | null;
+  action_completed_at: Date | null;
 
   @Column("timestamp", { name: "cancelled_at", nullable: true })
-  cancelledAt: Date | null;
+  action_cancelled_at: Date | null;
 
   @Column("tinyint", { name: "infinite", width: 1, default: () => "'0'" })
-  infinite: boolean;
+  action_infinite: boolean;
+
+  @AfterLoad()
+  calculateActionStartedTimeAgo(): void {
+    const days = ( (new Date()).valueOf() - (new Date(this.action_started_at)).valueOf()) / day_in_ms
+    const hours = days > 1 ? (days - Math.floor(days)) * 24 : days * 24
+    const minutes = hours > 1 ? (hours - Math.floor(hours)) * 60 : hours * 60
+    this.action_started_time_ago = Math.floor(days) + "days " + Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+  }
+
+  @AfterLoad()
+  calculateActionFinishReason(): void {
+    this.action_finish_reason = this.action_completed_at != null ? "Completed" : this.action_cancelled_at != null ? "Cancelled" : null
+  }
+
+  @AfterLoad()
+  calculateActionTypeName(): void {
+    switch(this.action_type_id) {
+      case 1: { this.action_type_name = "Get Food"; break }
+      case 2: { this.action_type_name = "Get Wood"; break }
+      case 3: { this.action_type_name = "Increase Storage"; break }
+      case 4: { this.action_type_name = "Increase Rooms"; break }
+      case 5: { this.action_type_name = "Create House"; break }
+      case 6: { this.action_type_name = "Create Baby"; break }
+      default: { this.action_type_name = "Unknown"; break }
+    }
+  }
 }
