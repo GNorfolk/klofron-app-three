@@ -6,6 +6,7 @@ import { HouseModule } from './house/house.module';
 import { ResourceModule } from './resource/resource.module';
 import { TradeModule } from './trade/trade.module';
 import { UserModule } from './user/user.module';
+import { ActionModule } from './action/action.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     ResourceModule,
     TradeModule,
     UserModule,
+    ActionModule,
   ],
   controllers: [],
   providers: [],
