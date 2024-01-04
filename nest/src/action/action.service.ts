@@ -19,9 +19,16 @@ export class ActionService {
     let actions =  this.actionRepository
       .createQueryBuilder("action")
       .orderBy("action.started_at", "DESC")
-      .limit(6)
+    if (query?.limit) {
+      actions = actions.limit(query.limit)
+    }
     if (query?.person_id) {
-      actions = actions.where("action.action_person_id = :id", { id: query.person_id })
+      actions = actions.where("action.person_id = :id", { id: query.person_id })
+      if (query?.current && query.current == "true") {
+        actions = actions.andWhere("action.completed_at IS NULL AND action.cancelled_at IS NULL");
+      } else if (query?.current && query.current == "false") {
+        actions = actions.andWhere("action.completed_at IS NOT NULL OR action.cancelled_at IS NOT NULL");
+      }
     }
     return await actions.getMany();
   }

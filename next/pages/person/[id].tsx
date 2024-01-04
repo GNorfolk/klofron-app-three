@@ -16,7 +16,9 @@ export default function Person() {
       <Layout>
         <QueryClientProvider client={queryClient}>
           <DescribePerson />
-          <DescribePersonActions />
+          <h2 className={styles.headingLg}>Actions Info</h2>
+          <DescribePersonCurrentAction />
+          <DescribePersonPreviousActions />
           <RenamePerson />
           <MoveHouse />
           <CreateProposal />
@@ -31,7 +33,9 @@ export default function Person() {
       <Layout>
         <QueryClientProvider client={queryClient}>
           <DescribePerson />
-          <DescribePersonActions />
+          <h2 className={styles.headingLg}>Actions Info</h2>
+          <DescribePersonCurrentAction />
+          <DescribePersonPreviousActions />
         </QueryClientProvider>
         <div className={styles.backToHome}>
           <Link href="/">← Back to home</Link>
@@ -75,13 +79,13 @@ function DescribePerson() {
   }
 }
 
-function DescribePersonActions() {
+function DescribePersonCurrentAction() {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['personActionsData' + router.query.id],
+      queryKey: ['personCurentActionsData' + router.query.id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/describe-person-actions/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action?person_id=' + router.query.id + '&limit=1&current=true').then(
           (res) => res.json(),
         ),
     })
@@ -95,44 +99,55 @@ function DescribePersonActions() {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
-    if (data.success) {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>Actions Info</h2>
-          <h3 className={styles.headingMd}>Curent Action</h3>
-          <ul className={styles.list}>
-            { data.current_action.length > 0 ? 
-              data.current_action.map(({ id, type_name, started_time_ago, finish_reason }) => (
-                <li className={styles.listItem} key={id}>
-                  <p>Action with id {id} of type {type_name} was started {started_time_ago} ago.</p>
-                  <button onClick={
-                    () => {
-                        cancelAction.mutate(id, { onSettled: (res) => {
-                        queryClient.invalidateQueries()
-                      }})
-                    }
-                  } >Cancel Action</button>
-                </li>
-              )) : <p>No actions currently in progress!</p> }
-          </ul>
-          <h3 className={styles.headingMd}>Previous Actions</h3>
-          <ul className={styles.list}>
-            {data.previous_actions.map(({ id, type_name, started_time_ago, finish_reason }) => (
-              <li className={styles.listItem} key={id}>
-                <p>Action with id {id} of type {type_name} was started {started_time_ago} ago and finished with reason {finish_reason}.</p>
+    return (
+      <div>
+        <h3 className={styles.headingMd}>Curent Action</h3>
+        <ul className={styles.list}>
+          { data.length > 0 ? 
+            data.map(({ action_id, action_type_name, action_started_time_ago }) => (
+              <li className={styles.listItem} key={action_id}>
+                <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago.</p>
+                <button onClick={
+                  () => {
+                      cancelAction.mutate(action_id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                    }})
+                  }
+                } >Cancel Action</button>
               </li>
-            ))}
-          </ul>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <h2 className={styles.headingLg}>Actions Info</h2>
-          <p>Backend call failed with error: {data.error}</p>
-        </div>
-      )
-    }
+            )) : <p>No actions currently in progress!</p> }
+        </ul>
+      </div>
+    )
+  }
+}
+
+function DescribePersonPreviousActions() {
+  const router = useRouter()
+  if (router.isReady) {
+    const { isLoading, error, data } = useQuery({
+      queryKey: ['personPreviousActionsData' + router.query.id],
+      queryFn: () =>
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action?person_id=' + router.query.id + '&limit=5&current=false').then(
+          (res) => res.json(),
+        ),
+    })
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Failed to load</div>
+
+    return (
+      <div>
+        <h3 className={styles.headingMd}>Previous Actions</h3>
+        <ul className={styles.list}>
+          {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
+            <li className={styles.listItem} key={action_id}>
+              <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago and finished with reason {action_finish_reason}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
   }
 }
 
