@@ -51,7 +51,11 @@ export class Action {
   calculateActionTimeRemaining(): void {
     const hours = ((new Date(this.action_started_at)).valueOf() - (new Date().valueOf() - (8 * hour_in_ms)).valueOf()) / hour_in_ms
     const minutes = hours > 1 ?  (hours - Math.floor(hours)) * 60 : hours * 60
-    this.action_time_remaining = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+    if (hours >= 0 && minutes >= 0 && this.action_completed_at == null && this.action_cancelled_at == null)  {
+      this.action_time_remaining = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+    } else {
+      this.action_time_remaining = null
+    }
   }
 
   @AfterLoad()
