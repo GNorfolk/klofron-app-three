@@ -11,7 +11,8 @@ export class ProposalService {
 
   async findAll(): Promise<Proposal[]> {
     let proposals = this.proposalRepository
-      .createQueryBuilder()
+      .createQueryBuilder("proposal")
+      .innerJoinAndSelect("proposal.proposal_proposer_person","proposer")
     return await proposals.getMany();
   }
 

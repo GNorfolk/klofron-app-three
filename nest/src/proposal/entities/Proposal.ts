@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn } from "typeorm";
+import { Person } from "../../person/entities/Person";
 
 @Entity("proposal", { schema: "klofron-app-three" })
 export class Proposal {
@@ -22,4 +23,18 @@ export class Proposal {
 
   @Column("timestamp", { name: "cancelled_at", nullable: true })
   proposal_cancelled_at: Date | null;
+
+  // @ManyToOne(() => Family, (family) => family.family_people, {
+  //   onDelete: "NO ACTION",
+  //   onUpdate: "NO ACTION",
+  // })
+  // @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
+  // person_family: Relation<Family>;
+
+  @ManyToOne(() => Person, (person) => person.person_proposals, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "proposer_person_id", referencedColumnName: "person_id" }])
+  proposal_proposer_person: Relation<Person>;
 }

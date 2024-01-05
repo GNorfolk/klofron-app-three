@@ -14,6 +14,7 @@ import { Family } from "../../family/entities/Family";
 import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
 import { Action } from "../../action/entities/Action";
+import { Proposal } from "../../proposal/entities/Proposal";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -56,7 +57,7 @@ export class Person {
   @Column("int", { name: "partner_id", nullable: true })
   person_partner_id: number | null;
 
-  @ManyToOne(() => Family, (family) => family.family_people, {
+  @ManyToOne(() => Family, (family) => family.family_people, { //////////////////////////
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
@@ -96,6 +97,11 @@ export class Person {
 
   @OneToMany(() => Action, (action) => action.action_person)
   person_actions: Relation<Action>[];
+
+  // @OneToMany(() => Person, (person) => person.person_family)
+  // family_people: Relation<Person>[];
+  @OneToMany(() => Proposal, (proposal) => proposal.proposal_proposer_person)
+  person_proposals: Relation<Person>[];
 
   @AfterLoad()
   calculateAge(): void {
