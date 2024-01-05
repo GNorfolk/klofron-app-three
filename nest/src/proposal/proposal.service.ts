@@ -13,6 +13,8 @@ export class ProposalService {
     let proposals = this.proposalRepository
       .createQueryBuilder("proposal")
       .innerJoinAndSelect("proposal.proposal_proposer_person","proposer")
+      .innerJoinAndSelect("proposer.person_family","family")
+      .where("proposal.accepter_person_id IS NULL AND proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
     return await proposals.getMany();
   }
 

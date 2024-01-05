@@ -22,7 +22,7 @@ function ListProposals() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['listProposalsData'],
     queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-proposals').then(
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal').then(
         (res) => res.json(),
       ),
   })
@@ -30,25 +30,16 @@ function ListProposals() {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  if (data.success) {
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
-        <ul className={styles.list}>
-          {data.data.map(({ id, name, family_name }) => (
-            <li className={styles.listItem} key={id}>
-              <p><Link href={"/person/" + id}>{name + " " + family_name}</Link>.</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
-        <p>Backend call failed with error: {data.error}</p>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <h2 className={styles.headingLg}>Proposal Info</h2>
+      <ul className={styles.list}>
+        {data.map(({ proposal_id, proposal_proposer_person_id, proposal_proposer_person }) => (
+          <li className={styles.listItem} key={proposal_id}>
+            <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name}</Link>.
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
