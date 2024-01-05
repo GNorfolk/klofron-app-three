@@ -1,6 +1,6 @@
 import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 export default function ListHouseTrades() {
   const router = useRouter()

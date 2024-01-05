@@ -1,7 +1,7 @@
 import styles from '../styles/main.module.css'
 import { useQuery } from '@tanstack/react-query'
 
-export default function ListAllFamilies() {
+export default function ListAllHouses() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['housesData'],
     queryFn: () =>
