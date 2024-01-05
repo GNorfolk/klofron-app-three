@@ -39,7 +39,7 @@ export class HouseService {
         "0 AS house_food_in_trade",
         "0 AS house_wood_in_trade"
       ])
-      .innerJoin("house.house_people", "person").addSelect("COUNT(person.house_id)", "house_people")
+      .leftJoin("house.house_people", "person").addSelect("COUNT(person.house_id)", "house_people")
       .leftJoin("house.house_resources", "food", "food.type_name = 'food'").addSelect("food.volume", "house_food")
       .leftJoin("house.house_resources", "wood", "wood.type_name = 'wood'").addSelect("wood.volume", "house_wood")
       .where("house.house_id = :id", { id: id })

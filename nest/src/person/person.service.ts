@@ -35,10 +35,9 @@ export class PersonService {
       .innerJoinAndSelect("father.person_family", "father_family")
       .innerJoinAndSelect("mother.person_family", "mother_family")
       .leftJoinAndSelect("person.person_house", "house")
-      .innerJoinAndSelect("person.person_partner", "partner")
-      .innerJoinAndSelect("partner.person_family", "partner_family")
+      .leftJoinAndSelect("person.person_partner", "partner")
+      .leftJoinAndSelect("partner.person_family", "partner_family")
       .where("person.person_id = :person_id", { person_id: id })
-    console.log(person.getSql())
     return await person.getOne();
   }
 }
