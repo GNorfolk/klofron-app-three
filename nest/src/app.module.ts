@@ -7,6 +7,7 @@ import { ResourceModule } from './resource/resource.module';
 import { TradeModule } from './trade/trade.module';
 import { UserModule } from './user/user.module';
 import { ActionModule } from './action/action.module';
+import { ProposalModule } from './proposal/proposal.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ActionModule } from './action/action.module';
     TradeModule,
     UserModule,
     ActionModule,
+    ProposalModule,
   ],
   controllers: [],
   providers: [],
