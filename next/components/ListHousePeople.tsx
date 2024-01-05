@@ -63,7 +63,7 @@ export default function ListHousePeople({ queryClient }) {
                     if (!res.data.success) {
                       document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + person_id).innerText = ' '
+                      document.getElementById("change-me-" + person_id).innerText = 'Action initiated!'
                     }
                   }})
                 }
