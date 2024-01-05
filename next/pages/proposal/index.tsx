@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styles from '../../styles/main.module.css'
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Layout from '../../components/Layout'
 import ListAllProposals from '../../components/ListAllProposals'
 
