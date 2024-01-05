@@ -1,10 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn, AfterLoad } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, AfterLoad, Relation, ManyToOne, JoinColumn } from "typeorm";
+import { Person } from "../../person/entities/Person";
 
 const day_in_ms = 24 * 3600 * 1000
+const hour_in_ms = 3600 * 1000
 
 @Entity("action", { schema: "klofron-app-three" })
 export class Action {
   protected action_started_time_ago: string;
+  protected action_time_remaining: string;
   protected action_finish_reason: string;
   protected action_type_name: string;
 
@@ -29,12 +32,26 @@ export class Action {
   @Column("tinyint", { name: "infinite", width: 1, default: () => "'0'" })
   action_infinite: boolean;
 
+  @ManyToOne(() => Person, (person) => person.person_actions, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
+  action_person: Relation<Person>;
+
   @AfterLoad()
   calculateActionStartedTimeAgo(): void {
     const days = ( (new Date()).valueOf() - (new Date(this.action_started_at)).valueOf()) / day_in_ms
     const hours = days > 1 ? (days - Math.floor(days)) * 24 : days * 24
     const minutes = hours > 1 ? (hours - Math.floor(hours)) * 60 : hours * 60
     this.action_started_time_ago = Math.floor(days) + "days " + Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+  }
+
+  @AfterLoad()
+  calculateActionTimeRemaining(): void {
+    const hours = ((new Date(this.action_started_at)).valueOf() - (new Date().valueOf() - (8 * hour_in_ms)).valueOf()) / hour_in_ms
+    const minutes = hours > 1 ?  (hours - Math.floor(hours)) * 60 : hours * 60
+    this.action_time_remaining = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
   }
 
   @AfterLoad()

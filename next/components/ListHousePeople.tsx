@@ -52,10 +52,10 @@ export default function ListHousePeople({ queryClient }) {
       <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ person_id, person_name, person_family, person_gender, person_age, person_house, action_time }) => (
+          {data.map(({ person_id, person_name, person_family, person_gender, person_age, person_house, person_actions }) => (
             <li className={styles.listItem} key={person_id}>
               <p><Link href={"/person/" + person_id}>{person_name + " " + person_family.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
-              { action_time ? (<><small className={styles.lightText}>{person_name} is performing an action completing in {action_time}.</small><br /></>) : (<></>) }
+              { person_actions[0]?.action_time_remaining ? (<><small className={styles.lightText}>{person_name} is performing an action completing in {person_actions[0].action_time_remaining}.</small><br /></>) : (<></>) }
               <button onClick={
                 () => {
                   increaseFood.mutate(person_id, { onSettled: (res) => {
@@ -63,7 +63,7 @@ export default function ListHousePeople({ queryClient }) {
                     if (!res.data.success) {
                       document.getElementById("change-me-" + person_id).innerText = res.data.error
                     } else {
-                      document.getElementById("change-me-" + person_id).innerText = 'Action initiated!'
+                      document.getElementById("change-me-" + person_id).innerText = ' '
                     }
                   }})
                 }

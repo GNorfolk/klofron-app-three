@@ -8,10 +8,12 @@ import {
   PrimaryGeneratedColumn,
   Relation,
   AfterLoad,
+  OneToOne,
 } from "typeorm";
 import { Family } from "../../family/entities/Family";
 import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
+import { Action } from "../../action/entities/Action";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -91,6 +93,9 @@ export class Person {
   })
   @JoinColumn([{ name: "partner_id", referencedColumnName: "person_id" }])
   person_partner: Relation<Person>;
+
+  @OneToMany(() => Action, (action) => action.action_person)
+  person_actions: Relation<Action>[];
 
   @AfterLoad()
   calculateAge(): void {

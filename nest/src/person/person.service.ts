@@ -18,6 +18,7 @@ export class PersonService {
       .createQueryBuilder("person")
       .innerJoinAndSelect("person.person_family", "family")
       .innerJoinAndSelect("person.person_house", "house")
+      .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
     if (query?.house_id) {
       people = people.where("person.person_house_id = :house_id", { house_id: query.house_id })
     }
@@ -37,6 +38,7 @@ export class PersonService {
       .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("person.person_partner", "partner")
       .leftJoinAndSelect("partner.person_family", "partner_family")
+      .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
   }

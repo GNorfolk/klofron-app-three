@@ -49,7 +49,7 @@ export default function DescribeHouseV2({ queryClient }) {
               if (!res.data.success) {
                 document.getElementById("change-me-two-" + data.house_id).innerText = res.data.error
               } else {
-                document.getElementById("change-me-two-" + data.house_id).innerText = 'Action initiated!'
+                document.getElementById("change-me-two-" + data.house_id).innerText = ' '
               }
             }})
           }
