@@ -2,11 +2,11 @@ import styles from '../styles/main.module.css'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
-export default function ListPersonHouses({ queryClient, personId }) {
+export default function ListPersonHouses({ queryClient, personId, familyId, houseId }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['moveHouseData' + personId],
     queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/list-person-houses/' + personId).then(
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house?family_id=' + familyId + '&exclude_ids=' + houseId).then(
         (res) => res.json(),
       ),
   })
@@ -25,31 +25,24 @@ export default function ListPersonHouses({ queryClient, personId }) {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  if (data.success) {
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Move House</h2>
-        <ul className={styles.list}>
-          {data.data.map(({ id, name }) => (
-            <li className={styles.listItem} key={id}>
-              Move into {name}: <button onClick={
+  return (
+    <div>
+      <h2 className={styles.headingLg}>Move House</h2>
+      <ul className={styles.list}>
+        {
+          data.map(({ house_id, house_name }) => (
+            <li className={styles.listItem} key={house_id}>
+              Move into {house_name}: <button onClick={
                 () => {
-                  movePersonHouse.mutate(id, { onSettled: (res) => {
+                  movePersonHouse.mutate(house_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                   }})
                 }
               } >Move</button>
             </li>
-          ))}
-        </ul>
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <h2 className={styles.headingLg}>Move House</h2>
-        <p>Backend call failed with error: {data.error}</p>
-      </div>
-    )
-  }
+          ))
+        }
+      </ul>
+    </div>
+  )
 }

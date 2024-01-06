@@ -21,8 +21,17 @@ export class HouseService {
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
       .innerJoinAndSelect("house.house_family", "family")
-      if (query?.family_id) {
-        houses = houses.where("house.house_family_id = :family_id", { family_id: query.family_id })
+      .leftJoinAndSelect("house.house_people", "person")
+      if (query?.family_id && query?.exclude_ids) {
+        const exclude_ids = query?.exclude_ids.split(",")
+        houses = houses
+          .where("house.house_family_id = :id", { id: query.family_id })
+          .andWhere("house.house_id NOT IN (:...ids)", { ids: exclude_ids })
+      } else if (query?.family_id) {
+        houses = houses.where("house.house_family_id = :id", { id: query.family_id })
+      } else if (query?.exclude_ids) {
+        const exclude_ids = query?.exclude_ids.split(",")
+        houses = houses.where("house.house_id NOT IN (:...ids)", { ids: exclude_ids })
       }
     return await houses.getMany();
   }

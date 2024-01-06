@@ -72,7 +72,7 @@ export default function DescribePersonV2({ queryClient, status = null, familyId 
                 <input type="submit" value="Rename" />
               </form>
             </ul>
-            <ListPersonHouses queryClient={queryClient} personId={router.query.id} />
+            <ListPersonHouses queryClient={queryClient} personId={router.query.id} familyId={familyId} houseId={data.person_house_id} />
             <h2 className={styles.headingLg}>Proposal Info</h2>
             <p>Go to <Link href={`/proposal/${router.query.id}`}>Proposals</Link> page.</p>
             <button onClick={
