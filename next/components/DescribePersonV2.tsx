@@ -57,7 +57,7 @@ export default function DescribePersonV2({ queryClient, status = null, familyId 
         <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.id} />
         <ListPersonActionsPrevious personId={router.query.id} />
         {
-          status === "authenticated" && familyId ? 
+          status === "authenticated" && familyId == data.person_family_id ?
           <div>
             <h2 className={styles.headingLg}>Rename Person</h2>
             <ul className={styles.list}>
@@ -72,12 +72,12 @@ export default function DescribePersonV2({ queryClient, status = null, familyId 
                 <input type="submit" value="Rename" />
               </form>
             </ul>
-            <ListPersonHouses queryClient={queryClient} personId={router.query.id} familyId={familyId} houseId={data.person_house_id} />
+            <ListPersonHouses queryClient={queryClient} personId={router.query.id} familyId={data.person_family_id} houseId={data.person_house_id} />
             <h2 className={styles.headingLg}>Proposal Info</h2>
             <p>Go to <Link href={`/proposal/${router.query.id}`}>Proposals</Link> page.</p>
             <button onClick={
               () => {
-                  createProposal.mutate(familyId, { onSettled: (res) => {
+                  createProposal.mutate(data.person_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                   }
                 })
