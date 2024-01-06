@@ -66,20 +66,27 @@ export default function DescribeHouseV2({ queryClient, status, familyId }) {
           </div>
         }
         <ListHouseTrades />
-        <ListHouseResources queryClient={queryClient} />
-        <h3 className={styles.headingMd}>Rename House</h3>
-        <ul className={styles.list}>
-          <form onSubmit={handleSubmit}>
-            <input
-              value={houseInfo.name}
-              onChange={({ target }) =>
-                sethouseInfo({ ...houseInfo, name: target.value })
-              }
-              placeholder="Insert name here"
-            />
-            <input type="submit" value="Rename" />
-          </form>
-        </ul>
+        <ListHouseResources queryClient={queryClient} status={status} houseFamilyId={data.house_family_id} familyId={familyId} />
+        {
+          status === "authenticated" && familyId == data.house_family_id ?
+          <div>
+            <h3 className={styles.headingMd}>Rename House</h3>
+              <ul className={styles.list}>
+                <form onSubmit={handleSubmit}>
+                  <input
+                    value={houseInfo.name}
+                    onChange={({ target }) =>
+                      sethouseInfo({ ...houseInfo, name: target.value })
+                    }
+                    placeholder="Insert name here"
+                  />
+                  <input type="submit" value="Rename" />
+                </form>
+              </ul>
+          </div>
+          :
+          <></>
+        }
       </QueryClientProvider>
     )
   }

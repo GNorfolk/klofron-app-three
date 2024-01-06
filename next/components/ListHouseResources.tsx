@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
-export default function ListHouseResources({ queryClient }) {
+export default function ListHouseResources({ queryClient, status, familyId = null, houseFamilyId = null }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -33,28 +33,31 @@ export default function ListHouseResources({ queryClient }) {
       <div>
         <h2 className={styles.headingLg}>Manage Resources</h2>
         <p>{data.house_name} has {data.house_food} food and {data.house_wood} wood in storage!</p>
-        <ul className={styles.list}>
-          <li className={styles.listItem}>
-            <p>Wood: {data.house_wood} in storage!</p>
-            <button onClick={
-              () => {
-                  decreaseWood.mutate(data.house_id, { onSettled: (res) => {
-                  queryClient.invalidateQueries()
-                }})
-              }
-            } >Decrease Wood</button>
-          </li>
-          <li className={styles.listItem}>
-            <p>Food: {data.house_food} in storage!</p>
-            <button onClick={
-              () => {
-                  decreaseFood.mutate(data.house_id, { onSettled: (res) => {
-                  queryClient.invalidateQueries()
-                }})
-              }
-            } >Decrease Food</button>
-          </li>
-        </ul>
+        {
+          status === "authenticated" && familyId == houseFamilyId ?
+          <ul className={styles.list}>
+            <li className={styles.listItem}>
+              <p>Wood: {data.house_wood} in storage! <button onClick={
+                () => {
+                    decreaseWood.mutate(data.house_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Decrease Wood</button></p>
+            </li>
+            <li className={styles.listItem}>
+              <p>Food: {data.house_food} in storage! <button onClick={
+                () => {
+                    decreaseFood.mutate(data.house_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Decrease Food</button></p>
+            </li>
+          </ul>
+          :
+          <></>
+        }
       </div>
     )
   }
