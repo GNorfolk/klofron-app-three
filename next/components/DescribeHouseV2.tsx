@@ -7,7 +7,7 @@ import ListHouseResources from './ListHouseResources'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 
-export default function DescribeHouseV2({ queryClient }) {
+export default function DescribeHouseV2({ queryClient, status, familyId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -42,20 +42,29 @@ export default function DescribeHouseV2({ queryClient }) {
         <h1 className={styles.heading2Xl}>{data.house_name}</h1>
         <p className={styles.listItem}>{data.house_name} has {data.house_rooms} rooms and contains {data.house_people} people, so has room for {data.house_rooms - data.house_people} more people.</p>
         <p className={styles.listItem}>{data.house_name} has {data.house_food} food and {data.house_wood} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p>
-        <button onClick={
-          () => {
-            createPerson.mutate(data.house_id, { onSettled: (res) => {
-              queryClient.invalidateQueries()
-              if (!res.data.success) {
-                document.getElementById("change-me-two-" + data.house_id).innerText = res.data.error
-              } else {
-                document.getElementById("change-me-two-" + data.house_id).innerText = ' '
+        {
+          status === "authenticated" && familyId == data.house_family_id ?
+          <div>
+            <button onClick={
+              () => {
+                createPerson.mutate(data.house_id, { onSettled: (res) => {
+                  queryClient.invalidateQueries()
+                  if (!res.data.success) {
+                    document.getElementById("change-me-two-" + data.house_id).innerText = res.data.error
+                  } else {
+                    document.getElementById("change-me-two-" + data.house_id).innerText = ' '
+                  }
+                }})
               }
-            }})
-          }
-        } >Create Person</button>
-        <small className={styles.lightText} id={'change-me-two-' + data.house_id}></small>
-        <ListHousePeople queryClient={queryClient} />
+            } >Create Person</button>
+            <small className={styles.lightText} id={'change-me-two-' + data.house_id}></small>
+            <ListHousePeople queryClient={queryClient} status={status} familyId={familyId} />
+          </div>
+          :
+          <div>
+            <ListHousePeople queryClient={queryClient} status={status} />
+          </div>
+        }
         <ListHouseTrades />
         <ListHouseResources queryClient={queryClient} />
         <h3 className={styles.headingMd}>Rename House</h3>
