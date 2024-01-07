@@ -113,9 +113,9 @@ INSERT INTO user (username, email, password, family_id) VALUES ('hudson', 'hudso
 CREATE TABLE `trade` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `house_id` INT NOT NULL,
-    `offered_type_id` INT NOT NULL,
+    `offered_type` VARCHAR(155) NOT NULL,
     `offered_volume` INT NOT NULL,
-    `requested_type_id` INT NOT NULL,
+    `requested_type` VARCHAR(155) NOT NULL,
     `requested_volume` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `completed_at` TIMESTAMP,

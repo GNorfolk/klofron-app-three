@@ -17,14 +17,14 @@ export class Trade {
   @Column("int", { name: "house_id" })
   trade_house_id: number;
 
-  @Column("int", { name: "offered_type_id" })
-  trade_offered_type_id: number;
+  @Column("varchar", { name: "offered_type", length: 155 })
+  trade_offered_type: string;
 
   @Column("int", { name: "offered_volume" })
   trade_offered_volume: number;
 
-  @Column("int", { name: "requested_type_id" })
-  trade_requested_type_id: number;
+  @Column("varchar", { name: "requested_type", length: 155 })
+  trade_requested_type: string;
 
   @Column("int", { name: "requested_volume" })
   trade_requested_volume: number;

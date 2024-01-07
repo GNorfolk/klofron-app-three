@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { TradeService } from './trade.service';
 import { CreateTradeDto } from './dto/create-trade.dto';
 import { UpdateTradeDto } from './dto/update-trade.dto';
+import { Trade } from './entities/Trade';
 
-@Controller('trade')
+@Controller({
+  path: 'trade',
+  version: '2',
+})
 export class TradeController {
   constructor(private readonly tradeService: TradeService) {}
 
@@ -13,8 +17,8 @@ export class TradeController {
   }
 
   @Get()
-  findAll() {
-    return this.tradeService.findAll();
+  async findAll(@Req() req): Promise<Trade[]> {
+    return await this.tradeService.findAll(req.query);
   }
 
   @Get(':id')
