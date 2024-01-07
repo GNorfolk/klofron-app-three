@@ -13,16 +13,29 @@ export default function ListPersonActionsPrevious({ personId }) {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h3 className={styles.headingMd}>Previous Actions</h3>
-      <ul className={styles.list}>
-        {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
-          <li className={styles.listItem} key={action_id}>
-            <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago and finished with reason {action_finish_reason}.</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (data.length > 0) {
+    return (
+      <div>
+        <h3 className={styles.headingMd}>Previous Actions</h3>
+        <ul className={styles.list}>
+          {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
+            <li className={styles.listItem} key={action_id}>
+              <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago and finished with reason {action_finish_reason}.</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h3 className={styles.headingMd}>Previous Actions</h3>
+        <ul className={styles.list}>
+            <li className={styles.listItem}>
+              <p>This person has no past actions initiated.</p>
+            </li>
+        </ul>
+      </div>
+    )
+  }
 }

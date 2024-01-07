@@ -25,24 +25,37 @@ export default function ListPersonHouses({ queryClient, personId, familyId, hous
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
 
-  return (
-    <div>
-      <h2 className={styles.headingLg}>Move House</h2>
-      <ul className={styles.list}>
-        {
-          data.map(({ house_id, house_name }) => (
-            <li className={styles.listItem} key={house_id}>
-              Move into {house_name}: <button onClick={
-                () => {
-                  movePersonHouse.mutate(house_id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                  }})
-                }
-              } >Move</button>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  )
+  if (data.length > 0) {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Move House</h2>
+        <ul className={styles.list}>
+          {
+            data.map(({ house_id, house_name }) => (
+              <li className={styles.listItem} key={house_id}>
+                Move into {house_name}: <button onClick={
+                  () => {
+                    movePersonHouse.mutate(house_id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                    }})
+                  }
+                } >Move</button>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2 className={styles.headingLg}>Move House</h2>
+        <ul className={styles.list}>
+          <li className={styles.listItem}>
+            <p>Person has no houses they can move into.</p>
+          </li>
+        </ul>
+      </div>
+    )
+  }
 }
