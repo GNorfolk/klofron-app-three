@@ -7,7 +7,7 @@ import ListHouseResources from './ListHouseResources'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 
-export default function DescribeHouseV2({ queryClient, status, familyId }) {
+export default function DescribeHouse({ queryClient, status, familyId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({

@@ -31,7 +31,7 @@ export default function ListHouseResources({ queryClient, status, familyId = nul
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Manage Resources</h2>
+        <h2 className={styles.headingLg}>Resource Info</h2>
         <p>{data.house_name} has {data.house_food} food and {data.house_wood} wood in storage!</p>
         {
           status === "authenticated" && familyId == houseFamilyId ?

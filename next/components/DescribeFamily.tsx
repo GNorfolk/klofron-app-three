@@ -3,7 +3,7 @@ import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import ListFamilyPeople from './ListFamilyPeople'
 import ListFamilyHouses from './ListFamilyHouses'
 
-export default function DescribeFamilyV2({ queryClient, familyId }) {
+export default function DescribeFamily({ queryClient, familyId }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familyData' + familyId],
     queryFn: () =>

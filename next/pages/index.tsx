@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Router from "next/router"
 import { useEffect } from "react"
-import DescribeFamilyV2 from '../components/DescribeFamilyV2'
+import DescribeFamily from '../components/DescribeFamily'
 
 const queryClient = new QueryClient()
 let familyId
@@ -18,7 +18,7 @@ export default function Family() {
     return (
       <Layout>
       <QueryClientProvider client={queryClient}>
-        <DescribeFamilyV2 queryClient={queryClient} familyId={familyId}/>
+        <DescribeFamily queryClient={queryClient} familyId={familyId}/>
       </QueryClientProvider>
     </Layout>
     )

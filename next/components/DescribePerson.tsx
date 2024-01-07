@@ -8,7 +8,7 @@ import ListPersonActionsCurrent from './ListPersonActionsCurrent'
 import ListPersonActionsPrevious from './ListPersonActionsPrevious'
 import ListPersonHouses from './ListPersonHouses'
 
-export default function DescribePersonV2({ queryClient, status, familyId }) {
+export default function DescribePerson({ queryClient, status, familyId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
