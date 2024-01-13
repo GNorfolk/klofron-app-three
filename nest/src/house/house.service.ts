@@ -56,7 +56,13 @@ export class HouseService {
     return await house.getRawOne();
   }
 
-  update(id: number, updateHouseDto: UpdateHouseDto) {
-    return `This action updates a #${id} house`;
+  // curl --request POST localhost:5000/v2/house/2 --header "Content-Type: application/json" --data '{"name":"SomeHouseName"}'
+  update(id: number, body) {
+    return this.houseRepository
+      .createQueryBuilder()
+      .update(House)
+      .set({ house_name: body.name })
+      .where("id = :id", { id: id })
+      .execute();
   }
 }

@@ -27,7 +27,7 @@ export default function DescribeHouse({ queryClient, status, familyId }) {
     const [houseInfo, sethouseInfo] = useState({ name: "" })
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
       e.preventDefault();
-      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/rename-house/' + router.query.id, {
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house/' + router.query.id, {
         name: houseInfo.name
       }).then((value) => {
         queryClient.invalidateQueries()
