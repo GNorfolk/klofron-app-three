@@ -42,4 +42,14 @@ export class PersonService {
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
   }
+
+  // curl --request PATCH localhost:5000/v2/person/41 --header "Content-Type: application/json" --data '{"name":"Cassie"}'
+  update(id: number, body) {
+    return this.personRepository
+      .createQueryBuilder()
+      .update(Person)
+      .set({ person_name: body.name })
+      .where("id = :id", { id: id })
+      .execute();
+  }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { Person } from './entities/Person';
@@ -30,5 +31,10 @@ export class PersonController {
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Person> {
     return await this.personService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number, @Req() req) {
+    return this.personService.update(id, req.body);
   }
 }

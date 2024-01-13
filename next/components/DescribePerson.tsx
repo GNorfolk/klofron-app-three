@@ -22,7 +22,7 @@ export default function DescribePerson({ queryClient, status, familyId }) {
     const [personInfo, setpersonInfo] = useState({ name: "" })
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
       e.preventDefault();
-      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/rename-person/' + router.query.id, {
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id, {
         name: personInfo.name
       }).then((value) => {
         queryClient.invalidateQueries()
