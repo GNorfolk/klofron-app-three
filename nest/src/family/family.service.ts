@@ -11,8 +11,11 @@ export class FamilyService {
     @InjectRepository(Family) private familyRepository: Repository<Family>,
   ) {}
 
-  async findAll(): Promise<Family[]> {
-    return await this.familyRepository.find();
+  async findAll(query): Promise<Family[]> {
+    let families = this.familyRepository
+      .createQueryBuilder("family")
+      .leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
+    return await families.getMany();
   }
 
   async findOne(id: number): Promise<Family> {

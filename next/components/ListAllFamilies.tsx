@@ -18,9 +18,9 @@ export default function ListAllFamilies() {
     <div>
       <h2 className={styles.headingLg}>Families</h2>
       <ul className={styles.list}>
-        {data.map(({ family_id, family_name }) => (
+        {data.map(({ family_id, family_name, family_people }) => (
           <li className={styles.listItem} key={family_id}>
-            <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
+            { family_people.length > 0 ? <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p> : <></> }
           </li>
         ))}
       </ul>

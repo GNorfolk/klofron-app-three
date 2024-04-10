@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { FamilyService } from './family.service';
 import { CreateFamilyDto } from './dto/create-family.dto';
@@ -19,8 +20,8 @@ export class FamilyController {
   constructor(private readonly familyService: FamilyService) {}
 
   @Get()
-  findAll() {
-    return this.familyService.findAll();
+  findAll(@Req() req) {
+    return this.familyService.findAll(req.query);
   }
 
   @Get(':id')
