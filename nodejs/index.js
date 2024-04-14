@@ -705,7 +705,7 @@ app.post('/v1/create-house/:id', function(req, res) {
 // curl --request POST localhost:3001/v1/login --header "Content-Type: application/json" --data '{"email":"halpert@klofron.uk","password":"password"}'
 
 app.post("/v1/login", (req, res)=> {
-    connection.query("SELECT id, username, password, email, family_id FROM user WHERE email = '" + req.body.email + "';", async (err, rows) => {
+    connection.query("SELECT id, username, password, email FROM user WHERE email = '" + req.body.email + "';", async (err, rows) => {
         if (rows.length == 0) {
             res.send({"success": false, "error": "User not found by email!"})
         } else if (rows.length > 1) {
@@ -715,8 +715,7 @@ app.post("/v1/login", (req, res)=> {
                 "success": true,
                 "id": rows[0].id,
                 "username": rows[0].username,
-                "email": rows[0].email,
-                "family_id": rows[0].family_id
+                "email": rows[0].email
             })
         } else {
             // bcrypt.hash(rows[0].password, saltRounds, (err, hash) => {

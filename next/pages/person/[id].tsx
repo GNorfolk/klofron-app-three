@@ -9,7 +9,7 @@ const queryClient = new QueryClient()
 
 export default function Person() {
   const { status, data } = useSession()
-  const familyId = data?.user ? data.user.family_id : null
+  const familyId = data?.user ? 2 : null
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>

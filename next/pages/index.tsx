@@ -14,7 +14,7 @@ export default function Family() {
     if (status === "unauthenticated") Router.replace("/family")
   }, [status])
   if (status === "authenticated") {
-    familyId = data.user.family_id
+    familyId = 2
     return (
       <Layout>
       <QueryClientProvider client={queryClient}>

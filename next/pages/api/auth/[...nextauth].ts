@@ -9,7 +9,6 @@ const authOptions: NextAuthOptions = {
                 session.user.id = token.id;
                 session.user.username = token.username;
                 session.user.email = token.email;
-                session.user.family_id = token.family_id;
             }
             return session;
         },
@@ -18,7 +17,6 @@ const authOptions: NextAuthOptions = {
                 token.id = user.id;
                 token.username = user.username;
                 token.email = user.email;
-                token.family_id = user.family_id;
             }
             return token;
         },
