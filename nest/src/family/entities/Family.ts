@@ -3,7 +3,7 @@ import { House } from "../../house/entities/House";
 import { Person } from "../../person/entities/Person";
 import { User } from "../../user/entities/User";
 
-@Entity("family", { schema: "klofron-app-three" })
+@Entity("family", { schema: "ka3" })
 export class Family {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   family_id: number;

@@ -17,7 +17,7 @@ import { ProposalModule } from './proposal/proposal.module';
       port: 3306,
       username: process.env.DB_USER || 'root',
       password: process.env.DB_PASS || 'password',
-      database: process.env.DB_NAME || 'klofron-app-three',
+      database: process.env.DB_NAME || 'ka3',
       autoLoadEntities: true,
     }),
     PersonModule,

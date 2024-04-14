@@ -9,7 +9,7 @@ import {
 import { House } from "../../house/entities/House";
 
 @Index("trade_house_id", ["trade_house_id"], {})
-@Entity("trade", { schema: "klofron-app-three" })
+@Entity("trade", { schema: "ka3" })
 export class Trade {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   trade_id: number;

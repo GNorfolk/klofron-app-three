@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("move_house", { schema: "klofron-app-three" })
+@Entity("move_house", { schema: "ka3" })
 export class MoveHouse {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;

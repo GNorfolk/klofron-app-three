@@ -4,7 +4,7 @@ import { Person } from "../../person/entities/Person";
 const day_in_ms = 24 * 3600 * 1000
 const hour_in_ms = 3600 * 1000
 
-@Entity("action", { schema: "klofron-app-three" })
+@Entity("action", { schema: "ka3" })
 export class Action {
   protected action_started_time_ago: string;
   protected action_time_remaining: string;

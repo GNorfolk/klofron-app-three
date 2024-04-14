@@ -12,7 +12,7 @@ import { Person } from "../../person/entities/Person";
 
 @Index("resource_ouse_id", ["resource_house_id"], {})
 @Index("resource_person_id", ["resource_person_id"], {})
-@Entity("resource", { schema: "klofron-app-three" })
+@Entity("resource", { schema: "ka3" })
 export class Resource {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   resource_id: number;

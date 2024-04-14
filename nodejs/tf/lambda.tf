@@ -16,7 +16,7 @@ resource "aws_lambda_function" "main" {
             DB_HOST = "react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com"
             DB_USER = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["username"]
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
-            DB_NAME = "klofron-app-three"
+            DB_NAME = "ka3"
         }
     }
 }

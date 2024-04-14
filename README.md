@@ -98,6 +98,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NestJS TypeORM Relations: https://github.com/typeorm/typeorm/blob/master/docs/relations.md
 - NestJS TypeORM Relations: https://orkhan.gitbook.io/typeorm/docs/relations
 - NestJS TypeORM Query Builder: https://orkhan.gitbook.io/typeorm/docs/select-query-builder
+- Renaming MySQL DB: https://stackoverflow.com/questions/67093/how-do-i-rename-a-mysql-database-change-schema-name
 
 # Development
 **How to clone repo**:
@@ -206,3 +207,12 @@ watch -n5 ENV=local node consumer.js
 
 **How to generate NestJS models:**
 - stg -D mysql -h localhost -p 3306 -d klofron-app-three -u root -x password --indices --case snake --out-dir models --clean
+
+**How to clean up mysql dump:**
+```sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump.sql
+sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump.sql
+sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump.sql
+```

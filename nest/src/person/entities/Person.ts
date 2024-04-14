@@ -20,7 +20,7 @@ const day_in_ms = 24 * 3600 * 1000
 
 @Index("person_family_id", ["person_family_id"], {})
 @Index("person_house_id", ["person_house_id"], {})
-@Entity("person", { schema: "klofron-app-three" })
+@Entity("person", { schema: "ka3" })
 export class Person {
   protected person_age: number;
 

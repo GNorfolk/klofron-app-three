@@ -15,7 +15,7 @@ import { Resource } from "../../resource/entities/Resource";
 import { Trade } from "../../trade/entities/Trade";
 
 @Index("house_family_id", ["house_family_id"], {})
-@Entity("house", { schema: "klofron-app-three" })
+@Entity("house", { schema: "ka3" })
 export class House {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   house_id: number;

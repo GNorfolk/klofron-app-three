@@ -4,7 +4,7 @@ config = {
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "password",
-    database: process.env.DB_NAME || "klofron-app-three",
+    database: process.env.DB_NAME || "ka3",
     multipleStatements: true
 }
 

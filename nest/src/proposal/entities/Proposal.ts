@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn } from "typeorm";
 import { Person } from "../../person/entities/Person";
 
-@Entity("proposal", { schema: "klofron-app-three" })
+@Entity("proposal", { schema: "ka3" })
 export class Proposal {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   proposal_id: number;
