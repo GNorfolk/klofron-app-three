@@ -112,14 +112,14 @@ Source: https://docs.github.com/en/repositories/creating-and-managing-repositori
 ```SQL
 mysql.server start
 mysql -h localhost -u root
-CREATE DATABASE `klofron-app-three`;
-USE klofron-app-three;
+CREATE DATABASE `ka3`;
+USE ka3;
 ```
 
 **How to reset database:**
 ```bash
-mysql -u root -p klofron-app-three < starter-data.sql
-mysql -u root -p klofron-app-three
+mysql -u root -p ka3 < starter-data.sql
+mysql -u root -p ka3
 ```
 
 **How to increment time for testing:**
@@ -197,22 +197,20 @@ watch -n5 ENV=local node consumer.js
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
 
 **How to backup and restore DB:**
-- mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p klofron-app-three > dump-2023-12-30.sql
-- aws s3 cp dump-2023-12-30.sql s3://ka3-db-dumps
-- AWS_PROFILE=react-app aws s3 cp s3://ka3-db-dumps/dump-2023-12-30.sql .
-- mysql -u root -p klofron-app-three < dump-2023-12-30.sql
+```bash
+mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2024-04-14-1800.sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2024-04-14-1800.sql
+sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2024-04-14-1800.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-04-14-1800.sql
+sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2024-04-14-1800.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-04-14-1800.sql
+aws s3 cp dump-2024-04-14-1800.sql s3://ka3-db-dumps
+AWS_PROFILE=react-app aws s3 cp s3://ka3-db-dumps/dump-2024-04-14-1800.sql .
+mysql -u root -p ka3 < dump-2024-04-14-1800.sql
+```
 
 **How to generate NestJS resource:**
 - nest g resource my-resource-name
 
 **How to generate NestJS models:**
-- stg -D mysql -h localhost -p 3306 -d klofron-app-three -u root -x password --indices --case snake --out-dir models --clean
-
-**How to clean up mysql dump:**
-```sql
-sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump.sql
-sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump.sql
-sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump.sql
-```
+- stg -D mysql -h localhost -p 3306 -d ka3 -u root -x password --indices --case snake --out-dir models --clean
