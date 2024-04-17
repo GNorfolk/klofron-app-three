@@ -11,6 +11,10 @@ export class FamilyService {
     @InjectRepository(Family) private familyRepository: Repository<Family>,
   ) {}
 
+  async create(family: Family): Promise<Family> {
+    return await this.familyRepository.save(family);
+  }
+
   async findAll(query): Promise<Family[]> {
     let families = this.familyRepository
       .createQueryBuilder("family")
