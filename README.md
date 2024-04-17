@@ -214,3 +214,6 @@ mysql -u root -p ka3 < dump-2024-04-14-1800.sql
 
 **How to generate NestJS models:**
 - stg -D mysql -h localhost -p 3306 -d ka3 -u root -x password --indices --case snake --out-dir models --clean
+
+# MySQL
+- alter table family add unique (name);

@@ -20,8 +20,9 @@ import { UpdateFamilyDto } from './dto/update-family.dto';
 export class FamilyController {
   constructor(private readonly familyService: FamilyService) {}
 
+  // curl --request POST localhost:5000/v2/family --header "Content-Type: application/json" --data '{"family_name": "georgetest", "family_user_id": 9}'
   @Post()
-  async create(@Body() family: Family): Promise<Family> {
+  async create(@Body() family: CreateFamilyDto): Promise<CreateFamilyDto> {
     return await this.familyService.create(family);
   }
 

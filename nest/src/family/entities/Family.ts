@@ -8,7 +8,7 @@ export class Family {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   family_id: number;
 
-  @Column("varchar", { name: "name", length: 155 })
+  @Column("varchar", { name: "name", unique: true, length: 155 })
   family_name: string;
 
   @Column("timestamp", {

@@ -11,7 +11,7 @@ export class FamilyService {
     @InjectRepository(Family) private familyRepository: Repository<Family>,
   ) {}
 
-  async create(family: Family): Promise<Family> {
+  async create(family: CreateFamilyDto): Promise<CreateFamilyDto> {
     return await this.familyRepository.save(family);
   }
 

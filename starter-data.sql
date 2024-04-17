@@ -5,7 +5,7 @@ DROP TABLE family;
 -- -- -- -- -- FAMILY -- -- -- -- --
 CREATE TABLE `family` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(155) NOT NULL,
+    `name` VARCHAR(155) NOT NULL UNIQUE,
     `user_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`user_id`) REFERENCES user(`id`)
