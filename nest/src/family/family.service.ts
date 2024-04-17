@@ -19,6 +19,9 @@ export class FamilyService {
     let families = this.familyRepository
       .createQueryBuilder("family")
       .leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
+      if (query?.user_id) {
+        families = families.where("family.family_user_id = :id", { id: query.user_id })
+      }
     return await families.getMany();
   }
 

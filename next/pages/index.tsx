@@ -1,12 +1,14 @@
+import Link from 'next/link'
 import Layout from '../components/Layout'
+import styles from '../styles/main.module.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Router from "next/router"
 import { useEffect } from "react"
-import DescribeFamily from '../components/DescribeFamily'
+import ListAllFamilies from '../components/ListAllFamilies'
 
 const queryClient = new QueryClient()
-let familyId
+let userId
 
 export default function Family() {
   const { status, data } = useSession()
@@ -14,13 +16,16 @@ export default function Family() {
     if (status === "unauthenticated") Router.replace("/family")
   }, [status])
   if (status === "authenticated") {
-    familyId = 2
+    userId = data.user.id
     return (
       <Layout>
-      <QueryClientProvider client={queryClient}>
-        <DescribeFamily queryClient={queryClient} familyId={familyId}/>
-      </QueryClientProvider>
-    </Layout>
+        <QueryClientProvider client={queryClient}>
+          <ListAllFamilies userId={userId}/>
+        </QueryClientProvider>
+        <div className={styles.backToHome}>
+          <Link href="/">← Back to home</Link>
+        </div>
+      </Layout>
     )
   }
   return <div>Loading...</div>

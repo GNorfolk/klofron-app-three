@@ -2,11 +2,12 @@ import styles from '../styles/main.module.css'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 
-export default function ListAllFamilies() {
+export default function ListAllFamilies({ userId = null }) {
+  const fetchQuery = userId ? '/v2/family?user_id=' + userId : '/v2/family'
   const { isLoading, error, data } = useQuery({
     queryKey: ['familiesData'],
     queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family').then(
+      fetch(process.env.NEXT_PUBLIC_API_HOST + fetchQuery).then(
         (res) => res.json(),
       ),
   })

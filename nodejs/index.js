@@ -706,22 +706,30 @@ app.post('/v1/create-house/:id', function(req, res) {
 
 app.post("/v1/login", (req, res)=> {
     connection.query("SELECT id, username, password, email FROM user WHERE email = '" + req.body.email + "';", async (err, rows) => {
-        if (rows.length == 0) {
-            res.send({"success": false, "error": "User not found by email!"})
-        } else if (rows.length > 1) {
-            res.send({"success": false, "error": "Too many users found by email!"})
-        } else if (await bcrypt.compare(req.body.password, rows[0].password)) {
-            res.send({
-                "success": true,
-                "id": rows[0].id,
-                "username": rows[0].username,
-                "email": rows[0].email
-            })
-        } else {
-            // bcrypt.hash(rows[0].password, saltRounds, (err, hash) => {
-            //     console.log(hash)
-            //   });
-            res.send({"success": false, "error": "User password is incorrect!"})
+        try {
+            if (rows.length == 0) {
+                res.send({"success": false, "error": "User not found by email!"})
+            } else if (rows.length > 1) {
+                res.send({"success": false, "error": "Too many users found by email!"})
+            } else if (await bcrypt.compare(req.body.password, rows[0].password)) {
+                res.send({
+                    "success": true,
+                    "id": rows[0].id,
+                    "username": rows[0].username,
+                    "email": rows[0].email
+                })
+            } else {
+                // bcrypt.hash(rows[0].password, saltRounds, (err, hash) => {
+                //     console.log(hash)
+                //   });
+                res.send({"success": false, "error": "User password is incorrect!"})
+            }
+        }
+        catch (error) {
+            console.log("LoginFirstError: ", err)
+            console.log("LoginSecondError: ", error)
+            console.log("LoginErrorRows: ", rows)
+            res.send({"success": false, "error": "An undefined error occurred!"})
         }
     })
 })
