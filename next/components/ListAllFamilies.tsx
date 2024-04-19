@@ -16,7 +16,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
   const createFamily = useMutation({
     mutationFn: (id) => {
       return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/family', {
-        family_name: "someFamilyName",
+        family_name: "someFamilyNameTwo",
         family_user_id: id
       })
     },
@@ -32,7 +32,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       <ul className={styles.list}>
         {data.map(({ family_id, family_name, family_people }) => (
           <li className={styles.listItem} key={family_id}>
-            { family_people.length > 0 ? <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p> : <></> }
+            <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
           </li>
         ))}
       </ul>

@@ -216,4 +216,15 @@ mysql -u root -p ka3 < dump-2024-04-14-1800.sql
 - stg -D mysql -h localhost -p 3306 -d ka3 -u root -x password --indices --case snake --out-dir models --clean
 
 # MySQL
-- alter table family add unique (name);
+```sql
+alter table family add unique (name);
+update family set user_id = 1 where id = 1;
+update family set user_id = 1 where id = 2;
+update family set user_id = 2 where id = 3;
+update family set user_id = 3 where id = 4;
+update family set user_id = 4 where id = 5;
+update family set user_id = 5 where id = 6;
+update family set user_id = 6 where id = 7;
+update family set user_id = 7 where id = 8;
+update family set user_id = 8 where id = 9;
+```
