@@ -9,6 +9,7 @@ const queryClient = new QueryClient()
 
 export default function House() {
   const { status, data } = useSession()
+  // TODO Fix familyId
   const familyId = data?.user ? 2 : null
   return (
     <Layout>

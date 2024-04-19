@@ -20,7 +20,7 @@ export default function Family() {
     return (
       <Layout>
         <QueryClientProvider client={queryClient}>
-          <ListAllFamilies userId={userId}/>
+          <ListAllFamilies queryClient={queryClient} userId={userId}/>
         </QueryClientProvider>
         <div className={styles.backToHome}>
           <Link href="/">← Back to home</Link>
