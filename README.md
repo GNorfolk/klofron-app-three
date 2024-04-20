@@ -99,6 +99,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NestJS TypeORM Relations: https://orkhan.gitbook.io/typeorm/docs/relations
 - NestJS TypeORM Query Builder: https://orkhan.gitbook.io/typeorm/docs/select-query-builder
 - Renaming MySQL DB: https://stackoverflow.com/questions/67093/how-do-i-rename-a-mysql-database-change-schema-name
+- TypeORM transations NestJS: https://docs.nestjs.com/techniques/database#typeorm-transactions
+- TypeORM QueryRunner transations: https://typeorm.io/transactions#using-queryrunner-to-create-and-control-state-of-single-database-connection
 
 # Development
 **How to clone repo**:
