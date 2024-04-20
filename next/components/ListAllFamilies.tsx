@@ -2,6 +2,7 @@ import styles from '../styles/main.module.css'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
+import { useForm, SubmitHandler } from "react-hook-form"
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
   const fetchQuery = userId ? '/v2/family?user_id=' + userId : '/v2/family'
@@ -13,14 +14,29 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       ),
   })
 
-  const createFamily = useMutation({
-    mutationFn: (id) => {
-      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/family', {
-        family_name: "someFamilyNameTwo",
-        family_user_id: id
-      })
-    },
-  })
+  type Inputs = {
+    family_name: string
+    family_user_id: number
+  }
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>()
+  
+  const onSubmit: SubmitHandler<Inputs> = (formData) => {
+    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/family', {
+      family_name: formData.family_name,
+      family_user_id: userId
+    }).then(response => {
+      queryClient.invalidateQueries()
+      document.getElementById("change-me-" + userId).innerText = ' '
+    }).catch(error => {
+      document.getElementById("change-me-" + userId).innerText = error.toString()
+    })
+  }
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
@@ -30,27 +46,18 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       <div>
       <h2 className={styles.headingLg}>Families</h2>
       <ul className={styles.list}>
-        {data.map(({ family_id, family_name, family_people }) => (
+        {data.map(({ family_id, family_name }) => (
           <li className={styles.listItem} key={family_id}>
             <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
           </li>
         ))}
       </ul>
       <h2 className={styles.headingLg}>Create Family</h2>
-      <button onClick={
-        () => {
-          createFamily.mutate(userId, {
-            onSettled: (data, error, variables, context) => {
-              queryClient.invalidateQueries()
-              if (error) {
-                document.getElementById("change-me-" + userId).innerText = error.toString()
-              } else {
-                document.getElementById("change-me-" + userId).innerText = ' '
-              }
-            }
-          })
-        }
-      } >Create Family</button>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input defaultValue="test" {...register("family_name", { required: true })} />
+        { errors.family_name && <span>This field is required</span> }
+        <input type="submit" />
+      </form>
       <small className={styles.lightText} id={'change-me-' + userId}></small>
     </div>
     )
