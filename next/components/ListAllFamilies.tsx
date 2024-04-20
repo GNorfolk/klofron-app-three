@@ -25,7 +25,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
     watch,
     formState: { errors },
   } = useForm<Inputs>()
-  
+
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
     axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/family', {
       family_name: formData.family_name,
@@ -54,7 +54,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       </ul>
       <h2 className={styles.headingLg}>Create Family</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input defaultValue="test" {...register("family_name", { required: true })} />
+        <input defaultValue="familyName" {...register("family_name", { required: true })} />
         { errors.family_name && <span>This field is required</span> }
         <input type="submit" />
       </form>

@@ -19,9 +19,10 @@ import { UpdateHouseDto } from './dto/update-house.dto';
 export class HouseController {
   constructor(private readonly houseService: HouseService) {}
 
+  // curl --request POST localhost:5000/v2/house --header "Content-Type: application/json" --data '{"house_name": "georgetest", "house_family_id": 43, "house_rooms": 2}'
   @Post()
-  create(@Body() createHouseDto: CreateHouseDto) {
-    return this.houseService.create(createHouseDto);
+  async create(@Body() house: CreateHouseDto) {
+    return await this.houseService.create(house);
   }
 
   @Get()

@@ -1,8 +1,10 @@
 import styles from '../styles/main.module.css'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import axios from 'axios'
+import { useForm, SubmitHandler } from "react-hook-form"
 
-export default function ListFamilyHouses({ familyId }) {
+export default function ListFamilyHouses({ queryClient = null, familyId }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familyHouseData' + familyId],
     queryFn: () =>
@@ -10,6 +12,32 @@ export default function ListFamilyHouses({ familyId }) {
         (res) => res.json(),
       ),
   })
+
+  type Inputs = {
+    house_name: string
+    house_family_id: number
+    house_rooms: number
+  }
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>()
+
+  const onSubmit: SubmitHandler<Inputs> = (formData) => {
+    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/house', {
+      house_name: formData.house_name,
+      house_family_id: familyId,
+      house_rooms: 2
+    }).then(response => {
+      queryClient.invalidateQueries()
+      document.getElementById("change-me-" + familyId).innerText = ' '
+    }).catch(error => {
+      document.getElementById("change-me-" + familyId).innerText = error.toString()
+    })
+  }
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
@@ -34,6 +62,11 @@ export default function ListFamilyHouses({ familyId }) {
         <ul className={styles.list}>
           <li className={styles.listItem}>
             <p>This family does not own any houses.</p>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input defaultValue="houseName" {...register("house_name")} />
+              <input type="submit" />
+            </form>
+            <small className={styles.lightText} id={'change-me-' + familyId}></small>
           </li>
         </ul>
       </div>

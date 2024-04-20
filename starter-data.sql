@@ -13,11 +13,9 @@ CREATE TABLE `family` (
 -- -- -- -- -- HOUSE -- -- -- -- --
 CREATE TABLE `house` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `type_id` INT NOT NULL,
-    `name` VARCHAR(155) NOT NULL,
-    `rooms` INT NOT NULL,
-    `storage` INT NOT NULL,
-    `land` INT NOT NULL,
+    `name` VARCHAR(155) NOT NULL DEFAULT 'House',
+    `rooms` INT NOT NULL DEFAULT 1,
+    `storage` INT NOT NULL DEFAULT 6,
     `food` INT NOT NULL DEFAULT 0,
     `wood` INT NOT NULL DEFAULT 0,
     `family_id` INT NOT NULL,

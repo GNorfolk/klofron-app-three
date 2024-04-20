@@ -19,7 +19,7 @@ export default function DescribeFamily({ queryClient, familyId }) {
     <QueryClientProvider client={queryClient}>
       <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
       <ListFamilyPeople familyId={familyId} />
-      <ListFamilyHouses familyId={familyId} />
+      <ListFamilyHouses queryClient={queryClient} familyId={familyId} />
     </QueryClientProvider>
   )
 }

@@ -38,12 +38,6 @@ export class House {
   })
   house_created_at: Date;
 
-  // @Column("int", { name: "type_id" })
-  // house_type_id: number;
-
-  // @Column("int", { name: "land" })
-  // house_land: number;
-
   @ManyToOne(() => Family, (family) => family.family_houses, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",

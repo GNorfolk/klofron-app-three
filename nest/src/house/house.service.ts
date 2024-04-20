@@ -2,17 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { House } from './entities/House';
 
 @Injectable()
 export class HouseService {
   constructor(
     @InjectRepository(House) private houseRepository: Repository<House>,
+    private dataSource: DataSource
   ) {}
 
-  create(createHouseDto: CreateHouseDto) {
-    return 'This action adds a new house';
+  async create(house: CreateHouseDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let res
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      res = await queryRunner.manager.save(House, house);
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+    return res;
   }
 
   async findAll(query): Promise<House[]> {

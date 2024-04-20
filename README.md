@@ -227,4 +227,11 @@ update family set user_id = 5 where id = 6;
 update family set user_id = 6 where id = 7;
 update family set user_id = 7 where id = 8;
 update family set user_id = 8 where id = 9;
+alter table house drop column type_id;
+alter table house drop column land;
+alter table house drop column food;
+alter table house drop column wood;
+alter table house alter column name set default 'House';
+alter table house alter column rooms set default 1;
+alter table house alter column storage set default 6;
 ```
