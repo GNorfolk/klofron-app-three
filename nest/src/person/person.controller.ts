@@ -9,6 +9,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
+import { CreatePersonDto } from './dto/create-person.dto';
 import { Person } from './entities/Person';
 
 @Controller({
@@ -18,9 +19,10 @@ import { Person } from './entities/Person';
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
+  // curl --request POST localhost:5000/v2/person --header "Content-Type: application/json" --data '[{"person_name": "one", "person_family_id": 44, "person_father_id": 1, "person_mother_id": 2, "person_gender": "female"},{"person_name": "two", "person_family_id": 44, "person_father_id": 1, "person_mother_id": 2, "person_gender": "male"}]'
   @Post()
-  async create(@Body() person: Person): Promise<Person> {
-    return await this.personService.create(person);
+  async createCouple(@Body() couple: CreatePersonDto[]) {
+    return await this.personService.createCouple(couple);
   }
 
   @Get()

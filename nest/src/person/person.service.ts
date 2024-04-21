@@ -1,23 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Person } from './entities/Person';
+import { CreatePersonDto } from './dto/create-person.dto';
 
 @Injectable()
 export class PersonService {
   constructor(
     @InjectRepository(Person) private personRepository: Repository<Person>,
+    private dataSource: DataSource
   ) {}
 
   async create(person: Person): Promise<Person> {
     return await this.personRepository.save(person);
   }
 
+  async createCouple(couple: CreatePersonDto[]) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let mother, father
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      mother = await queryRunner.manager.save(Person, couple[0]);
+      father = await queryRunner.manager.save(Person, couple[1]);
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+    return [mother, father];
+  }
+
   async findAll(query): Promise<Person[]> {
     let people = this.personRepository
       .createQueryBuilder("person")
       .innerJoinAndSelect("person.person_family", "family")
-      .innerJoinAndSelect("person.person_house", "house")
+      .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
     if (query?.house_id) {
       people = people.where("person.person_house_id = :house_id", { house_id: query.house_id })
