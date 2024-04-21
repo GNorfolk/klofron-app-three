@@ -73,7 +73,7 @@ CREATE TABLE `trade` (
 CREATE TABLE `resource` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `type_name` VARCHAR(155) NOT NULL,
-    `volume` INT NOT NULL,
+    `volume` INT NOT NULL DEFAULT 0,
     `house_id` INT,
     `person_id` INT,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),

@@ -4,6 +4,7 @@ import { UpdateHouseDto } from './dto/update-house.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { House } from './entities/House';
+import { Resource } from '../resource/entities/Resource';
 
 @Injectable()
 export class HouseService {
@@ -14,11 +15,21 @@ export class HouseService {
 
   async create(house: CreateHouseDto) {
     const queryRunner = this.dataSource.createQueryRunner();
-    let res
+    let result
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      res = await queryRunner.manager.save(House, house);
+      result = await queryRunner.manager.save(House, house);
+      const food = {
+        resource_type_name: "food",
+        resource_house_id: result.house_id
+      }
+      const wood = {
+        resource_type_name: "wood",
+        resource_house_id: result.house_id
+      }
+      await queryRunner.manager.save(Resource, food);
+      await queryRunner.manager.save(Resource, wood);
       await queryRunner.commitTransaction();
     } catch (err) {
       console.log(err)
@@ -26,7 +37,7 @@ export class HouseService {
     } finally {
       await queryRunner.release();
     }
-    return res;
+    return result;
   }
 
   async findAll(query): Promise<House[]> {

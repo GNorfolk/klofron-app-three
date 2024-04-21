@@ -236,4 +236,5 @@ alter table house drop column wood;
 alter table house alter column name set default 'House';
 alter table house alter column rooms set default 1;
 alter table house alter column storage set default 6;
+alter table resource alter column volume set default 0;
 ```
