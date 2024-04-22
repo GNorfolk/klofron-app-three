@@ -21,6 +21,10 @@ export class PersonService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      let eighteenDate = new Date();
+      eighteenDate.setDate(eighteenDate.getDate() - 18);
+      couple[0].person_created_at = eighteenDate;
+      couple[1].person_created_at = eighteenDate;
       mother = await queryRunner.manager.save(Person, couple[0]);
       father = await queryRunner.manager.save(Person, couple[1]);
       await queryRunner.commitTransaction();

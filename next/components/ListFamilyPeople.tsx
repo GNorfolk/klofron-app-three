@@ -31,8 +31,8 @@ export default function ListFamilyPeople({ queryClient = null, familyId }) {
         person_name: formData.mother_name,
         person_gender: "female",
         person_family_id: familyId,
-        person_mother_id: 1,
-        person_father_id: 2
+        person_mother_id: 2,
+        person_father_id: 1
       },
       {
         person_name: formData.father_name,
