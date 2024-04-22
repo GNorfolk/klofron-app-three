@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
 
-export default function ListHousePeople({ queryClient, status, familyId = null }) {
+export default function ListHousePeople({ queryClient, status, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -58,7 +58,7 @@ export default function ListHousePeople({ queryClient, status, familyId = null }
                 <p><Link href={"/person/" + person_id}>{person_name + " " + person_family.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
                 { person_actions[0]?.action_time_remaining ? (<><small className={styles.lightText}>{person_name} is performing an action completing in {person_actions[0].action_time_remaining}.</small><br /></>) : (<></>) }
                 {
-                  status === "authenticated" && familyId == person_family_id ?
+                  status === "authenticated" && userId == person_family.family_user_id ?
                   <div>
                     <button onClick={
                       () => {

@@ -9,12 +9,11 @@ const queryClient = new QueryClient()
 
 export default function House() {
   const { status, data } = useSession()
-  // TODO Fix familyId
-  const familyId = data?.user ? 2 : null
+  const userId = data?.user ? data.user.id : null
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>
-        <DescribeHouse queryClient={queryClient} status={status} familyId={familyId} />
+        <DescribeHouse queryClient={queryClient} status={status} userId={userId} />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>

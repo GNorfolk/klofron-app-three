@@ -7,7 +7,7 @@ import ListHouseResources from './ListHouseResources'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 
-export default function DescribeHouse({ queryClient, status, familyId }) {
+export default function DescribeHouse({ queryClient, status, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -43,7 +43,7 @@ export default function DescribeHouse({ queryClient, status, familyId }) {
         <p className={styles.listItem}>{data.house_name} has {data.house_rooms} rooms and contains {data.house_people} people, so has room for {data.house_rooms - data.house_people} more people.</p>
         <p className={styles.listItem}>{data.house_name} has {data.house_food} food and {data.house_wood} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p>
         {
-          status === "authenticated" && familyId == data.house_family_id ?
+          status === "authenticated" && userId == data.house_user_id ?
           <div>
             <button onClick={
               () => {
@@ -58,7 +58,7 @@ export default function DescribeHouse({ queryClient, status, familyId }) {
               }
             } >Create Person</button>
             <small className={styles.lightText} id={'change-me-two-' + data.house_id}></small>
-            <ListHousePeople queryClient={queryClient} status={status} familyId={familyId} />
+            <ListHousePeople queryClient={queryClient} status={status} userId={userId} />
           </div>
           :
           <div>
@@ -66,9 +66,9 @@ export default function DescribeHouse({ queryClient, status, familyId }) {
           </div>
         }
         <ListHouseTrades />
-        <ListHouseResources queryClient={queryClient} status={status} houseFamilyId={data.house_family_id} familyId={familyId} />
+        <ListHouseResources queryClient={queryClient} status={status} userId={userId} />
         {
-          status === "authenticated" && familyId == data.house_family_id ?
+          status === "authenticated" && userId == data.house_user_id ?
           <div>
             <h3 className={styles.headingMd}>Rename House</h3>
               <ul className={styles.list}>

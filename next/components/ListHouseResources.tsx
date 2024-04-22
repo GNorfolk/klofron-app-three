@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
-export default function ListHouseResources({ queryClient, status, familyId = null, houseFamilyId = null }) {
+export default function ListHouseResources({ queryClient, status, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -34,7 +34,7 @@ export default function ListHouseResources({ queryClient, status, familyId = nul
         <h2 className={styles.headingLg}>Resource Info</h2>
         <p>{data.house_name} has {data.house_food} food and {data.house_wood} wood in storage!</p>
         {
-          status === "authenticated" && familyId == houseFamilyId ?
+          status === "authenticated" && userId == data.house_user_id ?
           <ul className={styles.list}>
             <li className={styles.listItem}>
               <p>Wood: {data.house_wood} in storage! <button onClick={
