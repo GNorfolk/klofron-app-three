@@ -27,7 +27,7 @@ export class ActionService {
       if (query?.current && query.current == "true") {
         actions = actions.andWhere("action.completed_at IS NULL AND action.cancelled_at IS NULL");
       } else if (query?.current && query.current == "false") {
-        actions = actions.andWhere("action.completed_at IS NOT NULL OR action.cancelled_at IS NOT NULL");
+        actions = actions.andWhere("(action.completed_at IS NOT NULL OR action.cancelled_at IS NOT NULL)");
       }
     }
     return await actions.getMany();
