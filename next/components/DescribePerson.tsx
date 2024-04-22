@@ -8,7 +8,7 @@ import ListPersonActionsCurrent from './ListPersonActionsCurrent'
 import ListPersonActionsPrevious from './ListPersonActionsPrevious'
 import ListPersonHouses from './ListPersonHouses'
 
-export default function DescribePerson({ queryClient, status, familyId }) {
+export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -57,7 +57,7 @@ export default function DescribePerson({ queryClient, status, familyId }) {
         <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.id} />
         <ListPersonActionsPrevious personId={router.query.id} />
         {
-          status === "authenticated" && familyId == data.person_family_id ?
+          status === "authenticated" && userId == data.person_family.family_user_id ?
           <div>
             <h2 className={styles.headingLg}>Rename Person</h2>
             <ul className={styles.list}>
