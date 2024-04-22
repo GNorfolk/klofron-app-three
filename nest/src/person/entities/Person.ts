@@ -98,10 +98,14 @@ export class Person {
   @OneToMany(() => Action, (action) => action.action_person)
   person_actions: Relation<Action>[];
 
-  // @OneToMany(() => Person, (person) => person.person_family)
-  // family_people: Relation<Person>[];
   @OneToMany(() => Proposal, (proposal) => proposal.proposal_proposer_person)
   person_proposals: Relation<Person>[];
+
+  @OneToOne(() => Resource, (resource) => resource.resource_person)
+  person_wood: Relation<Resource>;
+
+  @OneToOne(() => Resource, (resource) => resource.resource_person)
+  person_food: Relation<Resource>;
 
   @AfterLoad()
   calculateAge(): void {

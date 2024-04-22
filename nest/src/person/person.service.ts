@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Person } from './entities/Person';
 import { CreatePersonDto } from './dto/create-person.dto';
+import { Resource } from '../resource/entities/Resource';
 
 @Injectable()
 export class PersonService {
@@ -27,6 +28,24 @@ export class PersonService {
       couple[1].person_created_at = eighteenDate;
       mother = await queryRunner.manager.save(Person, couple[0]);
       father = await queryRunner.manager.save(Person, couple[1]);
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "food",
+        resource_person_id: mother.person_id,
+        resource_volume: 3
+      });
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "wood",
+        resource_person_id: mother.person_id
+      });
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "food",
+        resource_person_id: father.person_id,
+        resource_volume: 3
+      });
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "wood",
+        resource_person_id: father.person_id
+      });
       await queryRunner.commitTransaction();
     } catch (err) {
       console.log(err)
@@ -64,6 +83,8 @@ export class PersonService {
       .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("person.person_partner", "partner")
       .leftJoinAndSelect("partner.person_family", "partner_family")
+      .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'") // TODO switch to inner join when all people have resources
+      .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'") // TODO switch to inner join when all people have resources
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
