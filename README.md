@@ -101,6 +101,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - Renaming MySQL DB: https://stackoverflow.com/questions/67093/how-do-i-rename-a-mysql-database-change-schema-name
 - TypeORM transations NestJS: https://docs.nestjs.com/techniques/database#typeorm-transactions
 - TypeORM QueryRunner transations: https://typeorm.io/transactions#using-queryrunner-to-create-and-control-state-of-single-database-connection
+- TypeORM QueryRunner Manager: https://orkhan.gitbook.io/typeorm/docs/entity-manager-api
 
 # Development
 **How to clone repo**:
@@ -219,22 +220,4 @@ mysql -u root -p ka3 < dump-2024-04-14-1800.sql
 
 # MySQL
 ```sql
-alter table family add unique (name);
-update family set user_id = 1 where id = 1;
-update family set user_id = 1 where id = 2;
-update family set user_id = 2 where id = 3;
-update family set user_id = 3 where id = 4;
-update family set user_id = 4 where id = 5;
-update family set user_id = 5 where id = 6;
-update family set user_id = 6 where id = 7;
-update family set user_id = 7 where id = 8;
-update family set user_id = 8 where id = 9;
-alter table house drop column type_id;
-alter table house drop column land;
-alter table house drop column food;
-alter table house drop column wood;
-alter table house alter column name set default 'House';
-alter table house alter column rooms set default 1;
-alter table house alter column storage set default 6;
-alter table resource alter column volume set default 0;
 ```

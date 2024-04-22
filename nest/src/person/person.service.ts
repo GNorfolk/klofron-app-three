@@ -39,11 +39,12 @@ export class PersonService {
       .innerJoinAndSelect("person.person_family", "family")
       .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+      .where("person.person_deleted_at IS NULL")
     if (query?.house_id) {
-      people = people.where("person.person_house_id = :house_id", { house_id: query.house_id })
+      people = people.andWhere("person.person_house_id = :house_id", { house_id: query.house_id })
     }
     if (query?.family_id) {
-      people = people.where("person.person_family_id = :family_id", { family_id: query.family_id })
+      people = people.andWhere("person.person_family_id = :family_id", { family_id: query.family_id })
     }
     return await people.getMany();
   }
