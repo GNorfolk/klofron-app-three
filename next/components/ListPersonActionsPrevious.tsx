@@ -10,7 +10,12 @@ export default function ListPersonActionsPrevious({ personId }) {
       ),
   })
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return (
+    <div>
+      <h3 className={styles.headingMd}>Previous Actions</h3>
+      <p>Loading...</p>
+    </div>
+  )
   if (error) return <div>Failed to load</div>
 
   if (data.length > 0) {

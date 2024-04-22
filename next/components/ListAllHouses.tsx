@@ -10,7 +10,12 @@ export default function ListAllHouses() {
       ),
   })
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return (
+    <div>
+      <h2 className={styles.headingLg}>Houses</h2>
+      <p>Loading...</p>
+    </div>
+  )
   if (error) return <div>Failed to load</div>
 
   return (

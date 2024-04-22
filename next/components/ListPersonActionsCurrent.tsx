@@ -17,7 +17,12 @@ export default function ListPersonActionsCurrent({ queryClient, personId }) {
     },
   })
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return (
+    <div>
+      <h3 className={styles.headingMd}>Current Action</h3>
+      <p>Loading...</p>
+    </div>
+  )
   if (error) return <div>Failed to load</div>
 
   return (

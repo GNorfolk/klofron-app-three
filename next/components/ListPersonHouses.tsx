@@ -22,7 +22,12 @@ export default function ListPersonHouses({ queryClient, personId, familyId, hous
     },
   })
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return (
+    <div>
+      <h2 className={styles.headingLg}>Move House</h2>
+      <p>Loading...</p>
+    </div>
+  )
   if (error) return <div>Failed to load</div>
 
   if (data.length > 0) {

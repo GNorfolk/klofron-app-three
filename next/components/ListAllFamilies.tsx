@@ -38,28 +38,33 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
     })
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return (
+    <div>
+      <h2 className={styles.headingLg}>Families</h2>
+      <p>Loading...</p>
+    </div>
+  )
   if (error) return <div>Failed to load</div>
 
-  if (userId) {
+  if (userId) { // TODO: Add empty handling like ListHousePeople
     return (
       <div>
-      <h2 className={styles.headingLg}>Families</h2>
-      <ul className={styles.list}>
-        {data.map(({ family_id, family_name }) => (
-          <li className={styles.listItem} key={family_id}>
-            <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
-          </li>
-        ))}
-      </ul>
-      <h2 className={styles.headingLg}>Create Family</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input defaultValue="familyName" {...register("family_name", { required: true })} />
-        { errors.family_name && <span>This field is required</span> }
-        <input type="submit" />
-      </form>
-      <small className={styles.lightText} id={'change-me-' + userId}></small>
-    </div>
+        <h2 className={styles.headingLg}>Families</h2>
+        <ul className={styles.list}>
+          {data.map(({ family_id, family_name }) => (
+            <li className={styles.listItem} key={family_id}>
+              <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
+            </li>
+          ))}
+        </ul>
+        <h2 className={styles.headingLg}>Create Family</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input defaultValue="familyName" {...register("family_name", { required: true })} />
+          { errors.family_name && <span>This field is required</span> }
+          <input type="submit" />
+        </form>
+        <small className={styles.lightText} id={'change-me-' + userId}></small>
+      </div>
     )
   } else {
     return (

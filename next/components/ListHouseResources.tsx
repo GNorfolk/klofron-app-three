@@ -26,7 +26,12 @@ export default function ListHouseResources({ queryClient, status, userId = null 
       },
     })
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) return (
+      <div>
+        <h2 className={styles.headingLg}>Resource Info</h2>
+        <p>Loading...</p>
+      </div>
+    )
     if (error) return <div>Failed to load</div>
 
     return (

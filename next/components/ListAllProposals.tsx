@@ -21,7 +21,12 @@ export default function ListAllProposals({ accepterPersonId = null, queryClient 
     },
   })
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return (
+    <div>
+      <h2 className={styles.headingLg}>Proposal Info</h2>
+      <p>Loading...</p>
+    </div>
+  )
   if (error) return <div>Failed to load</div>
 
   return (
