@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
-  const fetchQuery = userId ? '/v2/family?user_id=' + userId : '/v2/family'
+  const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
   const { isLoading, error, data } = useQuery({
     queryKey: ['familiesData'],
     queryFn: () =>
