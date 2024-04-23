@@ -75,15 +75,11 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       <div>
         <h2 className={styles.headingLg}>Families</h2>
         <ul className={styles.list}>
-          { data.length > 0 ? data.map(({ family_id, family_name }) => (
+          { data.map(({ family_id, family_name }) => (
             <li className={styles.listItem} key={family_id}>
               <p>The <Link href={`/family/${family_id}`}>{family_name}</Link> family.</p>
             </li>
-          )) :
-            <li className={styles.listItem}>
-              <p>This user does not own any families.</p>
-            </li>
-          }
+          ))}
         </ul>
       </div>
     )
