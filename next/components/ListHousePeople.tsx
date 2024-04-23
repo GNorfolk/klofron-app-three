@@ -70,9 +70,9 @@ export default function ListHousePeople({ queryClient, status, userId = null }) 
                         increaseFood.mutate(person_id, { onSettled: (res) => {
                           queryClient.invalidateQueries()
                           if (!res.data.success) {
-                            document.getElementById("change-me-" + person_id).innerText = res.data.error
+                            document.getElementById("cm-" + person_id).innerText = res.data.error
                           } else {
-                            document.getElementById("change-me-" + person_id).innerText = ' '
+                            document.getElementById("cm-" + person_id).innerText = ' '
                           }
                         }})
                       }
@@ -82,9 +82,9 @@ export default function ListHousePeople({ queryClient, status, userId = null }) 
                         increaseWood.mutate(person_id, { onSettled: (res) => {
                           queryClient.invalidateQueries()
                           if (!res.data.success) {
-                            document.getElementById("change-me-" + person_id).innerText = res.data.error
+                            document.getElementById("cm-" + person_id).innerText = res.data.error
                           } else {
-                            document.getElementById("change-me-" + person_id).innerText = ' '
+                            document.getElementById("cm-" + person_id).innerText = ' '
                           }
                         }})
                       }
@@ -94,9 +94,9 @@ export default function ListHousePeople({ queryClient, status, userId = null }) 
                         increaseStorage.mutate(person_id, { onSettled: (res) => {
                           queryClient.invalidateQueries()
                           if (!res.data.success) {
-                            document.getElementById("change-me-" + person_id).innerText = res.data.error
+                            document.getElementById("cm-" + person_id).innerText = res.data.error
                           } else {
-                            document.getElementById("change-me-" + person_id).innerText = ' '
+                            document.getElementById("cm-" + person_id).innerText = ' '
                           }
                         }})
                       }
@@ -106,9 +106,9 @@ export default function ListHousePeople({ queryClient, status, userId = null }) 
                         increaseRooms.mutate(person_id, { onSettled: (res) => {
                           queryClient.invalidateQueries()
                           if (!res.data.success) {
-                            document.getElementById("change-me-" + person_id).innerText = res.data.error
+                            document.getElementById("cm-" + person_id).innerText = res.data.error
                           } else {
-                            document.getElementById("change-me-" + person_id).innerText = ' '
+                            document.getElementById("cm-" + person_id).innerText = ' '
                           }
                         }})
                       }
@@ -118,14 +118,14 @@ export default function ListHousePeople({ queryClient, status, userId = null }) 
                         createHouse.mutate(person_id, { onSettled: (res) => {
                           queryClient.invalidateQueries()
                           if (!res.data.success) {
-                            document.getElementById("change-me-" + person_id).innerText = res.data.error
+                            document.getElementById("cm-" + person_id).innerText = res.data.error
                           } else {
-                            document.getElementById("change-me-" + person_id).innerText = ' '
+                            document.getElementById("cm-" + person_id).innerText = ' '
                           }
                         }})
                       }
                     } >Create House</button>
-                    <small className={styles.lightText} id={'change-me-' + person_id}></small>
+                    <small className={styles.lightText} id={'cm-' + person_id}></small>
                   </div>
                   :
                   <></>

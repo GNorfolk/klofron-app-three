@@ -32,9 +32,9 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       family_user_id: userId
     }).then(response => {
       queryClient.invalidateQueries()
-      document.getElementById("change-me-" + userId).innerText = ' '
+      document.getElementById("cm-" + userId).innerText = ' '
     }).catch(error => {
-      document.getElementById("change-me-" + userId).innerText = error.toString()
+      document.getElementById("cm-" + userId).innerText = error.toString()
     })
   }
 
@@ -67,7 +67,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
           { errors.family_name && <span>This field is required</span> }
           <input type="submit" />
         </form>
-        <small className={styles.lightText} id={'change-me-' + userId}></small>
+        <small className={styles.lightText} id={'cm-' + userId}></small>
       </div>
     )
   } else {

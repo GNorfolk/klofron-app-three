@@ -50,14 +50,14 @@ export default function DescribeHouse({ queryClient, status, userId }) {
                 createPerson.mutate(data.house_id, { onSettled: (res) => {
                   queryClient.invalidateQueries()
                   if (!res.data.success) {
-                    document.getElementById("change-me-two-" + data.house_id).innerText = res.data.error
+                    document.getElementById("cm-two-" + data.house_id).innerText = res.data.error
                   } else {
-                    document.getElementById("change-me-two-" + data.house_id).innerText = ' '
+                    document.getElementById("cm-two-" + data.house_id).innerText = ' '
                   }
                 }})
               }
             } >Create Person</button>
-            <small className={styles.lightText} id={'change-me-two-' + data.house_id}></small>
+            <small className={styles.lightText} id={'cm-two-' + data.house_id}></small>
             <ListHousePeople queryClient={queryClient} status={status} userId={userId} />
           </div>
           :

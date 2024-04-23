@@ -44,17 +44,17 @@ export default function ListPersonHouses({ queryClient, personId, familyId, hous
                       onSettled: (data, error, variables, context) => {
                         queryClient.invalidateQueries()
                         if (error) {
-                          document.getElementById("change-me-" + house_id).innerText = error.toString()
+                          document.getElementById("cm-" + house_id).innerText = error.toString()
                         } else if (!data.data.status) {
-                          document.getElementById("change-me-" + house_id).innerText = data.data.error
+                          document.getElementById("cm-" + house_id).innerText = data.data.error
                         } else {
-                          document.getElementById("change-me-" + house_id).innerText = ' '
+                          document.getElementById("cm-" + house_id).innerText = ' '
                         }
                       }
                     })
                   }
                 } >Move</button>
-                <small className={styles.lightText} id={'change-me-' + house_id}></small>
+                <small className={styles.lightText} id={'cm-' + house_id}></small>
               </li>
             ))
           }

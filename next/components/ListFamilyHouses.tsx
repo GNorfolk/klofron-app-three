@@ -33,9 +33,9 @@ export default function ListFamilyHouses({ queryClient = null, familyId }) {
       house_rooms: 2
     }).then(response => {
       queryClient.invalidateQueries()
-      document.getElementById("change-me-" + familyId).innerText = ' '
+      document.getElementById("cm-" + familyId).innerText = ' '
     }).catch(error => {
-      document.getElementById("change-me-" + familyId).innerText = error.toString()
+      document.getElementById("cm-" + familyId).innerText = error.toString()
     })
   }
 
@@ -71,7 +71,7 @@ export default function ListFamilyHouses({ queryClient = null, familyId }) {
               <input defaultValue="houseName" {...register("house_name")} />
               <input type="submit" />
             </form>
-            <small className={styles.lightText} id={'change-me-' + familyId}></small>
+            <small className={styles.lightText} id={'cm-' + familyId}></small>
           </li>
         </ul>
       </div>
