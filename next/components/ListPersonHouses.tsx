@@ -40,11 +40,21 @@ export default function ListPersonHouses({ queryClient, personId, familyId, hous
               <li className={styles.listItem} key={house_id}>
                 Move into {house_name}: <button onClick={
                   () => {
-                    movePersonHouse.mutate(house_id, { onSettled: (res) => {
-                      queryClient.invalidateQueries()
-                    }})
+                    movePersonHouse.mutate(house_id, {
+                      onSettled: (data, error, variables, context) => {
+                        queryClient.invalidateQueries()
+                        if (error) {
+                          document.getElementById("change-me-" + house_id).innerText = error.toString()
+                        } else if (!data.data.status) {
+                          document.getElementById("change-me-" + house_id).innerText = data.data.error
+                        } else {
+                          document.getElementById("change-me-" + house_id).innerText = ' '
+                        }
+                      }
+                    })
                   }
                 } >Move</button>
+                <small className={styles.lightText} id={'change-me-' + house_id}></small>
               </li>
             ))
           }

@@ -220,4 +220,5 @@ mysql -u root -p ka3 < dump-2024-04-23.sql
 
 # MySQL
 ```sql
+update proposal set cancelled_at = now() where id in (14,15,19,20,23,25,27);
 ```
