@@ -64,22 +64,15 @@ export class HouseService {
   async findOne(id: number): Promise<House> {
     const house = this.houseRepository
       .createQueryBuilder("house")
-      .select([
-        "house.house_id",
-        "house.house_name",
-        "house.house_rooms",
-        "house.house_storage",
-        "house.house_family_id",
-        "0 AS house_food_in_trade",
-        "0 AS house_wood_in_trade"
-      ])
-      .leftJoin("house.house_people", "person").addSelect("COUNT(person.house_id)", "house_people")
-      .leftJoin("house.house_family", "family").addSelect("family.user_id", "house_user_id")
-      .leftJoin("house.house_resources", "food", "food.type_name = 'food'").addSelect("food.volume", "house_food")
-      .leftJoin("house.house_resources", "wood", "wood.type_name = 'wood'").addSelect("wood.volume", "house_wood")
+      .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+      .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
+      .innerJoinAndSelect("house.house_family", "family")
+      .leftJoinAndSelect("house.house_people", "person")
+      .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
+      .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
+      .leftJoinAndSelect("house.house_trades", "trades")
       .where("house.house_id = :id", { id: id })
-      .groupBy("food.id").addGroupBy("wood.id");
-    return await house.getRawOne();
+    return await house.getOne();
   }
 
   // curl --request POST localhost:5000/v2/house/2 --header "Content-Type: application/json" --data '{"name":"SomeHouseName"}'
