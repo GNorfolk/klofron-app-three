@@ -2,6 +2,7 @@ import styles from '../styles/main.module.css'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import ListFamilyPeople from './ListFamilyPeople'
 import ListFamilyHouses from './ListFamilyHouses'
+import ListFamilyTravel from './ListFamilyTravel'
 
 export default function DescribeFamily({ queryClient, familyId }) {
   const { isLoading, error, data } = useQuery({
@@ -20,6 +21,7 @@ export default function DescribeFamily({ queryClient, familyId }) {
       <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
       <ListFamilyPeople queryClient={queryClient} familyId={familyId} />
       <ListFamilyHouses queryClient={queryClient} familyId={familyId} />
+      <ListFamilyTravel />
     </QueryClientProvider>
   )
 }
