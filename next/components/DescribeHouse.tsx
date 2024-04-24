@@ -45,7 +45,7 @@ export default function DescribeHouse({ queryClient, status, userId }) {
         {/* <p className={styles.listItem}>{data.house_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
         <p className={styles.listItem}>{data.house_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
         {
-          status === "authenticated" && userId == data.house_user_id ?
+          status === "authenticated" && userId == data.house_family.family_user_id ?
           <div>
             <button onClick={
               () => {
@@ -70,7 +70,7 @@ export default function DescribeHouse({ queryClient, status, userId }) {
         <ListHouseTrades />
         <ListHouseResources queryClient={queryClient} status={status} userId={userId} />
         {
-          status === "authenticated" && userId == data.house_user_id ?
+          status === "authenticated" && userId == data.house_family.family_user_id ?
           <div>
             <h3 className={styles.headingMd}>Rename House</h3>
               <ul className={styles.list}>
