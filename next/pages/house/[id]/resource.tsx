@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>
-        <ManageHouseResources />
+        <ManageHouseResources queryClient={queryClient} />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>

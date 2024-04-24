@@ -1,8 +1,10 @@
 import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
+import { useForm, SubmitHandler } from "react-hook-form"
+import axios from 'axios'
 
-export default function ManageHouseResources() {
+export default function ManageHouseResources({ queryClient }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
@@ -12,6 +14,40 @@ export default function ManageHouseResources() {
           (res) => res.json(),
         ),
     })
+
+    type Inputs = {
+      person_id: number
+      resource_type: string
+      resource_volume: number
+    }
+
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<Inputs>()
+
+    const onDeposit: SubmitHandler<Inputs> = (formData) => {
+      onSubmit(formData, true)
+    }
+
+    const onWithdraw: SubmitHandler<Inputs> = (formData) => {
+      onSubmit(formData, false)
+    }
+
+    const onSubmit = (inputs, deposit) => {
+      axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+        person_id: inputs.person_id,
+        resource_type: inputs.resource_type,
+        resource_volume: deposit ? inputs.resource_volume * -1 : inputs.resource_volume
+      }).then(response => {
+        queryClient.invalidateQueries()
+        document.getElementById("cm-" + router.query.id).innerText = ' '
+      }).catch(error => {
+        document.getElementById("cm-" + router.query.id).innerText = error.toString()
+      })
+    }
 
     if (isLoading) return (
       <div>
@@ -28,6 +64,22 @@ export default function ManageHouseResources() {
         { data.house_people.map(({ person_name, person_food, person_wood }) => (
           <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
         ))}
+        <h2 className={styles.headingLg}>Manage Resources</h2>
+        <form>
+          <select {...register("person_id")}>
+          { data.house_people.map(({ person_name }) => (
+            <option value={person_name}>{person_name}</option>
+          ))}
+          </select>
+          <select {...register("resource_type")}>
+            <option value="food">food</option>
+            <option value="wood">wood</option>
+          </select>
+          <input defaultValue="1" {...register("resource_volume")} />
+          <input type="submit" value="Deposit" onClick={handleSubmit(onDeposit)} />
+          <input type="submit" value="Withdraw" onClick={handleSubmit(onWithdraw)} />
+        </form>
+        <small className={styles.lightText} id={'cm-' + router.query.id}></small>
       </div>
     )
   }
