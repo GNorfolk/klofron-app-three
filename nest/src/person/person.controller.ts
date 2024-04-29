@@ -37,6 +37,10 @@ export class PersonController {
 
   @Patch(':id')
   update(@Param('id') id: number, @Req() req) {
-    return this.personService.update(id, req.body);
+    if(req.body?.name) {
+      return this.personService.updateName(id, req.body.name);
+    } else if (req.body?.house_id) {
+      return this.personService.updateTravel(id, req.body.house_id);
+    }
   }
 }

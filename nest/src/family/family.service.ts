@@ -30,10 +30,12 @@ export class FamilyService {
   }
 
   async findOne(id: number): Promise<Family> {
-    return await this.familyRepository.findOne({
-      where: {
-        family_id: id,
-      },
-    });
+    let family = this.familyRepository
+      .createQueryBuilder("family")
+      .leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
+      .leftJoinAndSelect("family.family_houses", "house")
+      .leftJoinAndSelect("person.person_house", "person_house")
+      .where("family.id = :id", { id: id })
+    return await family.getOne();
   }
 }

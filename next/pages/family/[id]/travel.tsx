@@ -13,7 +13,7 @@ export default function Family() {
     return (
       <Layout>
       <QueryClientProvider client={queryClient}>
-        <ManageFamilyTravel familyId={router.query.id} />
+        <ManageFamilyTravel queryClient={queryClient} familyId={router.query.id} />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>

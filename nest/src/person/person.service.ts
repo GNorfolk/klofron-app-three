@@ -91,11 +91,20 @@ export class PersonService {
   }
 
   // curl --request PATCH localhost:5000/v2/person/41 --header "Content-Type: application/json" --data '{"name":"Cassie"}'
-  update(id: number, body) {
+  updateName(id: number, name: string) {
     return this.personRepository
       .createQueryBuilder()
       .update(Person)
-      .set({ person_name: body.name })
+      .set({ person_name: name })
+      .where("id = :id", { id: id })
+      .execute();
+  }
+
+  updateTravel(id: number, house_id: number) {
+    return this.personRepository
+      .createQueryBuilder()
+      .update(Person)
+      .set({ person_house_id: house_id })
       .where("id = :id", { id: id })
       .execute();
   }
