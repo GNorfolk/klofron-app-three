@@ -13,7 +13,7 @@ export default function House() {
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>
-        <DescribeHouse queryClient={queryClient} status={status} userId={userId} />
+        <DescribeHouse queryClient={queryClient} userId={userId} />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
