@@ -24,21 +24,22 @@ export class ResourceService {
 
   async updateMoveResource(body) {
     const queryRunner = this.dataSource.createQueryRunner();
-    let res = []
+    let inc, dec
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      res.push(await queryRunner.manager.increment(Resource, {
+      inc = await queryRunner.manager.increment(Resource, {
         resource_type_name: body.resource_type,
         resource_person_id: body.person_id
-      }, "resource_volume", body.resource_volume))
-      res.push(await queryRunner.manager.decrement(Resource, {
+      }, "resource_volume", body.resource_volume)
+      dec = await queryRunner.manager.decrement(Resource, {
         resource_type_name: body.resource_type,
         resource_house_id: body.house_id
-      }, "resource_volume", body.resource_volume))
+      }, "resource_volume", body.resource_volume)
+      if (inc.affected != 1 || dec.affected != 1) throw [inc, dec]
       await queryRunner.commitTransaction();
       await queryRunner.release();
-      return res;
+      return [inc, dec];
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
