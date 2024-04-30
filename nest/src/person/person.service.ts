@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Person } from './entities/Person';
@@ -28,6 +28,8 @@ export class PersonService {
       couple[1].person_created_at = eighteenDate;
       mother = await queryRunner.manager.save(Person, couple[0]);
       father = await queryRunner.manager.save(Person, couple[1]);
+      await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });
+      await queryRunner.manager.update(Person, father.person_id, { person_partner_id: mother.person_id });
       await queryRunner.manager.save(Resource, {
         resource_type_name: "food",
         resource_person_id: mother.person_id,
@@ -47,13 +49,14 @@ export class PersonService {
         resource_person_id: father.person_id
       });
       await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [mother, father];
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
-    } finally {
       await queryRunner.release();
+      throw new BadRequestException();
     }
-    return [mother, father];
   }
 
   async findAll(query): Promise<Person[]> {
