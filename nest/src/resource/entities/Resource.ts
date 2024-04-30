@@ -10,7 +10,7 @@ import {
 import { House } from "../../house/entities/House";
 import { Person } from "../../person/entities/Person";
 
-@Index("resource_ouse_id", ["resource_house_id"], {})
+@Index("resource_house_id", ["resource_house_id"], {})
 @Index("resource_person_id", ["resource_person_id"], {})
 @Entity("resource", { schema: "ka3" })
 export class Resource {
@@ -20,7 +20,7 @@ export class Resource {
   @Column("varchar", { name: "type_name", length: 155 })
   resource_type_name: string;
 
-  @Column("int", { name: "volume" })
+  @Column("int", { name: "volume", unsigned: true })
   resource_volume: number;
 
   @Column("int", { name: "house_id", nullable: true })

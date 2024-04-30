@@ -102,6 +102,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - TypeORM transations NestJS: https://docs.nestjs.com/techniques/database#typeorm-transactions
 - TypeORM QueryRunner transations: https://typeorm.io/transactions#using-queryrunner-to-create-and-control-state-of-single-database-connection
 - TypeORM QueryRunner Manager: https://orkhan.gitbook.io/typeorm/docs/entity-manager-api
+- NextJS HTTP exceptions: https://docs.nestjs.com/exception-filters
+- NextJS response interceptors: https://blog.stackademic.com/crafting-a-uniform-response-structure-in-nestjs-a-guide-to-mastering-interceptors-706820b5aa0b
 
 # Development
 **How to clone repo**:
@@ -221,4 +223,5 @@ mysql -u root -p ka3 < dump-2024-04-23.sql
 # MySQL
 ```sql
 update proposal set cancelled_at = now() where id in (14,15,19,20,23,25,27);
+ALTER TABLE resource CHANGE volume volume INT UNSIGNED;
 ```

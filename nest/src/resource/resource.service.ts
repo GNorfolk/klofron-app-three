@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Resource } from './entities/Resource';
 import { Repository, DataSource } from 'typeorm';
@@ -24,25 +24,27 @@ export class ResourceService {
 
   async updateMoveResource(body) {
     const queryRunner = this.dataSource.createQueryRunner();
+    let res = []
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.increment(Resource, {
+      res.push(await queryRunner.manager.increment(Resource, {
         resource_type_name: body.resource_type,
         resource_person_id: body.person_id
-      }, "resource_volume", body.resource_volume)
-      await queryRunner.manager.decrement(Resource, {
+      }, "resource_volume", body.resource_volume))
+      res.push(await queryRunner.manager.decrement(Resource, {
         resource_type_name: body.resource_type,
         resource_house_id: body.house_id
-      }, "resource_volume", body.resource_volume)
+      }, "resource_volume", body.resource_volume))
       await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return res;
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
-    } finally {
       await queryRunner.release();
+      throw new BadRequestException();
     }
-    return true;
   }
 
 }
