@@ -28,14 +28,18 @@ export default function ManageFamilyTravel({ queryClient, userId }) {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
-      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + formData.person_id, {
-        house_id: formData.house_id
-      }).then(response => {
-        queryClient.invalidateQueries()
-        document.getElementById("cm-" + router.query.id).innerText = ' '
-      }).catch(error => {
-        document.getElementById("cm-" + router.query.id).innerText = error.toString()
-      })
+      if (formData.person_id) {
+        axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + formData.person_id, {
+          house_id: formData.house_id
+        }).then(response => {
+          queryClient.invalidateQueries()
+          document.getElementById("cm-" + router.query.id).innerText = ' '
+        }).catch(error => {
+          document.getElementById("cm-" + router.query.id).innerText = error.toString()
+        })
+      } else {
+        document.getElementById("cm-" + router.query.id).innerText = 'CustomError: The Person field is required'
+      }
     }
 
     if (isLoading) return (
@@ -55,7 +59,8 @@ export default function ManageFamilyTravel({ queryClient, userId }) {
           ))}
           <h2 className={styles.headingLg}>Manage Travel</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <select {...register("person_id")}>
+            <select {...register("person_id", { required: true })}>
+            { errors.person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
             { data.family_people.map(({ person_id, person_name }) => (
               <option value={person_id}>{person_name}</option>
             ))}
