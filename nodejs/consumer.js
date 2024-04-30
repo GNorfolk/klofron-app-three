@@ -2,14 +2,14 @@ const mysql = require( 'mysql' );
 const http = require('http')
 
 config = {
-    host: process.env.DB_HOST || "localhost",
+    host: process.env.DB_HOST || "127.0.0.1",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "password",
     database: process.env.DB_NAME || "ka3",
     multipleStatements: true
 }
 
-const apiHost = process.env.API_HOST || "localhost"
+const apiHost = process.env.API_HOST || "127.0.0.1"
 const apiPort = process.env.API_PORT || 3001
 const apiMethod = "POST"
 
@@ -35,7 +35,7 @@ function checkQueue(connection) {
                                             FROM trade
                                             WHERE
                                                 house_id = (SELECT house_id FROM person WHERE id = ` + row1['person_id'] + `) AND
-                                                offered_type_id IN (1, 2) AND
+                                                offered_type IN (1, 2) AND
                                                 completed_at IS NULL AND
                                                 cancelled_at IS NULL
                                         ), 0) AS in_trade
