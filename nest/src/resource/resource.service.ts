@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Resource } from './entities/Resource';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 
 @Injectable()
 export class ResourceService {
   constructor(
     @InjectRepository(Resource) private resourceRepository: Repository<Resource>,
+    private dataSource: DataSource
   ) {}
 
   async findAll(): Promise<Resource[]> {
@@ -20,4 +21,28 @@ export class ResourceService {
       },
     });
   }
+
+  async updateMoveResource(body) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.increment(Resource, {
+        resource_type_name: body.resource_type,
+        resource_person_id: body.person_id
+      }, "resource_volume", body.resource_volume)
+      await queryRunner.manager.decrement(Resource, {
+        resource_type_name: body.resource_type,
+        resource_house_id: body.house_id
+      }, "resource_volume", body.resource_volume)
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+    return true;
+  }
+
 }

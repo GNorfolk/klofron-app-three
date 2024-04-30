@@ -91,7 +91,7 @@ export class PersonService {
   }
 
   // curl --request PATCH localhost:5000/v2/person/41 --header "Content-Type: application/json" --data '{"name":"Cassie"}'
-  updateName(id: number, name: string) {
+  async updateName(id: number, name: string) {
     return this.personRepository
       .createQueryBuilder()
       .update(Person)
@@ -100,7 +100,7 @@ export class PersonService {
       .execute();
   }
 
-  updateTravel(id: number, house_id: number) {
+  async updateTravel(id: number, house_id: number) {
     return this.personRepository
       .createQueryBuilder()
       .update(Person)

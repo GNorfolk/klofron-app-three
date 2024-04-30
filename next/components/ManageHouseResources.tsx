@@ -17,6 +17,7 @@ export default function ManageHouseResources({ queryClient }) {
 
     type Inputs = {
       person_id: number
+      house_id: number
       resource_type: string
       resource_volume: number
     }
@@ -37,8 +38,9 @@ export default function ManageHouseResources({ queryClient }) {
     }
 
     const onSubmit = (inputs, deposit) => {
-      axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
         person_id: inputs.person_id,
+        house_id: router.query.id,
         resource_type: inputs.resource_type,
         resource_volume: deposit ? inputs.resource_volume * -1 : inputs.resource_volume
       }).then(response => {
@@ -67,8 +69,8 @@ export default function ManageHouseResources({ queryClient }) {
         <h2 className={styles.headingLg}>Manage Resources</h2>
         <form>
           <select {...register("person_id")}>
-          { data.house_people.map(({ person_name }) => (
-            <option value={person_name}>{person_name}</option>
+          { data.house_people.map(({ person_id, person_name }) => (
+            <option value={person_id}>{person_name}</option>
           ))}
           </select>
           <select {...register("resource_type")}>

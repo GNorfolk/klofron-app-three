@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { ResourceService } from './resource.service';
 
 @Controller({
@@ -16,5 +16,10 @@ export class ResourceController {
   @Get(':house_id')
   findOne(@Param('house_id') house_id: string) {
     return this.resourceService.findByHouseId(+house_id);
+  }
+
+  @Patch()
+  update(@Req() req) {
+    return this.resourceService.updateMoveResource(req.body);
   }
 }
