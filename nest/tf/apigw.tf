@@ -32,6 +32,12 @@ resource "aws_apigatewayv2_route" "post-people" {
     target = "integrations/${aws_apigatewayv2_integration.main.id}"
 }
 
+resource "aws_apigatewayv2_route" "patch-people" {
+    api_id = data.aws_apigatewayv2_api.main.id
+    route_key = "PATCH /v2/{proxy+}"
+    target = "integrations/${aws_apigatewayv2_integration.main.id}"
+}
+
 resource "aws_apigatewayv2_route" "options-people" {
     api_id = data.aws_apigatewayv2_api.main.id
     route_key = "OPTIONS /v2/{proxy+}"
