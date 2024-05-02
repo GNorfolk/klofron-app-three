@@ -68,21 +68,30 @@ export default function ManageHouseResources({ queryClient, userId }) {
             <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
           ))}
           <h2 className={styles.headingLg}>Manage Resources</h2>
-          <form>
-            <select {...register("person_id")}>
-            { data.house_people.map(({ person_id, person_name }) => (
-              <option value={person_id}>{person_name}</option>
-            ))}
-            </select>
-            <select {...register("resource_type")}>
-              <option value="food">food</option>
-              <option value="wood">wood</option>
-            </select>
-            <input defaultValue="1" {...register("resource_volume")} />
-            <input type="submit" value="Deposit" onClick={handleSubmit(onDeposit)} />
-            <input type="submit" value="Withdraw" onClick={handleSubmit(onWithdraw)} />
-          </form>
-          <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+          {
+            data.house_people.length > 0 ?
+              <div>
+                <form>
+                  <select {...register("person_id")}>
+                  { data.house_people.map(({ person_id, person_name }) => (
+                    <option value={person_id}>{person_name}</option>
+                  ))}
+                  </select>
+                  <select {...register("resource_type")}>
+                    <option value="food">food</option>
+                    <option value="wood">wood</option>
+                  </select>
+                  <input defaultValue="1" {...register("resource_volume")} />
+                  <input type="submit" value="Deposit" onClick={handleSubmit(onDeposit)} />
+                  <input type="submit" value="Withdraw" onClick={handleSubmit(onWithdraw)} />
+                </form>
+                <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+              </div>
+            :
+              <div>
+                <p>This house does not have any people in it.</p>
+              </div>
+          }
         </div>
       )
     } else {
