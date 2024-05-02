@@ -304,12 +304,13 @@ function actionMoveHouse(conn) {
     return new Promise((resolve1, reject1) => {
         const query1 = `
             SELECT
-                mh.id, mh.person_id, mh.origin_house_id, mh.destination_house_id, mh.started_at, mh.completed_at, mh.cancelled_at, house.rooms,
-                (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people,
-                (SELECT volume FROM resource WHERE type_name = 'food' AND person_id = mh.person_id) AS person_food,
-                (SELECT volume FROM resource WHERE type_name = 'wood' AND person_id = mh.person_id) AS person_wood
+                mh.id, mh.person_id, mh.origin_house_id, mh.destination_house_id, mh.started_at, mh.completed_at, mh.cancelled_at,
+                destination_house.rooms AS destination_rooms, origin_house.rooms AS orgin_rooms,
+                (SELECT COUNT(id) FROM person WHERE house_id = destination_house.id) AS destination_people,
+                (SELECT COUNT(id) FROM person WHERE house_id = origin_house.id) AS origin_people
             FROM move_house mh
-                INNER JOIN house ON mh.destination_house_id = house.id
+                INNER JOIN house destination_house ON mh.destination_house_id = destination_house.id
+                INNER JOIN house origin_house ON mh.origin_house_id = origin_house.id
             WHERE completed_at IS NULL AND cancelled_at IS NULL AND started_at + INTERVAL 8 HOUR < NOW();`
         conn.query(query1, function(err1, rows1) {
             if (err1) {
@@ -321,14 +322,25 @@ function actionMoveHouse(conn) {
                         console.log('Executing move with ID ' + row1['id'])
                         return new Promise((resolve3, reject3) => {
                             console.log(row1)
-                            if (row1['rooms'] > row1['people']) {
+                            if (row1['destination_rooms'] > row1['destination_people']) {
                                 const query3 = `
                                     UPDATE move_house SET completed_at = NOW() WHERE id = ` + row1['id'] + `;
-                                    UPDATE person SET house_id = ` + row1['destination_house_id'] + ` WHERE id = ` + row1['person_id'] + `;
-                                    UPDATE resource SET volume = 0 WHERE person_id = ` + row1['person_id'] + `;
-                                    UPDATE resource SET volume = volume + ` + row1['person_food'] + ` WHERE type_name = 'food' AND house_id = ` + row1['destination_house_id'] + `;
-                                    UPDATE resource SET volume = volume + ` + row1['person_wood'] + ` WHERE type_name = 'wood' AND house_id = ` + row1['destination_house_id']
+                                    UPDATE person SET house_id = ` + row1['destination_house_id'] + ` WHERE id = ` + row1['person_id']
                                 console.log(query3)
+                                conn.query(query3, function(err3, res3) {
+                                    if (err3) {
+                                        return reject3(err3)
+                                    } else {
+                                        for (const msg of res3) {
+                                            console.log('Move with ID ' + row1['id'] + ' message: ' + msg.message)
+                                        }
+                                        resolve3(res3)
+                                    }
+                                })
+                            } else if (row1['origin_rooms'] > row1['origin_people']) {
+                                const query3 = `
+                                    UPDATE move_house SET completed_at = NOW() WHERE id = ` + row1['id'] + `;
+                                    UPDATE person SET house_id = ` + row1['origin_house_id'] + ` WHERE id = ` + row1['person_id']
                                 conn.query(query3, function(err3, res3) {
                                     if (err3) {
                                         return reject3(err3)
@@ -341,8 +353,7 @@ function actionMoveHouse(conn) {
                                 })
                             } else {
                                 const query3 = `
-                                    UPDATE move_house SET completed_at = NOW() WHERE id = ` + row1['id'] + `;
-                                    UPDATE resource SET volume = 0 WHERE person_id = ` + row1['person_id']
+                                    UPDATE move_house SET cancelled_at = NOW() WHERE id = ` + row1['id']
                                 conn.query(query3, function(err3, res3) {
                                     if (err3) {
                                         return reject3(err3)
