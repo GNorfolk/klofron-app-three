@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -31,13 +31,14 @@ export class HouseService {
       await queryRunner.manager.save(Resource, food);
       await queryRunner.manager.save(Resource, wood);
       await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
-    } finally {
       await queryRunner.release();
+      throw new BadRequestException();
     }
-    return result;
   }
 
   async findAll(query): Promise<House[]> {

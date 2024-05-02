@@ -20,7 +20,7 @@ export class Resource {
   @Column("varchar", { name: "type_name", length: 155 })
   resource_type_name: string;
 
-  @Column("int", { name: "volume", unsigned: true })
+  @Column("int", { name: "volume", unsigned: true, nullable: false, default: 0 })
   resource_volume: number;
 
   @Column("int", { name: "house_id", nullable: true })
