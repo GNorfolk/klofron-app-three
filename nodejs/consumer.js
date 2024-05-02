@@ -105,7 +105,7 @@ function checkQueue(connection) {
                                             FROM trade
                                             WHERE
                                                 house_id = (SELECT house_id FROM person WHERE id = ` + row1['person_id'] + `) AND
-                                                offered_type_id IN (1, 2) AND
+                                                offered_type IN (1, 2) AND
                                                 completed_at IS NULL AND
                                                 cancelled_at IS NULL
                                         ), 0) AS in_trade
