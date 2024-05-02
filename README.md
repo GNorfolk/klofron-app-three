@@ -225,5 +225,5 @@ mysql -u root -p ka3 < dump-2024-04-23.sql
 update proposal set cancelled_at = now() where id in (14,15,19,20,23,25,27);
 ALTER TABLE resource CHANGE volume volume INT UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE move_house DROP COLUMN origin_house_id;
-ALTER TABLE move_house CHANGE destination_house_id house_id
+ALTER TABLE move_house CHANGE destination_house_id house_id INT NOT NULL;
 ```

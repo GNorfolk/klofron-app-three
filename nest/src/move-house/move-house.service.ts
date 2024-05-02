@@ -5,6 +5,7 @@ import { MoveHouse } from './entities/MoveHouse';
 import { Repository, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from '../person/entities/Person';
+import { Resource } from '../resource/entities/Resource';
 
 @Injectable()
 export class MoveHouseService {
@@ -15,20 +16,25 @@ export class MoveHouseService {
 
   async create(moveHouse: CreateMoveHouseDto) {
     const queryRunner = this.dataSource.createQueryRunner();
-    let move, person
+    let move, person, resource
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       move = await queryRunner.manager.save(MoveHouse, moveHouse);
       person = await queryRunner.manager.update(Person, moveHouse.move_house_person_id, { person_house_id: null });
+      resource = await queryRunner.manager.decrement(Resource, {
+        resource_type_name: "food",
+        resource_person_id: moveHouse.move_house_person_id
+      }, "resource_volume", 1);
+      if (resource.affected != 1) throw [move, person, resource];
       await queryRunner.commitTransaction();
       await queryRunner.release();
-      return [move, person];
+      return [move, person, resource];
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
-      throw new BadRequestException();
+      throw new BadRequestException(err);
     }
   }
 
