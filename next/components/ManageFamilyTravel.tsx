@@ -54,25 +54,39 @@ export default function ManageFamilyTravel({ queryClient, userId }) {
       return (
         <div>
           <h2 className={styles.headingLg}>Travel Info</h2>
-          { data.family_people.map(({ person_name, person_house_id, person_house }) => (
-            person_house_id ? <p>{person_name} lives at {person_house.house_name}.</p> : <p>{person_name} is unhoused.</p>
-          ))}
+          {
+            data.family_people.length > 0 ? 
+              data.family_people.map(({ person_name, person_house_id, person_house }) => (
+                person_house_id ? <p>{person_name} lives at {person_house.house_name}.</p> : <p>{person_name} is unhoused.</p>
+              ))
+            :
+              <p>This family does not have any people in it.</p>
+          }
           <h2 className={styles.headingLg}>Manage Travel</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <select {...register("person_id", { required: true })}>
-            { errors.person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
-            { data.family_people.map(({ person_id, person_name }) => (
-              <option value={person_id}>{person_name}</option>
-            ))}
-            </select>
-            <select {...register("house_id")}>
-            { data.family_houses.map(({ house_id, house_name }) => (
-              <option value={house_id}>{house_name}</option>
-            ))}
-            </select>
-            <input type="submit" />
-          </form>
-          <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+          {
+            data.family_people.length > 0 && data.family_houses.length > 0 ?
+              <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <select {...register("person_id", { required: true })}>
+                  { errors.person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
+                  { data.family_people.map(({ person_id, person_name }) => (
+                    <option value={person_id}>{person_name}</option>
+                  ))}
+                  </select>
+                  <select {...register("house_id")}>
+                  { data.family_houses.map(({ house_id, house_name }) => (
+                    <option value={house_id}>{house_name}</option>
+                  ))}
+                  </select>
+                  <input type="submit" />
+                </form>
+                <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+              </div>
+            :
+              <div>
+                <p>This family has {data.family_people.length} people and {data.family_houses.length} houses but both must be above 0.</p>
+              </div>
+          }
         </div>
       )
     } else {
