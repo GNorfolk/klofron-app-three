@@ -16,12 +16,17 @@ export class MoveHouseService {
     return 'This action adds a new moveHouse';
   }
 
-  findAll() {
-    return `This action returns all moveHouse`;
+  async findAll(): Promise<MoveHouse[]> {
+    let moveHouse = this.moveHouseRepository
+      .createQueryBuilder("move_house")
+    return await moveHouse.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} moveHouse`;
+  async findOne(id: number): Promise<MoveHouse> {
+    const person = this.moveHouseRepository
+      .createQueryBuilder("move_house")
+      .where("move_house.id = :id", { id: id })
+    return await person.getOne();
   }
 
   update(id: number, updateMoveHouseDto: UpdateMoveHouseDto) {
