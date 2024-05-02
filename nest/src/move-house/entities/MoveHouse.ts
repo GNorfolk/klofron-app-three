@@ -8,11 +8,8 @@ export class MoveHouse {
   @Column("int", { name: "person_id" })
   move_house_person_id: number;
 
-  @Column("int", { name: "origin_house_id" })
-  move_house_origin_house_id: number;
-
-  @Column("int", { name: "destination_house_id" })
-  move_house_destination_house_id: number;
+  @Column("int", { name: "house_id" })
+  move_house_house_id: number;
 
   @Column("timestamp", {
     name: "started_at",

@@ -85,8 +85,7 @@ CREATE TABLE `resource` (
 CREATE TABLE `move_house` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `person_id` INT NOT NULL,
-    `origin_house_id` INT NOT NULL,
-    `destination_house_id` INT NOT NULL,
+    `house_id` INT NOT NULL,
     `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP
