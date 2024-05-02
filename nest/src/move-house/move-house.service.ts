@@ -1,19 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateMoveHouseDto } from './dto/create-move-house.dto';
 import { UpdateMoveHouseDto } from './dto/update-move-house.dto';
 import { MoveHouse } from './entities/MoveHouse';
 import { Repository, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-
+import { Person } from '../person/entities/Person';
 
 @Injectable()
 export class MoveHouseService {
   constructor(
     @InjectRepository(MoveHouse) private moveHouseRepository: Repository<MoveHouse>,
+    private dataSource: DataSource
   ) {}
 
-  create(createMoveHouseDto: CreateMoveHouseDto) {
-    return 'This action adds a new moveHouse';
+  async create(moveHouse: CreateMoveHouseDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let move, person
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      move = await queryRunner.manager.save(MoveHouse, moveHouse);
+      person = await queryRunner.manager.update(Person, moveHouse.move_house_person_id, { person_house_id: null });
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [move, person];
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException();
+    }
   }
 
   async findAll(): Promise<MoveHouse[]> {
