@@ -4,7 +4,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 
-export default function ListFamilyPeople({ queryClient = null, familyId }) {
+export default function ListFamilyPeople({ queryClient = null, familyId, unnamedBoolean = false }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familyMemberData' + familyId],
     queryFn: () =>
@@ -81,12 +81,18 @@ export default function ListFamilyPeople({ queryClient = null, familyId }) {
         <ul className={styles.list}>
           <li className={styles.listItem}>
             <p>This family does not have any people in it.</p>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <input defaultValue="motherName" {...register("mother_name")} />
-              <input defaultValue="fatherName" {...register("father_name")} />
-              <input type="submit" />
-            </form>
-            <small className={styles.lightText} id={'cm-' + familyId}></small>
+            {
+              unnamedBoolean ?
+                <div>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <input defaultValue="motherName" {...register("mother_name")} />
+                    <input defaultValue="fatherName" {...register("father_name")} />
+                    <input type="submit" />
+                  </form>
+                  <small className={styles.lightText} id={'cm-' + familyId}></small>
+                </div>
+              : null
+            }
           </li>
         </ul>
       </div>

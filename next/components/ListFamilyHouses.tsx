@@ -4,7 +4,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 
-export default function ListFamilyHouses({ queryClient = null, familyId }) {
+export default function ListFamilyHouses({ queryClient = null, familyId, unnamedBoolean = false }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familyHouseData' + familyId],
     queryFn: () =>
@@ -67,11 +67,17 @@ export default function ListFamilyHouses({ queryClient = null, familyId }) {
         <ul className={styles.list}>
           <li className={styles.listItem}>
             <p>This family does not own any houses.</p>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <input defaultValue="houseName" {...register("house_name")} />
-              <input type="submit" />
-            </form>
-            <small className={styles.lightText} id={'cm-' + familyId}></small>
+            {
+              unnamedBoolean ?
+                <div>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <input defaultValue="houseName" {...register("house_name")} />
+                    <input type="submit" />
+                  </form>
+                  <small className={styles.lightText} id={'cm-' + familyId}></small>
+                </div>
+              : null
+            }
           </li>
         </ul>
       </div>

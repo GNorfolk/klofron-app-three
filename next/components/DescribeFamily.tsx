@@ -23,8 +23,8 @@ export default function DescribeFamily({ queryClient, userId }) {
       return (
         <QueryClientProvider client={queryClient}>
           <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
-          <ListFamilyPeople queryClient={queryClient} familyId={router.query.id} />
-          <ListFamilyHouses queryClient={queryClient} familyId={router.query.id} />
+          <ListFamilyPeople queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+          <ListFamilyHouses queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
           <ListFamilyTravel />
         </QueryClientProvider>
       )
@@ -32,8 +32,8 @@ export default function DescribeFamily({ queryClient, userId }) {
       return (
         <QueryClientProvider client={queryClient}>
           <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
-          <ListFamilyPeople queryClient={queryClient} familyId={router.query.id} />
-          <ListFamilyHouses queryClient={queryClient} familyId={router.query.id} />
+          <ListFamilyPeople queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
+          <ListFamilyHouses queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
         </QueryClientProvider>
       )
     }
