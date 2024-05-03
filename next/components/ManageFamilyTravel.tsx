@@ -29,9 +29,8 @@ export default function ManageFamilyTravel({ queryClient, userId }) {
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
       if (formData.person_id) {
-        axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/move-house', {
-          move_house_person_id: formData.person_id,
-          move_house_house_id: formData.house_id
+        axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + formData.person_id, {
+          house_id: formData.house_id
         }).then(response => {
           queryClient.invalidateQueries()
           document.getElementById("cm-" + router.query.id).innerText = ' '
