@@ -35,7 +35,7 @@ export default function ManageFamilyTravel({ queryClient, userId }) {
           queryClient.invalidateQueries()
           document.getElementById("cm-" + router.query.id).innerText = ' '
         }).catch(error => {
-          document.getElementById("cm-" + router.query.id).innerText = error.toString()
+          document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
         })
       } else {
         document.getElementById("cm-" + router.query.id).innerText = 'CustomError: The Person field is required'

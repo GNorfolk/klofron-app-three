@@ -4,6 +4,7 @@ import { Repository, DataSource } from 'typeorm';
 import { Person } from './entities/Person';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { Resource } from '../resource/entities/Resource';
+import { House } from '../house/entities/House';
 
 @Injectable()
 export class PersonService {
@@ -103,12 +104,43 @@ export class PersonService {
       .execute();
   }
 
-  async updateTravel(id: number, house_id: number) {
-    return this.personRepository
-      .createQueryBuilder()
-      .update(Person)
-      .set({ person_house_id: house_id })
-      .where("id = :id", { id: id })
-      .execute();
+  async updateTravel(person_id: number, house_id: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const food = await queryRunner.manager
+        .createQueryBuilder(Resource, "resource")
+        .where("resource.person_id = :id", { id: person_id })
+        .andWhere("resource.type_name = 'food'")
+        .getOne();
+      if (food.resource_volume < 1) throw "Not enough food to move!"
+      const person = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .where("person.id = :id", { id: person_id })
+        .getOne();
+      if (person.person_house_id == house_id) throw "Already living at this address!"
+      result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
+      const resource = await queryRunner.manager.decrement(Resource, {
+        resource_type_name: "food",
+        resource_person_id: person_id
+      }, "resource_volume", 1);
+      if (resource.affected != 1) throw "Unable to take food resource from person!";
+      const house = await queryRunner.manager
+        .createQueryBuilder(House, "house")
+        .leftJoinAndSelect("house.house_people", "person")
+        .where("house.house_id = :id", { id: house_id })
+        .getOne();
+      if (house.house_people.length > house.house_rooms) throw "Too many people live at this address!";
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [result];
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 }
