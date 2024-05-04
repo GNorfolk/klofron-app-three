@@ -392,69 +392,6 @@ app.post("/v1/cancel-person-action/:id", (req, res, next) => {
     })
 })
 
-// curl --request POST localhost:3001/v1/move-person-house --header "Content-Type: application/json" --data '{"person_id":3, "house_id": 12, "food": 1, "wood", 1}'
-app.post('/v1/move-person-house', function(req, res) {
-    const selectQuery = `
-        SELECT
-            id, rooms,
-            COALESCE((SELECT house_id FROM person WHERE id = ` + req.body.person_id + `), -1) AS origin_house_id,
-            (SELECT volume FROM resource WHERE type_name = 'food' AND house_id = COALESCE((SELECT house_id FROM person WHERE id = ` + req.body.person_id + `), -1)) AS origin_house_food,
-            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = COALESCE((SELECT house_id FROM person WHERE id = ` + req.body.person_id + `), -1)) AS origin_house_wood,
-            (SELECT COUNT(id) FROM person WHERE house_id = house.id) AS people,
-            (SELECT count(id) FROM action WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count,
-            (SELECT count(id) FROM move_house WHERE person_id = ` + req.body.person_id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS move_count,
-            (SELECT volume FROM resource WHERE type_name = 'food' AND person_id = ` + req.body.person_id + `) AS person_food,
-            (SELECT volume FROM resource WHERE type_name = 'wood' AND person_id = ` + req.body.person_id + `) AS person_wood
-        FROM house
-        WHERE 
-            family_id = (SELECT family_id FROM person WHERE id = ` + req.body.person_id + `);`
-    connection.query(selectQuery, function (err, rows) {
-        const myIndex = rows.map(a => a.id).indexOf(req.body.house_id)
-        if (err) {
-            console.log("MovePersonHouseSelectError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else if (myIndex == -1) {
-            res.send({"success": false, "error": "House with id " + req.body.house_id + " not in [" + rows.map(a => a.id) + "] array of family houses!"})
-        } else if (rows[myIndex].rooms <= rows[myIndex].people) {
-            res.send({"success": false, "error": "House has " + rows[myIndex].people + " people and " + rows[myIndex].rooms + " rooms!"})
-        } else if (rows[myIndex].action_count > 0) {
-            res.send({"success": false, "error": "There is already " + rows[myIndex].action_count + " action in progress!"})
-        } else if (rows[myIndex].move_count > 0) {
-            res.send({"success": false, "error": "There is already " + rows[myIndex].move_count + " move in progress!"})
-        } else if (rows[myIndex].origin_house_id == rows[myIndex].id) {
-            res.send({"success": false, "error": "Origin house with ID " + rows[myIndex].origin_house_id + " is identical to destination house with ID " + rows[myIndex].id + "!"})
-        } else if (rows[myIndex].origin_house_id == -1 && req.body.food + req.body.wood > 0 ) {
-            res.send({"success": false, "error": "Person is of no fixed abode so cannot take " + req.body.food + " food and " + req.body.wood + " wood !"})
-        } else if (req.body.food + 1 > rows[myIndex].origin_house_food) {
-            res.send({"success": false, "error": "Person requires " + (req.body.food + 1) + " food but only " + rows[myIndex].origin_house_food + " food available!"})
-        } else if (req.body.wood > rows[myIndex].origin_house_wood) {
-            res.send({"success": false, "error": "Person is taking " + req.body.wood + " wood but only " + rows[myIndex].origin_house_wood + " wood available!"})
-        } else if (rows[myIndex].person_food + rows[myIndex].person_wood > 0) {
-            res.send({"success": false, "error": "Person already has  " + rows[myIndex].person_food + " food and " + rows[myIndex].person_wood + " wood on their person!"})
-        } else {
-            postQuery = `
-                UPDATE person SET house_id = NULL WHERE id = ` + req.body.person_id + `;
-                UPDATE resource SET volume = volume - ` + req.body.food + ` WHERE type_name = 'food' AND house_id = ` + rows[myIndex].origin_house_id + `;
-                UPDATE resource SET volume = volume - ` + req.body.wood + ` WHERE type_name = 'wood' AND house_id = ` + rows[myIndex].origin_house_id + `;
-                UPDATE resource SET volume = volume + ` + req.body.food + ` WHERE type_name = 'food' AND person_id = ` + req.body.person_id + `;
-                UPDATE resource SET volume = volume + ` + req.body.wood + ` WHERE type_name = 'wood' AND person_id = ` + req.body.person_id + `;
-                INSERT INTO move_house
-                    (person_id, origin_house_id, destination_house_id)
-                VALUES
-                    (` + req.body.person_id + `, ` + rows[myIndex].origin_house_id + `, ` + rows[myIndex].id + `);`
-            connection.query(postQuery, function(err, result) {
-                if (err) {
-                    console.log("MovePersonHouseUpdateError: ", err)
-                    res.send({"success": false, "error": err})
-                } else {
-                    res.send({"success": true, "result": result})
-                }
-            })
-        }
-    })
-})
-
 // curl --request POST localhost:3001/v1/create-proposal/43
 app.post("/v1/create-proposal/:id", (req, res, next) => {
     connection.query('SELECT id FROM person WHERE id = ' + req.params.id, function (err, rows) {

@@ -6,7 +6,6 @@ import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 import ListPersonActionsCurrent from './ListPersonActionsCurrent'
 import ListPersonActionsPrevious from './ListPersonActionsPrevious'
-import ListPersonHouses from './ListPersonHouses'
 
 export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()
@@ -72,7 +71,6 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
                 <input type="submit" value="Rename" />
               </form>
             </ul>
-            <ListPersonHouses queryClient={queryClient} personId={router.query.id} familyId={data.person_family_id} houseId={data.person_house_id} />
             <h2 className={styles.headingLg}>Proposal Info</h2>
             <p>Go to <Link href={`/proposal/${router.query.id}`}>Proposals</Link> page.</p>
             <button onClick={
