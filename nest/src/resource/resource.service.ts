@@ -66,4 +66,33 @@ export class ResourceService {
     }
   }
 
+  async updateDecrementResource(house_id, resource_type) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let dec
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const house = await queryRunner.manager
+        .createQueryBuilder(House, "house")
+        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+        .where("house.house_id = :id", { id: house_id })
+        .getOne()
+      if (resource_type == "food" && house.house_food.resource_volume < 1) throw "House cannot decrement food below zero!"
+      if (resource_type == "wood" && house.house_wood.resource_volume < 1) throw "House cannot decrement wood below zero!"
+      dec = await queryRunner.manager.decrement(Resource, {
+        resource_type_name: resource_type,
+        resource_house_id: house_id
+      }, "resource_volume", 1)
+      if (dec.affected != 1) throw "Cannot update House resource!"
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [dec];
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
+  }
 }

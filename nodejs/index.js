@@ -45,31 +45,6 @@ app.post('/v1/increase-food/:id', function(req, res) {
     })
 })
 
-app.post('/v1/decrease-food/:id', function(req, res) {
-    connection.query("SELECT COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = " + req.params.id + "), 0) AS food", function (err, rows) {
-        if (err) {
-            console.log("DecreaseFoodError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else {
-            if (rows[0].food > 0) {
-                connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + req.params.id, function (err, result) {
-                    if(err) {
-                        console.log("DecreaseFoodInsertError: ", err)
-                        res.send({"success": false, "error": err})
-                    } else {
-                        res.send({"success": true, "result": result})
-                    }
-                })
-            } else if (rows[0].food < 1) {
-                res.send({"success": false, "error": "There is " + rows[0].food + " food but at least 1 required!"})
-            } else {
-                res.send({"success": false, "error": "Unknown API error occurred!"})
-            }
-        }
-    })
-})
-
 app.post('/v1/increase-wood/:id', function(req, res) {
     const selectQuery = `
         SELECT
@@ -99,31 +74,6 @@ app.post('/v1/increase-wood/:id', function(req, res) {
                 res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
             } else if (rows[0].food < 1) {
                 res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
-            } else {
-                res.send({"success": false, "error": "Unknown API error occurred!"})
-            }
-        }
-    })
-})
-
-app.post('/v1/decrease-wood/:id', function(req, res) {
-    connection.query("SELECT COALESCE((SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = " + req.params.id + "), 0) AS wood", function (err, rows) {
-        if (err) {
-            console.log("DecreaseWoodError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else {
-            if (rows[0].wood > 0) {
-                connection.query("UPDATE resource SET volume = volume - 1 WHERE type_name = 'wood' AND house_id = " + req.params.id, function (err, result) {
-                    if(err) {
-                        console.log("DecreaseWoodInsertError: ", err)
-                        res.send({"success": false, "error": err})
-                    } else {
-                        res.send({"success": true, "result": result})
-                    }
-                })
-            } else if (rows[0].wood < 1) {
-                res.send({"success": false, "error": "There is " + rows[0].wood + " wood but at least 1 required!"})
             } else {
                 res.send({"success": false, "error": "Unknown API error occurred!"})
             }

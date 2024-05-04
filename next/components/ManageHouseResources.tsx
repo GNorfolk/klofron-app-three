@@ -1,6 +1,6 @@
 import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 
@@ -13,6 +13,26 @@ export default function ManageHouseResources({ queryClient, userId }) {
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house/' + router.query.id).then(
           (res) => res.json(),
         ),
+    })
+
+    const decreaseWood = useMutation({
+      mutationFn: (id) => {
+        return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+          action: "decrement",
+          house_id: id,
+          type_name: "wood"
+        })
+      },
+    })
+
+    const decreaseFood = useMutation({
+      mutationFn: (id) => {
+        return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+          action: "decrement",
+          house_id: id,
+          type_name: "food"
+        })
+      },
     })
 
     type Inputs = {
@@ -92,6 +112,27 @@ export default function ManageHouseResources({ queryClient, userId }) {
                 <p>This house does not have any people in it.</p>
               </div>
           }
+          <h2 className={styles.headingLg}>Delete Resources</h2>
+          <ul className={styles.list}>
+            <li className={styles.listItem}>
+              <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
+                () => {
+                    decreaseWood.mutate(data.house_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Decrease Wood</button></p>
+            </li>
+            <li className={styles.listItem}>
+              <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
+                () => {
+                    decreaseFood.mutate(data.house_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Decrease Food</button></p>
+            </li>
+          </ul>
         </div>
       )
     } else {

@@ -20,6 +20,10 @@ export class ResourceController {
 
   @Patch()
   update(@Req() req) {
-    return this.resourceService.updateMoveResource(req.body);
+    if (req.body.action == "decrement") {
+      return this.resourceService.updateDecrementResource(req.body.house_id, req.body.type_name)
+    } else {
+      return this.resourceService.updateMoveResource(req.body);
+    }
   }
 }
