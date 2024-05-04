@@ -25,4 +25,18 @@ export class ActionController {
   findOne(@Param('id') id: string) {
     return this.actionService.findOne(+id);
   }
+
+  @Patch()
+  update(@Req() req) {
+    if (req.body.action == "cancel") {
+      return this.actionService.updateCancelPersonAction(req.body.person_id)
+    }
+  }
+
+  @Patch(':id')
+  updateOne(@Req() req, @Param('id') id: number) {
+    if (req.body.action == "cancel") {
+      return this.actionService.updateCancelAction(id)
+    }
+  }
 }

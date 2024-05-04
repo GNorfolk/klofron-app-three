@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateActionDto } from './dto/create-action.dto';
 import { UpdateActionDto } from './dto/update-action.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Action } from './entities/Action';
+import { Person } from '../person/entities/Person';
 
 @Injectable()
 export class ActionService {
   constructor(
     @InjectRepository(Action) private actionRepository: Repository<Action>,
+    private dataSource: DataSource
   ) {}
 
   create(createActionDto: CreateActionDto) {
@@ -39,5 +41,50 @@ export class ActionService {
         action_id: id,
       },
     });
+  }
+
+  async updateCancelPersonAction(person_id) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let cancel;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const person = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .where("person.person_id = :id", { id: person_id })
+        .getOne();
+      if (person.person_actions.length == 0) throw "No actions cancellable!";
+      if (person.person_actions.length > 1) throw "Too many current actions returned!";
+      cancel = await queryRunner.manager.update(Action, person.person_actions[0].action_id, { action_cancelled_at: "CURRENT_TIMESTAMP" });
+      if (cancel.affected != 1) throw "Unable to cancel action!";
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [cancel];
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
+  }
+
+  async updateCancelAction(action_id) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let cancel;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      cancel = await queryRunner.manager.update(Action, action_id, { action_cancelled_at: new Date() });
+      if (cancel.affected != 1) throw "Unable to cancel action!";
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [cancel];
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 }

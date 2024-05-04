@@ -13,7 +13,9 @@ export default function ListPersonActionsCurrent({ queryClient, personId }) {
 
   const cancelAction = useMutation({
     mutationFn: (id) => {
-      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/cancel-person-action/' + id)
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action/' + id, {
+        action: "cancel"
+      })
     },
   })
 

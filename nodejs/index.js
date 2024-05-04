@@ -317,31 +317,6 @@ app.post("/v1/login", (req, res)=> {
     })
 })
 
-// curl --request POST http://localhost:3000/v1/cancel-person-action/176
-app.post("/v1/cancel-person-action/:id", (req, res, next) => {
-    connection.query('SELECT id, started_at, cancelled_at, completed_at FROM action WHERE cancelled_at IS NULL AND completed_at IS NULL AND id = ' + req.params.id, function (err, rows) {
-        if (err) {
-            console.log("CancelPersonActionError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else if (rows.length == 0) {
-            res.send({"success": false, "error": "No current action returned!"})
-        } else if (rows.length > 1) {
-            res.send({"success": false, "error": "More than one current action returned!"})
-        } else {
-            const current_action = rows[0]
-            connection.query("UPDATE action SET cancelled_at = NOW() WHERE id = " + current_action.id, function(err, result) {
-                if(err) {
-                    console.log("CancelPersonActionInsertError: ", err)
-                    res.send({"success": false, "error": err})
-                } else {
-                    res.send({"success": true, "result": result})
-                }
-            })
-        }
-    })
-})
-
 // curl --request POST localhost:3001/v1/create-proposal/43
 app.post("/v1/create-proposal/:id", (req, res, next) => {
     connection.query('SELECT id FROM person WHERE id = ' + req.params.id, function (err, rows) {
