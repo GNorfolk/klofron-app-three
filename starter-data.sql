@@ -43,7 +43,7 @@ CREATE TABLE `action` (
     `person_id` INT NOT NULL,
     `type_id` INT NOT NULL,
     `infinite` BOOL NOT NULL DEFAULT 0,
-    `started_at` TIMESTAMP,
+    `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

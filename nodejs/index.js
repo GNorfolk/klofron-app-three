@@ -19,68 +19,6 @@ if (process.env.ENV === 'local') {
     module.exports.handler = serverless(app);
 }
 
-app.post('/v1/increase-food/:id', function(req, res) {
-    connection.query('SELECT (SELECT count(id) FROM action WHERE person_id = ' + req.params.id + ' AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count FROM person INNER JOIN house ON person.house_id = house.id WHERE person.id = ' + req.params.id, function (err, rows) {
-        if (err) {
-            console.log("IncreaseFoodError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else {
-            if (rows[0].action_count == 0) {
-                const infinite = req.query.infinite | 0
-                connection.query('INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (' + req.params.id + ', 1, NOW(), ' + infinite + ')', function(err, result) {
-                    if(err) {
-                        console.log("IncreaseFoodInsertError: ", err)
-                        res.send({"success": false, "error": err})
-                    } else {
-                        res.send({"success": true, "result": result})
-                    }
-                })
-            } else if (rows[0].action_count != 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
-            } else {
-                res.send({"success": false, "error": "Unknown API error occurred!"})
-            }
-        }
-    })
-})
-
-app.post('/v1/increase-wood/:id', function(req, res) {
-    const selectQuery = `
-        SELECT
-            person.house_id,
-            COALESCE((SELECT volume FROM resource WHERE type_name = 'food' AND house_id = house.id), 0) AS food,
-            (SELECT count(id) FROM action WHERE person_id = ` + req.params.id + ` AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count
-        FROM person
-            JOIN house ON person.house_id = house.id
-        WHERE person.id = ` + req.params.id
-    connection.query(selectQuery, function (err, rows) {
-        if (err) {
-            console.log("IncreaseWoodError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else {
-            if (rows[0].food >= 1 && rows[0].action_count == 0) {
-                const infinite = req.query.infinite | 0
-                connection.query("INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (" + req.params.id + ", 2, NOW(), " + infinite + "); UPDATE resource SET volume = volume - 1 WHERE type_name = 'food' AND house_id = " + rows[0].house_id, function(err, result) {
-                    if(err) {
-                        console.log("IncreaseWoodInsertError: ", err)
-                        res.send({"success": false, "error": err})
-                    } else {
-                        res.send({"success": true, "result": result})
-                    }
-                })
-            } else if (rows[0].action_count != 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
-            } else if (rows[0].food < 1) {
-                res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining!"})
-            } else {
-                res.send({"success": false, "error": "Unknown API error occurred!"})
-            }
-        }
-    })
-})
-
 app.post('/v1/modify-house/increase-storage/:id', function(req, res) {
     const selectQuery = `
         SELECT

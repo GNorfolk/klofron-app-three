@@ -20,8 +20,12 @@ export class Action {
   @Column("int", { name: "type_id" })
   action_type_id: number;
 
-  @Column("timestamp", { name: "started_at", nullable: true })
-  action_started_at: Date | null;
+  @Column("timestamp", {
+    name: "started_at",
+    default: () => "CURRENT_TIMESTAMP",
+    nullable: false
+  })
+  action_started_at: Date;
 
   @Column("timestamp", { name: "completed_at", nullable: true })
   action_completed_at: Date | null;

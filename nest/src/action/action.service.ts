@@ -13,8 +13,28 @@ export class ActionService {
     private dataSource: DataSource
   ) {}
 
-  create(createActionDto: CreateActionDto) {
-    return 'This action adds a new action';
+  async create(action: CreateActionDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const person = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .where("person.person_id = :id", { id: action.action_person_id })
+        .getOne();
+      if (person.person_actions.length > 0) throw "Action already in progress!";
+      result = await queryRunner.manager.save(Action, action);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [result];
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 
   async findAll(query): Promise<Action[]> {

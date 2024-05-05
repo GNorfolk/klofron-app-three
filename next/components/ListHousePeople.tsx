@@ -17,13 +17,19 @@ export default function ListHousePeople({ queryClient, userId = null }) {
 
     const  increaseFood  = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/increase-food/' + id, null, { params: {infinite: 0} })
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
+          action_person_id: id,
+          action_type_id: 1
+        })
       },
     })
 
     const  increaseWood  = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/increase-wood/' + id, null, { params: {infinite: 0} })
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
+          action_person_id: id,
+          action_type_id: 2
+        })
       },
     })
 
@@ -67,10 +73,10 @@ export default function ListHousePeople({ queryClient, userId = null }) {
                   <div>
                     <button onClick={
                       () => {
-                        increaseFood.mutate(person_id, { onSettled: (res) => {
+                        increaseFood.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
-                          if (!res.data.success) {
-                            document.getElementById("cm-" + person_id).innerText = res.data.error
+                          if (error) {
+                            document.getElementById("cm-" + person_id).innerText = error.response.data.message
                           } else {
                             document.getElementById("cm-" + person_id).innerText = ' '
                           }
@@ -79,10 +85,10 @@ export default function ListHousePeople({ queryClient, userId = null }) {
                     } >Get Food</button>
                     <button onClick={
                       () => {
-                        increaseWood.mutate(person_id, { onSettled: (res) => {
+                        increaseWood.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
-                          if (!res.data.success) {
-                            document.getElementById("cm-" + person_id).innerText = res.data.error
+                          if (error) {
+                            document.getElementById("cm-" + person_id).innerText = error.response.data.message
                           } else {
                             document.getElementById("cm-" + person_id).innerText = ' '
                           }

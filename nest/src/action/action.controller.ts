@@ -12,8 +12,8 @@ export class ActionController {
   constructor(private readonly actionService: ActionService) {}
 
   @Post()
-  create(@Body() createActionDto: CreateActionDto) {
-    return this.actionService.create(createActionDto);
+  async create(@Body() action: CreateActionDto) {
+    return await this.actionService.create(action);
   }
 
   @Get()
