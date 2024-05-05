@@ -30,14 +30,18 @@ export class ResourceService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      inc = await queryRunner.manager.increment(Resource, {
-        resource_type_name: body.resource_type,
-        resource_person_id: body.person_id
-      }, "resource_volume", body.resource_volume)
-      dec = await queryRunner.manager.decrement(Resource, {
-        resource_type_name: body.resource_type,
-        resource_house_id: body.house_id
-      }, "resource_volume", body.resource_volume)
+      try {
+        inc = await queryRunner.manager.increment(Resource, {
+          resource_type_name: body.resource_type,
+          resource_person_id: body.person_id
+        }, "resource_volume", body.resource_volume)
+        dec = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: body.resource_type,
+          resource_house_id: body.house_id
+        }, "resource_volume", body.resource_volume)
+      } catch {
+        throw "Cannot reduce resource below zero!"
+      }
       if (inc.affected != 1 || dec.affected != 1) throw "Cannot update Person and House resources!"
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
