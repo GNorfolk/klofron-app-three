@@ -37,7 +37,7 @@ export class HouseService {
       console.log(err)
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
-      throw new BadRequestException();
+      throw new BadRequestException(err);
     }
   }
 

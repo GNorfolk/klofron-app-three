@@ -26,7 +26,7 @@ export class MoveHouseService {
         resource_type_name: "food",
         resource_person_id: moveHouse.move_house_person_id
       }, "resource_volume", 1);
-      if (resource.affected != 1) throw [move, person, resource];
+      if (resource.affected != 1) throw "Cannot decrement person resrouces!"
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return [move, person, resource];

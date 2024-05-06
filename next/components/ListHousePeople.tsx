@@ -35,13 +35,19 @@ export default function ListHousePeople({ queryClient, userId = null }) {
 
     const increaseStorage = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/modify-house/increase-storage/' + id, null, { params: {infinite: 0} })
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
+          action_person_id: id,
+          action_type_id: 3
+        })
       },
     })
 
     const increaseRooms = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/modify-house/increase-rooms/' + id, null, { params: {infinite: 0} })
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
+          action_person_id: id,
+          action_type_id: 4
+        })
       },
     })
 
@@ -97,10 +103,10 @@ export default function ListHousePeople({ queryClient, userId = null }) {
                     } >Get Wood</button>
                     <button onClick={
                       () => {
-                        increaseStorage.mutate(person_id, { onSettled: (res) => {
+                        increaseStorage.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
-                          if (!res.data.success) {
-                            document.getElementById("cm-" + person_id).innerText = res.data.error
+                          if (error) {
+                            document.getElementById("cm-" + person_id).innerText = error.response.data.message
                           } else {
                             document.getElementById("cm-" + person_id).innerText = ' '
                           }
@@ -109,10 +115,10 @@ export default function ListHousePeople({ queryClient, userId = null }) {
                     } >Increase Storage</button>
                     <button onClick={
                       () => {
-                        increaseRooms.mutate(person_id, { onSettled: (res) => {
+                        increaseRooms.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
-                          if (!res.data.success) {
-                            document.getElementById("cm-" + person_id).innerText = res.data.error
+                          if (error) {
+                            document.getElementById("cm-" + person_id).innerText = error.response.data.message
                           } else {
                             document.getElementById("cm-" + person_id).innerText = ' '
                           }

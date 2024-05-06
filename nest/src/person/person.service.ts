@@ -123,7 +123,7 @@ export class PersonService {
       console.log(err)
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
-      throw new BadRequestException();
+      throw new BadRequestException(err);
     }
   }
 
@@ -193,7 +193,7 @@ export class PersonService {
         resource_type_name: "food",
         resource_person_id: person_id
       }, "resource_volume", 1);
-      if (resource.affected != 1) throw "Unable to take food resource from person!";
+      if (resource.affected != 1) throw "Cannot decrement person resrouces!"
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")
         .leftJoinAndSelect("house.house_people", "person")

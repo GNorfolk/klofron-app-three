@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Action } from './entities/Action';
 import { Person } from '../person/entities/Person';
+import { Resource } from '../resource/entities/Resource';
 
 @Injectable()
 export class ActionService {
@@ -22,9 +23,44 @@ export class ActionService {
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
         .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .leftJoinAndSelect("person.person_house", "house")
+        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("person.person_id = :id", { id: action.action_person_id })
         .getOne();
       if (person.person_actions.length > 0) throw "Action already in progress!";
+      if (action.action_type_id == 2) {
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food!"
+        const food = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "food",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 1);
+        if (food.affected != 1) throw "Cannot decrement house resources!"
+      } else if (action.action_type_id == 3) {
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food!"
+        if (person.person_house.house_wood.resource_volume < 3) throw "Not enough wood!"
+        const food = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "food",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 1);
+        const wood = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "wood",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 3);
+        if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
+      } else if (action.action_type_id == 4) {
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food!"
+        if (person.person_house.house_wood.resource_volume < 6) throw "Not enough wood!"
+        const food = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "food",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 1);
+        const wood = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "wood",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 6);
+        if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
+      }
       result = await queryRunner.manager.save(Action, action);
       await queryRunner.commitTransaction();
       await queryRunner.release();
