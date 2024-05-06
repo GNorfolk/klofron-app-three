@@ -19,48 +19,6 @@ if (process.env.ENV === 'local') {
     module.exports.handler = serverless(app);
 }
 
-app.post('/v1/create-house/:id', function(req, res) {
-    const selectQuery = `
-        SELECT
-            id, house_id,
-            (SELECT volume FROM resource WHERE type_name = 'food' AND house_id = person.house_id) AS food,
-            (SELECT volume FROM resource WHERE type_name = 'wood' AND house_id = person.house_id) AS wood,
-            (SELECT count(id) FROM action WHERE person_id = person.id AND started_at IS NOT NULL AND completed_at IS NULL AND cancelled_at IS NULL) AS action_count
-        FROM person
-        WHERE id = ` + req.params.id
-    connection.query(selectQuery, function (err, rows) {
-        if (err) {
-            console.log("CreateHouseError: ", err)
-            connection = require('./database.js')
-            res.send({"success": false, "error": err})
-        } else {
-            if (rows[0].wood >= 12 && rows[0].food >= 3 && rows[0].action_count == 0) {
-                const infinite = req.query.infinite | 0
-                const postQuery = `
-                    INSERT INTO action (person_id, type_id, started_at, infinite) VALUES (` + req.params.id + `, 5, NOW(), ` + infinite + `);
-                    UPDATE resource SET volume = volume - 12 WHERE type_name = 'wood' AND house_id = ` + rows[0].house_id + `;
-                    UPDATE resource SET volume = volume - 3 WHERE type_name = 'food' AND house_id = ` + rows[0].house_id
-                connection.query(postQuery, function(err, result) {
-                    if(err) {
-                        console.log("CreateHouseInsertError: ", err)
-                        res.send({"success": false, "error": err})
-                    } else {
-                        res.send({"success": true, "result": result})
-                    }
-                })
-            } else if (rows[0].wood < 12) {
-                res.send({"success": false, "error": "Not enough wood, only " + rows[0].wood + " wood remaining and 12 required!"})
-            } else if (rows[0].food < 3) {
-                res.send({"success": false, "error": "Not enough food, only " + rows[0].food + " food remaining and 3 required!"})
-            } else if (rows[0].action_count > 0) {
-                res.send({"success": false, "error": "There is already " + rows[0].action_count + " action in progress!"})
-            } else {
-                res.send({"success": false, "error": "Unknown API error occurred!"})
-            }
-        }
-    })
-})
-
 // curl --request POST localhost:3001/v1/login --header "Content-Type: application/json" --data '{"email":"halpert@klofron.uk","password":"password"}'
 app.post("/v1/login", (req, res)=> {
     connection.query("SELECT id, username, password, email FROM user WHERE email = '" + req.body.email + "';", async (err, rows) => {

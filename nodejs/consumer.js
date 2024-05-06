@@ -11,7 +11,16 @@ config = {
 
 const apiHost = process.env.API_HOST || "127.0.0.1"
 const apiPort = process.env.API_PORT || 3001
-const apiMethod = "POST"
+
+if (process.env.ENV === 'local') {
+    connection = mysql.createConnection(config)
+    checkQueue(connection)
+} else {
+    exports.handler = function (event, context) {
+        connection = mysql.createConnection(config)
+        checkQueue(connection)
+    }
+}
 
 function checkQueue(connection) {
     return new Promise((resolve1, reject1) => {
@@ -62,16 +71,6 @@ function checkQueue(connection) {
     })
 }
 
-if (process.env.ENV === 'local') {
-    connection = mysql.createConnection(config)
-    checkQueue(connection)
-} else {
-    exports.handler = function (event, context) {
-        connection = mysql.createConnection(config)
-        checkQueue(connection)
-    }
-}
-
 function actionGetFood(conn, data) {
     return new Promise((resolve2, reject2) => {
         const query2 = `
@@ -108,7 +107,10 @@ function actionGetFood(conn, data) {
                                         return reject3(err3)
                                     } else {
                                         if (data['infinite'] == 1) {
-                                            const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/increase-food/' + data['person_id'] + '?infinite=1' }
+                                            const options = { host: apiHost, port: apiPort, method: "POST", path: '/v2/action', body: {
+                                                action_person_id: data['person_id'],
+                                                action_type_id: 1
+                                            }}
                                             http.request(options, function(res) {
                                                 res.on('data', function (body) {
                                                     console.log('Kicked off infinite action with id ' + data['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
@@ -180,7 +182,10 @@ function actionGetWood(conn, data) {
                                         return reject3(err3)
                                     } else {
                                         if (data['infinite'] == 1) {
-                                            const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/increase-wood/' + data['person_id'] + '?infinite=1' }
+                                            const options = { host: apiHost, port: apiPort, method: "POST", path: '/v2/action', body: {
+                                                action_person_id: data['person_id'],
+                                                action_type_id: 2
+                                            }}
                                             http.request(options, function(res) {
                                                 res.on('data', function (body) {
                                                     console.log('Kicked off infinite action with id ' + data['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
@@ -225,7 +230,10 @@ function actionIncreaseStorage(conn, data) {
                 return reject3(err3)
             } else {
                 if (data['infinite'] == 1) {
-                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-storage/' + data['person_id'] + '?infinite=1' }
+                    const options = { host: apiHost, port: apiPort, method: "POST", path: '/v2/action', body: {
+                        action_person_id: data['person_id'],
+                        action_type_id: 3
+                    }}
                     http.request(options, function(res) {
                         res.on('data', function (body) {
                             console.log('Kicked off infinite action with id ' + data['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
@@ -250,7 +258,10 @@ function actionIncreaseRooms(conn, data) {
                 return reject3(err3)
             } else {
                 if (data['infinite'] == 1) {
-                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/modify-house/increase-rooms/' + data['person_id'] + '?infinite=1' }
+                    const options = { host: apiHost, port: apiPort, method: "POST", path: '/v2/action', body: {
+                        action_person_id: data['person_id'],
+                        action_type_id: 4
+                    }}
                     http.request(options, function(res) {
                         res.on('data', function (body) {
                             console.log('Kicked off infinite action with id ' + data['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
@@ -275,7 +286,10 @@ function actionCreateHouse(conn, data) {
                 return reject3(err3)
             } else {
                 if (data['infinite'] == 1) {
-                    const options = { host: apiHost, port: apiPort, method: apiMethod, path: '/v1/create-house/' + data['person_id'] + '?infinite=1' }
+                    const options = { host: apiHost, port: apiPort, method: "POST", path: '/v2/action', body: {
+                        action_person_id: data['person_id'],
+                        action_type_id: 5
+                    }}
                     http.request(options, function(res) {
                         res.on('data', function (body) {
                             console.log('Kicked off infinite action with id ' + data['id'] + ' with status ' + res.statusCode + ' and body: ' + body);
