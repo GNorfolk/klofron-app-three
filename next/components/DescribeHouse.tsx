@@ -20,7 +20,9 @@ export default function DescribeHouse({ queryClient, userId }) {
 
     const createPerson = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/create-person/' + id)
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + id, {
+          person_name: "Baby"
+        })
       },
     })
 
@@ -37,6 +39,8 @@ export default function DescribeHouse({ queryClient, userId }) {
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
+    const house_id = data.house_id
+
     return (
       <QueryClientProvider client={queryClient}>
         <h1 className={styles.heading2Xl}>{data.house_name}</h1>
@@ -49,17 +53,17 @@ export default function DescribeHouse({ queryClient, userId }) {
           <div>
             <button onClick={
               () => {
-                createPerson.mutate(data.house_id, { onSettled: (res) => {
+                createPerson.mutate(house_id, { onSettled: (data, error: any) => {
                   queryClient.invalidateQueries()
-                  if (!res.data.success) {
-                    document.getElementById("cm-two-" + data.house_id).innerText = res.data.error
+                  if (error) {
+                    document.getElementById("cm-two-" + house_id).innerText = error.response.data.message
                   } else {
-                    document.getElementById("cm-two-" + data.house_id).innerText = ' '
+                    document.getElementById("cm-two-" + house_id).innerText = ' '
                   }
                 }})
               }
             } >Create Person</button>
-            <small className={styles.lightText} id={'cm-two-' + data.house_id}></small>
+            <small className={styles.lightText} id={'cm-two-' + house_id}></small>
             <ListHousePeople queryClient={queryClient} userId={userId} />
           </div>
           :

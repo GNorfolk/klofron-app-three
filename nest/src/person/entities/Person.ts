@@ -22,8 +22,6 @@ const day_in_ms = 24 * 3600 * 1000
 @Index("person_house_id", ["person_house_id"], {})
 @Entity("person", { schema: "ka3" })
 export class Person {
-  protected person_age: number;
-
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   person_id: number;
 
@@ -111,4 +109,5 @@ export class Person {
   calculateAge(): void {
     this.person_age = Math.floor(((new Date()).valueOf() - (new Date(this.person_created_at)).valueOf()) / day_in_ms);
   }
+  person_age: number;
 }

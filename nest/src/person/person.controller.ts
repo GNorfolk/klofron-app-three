@@ -25,6 +25,11 @@ export class PersonController {
     return await this.personService.createCouple(couple);
   }
 
+  @Post(':id')
+  async createPerson(@Param('id') id: number, @Body() person: CreatePersonDto) {
+    return await this.personService.createPerson(id, person);
+  }
+
   @Get()
   async findAll(@Req() req): Promise<Person[]> {
     return await this.personService.findAll(req.query);

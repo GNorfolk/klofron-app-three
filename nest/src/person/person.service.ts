@@ -5,6 +5,7 @@ import { Person } from './entities/Person';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
+import { Action } from '../action/entities/Action';
 
 @Injectable()
 export class PersonService {
@@ -15,6 +16,72 @@ export class PersonService {
 
   async create(person: Person): Promise<Person> {
     return await this.personRepository.save(person);
+  }
+
+  async createPerson(house_id: number, person: CreatePersonDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const house = await queryRunner.manager
+        .createQueryBuilder(House, "house")
+        .leftJoinAndSelect("house.house_people", "person", "person.person_partner_id IS NOT NULL")
+        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+        .where("house.house_id = :id", { id: house_id })
+        .getOne();
+      // TODO: Add where clause on house_people so that it doesn't return children
+      // TODO: Log verbose error messaging and provide transaction id for debugging
+      if (house.house_people.length < 2 || house.house_people.length > 2) throw "Wrong number of parents!"
+      const mother = house.house_people.filter(person => { return person.person_gender === 'female' })[0]
+      const father = house.house_people.filter(person => { return person.person_gender === 'male' })[0]
+      if (mother.person_partner_id != father.person_id || father.person_partner_id != mother.person_id) throw "Parents aren't partners!"
+      if (mother.person_family_id != father.person_family_id) throw "Not matching family_id!";
+      person.person_family_id = mother.person_family_id
+      if (mother.person_house_id != father.person_house_id) throw "Not matching house_id!";
+      person.person_family_id = mother.person_family_id
+      if (mother.person_age > 50) throw "Mother too old!"
+      const house_people = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .where("person.house_id = :id", { id: house_id })
+        .getMany()
+      if (house_people.length >= house.house_rooms) throw "Not enough rooms!"
+      if (house.house_food.resource_volume < 2) throw "Not enough food!"
+      const resource = await queryRunner.manager.decrement(Resource, {
+        resource_type_name: "food",
+        resource_house_id: house_id
+      }, "resource_volume", 2);
+      if (resource.affected != 1) throw "Cannot decrement house resrouces!"
+      if (mother.person_actions.length > 0 || father.person_actions.length > 0) throw "Parent already has an action in progress!"
+      await queryRunner.manager.save(Action, {
+        action_person_id: mother.person_id,
+        action_type_id: 6
+      });
+      await queryRunner.manager.save(Action, {
+        action_person_id: father.person_id,
+        action_type_id: 6
+      });
+      person.person_gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
+      person.person_mother_id = mother.person_id
+      person.person_father_id = father.person_id
+      const result = await queryRunner.manager.save(Person, person);
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "food",
+        resource_person_id: result.person_id
+      });
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "wood",
+        resource_person_id: result.person_id
+      });
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return [result];
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 
   async createCouple(couple: CreatePersonDto[]) {

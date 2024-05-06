@@ -222,6 +222,4 @@ mysql -u root -p ka3 < dump-2024-04-23.sql
 
 # MySQL
 ```sql
-DELETE FROM action WHERE started_at IS NULL;
-ALTER TABLE action CHANGE `started_at` `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp();
 ```
