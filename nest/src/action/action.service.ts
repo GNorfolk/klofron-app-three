@@ -30,15 +30,15 @@ export class ActionService {
         .getOne();
       if (person.person_actions.length > 0) throw "Action already in progress!";
       if (action.action_type_id == 2) {
-        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food!"
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
         const food = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "food",
           resource_house_id: person.person_house_id
         }, "resource_volume", 1);
         if (food.affected != 1) throw "Cannot decrement house resources!"
       } else if (action.action_type_id == 3) {
-        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food!"
-        if (person.person_house.house_wood.resource_volume < 3) throw "Not enough wood!"
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
+        if (person.person_house.house_wood.resource_volume < 3) throw "Not enough wood, 3 required!"
         const food = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "food",
           resource_house_id: person.person_house_id
@@ -49,8 +49,8 @@ export class ActionService {
         }, "resource_volume", 3);
         if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
       } else if (action.action_type_id == 4) {
-        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food!"
-        if (person.person_house.house_wood.resource_volume < 6) throw "Not enough wood!"
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
+        if (person.person_house.house_wood.resource_volume < 6) throw "Not enough wood, 6 required!"
         const food = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "food",
           resource_house_id: person.person_house_id
@@ -59,6 +59,18 @@ export class ActionService {
           resource_type_name: "wood",
           resource_house_id: person.person_house_id
         }, "resource_volume", 6);
+        if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
+      } else if (action.action_type_id == 5) {
+        if (person.person_house.house_food.resource_volume < 3) throw "Not enough food, 3 required!"
+        if (person.person_house.house_wood.resource_volume < 12) throw "Not enough wood, 12 required!"
+        const food = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "food",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 3);
+        const wood = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "wood",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 12);
         if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
       }
       result = await queryRunner.manager.save(Action, action);

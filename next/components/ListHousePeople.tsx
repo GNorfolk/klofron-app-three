@@ -53,7 +53,10 @@ export default function ListHousePeople({ queryClient, userId = null }) {
 
     const createHouse = useMutation({
       mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/create-house/' + id, null, { params: {infinite: 0} })
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
+          action_person_id: id,
+          action_type_id: 5
+        })
       },
     })
 
@@ -127,10 +130,10 @@ export default function ListHousePeople({ queryClient, userId = null }) {
                     } >Increase Rooms</button>
                     <button onClick={
                       () => {
-                        createHouse.mutate(person_id, { onSettled: (res) => {
+                        createHouse.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
-                          if (!res.data.success) {
-                            document.getElementById("cm-" + person_id).innerText = res.data.error
+                          if (error) {
+                            document.getElementById("cm-" + person_id).innerText = error.response.data.message
                           } else {
                             document.getElementById("cm-" + person_id).innerText = ' '
                           }
