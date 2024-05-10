@@ -144,49 +144,6 @@ UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
 **How to create a new nodejs zip file:**
 - zip -r nodejs.zip .
 
-**How to deploy nextjs app:**
-```bash
-rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nextjs.zip next-env.d.ts
-npm install
-npm run deploy
-cp -R .next/serverless/ .serverless_nextjs/default-lambda/
-cp .env.local .serverless_nextjs/default-lambda/.env.production.local
-AWS_PROFILE=react-app terraform -chdir=tf init
-AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-AWS_PROFILE=react-app aws s3 sync --acl private .serverless_nextjs/assets/ s3://ka3-nextjs-app/
-AWS_PROFILE=react-app aws cloudfront create-invalidation --distribution-id E15HWCISMEGS57 --invalidation-batch "{ \"Paths\": { \"Quantity\": 2, \"Items\": [ \"/\", \"/*\" ] }, \"CallerReference\": \"$(date +%s)\" }"
-```
-
-**How to deploy nodejs:**
-```bash
-rm -rf node_modules tf/.terraform tf/.terraform.lock.hcl tf/*.zip
-npm install
-AWS_PROFILE=react-app terraform -chdir=tf init
-AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-AWS_PROFILE=react-app aws lambda update-function-configuration --function-name ka3-nodejs --description $(date +%s) --region eu-west-1
-AWS_PROFILE=react-app aws lambda update-function-configuration --function-name ka3-consumer --description $(date +%s) --region eu-west-1
-```
-
-**How to deploy nestjs app:**
-```bash
-rm -rf .aws-sam dist node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nestjs.zip
-npm install
-npm run build
-AWS_PROFILE=react-app sam build --template serverless.yaml --manifest package.json
-AWS_PROFILE=react-app sam validate --lint --template serverless.yaml --region eu-west-1
-AWS_PROFILE=react-app terraform -chdir=tf init
-AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-```
-Or
-```bash
-rm -rf .aws-sam dist tf/.terraform tf/.terraform.lock.hcl tf/ka3-nestjs.zip
-npm run build
-AWS_PROFILE=react-app sam build --template serverless.yaml --manifest package.json
-AWS_PROFILE=react-app sam validate --lint --template serverless.yaml --region eu-west-1
-AWS_PROFILE=react-app terraform -chdir=tf init
-AWS_PROFILE=react-app terraform -chdir=tf apply -auto-approve
-```
-
 **How to run sam template locally:**
 ```bash
 AWS_PROFILE=react-app sam local invoke

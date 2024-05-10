@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "clear && node index.js"
+    "dev": "clear && node index.js",
+    "deploy": "npm install && terraform -chdir=tf init && terraform -chdir=tf apply -auto-approve"
   },
   "author": "",
   "license": "ISC",
