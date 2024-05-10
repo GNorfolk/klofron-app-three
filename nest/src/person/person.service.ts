@@ -39,7 +39,7 @@ export class PersonService {
       if (mother.person_family_id != father.person_family_id) throw "Not matching family_id!";
       person.person_family_id = mother.person_family_id
       if (mother.person_house_id != father.person_house_id) throw "Not matching house_id!";
-      person.person_family_id = mother.person_family_id
+      person.person_house_id = mother.person_house_id
       if (mother.person_age > 50) throw "Mother too old!"
       const house_people = await queryRunner.manager
         .createQueryBuilder(Person, "person")
