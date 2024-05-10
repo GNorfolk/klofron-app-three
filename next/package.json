@@ -4,13 +4,10 @@
     "cdk": "bin/cdk.js"
   },
   "scripts": {
-    "dev": "clear && export NEXT_PUBLIC_API_HOST=http://localhost:3000 NEXTAUTH_SECRET=say_lalisa_love_me_lalisa_love_me_hey NEXTAUTH_URL=http://localhost:3000 && next dev",
+    "dev": "clear && next dev",
     "build": "next build",
     "start": "next start",
-    "deploy": "export NEXT_PUBLIC_API_HOST=https://api.klofron.uk NEXT_PUBLIC_NEXTAUTH_URL=https://www.klofron.uk && AWS_PROFILE=null serverless",
-    "cdk-bootstrap": "AWS_PROFILE=react-app cdk bootstrap",
-    "cdk-diff": "AWS_PROFILE=react-app cdk diff",
-    "cdk-deploy": "AWS_PROFILE=react-app JSII_SILENCE_WARNING_UNTESTED_NODE_VERSION=true cdk deploy --require-approval never"
+    "deploy": "AWS_PROFILE=null serverless"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",

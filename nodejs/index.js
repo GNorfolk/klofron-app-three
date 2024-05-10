@@ -7,6 +7,7 @@ const day_in_ms = 24 * 3600 * 1000
 const hour_in_ms = 3600 * 1000
 let connection = require('./database.js')
 const saltRounds = 10;
+const dotenv = require('dotenv').config()
 
 app.use(cors({ origin: ['https://www.klofron.uk', 'https://old.klofron.uk'] }))
 app.use(express.json())
