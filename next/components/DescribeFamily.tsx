@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import ListFamilyPeople from './ListFamilyPeople'
 import ListFamilyHouses from './ListFamilyHouses'
 import ListFamilyTravel from './ListFamilyTravel'
+import ListFamilyProposals from './ListFamilyProposals'
 
 export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
@@ -26,6 +27,7 @@ export default function DescribeFamily({ queryClient, userId }) {
           <ListFamilyPeople queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
           <ListFamilyHouses queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
           <ListFamilyTravel />
+          <ListFamilyProposals />
         </QueryClientProvider>
       )
     } else {
