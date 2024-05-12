@@ -5,7 +5,7 @@
   },
   "scripts": {
     "dev": "clear && next dev",
-    "build": "next build && serverless",
+    "build": "next build",
     "deploy": "terraform -chdir=tf init && terraform -chdir=tf apply -auto-approve"
   },
   "dependencies": {
