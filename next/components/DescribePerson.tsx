@@ -71,8 +71,9 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
                 <input type="submit" value="Rename" />
               </form>
             </ul>
+            {/* TODO: Remove below sthick replace with ListPersonProposals */}
             <h2 className={styles.headingLg}>Proposal Info</h2>
-            <p>Go to <Link href={`/proposal/${router.query.id}`}>Proposals</Link> page.</p>
+            <p>Go to <Link href={`/person/${router.query.id}/proposal`}>Proposals</Link> page.</p>
             <button onClick={
               () => {
                   createProposal.mutate(data.person_id, { onSettled: (res) => {
