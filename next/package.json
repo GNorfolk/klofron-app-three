@@ -5,9 +5,8 @@
   },
   "scripts": {
     "dev": "clear && next dev",
-    "build": "next build",
-    "start": "next start",
-    "deploy": "AWS_PROFILE=null serverless"
+    "build": "next build && serverless",
+    "deploy": "terraform -chdir=tf init && terraform -chdir=tf apply -auto-approve"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",

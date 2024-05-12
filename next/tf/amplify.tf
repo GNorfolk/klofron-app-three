@@ -55,7 +55,7 @@ resource "aws_amplify_app" "this" {
 
 resource "aws_amplify_branch" "this" {
   app_id      = aws_amplify_app.this.id
-  branch_name = "nextjs12"
+  branch_name = "main"
 
   framework = "Next.js - SSR"
   stage     = "PRODUCTION"
