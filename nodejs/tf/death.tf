@@ -17,6 +17,7 @@ resource "aws_lambda_function" "death" {
             DB_USER = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["username"]
             DB_PASS = jsondecode(data.aws_secretsmanager_secret_version.rds.secret_string)["password"]
             DB_NAME = "ka3"
+            ENV = "production"
         }
     }
 }

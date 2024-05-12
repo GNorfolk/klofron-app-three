@@ -19,6 +19,7 @@ resource "aws_lambda_function" "consumer" {
             DB_NAME = "ka3"
             API_HOST = "api.klofron.uk"
             API_PORT = 443
+            ENV = "production"
         }
     }
 }
