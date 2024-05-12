@@ -4,15 +4,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 
-export default function ListFamilyHouses({ queryClient = null, familyId, unnamedBoolean = false }) {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['familyHouseData' + familyId],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house?family_id=' + familyId).then(
-        (res) => res.json(),
-      ),
-  })
-
+export default function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean = false }) {
   type Inputs = {
     house_name: string
     house_family_id: number
@@ -39,22 +31,14 @@ export default function ListFamilyHouses({ queryClient = null, familyId, unnamed
     })
   }
 
-  if (isLoading) return (
-    <div>
-      <h2 className={styles.headingLg}>House Info</h2>
-      <p>Loading...</p>
-    </div>
-  )
-  if (error) return <div>Failed to load</div>
-
-  if (data.length > 0) {
+  if (data.family_houses.length > 0) {
     return (
       <div>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.map(({ house_id, house_name, house_family, house_food, house_wood }) => (
+          {data.family_houses.map(({ house_id, house_name, house_family, house_food, house_wood }) => (
             <li className={styles.listItem} key={house_id}>
-              <p>The {house_family.family_name} family own <Link href={`/house/${house_id}`}>{house_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
+              <p>The {data.family_name} family own <Link href={`/house/${house_id}`}>{house_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
             </li>
           ))}
         </ul>

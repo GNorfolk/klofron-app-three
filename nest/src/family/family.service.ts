@@ -36,6 +36,8 @@ export class FamilyService {
       .leftJoinAndSelect("family.family_houses", "house")
       .leftJoinAndSelect("person.person_house", "person_house")
       .leftJoinAndSelect("person.person_proposals", "proposal", "proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
+      .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+      .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
       .where("family.id = :id", { id: id })
     return await family.getOne();
   }

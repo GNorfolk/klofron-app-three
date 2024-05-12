@@ -4,15 +4,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 
-export default function ListFamilyPeople({ queryClient = null, familyId, unnamedBoolean = false }) {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['familyMemberData' + familyId],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person?family_id=' + familyId).then(
-        (res) => res.json(),
-      ),
-  })
-
+export default function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean = false }) {
   type Inputs = {
     mother_name: string
     father_name: string
@@ -49,25 +41,17 @@ export default function ListFamilyPeople({ queryClient = null, familyId, unnamed
     })
   }
 
-  if (isLoading) return (
-    <div>
-      <h2 className={styles.headingLg}>Person Info</h2>
-      <p>Loading...</p>
-    </div>
-  )
-  if (error) return <div>Failed to load</div>
-
-  if (data.length > 0) {
+  if (data.family_people.length > 0) {
     return (
       <div>
         <h2 className={styles.headingLg}>Person Info</h2>
         <ul className={styles.list}>
-          {data.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
+          {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
             <li className={styles.listItem} key={person_id}>
               { person_house ?
-                <p><Link href={"/person/" + person_id}>{person_name + ' ' + person_family.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
+                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
               :
-                <p><Link href={"/person/" + person_id}>{person_name + ' ' + person_family.family_name}</Link> is {person_gender} and {person_age} years old and is currently unhoused.</p>
+                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and is currently unhoused.</p>
               }
             </li>
           ))}
