@@ -157,6 +157,7 @@ export class PersonService {
       .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'") // TODO switch to inner join when all people have resources
       .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'") // TODO switch to inner join when all people have resources
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+      .leftJoinAndSelect("person.person_proposals", "proposal", "proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
   }
