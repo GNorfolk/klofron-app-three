@@ -4,14 +4,13 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
 
-export default function ManagePersonProposals({ userId, queryClient = null }) {
+export default function ManagePersonProposals({ personData, queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['listProposalsData'],
+      queryKey: ['managePersonProposalsData'],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal').then(
-          // ToDo: Do something different with this data set so we can compare userId, mebe get person data and proposal data somehow
           (res) => res.json(),
         ),
     })
@@ -33,7 +32,9 @@ export default function ManagePersonProposals({ userId, queryClient = null }) {
     )
     if (error) return <div>Failed to load</div>
 
-    const proposals = data.filter(prop => prop.proposal_id != 30)
+    const proposals = data.filter(prop =>
+      prop.proposal_proposer_person.person_family_id != personData.person_family_id
+    )
 
     return (
       <div>
@@ -41,9 +42,8 @@ export default function ManagePersonProposals({ userId, queryClient = null }) {
         <ul className={styles.list}>
           {proposals.map(({ proposal_id, proposal_proposer_person_id, proposal_proposer_person }) => (
             <li className={styles.listItem} key={proposal_id}>
-              {/* ToDo: Add something like data.house_family.family_user_id === userId conditional */}
-              { queryClient ? 
-              <>
+              { personData.person_family.family_user_id === userId ?
+              <div>
                 <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name + ": "}</Link>
                 <button onClick={
                   () => {
@@ -54,7 +54,7 @@ export default function ManagePersonProposals({ userId, queryClient = null }) {
                     })
                   }
                 }>Accept Proposal</button>
-              </> : <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name + "."}</Link>
+              </div> : <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name + "."}</Link>
               }
             </li>
           ))}
