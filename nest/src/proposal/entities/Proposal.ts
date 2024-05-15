@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Person } from "../../person/entities/Person";
+import { ProposalOffer } from "./ProposalOffer";
 
 @Entity("proposal", { schema: "ka3" })
 export class Proposal {
@@ -21,17 +22,13 @@ export class Proposal {
   @Column("timestamp", { name: "cancelled_at", nullable: true })
   proposal_cancelled_at: Date | null;
 
-  // @ManyToOne(() => Family, (family) => family.family_people, {
-  //   onDelete: "NO ACTION",
-  //   onUpdate: "NO ACTION",
-  // })
-  // @JoinColumn([{ name: "family_id", referencedColumnName: "family_id" }])
-  // person_family: Relation<Family>;
-
   @ManyToOne(() => Person, (person) => person.person_proposals, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   proposal_person: Relation<Person>;
+
+  @OneToMany(() => ProposalOffer, (proposal_offer) => proposal_offer.proposal_offer_proposal)
+  proposal_offer_ids: Relation<ProposalOffer>[];
 }
