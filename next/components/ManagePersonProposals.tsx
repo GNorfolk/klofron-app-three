@@ -39,22 +39,18 @@ export default function ManagePersonProposals({ personData, queryClient, userId 
     return (
       <div>
         <h2 className={styles.headingLg}>Proposal Info</h2>
+        <p>The following people are open to proposals.</p>
         <ul className={styles.list}>
-          {proposals.map(({ proposal_id, proposal_person_id, proposal_person }) => (
+          {proposals.map(({ proposal_id, proposal_person }) => (
             <li className={styles.listItem} key={proposal_id}>
               { personData.person_family.family_user_id === userId ?
-              <div>
-                <Link href={"/person/" + proposal_person_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name + ": "}</Link>
-                <button onClick={
-                  () => {
-                    acceptProposal.mutate(proposal_person_id, {
-                      onSettled: (res) => {
-                        queryClient.invalidateQueries()
-                      }
-                    })
-                  }
-                }>Accept Proposal</button>
-              </div> : <Link href={"/person/" + proposal_person_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name + "."}</Link>
+                <div>
+                  <Link href={"/person/" + router.query.id + "/proposal/" + proposal_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</Link>
+                </div>
+              :
+                <div>
+                  <p>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</p>
+                </div>
               }
             </li>
           ))}

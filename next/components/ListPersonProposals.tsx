@@ -15,11 +15,11 @@ export default function ListPersonProposals({ data }) {
             data.person_proposals.length > 0 ?
               data.person_proposals.map(({ proposal_id }) => (
                 <li className={styles.listItem} key={proposal_id}>
-                  <p>This person has an existing proposal with id {proposal_id}.</p>
+                  <p>{data.person_name} has an existing proposal with id {proposal_id}.</p>
                 </li>
               ))
             :
-              <p>No Proposals!</p>
+              <p>{data.person_name} is not open to proposal offers!</p>
           }
         </ul>
         <p>Go to <Link href={`/person/${router.query.id}/proposal`}>Proposals</Link> page.</p>
