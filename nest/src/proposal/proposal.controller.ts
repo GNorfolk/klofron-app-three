@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
-import { ProposalEligible } from './entities/ProposalEligible';
+import { Proposal } from './entities/Proposal';
 
 @Controller({
   path: 'proposal',
@@ -10,12 +10,12 @@ export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
   @Get()
-  async findAll(): Promise<ProposalEligible[]> {
+  async findAll(): Promise<Proposal[]> {
     return this.proposalService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<ProposalEligible> {
+  async findOne(@Param('id') id: string): Promise<Proposal> {
     return await this.proposalService.findOne(+id);
   }
 }

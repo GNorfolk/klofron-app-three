@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn
 import { Person } from "../../person/entities/Person";
 
 @Entity("proposal", { schema: "ka3" })
-export class ProposalEligible {
+export class Proposal {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   proposal_id: number;
 
