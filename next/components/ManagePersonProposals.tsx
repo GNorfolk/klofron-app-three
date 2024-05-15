@@ -16,9 +16,9 @@ export default function ManagePersonProposals({ personData, queryClient, userId 
     })
 
     const acceptProposal = useMutation({
-      mutationFn: (proposer_person_id) => {
+      mutationFn: (person_id) => {
         return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/accept-proposal', {
-          proposer_id: proposer_person_id,
+          proposer_id: person_id,
           accepter_id: router.query.id
         })
       },
@@ -33,28 +33,28 @@ export default function ManagePersonProposals({ personData, queryClient, userId 
     if (error) return <div>Failed to load</div>
 
     const proposals = data.filter(prop =>
-      prop.proposal_proposer_person.person_family_id != personData.person_family_id
+      prop.proposal_person.person_family_id != personData.person_family_id
     )
 
     return (
       <div>
         <h2 className={styles.headingLg}>Proposal Info</h2>
         <ul className={styles.list}>
-          {proposals.map(({ proposal_id, proposal_proposer_person_id, proposal_proposer_person }) => (
+          {proposals.map(({ proposal_id, proposal_person_id, proposal_person }) => (
             <li className={styles.listItem} key={proposal_id}>
               { personData.person_family.family_user_id === userId ?
               <div>
-                <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name + ": "}</Link>
+                <Link href={"/person/" + proposal_person_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name + ": "}</Link>
                 <button onClick={
                   () => {
-                    acceptProposal.mutate(proposal_proposer_person_id, {
+                    acceptProposal.mutate(proposal_person_id, {
                       onSettled: (res) => {
                         queryClient.invalidateQueries()
                       }
                     })
                   }
                 }>Accept Proposal</button>
-              </div> : <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name + "."}</Link>
+              </div> : <Link href={"/person/" + proposal_person_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name + "."}</Link>
               }
             </li>
           ))}

@@ -24,9 +24,9 @@ export default function ListAllProposals() {
     <div>
       <h2 className={styles.headingLg}>Proposal Info</h2>
       <ul className={styles.list}>
-        {data.map(({ proposal_id, proposal_proposer_person_id, proposal_proposer_person }) => (
+        {data.map(({ proposal_id, proposal_person_id, proposal_person }) => (
           <li className={styles.listItem} key={proposal_id}>
-            <Link href={"/person/" + proposal_proposer_person_id}>{proposal_proposer_person.person_name + " " + proposal_proposer_person.person_family.family_name + "."}</Link>
+            <Link href={"/person/" + proposal_person_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name + "."}</Link>
           </li>
         ))}
       </ul>

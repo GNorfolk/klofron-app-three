@@ -179,4 +179,6 @@ mysql -u root -p ka3 < dump-2024-05-10.sql
 
 # MySQL
 ```sql
+ALTER TABLE proposal DROP COLUMN accepter_person_id;
+ALTER TABLE proposal CHANGE `proposer_person_id` `person_id` INT NOT NULL;
 ```

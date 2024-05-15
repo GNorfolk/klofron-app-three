@@ -96,7 +96,7 @@ export class Person {
   @OneToMany(() => Action, (action) => action.action_person)
   person_actions: Relation<Action>[];
 
-  @OneToMany(() => Proposal, (proposal) => proposal.proposal_proposer_person)
+  @OneToMany(() => Proposal, (proposal) => proposal.proposal_person)
   person_proposals: Relation<Person>[];
 
   @OneToOne(() => Resource, (resource) => resource.resource_person)

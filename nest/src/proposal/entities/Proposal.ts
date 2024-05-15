@@ -6,11 +6,8 @@ export class Proposal {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   proposal_id: number;
 
-  @Column("int", { name: "proposer_person_id" })
-  proposal_proposer_person_id: number;
-
-  @Column("int", { name: "accepter_person_id", nullable: true })
-  proposal_accepter_person_id: number | null;
+  @Column("int", { name: "person_id" })
+  proposal_person_id: number;
 
   @Column("timestamp", {
     name: "created_at",
@@ -35,6 +32,6 @@ export class Proposal {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
-  @JoinColumn([{ name: "proposer_person_id", referencedColumnName: "person_id" }])
-  proposal_proposer_person: Relation<Person>;
+  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
+  proposal_person: Relation<Person>;
 }

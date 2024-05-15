@@ -93,8 +93,7 @@ CREATE TABLE `move_house` (
 -- -- -- -- -- PROPOSAL -- -- -- -- --
 CREATE TABLE `proposal` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `proposer_person_id` INT NOT NULL,
-    `accepter_person_id` INT,
+    `person_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `accepted_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP

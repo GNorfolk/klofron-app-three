@@ -12,9 +12,9 @@ export class ProposalService {
   async findAll(): Promise<Proposal[]> {
     let proposals = this.proposalRepository
       .createQueryBuilder("proposal")
-      .innerJoinAndSelect("proposal.proposal_proposer_person","proposer")
+      .innerJoinAndSelect("proposal.proposal_person","proposer")
       .innerJoinAndSelect("proposer.person_family","family")
-      .where("proposal.accepter_person_id IS NULL AND proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
+      .where("proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
     return await proposals.getMany();
   }
 
