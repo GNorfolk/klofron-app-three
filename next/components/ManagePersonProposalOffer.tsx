@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
+import { useForm, SubmitHandler } from "react-hook-form"
 
 export default function ManagePersonProposalOffer({ queryClient, userId }) {
   const router = useRouter()
@@ -10,27 +11,67 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['ManagePersonProposalOfferData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal/' + router.query.idd).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id).then(
           (res) => res.json(),
         ),
     })
 
+    type Inputs = {
+      person_id: number
+    }
+
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<Inputs>()
+
+    const onSubmit: SubmitHandler<Inputs> = (formData) => {
+      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/something/', {
+        person_id: formData.person_id
+      }).then(response => {
+        queryClient.invalidateQueries()
+        document.getElementById("cm-" + router.query.id).innerText = ' '
+      }).catch(error => {
+        document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
+      })
+    }
+
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className={styles.headingLg}>Proposal Offer</h2>
         <p>Loading...</p>
       </div>
     )
     if (error) return <div>Failed to load</div>
 
-    // const proposals = data.filter(prop =>
-    //   prop.proposal_person.person_family_id != personData.person_family_id
-    // )
+    const familyBachelors = data.person_family.family_people.filter(ppl => ppl.person_age >= 18 && ppl.person_partner_id === null)
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
-        <p>Here will be some info on accepting proposals.</p>
+        <h2 className={styles.headingLg}>Proposal Offer</h2>
+        {
+          familyBachelors.length > 0 ?
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <select {...register("person_id", { required: true })}>
+                {
+                  errors.person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                }
+                {
+                  familyBachelors.map(({ person_id, person_name }) => (
+                    <option value={person_id}>{person_name}</option>
+                  ))
+                }
+                </select>
+                <input type="submit" />
+              </form>
+              <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+            </div>
+          :
+            <p>No family people are eligible to betrothe!</p>
+        }
       </div>
     )
   }

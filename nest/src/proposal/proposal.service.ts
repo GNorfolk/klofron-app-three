@@ -12,8 +12,8 @@ export class ProposalService {
   async findAll(): Promise<Proposal[]> {
     let proposals = this.proposalRepository
       .createQueryBuilder("proposal")
-      .innerJoinAndSelect("proposal.proposal_person","proposer")
-      .innerJoinAndSelect("proposer.person_family","family")
+      .innerJoinAndSelect("proposal.proposal_person","person")
+      .innerJoinAndSelect("person.person_family","family")
       .where("proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
     return await proposals.getMany();
   }
@@ -21,6 +21,7 @@ export class ProposalService {
   async findOne(id: number): Promise<Proposal> {
     const proposal = this.proposalRepository
       .createQueryBuilder("proposal")
+      .innerJoinAndSelect("proposal.proposal_person","person")
       .where("proposal.proposal_id = :id", { id: id })
     return await proposal.getOne();
   }
