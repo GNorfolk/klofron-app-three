@@ -177,6 +177,9 @@ mysql -u root -p ka3 < dump-2024-05-10.sql
 **How to generate NestJS models:**
 - stg -D mysql -h localhost -p 3306 -d ka3 -u root -x password --indices --case snake --out-dir models --clean
 
+**How to age people:**
+- update person set created_at = created_at - interval 14 day where house_id = 25;
+
 # MySQL
 ```sql
 ALTER TABLE proposal DROP COLUMN accepter_person_id;

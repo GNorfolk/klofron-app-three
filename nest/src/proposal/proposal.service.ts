@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Proposal } from './entities/Proposal';
+import { ProposalEligible } from './entities/ProposalEligible';
 
 @Injectable()
 export class ProposalService {
   constructor(
-    @InjectRepository(Proposal) private proposalRepository: Repository<Proposal>,
+    @InjectRepository(ProposalEligible) private proposalRepository: Repository<ProposalEligible>,
   ) {}
 
-  async findAll(): Promise<Proposal[]> {
+  async findAll(): Promise<ProposalEligible[]> {
     let proposals = this.proposalRepository
       .createQueryBuilder("proposal")
       .innerJoinAndSelect("proposal.proposal_person","person")
@@ -18,7 +18,7 @@ export class ProposalService {
     return await proposals.getMany();
   }
 
-  async findOne(id: number): Promise<Proposal> {
+  async findOne(id: number): Promise<ProposalEligible> {
     const proposal = this.proposalRepository
       .createQueryBuilder("proposal")
       .innerJoinAndSelect("proposal.proposal_person","person")

@@ -46,7 +46,9 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
     )
     if (error) return <div>Failed to load</div>
 
-    const familyBachelors = data.person_family.family_people.filter(ppl => ppl.person_age >= 18 && ppl.person_partner_id === null)
+    const familyBachelors = data.person_family.family_people.filter(ppl =>
+      ppl.person_age >= 18 && ppl.person_partner_id === null && ppl.person_id != router.query.id
+    )
 
     return (
       <div>
