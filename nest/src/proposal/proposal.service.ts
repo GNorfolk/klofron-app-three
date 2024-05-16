@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Proposal } from './entities/Proposal';
 import { CreateProposalDto } from './dto/create-proposal.dto';
+import { Person } from '../person/entities/Person';
 
 @Injectable()
 export class ProposalService {
@@ -17,6 +18,14 @@ export class ProposalService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const person = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .leftJoinAndSelect("person.person_proposals", "proposal", "proposal.cancelled_at IS NULL AND proposal.accepted_at IS NULL")
+        .where("person.person_id = :id", { id: proposal.proposal_person_id })
+        .getOne();
+      if (person.person_partner_id != null) throw "Person already has a non-null partner id!"
+      if (person.person_age < 18) throw "Person is under the age of 18!"
+      if (person.person_proposals.length > 0) throw "Person already has an open proposal!"
       result = await queryRunner.manager.save(Proposal, proposal);
       await queryRunner.commitTransaction();
       await queryRunner.release();
