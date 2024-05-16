@@ -182,16 +182,4 @@ mysql -u root -p ka3 < dump-2024-05-10.sql
 
 # MySQL
 ```sql
-ALTER TABLE proposal ADD CONSTRAINT fk_person_id FOREIGN KEY (`person_id`) REFERENCES person(`id`);
-CREATE TABLE `proposal_offer` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `proposal_id` INT NOT NULL,
-    `person_id` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`proposal_id`) REFERENCES proposal(`id`),
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 ```

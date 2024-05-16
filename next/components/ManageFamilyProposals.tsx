@@ -71,7 +71,7 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
                   <select {...register("proposal_person_id", { required: true })}>
                     { errors.proposal_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
                     {
-                      data.family_people.map(({ person_id, person_name }) => (
+                      familyBachelors.map(({ person_id, person_name }) => (
                         <option value={person_id}>{person_name}</option>
                       ))
                     }
