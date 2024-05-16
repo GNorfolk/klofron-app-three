@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
 
-export default function ListPersonProposals({ data }) {
+export default function ListPersonProposals({ data, showLink = true }) {
   const router = useRouter()
   if (router.isReady) {
     return (
@@ -22,7 +22,9 @@ export default function ListPersonProposals({ data }) {
               <p>{data.person_name} is not open to proposal offers!</p>
           }
         </ul>
-        <p>Go to <Link href={`/person/${router.query.id}/proposal`}>Proposals</Link> page.</p>
+        {
+          showLink ? <p>Go to <Link href={`/person/${router.query.id}/proposal`}>Proposals</Link> page.</p> : null
+        }
       </div>
     )
   }
