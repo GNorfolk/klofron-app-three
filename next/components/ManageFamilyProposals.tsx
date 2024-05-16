@@ -28,8 +28,8 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
-      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal', {
-        person_id: formData.proposal_person_id
+      axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal', {
+        proposal_person_id: formData.proposal_person_id
       }).then(response => {
         queryClient.invalidateQueries()
         document.getElementById("cm-" + router.query.id).innerText = ' '

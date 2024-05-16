@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import { Proposal } from './entities/Proposal';
+import { CreateProposalDto } from './dto/create-proposal.dto';
 
 @Controller({
   path: 'proposal',
@@ -17,5 +18,10 @@ export class ProposalController {
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Proposal> {
     return await this.proposalService.findOne(+id);
+  }
+
+  @Post()
+  async create(@Body() proposal: CreateProposalDto) {
+    return await this.proposalService.create(proposal);
   }
 }
