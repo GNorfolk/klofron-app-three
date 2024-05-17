@@ -15,7 +15,7 @@ import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
 import { Action } from "../../action/entities/Action";
 import { Proposal } from "../../proposal/entities/Proposal";
-import { ProposalOffer } from "../../proposal_offer/entities/ProposalOffer";
+import { ProposalOffer } from "../../proposal-offer/entities/ProposalOffer";
 
 const day_in_ms = 24 * 3600 * 1000
 

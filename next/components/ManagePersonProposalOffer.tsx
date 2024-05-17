@@ -28,7 +28,7 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
-      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/something/', {
+      axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer', {
         person_id: formData.person_id
       }).then(response => {
         queryClient.invalidateQueries()

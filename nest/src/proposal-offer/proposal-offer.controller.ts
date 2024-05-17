@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProposalOfferService } from './proposal_offer.service';
-import { CreateProposalOfferDto } from './dto/create-proposal_offer.dto';
-import { UpdateProposalOfferDto } from './dto/update-proposal_offer.dto';
+import { ProposalOfferService } from './proposal-offer.service';
+import { CreateProposalOfferDto } from './dto/create-proposal-offer.dto';
+import { UpdateProposalOfferDto } from './dto/update-proposal-offer.dto';
 
 @Controller({
-  path: 'proposal_offer',
+  path: 'proposal-offer',
   version: '2',
 })
 export class ProposalOfferController {

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ProposalOfferService } from './proposal_offer.service';
-import { ProposalOfferController } from './proposal_offer.controller';
+import { ProposalOfferService } from './proposal-offer.service';
+import { ProposalOfferController } from './proposal-offer.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProposalOffer } from './entities/ProposalOffer';
 

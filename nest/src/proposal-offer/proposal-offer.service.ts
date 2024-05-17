@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { CreateProposalOfferDto } from './dto/create-proposal_offer.dto';
-import { UpdateProposalOfferDto } from './dto/update-proposal_offer.dto';
+import { CreateProposalOfferDto } from './dto/create-proposal-offer.dto';
+import { UpdateProposalOfferDto } from './dto/update-proposal-offer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { ProposalOffer } from './entities/ProposalOffer';
