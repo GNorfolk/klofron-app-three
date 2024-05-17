@@ -17,7 +17,7 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
     })
 
     type Inputs = {
-      person_id: number
+      proposal_offer_person_id: number
     }
 
     const {
@@ -29,7 +29,8 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
       axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer', {
-        person_id: formData.person_id
+        proposal_offer_person_id: formData.proposal_offer_person_id,
+        proposal_offer_proposal_id: router.query.idd
       }).then(response => {
         queryClient.invalidateQueries()
         document.getElementById("cm-" + router.query.id).innerText = ' '
@@ -57,9 +58,9 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
           familyBachelors.length > 0 ?
             <div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <select {...register("person_id", { required: true })}>
+                <select {...register("proposal_offer_person_id", { required: true })}>
                 {
-                  errors.person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                  errors.proposal_offer_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
                 }
                 {
                   familyBachelors.map(({ person_id, person_name }) => (

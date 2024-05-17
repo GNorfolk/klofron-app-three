@@ -7,6 +7,7 @@ export class ProposalOffer {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   proposal_offer_id: number;
 
+  @Column("int", { name: "proposal_id" })
   proposal_offer_proposal_id: number;
 
   @Column("int", { name: "person_id" })
@@ -21,8 +22,8 @@ export class ProposalOffer {
   @Column("timestamp", { name: "accepted_at", nullable: true })
   proposal_offer_accepted_at: Date | null;
 
-  @Column("timestamp", { name: "cancelled_at", nullable: true })
-  proposal_offer_cancelled_at: Date | null;
+  @Column("timestamp", { name: "deleted_at", nullable: true })
+  proposal_offer_deleted_at: Date | null;
 
   @ManyToOne(() => Proposal, (proposal) => proposal.proposal_offer_ids, {
     onDelete: "NO ACTION",

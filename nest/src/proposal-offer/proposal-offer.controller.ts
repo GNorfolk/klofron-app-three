@@ -25,13 +25,13 @@ export class ProposalOfferController {
     return await this.proposalOfferService.findOne(+id);
   }
 
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateProposalOfferDto: UpdateProposalOfferDto) {
-    return await this.proposalOfferService.update(+id, updateProposalOfferDto);
-  }
+  // @Patch(':id')
+  // async update(@Param('id') id: string, @Body() updateProposalOfferDto: UpdateProposalOfferDto) {
+  //   return await this.proposalOfferService.update(+id, updateProposalOfferDto);
+  // }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.proposalOfferService.remove(+id);
-  }
+  // @Delete(':id')
+  // async remove(@Param('id') id: string) {
+  //   return await this.proposalOfferService.remove(+id);
+  // }
 }

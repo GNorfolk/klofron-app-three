@@ -12,23 +12,42 @@ export class ProposalOfferService {
     private dataSource: DataSource
   ) {}
 
-  create(createProposalOfferDto: CreateProposalOfferDto) {
-    return 'This action adds a new proposalOffer';
+  async create(proposalOffer: CreateProposalOfferDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      result = await queryRunner.manager.save(ProposalOffer, proposalOffer);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 
-  findAll() {
-    return `This action returns all proposalOffer`;
+  async findAll(): Promise<ProposalOffer[]> {
+    let proposalOffers = this.proposalOfferRepository
+      .createQueryBuilder("proposalOffer")
+    return await proposalOffers.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} proposalOffer`;
+  async findOne(id: number): Promise<ProposalOffer> {
+    const proposalOffer = this.proposalOfferRepository
+      .createQueryBuilder("proposalOffer")
+      .where("proposalOffer.proposal_offer_id = :id", { id: id })
+    return await proposalOffer.getOne();
   }
 
-  update(id: number, updateProposalOfferDto: UpdateProposalOfferDto) {
-    return `This action updates a #${id} proposalOffer`;
-  }
+  // async update(id: number, updateProposalOfferDto: UpdateProposalOfferDto) {
+  //   return await`This action updates a #${id} proposalOffer`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} proposalOffer`;
-  }
+  // async remove(id: number) {
+  //   return await`This action removes a #${id} proposalOffer`;
+  // }
 }
