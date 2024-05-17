@@ -18,6 +18,12 @@ export class ProposalOfferService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const existing = await queryRunner.manager
+        .createQueryBuilder(ProposalOffer, "offer")
+        .where("offer.proposal_offer_proposal_id = :id", { id: proposalOffer.proposal_offer_proposal_id })
+        .andWhere("offer.proposal_offer_person_id = :idd", { idd: proposalOffer.proposal_offer_person_id })
+        .getMany()
+      if (existing.length > 0) throw "This proposal offer already exists!"
       result = await queryRunner.manager.save(ProposalOffer, proposalOffer);
       await queryRunner.commitTransaction();
       await queryRunner.release();
