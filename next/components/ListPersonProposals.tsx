@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
 
-export default function ListPersonProposals({ data, showLink = true, queryClient = null }) {
+export default function ListPersonProposals({ data, showLink = true, queryClient = null, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const createProposal = useMutation({
@@ -29,14 +29,19 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
             :
               <div>
                 <p>{data.person_name} is not open to proposal offers!</p>
-                <button onClick={
-                  () => {
-                      createProposal.mutate(data.person_id, { onSettled: (res) => {
-                        queryClient.invalidateQueries()
+                {
+                  data.person_family.family_user_id === userId ?
+                    <button onClick={
+                      () => {
+                          createProposal.mutate(data.person_id, { onSettled: (res) => {
+                            queryClient.invalidateQueries()
+                          }
+                        })
                       }
-                    })
-                  }
-                }>Create Proposal</button>
+                    }>Create Proposal</button>
+                  :
+                    null
+                }
               </div>
           }
         </ul>

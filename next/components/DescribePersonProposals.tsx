@@ -27,7 +27,7 @@ export default function DescribePersonProposals({ userId, queryClient }) {
 
     return (
       <QueryClientProvider client={queryClient}>
-        <ListPersonProposals data={data} showLink={false} queryClient={queryClient} />
+        <ListPersonProposals data={data} showLink={false} queryClient={queryClient} userId={userId} />
         <ManagePersonProposals personData={data} queryClient={queryClient} userId={userId} />
       </QueryClientProvider>
     )
