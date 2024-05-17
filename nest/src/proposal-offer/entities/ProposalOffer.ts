@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import { Person } from "../../person/entities/Person";
 import { Proposal } from "../../proposal/entities/Proposal";
+import { ProposalDowry } from "./ProposalDowry";
 
 @Entity("proposal_offer", { schema: "ka3" })
 export class ProposalOffer {
@@ -12,6 +13,9 @@ export class ProposalOffer {
 
   @Column("int", { name: "person_id" })
   proposal_offer_person_id: number;
+
+  @Column("int", { name: "dowry_id" })
+  proposal_offer_dowry_id: number;
 
   @Column("timestamp", {
     name: "created_at",
@@ -38,4 +42,8 @@ export class ProposalOffer {
   })
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   proposal_offer_person: Relation<Person>;
+
+  @OneToOne(() => ProposalDowry, (proposalDowry) => proposalDowry.proposal_dowry_offer)
+  @JoinColumn([{ name: "dowry_id", referencedColumnName: "proposal_dowry_id" }])
+  proposal_offer_dowry: Relation<ProposalOffer>;
 }

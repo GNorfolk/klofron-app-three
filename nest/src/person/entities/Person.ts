@@ -16,6 +16,7 @@ import { Resource } from "../../resource/entities/Resource";
 import { Action } from "../../action/entities/Action";
 import { Proposal } from "../../proposal/entities/Proposal";
 import { ProposalOffer } from "../../proposal-offer/entities/ProposalOffer";
+import { ProposalDowry } from "../../proposal-offer/entities/ProposalDowry";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -102,6 +103,9 @@ export class Person {
 
   @OneToMany(() => ProposalOffer, (proposal_offer) => proposal_offer.proposal_offer_person)
   person_proposal_offers: Relation<ProposalOffer>[];
+
+  @OneToMany(() => ProposalDowry, (proposal_dowry) => proposal_dowry.proposal_dowry_person)
+  person_proposal_dowrys: Relation<ProposalDowry>[];
 
   @OneToOne(() => Resource, (resource) => resource.resource_person)
   person_wood: Relation<Resource>;

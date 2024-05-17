@@ -29,8 +29,9 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
       axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer', {
-        proposal_offer_person_id: formData.proposal_offer_person_id,
-        proposal_offer_proposal_id: router.query.idd
+        proposal_offer_person_id: router.query.id,
+        proposal_offer_proposal_id: router.query.idd,
+        proposal_dowry_person_id: formData.proposal_offer_person_id
       }).then(response => {
         queryClient.invalidateQueries()
         document.getElementById("cm-" + router.query.id).innerText = ' '

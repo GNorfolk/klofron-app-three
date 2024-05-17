@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProposalOfferService } from './proposal-offer.service';
 import { CreateProposalOfferDto } from './dto/create-proposal-offer.dto';
+import { CreateProposalDowryDto } from './dto/create-proposal-dowry.dto';
 import { UpdateProposalOfferDto } from './dto/update-proposal-offer.dto';
 
 @Controller({
@@ -11,8 +12,8 @@ export class ProposalOfferController {
   constructor(private readonly proposalOfferService: ProposalOfferService) {}
 
   @Post()
-  async create(@Body() createProposalOfferDto: CreateProposalOfferDto) {
-    return await this.proposalOfferService.create(createProposalOfferDto);
+  async create(@Body() createProposalOfferDto: CreateProposalOfferDto, @Body() createProposalDowryDto: CreateProposalDowryDto, ) {
+    return await this.proposalOfferService.create(createProposalOfferDto, createProposalDowryDto);
   }
 
   @Get()

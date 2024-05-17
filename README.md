@@ -182,4 +182,31 @@ mysql -u root -p ka3 < dump-2024-05-15.sql
 
 # MySQL
 ```sql
+DROP TABLE proposal_offer;
+CREATE TABLE `proposal_dowry` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `accepted_at` TIMESTAMP NULL,
+    `deleted_at` TIMESTAMP NULL,
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `proposal_offer` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `proposal_id` INT NOT NULL,
+    `person_id` INT NOT NULL,
+    `dowry_id` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `accepted_at` TIMESTAMP NULL,
+    `deleted_at` TIMESTAMP NULL,
+    FOREIGN KEY (`proposal_id`) REFERENCES proposal(`id`),
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`),
+    FOREIGN KEY (`dowry_id`) REFERENCES proposal_dowry(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+# save
+```sql
+set sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
+set sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
 ```
