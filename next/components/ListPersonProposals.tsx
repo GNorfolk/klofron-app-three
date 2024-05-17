@@ -4,9 +4,17 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
 
-export default function ListPersonProposals({ data, showLink = true }) {
+export default function ListPersonProposals({ data, showLink = true, queryClient = null }) {
   const router = useRouter()
   if (router.isReady) {
+    const createProposal = useMutation({
+      mutationFn: (id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal', {
+          proposal_person_id: id
+        })
+      },
+    })
+
     return (
       <div>
         <h2 className={styles.headingLg}>Proposal Info</h2>
@@ -19,7 +27,17 @@ export default function ListPersonProposals({ data, showLink = true }) {
                 </li>
               ))
             :
-              <p>{data.person_name} is not open to proposal offers!</p>
+              <div>
+                <p>{data.person_name} is not open to proposal offers!</p>
+                <button onClick={
+                  () => {
+                      createProposal.mutate(data.person_id, { onSettled: (res) => {
+                        queryClient.invalidateQueries()
+                      }
+                    })
+                  }
+                }>Create Proposal</button>
+              </div>
           }
         </ul>
         {

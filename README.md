@@ -160,15 +160,15 @@ watch -n5 ENV=local node consumer.js
 
 **How to backup and restore DB:**
 ```bash
-mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2024-05-10.sql
-sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2024-05-10.sql
-sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2024-05-10.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-05-10.sql
-sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2024-05-10.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-05-10.sql
-aws s3 cp dump-2024-05-10.sql s3://ka3-db-dumps
-AWS_PROFILE=react-app aws s3 cp s3://ka3-db-dumps/dump-2024-05-10.sql .
-mysql -u root -p ka3 < dump-2024-05-10.sql
+mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2024-05-15.sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2024-05-15.sql
+sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2024-05-15.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-05-15.sql
+sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2024-05-15.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-05-15.sql
+aws s3 cp dump-2024-05-15.sql s3://ka3-db-dumps
+AWS_PROFILE=react-app aws s3 cp s3://ka3-db-dumps/dump-2024-05-15.sql .
+mysql -u root -p ka3 < dump-2024-05-15.sql
 ```
 
 **How to generate NestJS resource:**
