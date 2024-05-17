@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn } from "typeorm";
 import { Person } from "../../person/entities/Person";
-import { Proposal } from "./Proposal";
+import { Proposal } from "../../proposal/entities/Proposal";
 
 @Entity("proposal_offer", { schema: "ka3" })
 export class ProposalOffer {
