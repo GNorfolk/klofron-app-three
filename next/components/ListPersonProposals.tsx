@@ -21,9 +21,18 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
         <ul className={styles.list}>
           {
             data.person_proposals.length > 0 ?
-              data.person_proposals.map(({ proposal_id }) => (
-                <li className={styles.listItem} key={proposal_id}>
+              data.person_proposals.map(({ proposal_id, proposal_offers }) => (
+                <li className={styles.listItem} key={data.proposal_id}>
                   <p>{data.person_name} has an existing proposal with id {proposal_id}.</p>
+                  {
+                    proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
+                      <p>
+                        Person with proposal is {data.person_name} who is {data.person_gender} and is {data.person_age} years old.
+                        Person {data.person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
+                        They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
+                      </p>
+                    ))
+                  }
                 </li>
               ))
             :
