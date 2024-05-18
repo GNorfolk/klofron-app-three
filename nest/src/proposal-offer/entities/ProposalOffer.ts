@@ -29,7 +29,7 @@ export class ProposalOffer {
   @Column("timestamp", { name: "deleted_at", nullable: true })
   proposal_offer_deleted_at: Date | null;
 
-  @ManyToOne(() => Proposal, (proposal) => proposal.proposal_offer_ids, {
+  @ManyToOne(() => Proposal, (proposal) => proposal.proposal_offers, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })

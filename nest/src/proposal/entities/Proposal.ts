@@ -30,5 +30,5 @@ export class Proposal {
   proposal_person: Relation<Person>;
 
   @OneToMany(() => ProposalOffer, (proposal_offer) => proposal_offer.proposal_offer_proposal)
-  proposal_offer_ids: Relation<ProposalOffer>[];
+  proposal_offers: Relation<ProposalOffer>[];
 }

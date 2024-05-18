@@ -48,6 +48,7 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
 
     const familyBachelors = data.family_people.filter(ppl => ppl.person_proposals.length === 0 && ppl.person_age >= 18 && ppl.person_partner_id === null)
     const familyProposals = data.family_people.filter(ppl => ppl.person_proposals.length > 0)
+    const familyProposalOffers = familyProposals.filter(ppl => ppl.person_proposals.filter(prop => prop.proposal_offers.length > 0).length > 0)
 
     if (data.family_user_id === userId) {
       return (
@@ -82,6 +83,25 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
               </div>
             :
               <p>No eligible bachelors!</p>
+          }
+          <h2 className={styles.headingLg}>List Proposal Offers</h2>
+          {
+            familyProposalOffers.length > 0 ?
+              familyProposalOffers.map(({ person_proposals, person_name, person_gender, person_age }) => (
+                person_proposals.map(({ proposal_offers }) => (
+                  proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
+                    <div>
+                      <p>
+                        Person with proposal is {person_name} who is {person_gender} and is {person_age} years old.
+                        Person {person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
+                        They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
+                      </p>
+                    </div>
+                  ))
+                ))
+              ))
+            :
+              <p>This family have no proposal offers.</p>
           }
         </div>
       )
