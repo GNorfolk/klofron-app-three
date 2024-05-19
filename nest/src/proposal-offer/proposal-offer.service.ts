@@ -34,16 +34,67 @@ export class ProposalOfferService {
       const proposal = await queryRunner.manager
         .createQueryBuilder(Proposal, "proposal")
         .innerJoinAndSelect("proposal.proposal_person", "person")
+        .innerJoinAndSelect("person.person_mother", "mother")
+        .innerJoinAndSelect("person.person_father", "father")
+        .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+        .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+        .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+        .innerJoinAndSelect("father.person_father", "paternal_grandfather")
         .where("proposal.proposal_id = :id", { id: proposalOffer.proposal_offer_proposal_id })
         .getOne()
       const offerPerson = await queryRunner.manager
         .createQueryBuilder(Person, "person")
+        .innerJoinAndSelect("person.person_mother", "mother")
+        .innerJoinAndSelect("person.person_father", "father")
+        .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+        .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+        .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+        .innerJoinAndSelect("father.person_father", "paternal_grandfather")
         .where("person.person_id = :id", { id: proposalOffer.proposal_offer_person_id })
         .getOne()
       const dowryPerson = await queryRunner.manager
         .createQueryBuilder(Person, "person")
+        .innerJoinAndSelect("person.person_mother", "mother")
+        .innerJoinAndSelect("person.person_father", "father")
+        .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+        .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+        .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+        .innerJoinAndSelect("father.person_father", "paternal_grandfather")
         .where("person.person_id = :id", { id: proposalDowry.proposal_dowry_person_id })
         .getOne()
+      const proposalPersonArray = [], offerPersonArray = [], dowryPersonArray = []
+      proposalPersonArray.push(
+        proposal.proposal_person.person_id,
+        proposal.proposal_person.person_mother.person_id,
+        proposal.proposal_person.person_father.person_id,
+        proposal.proposal_person.person_mother.person_mother.person_id,
+        proposal.proposal_person.person_mother.person_father.person_id,
+        proposal.proposal_person.person_father.person_mother.person_id,
+        proposal.proposal_person.person_father.person_father.person_id
+      )
+      offerPersonArray.push(
+        offerPerson.person_id,
+        offerPerson.person_mother.person_id,
+        offerPerson.person_father.person_id,
+        offerPerson.person_mother.person_mother.person_id,
+        offerPerson.person_mother.person_father.person_id,
+        offerPerson.person_father.person_mother.person_id,
+        offerPerson.person_father.person_father.person_id
+      )
+      dowryPersonArray.push(
+        dowryPerson.person_id,
+        dowryPerson.person_mother.person_id,
+        dowryPerson.person_father.person_id,
+        dowryPerson.person_mother.person_mother.person_id,
+        dowryPerson.person_mother.person_father.person_id,
+        dowryPerson.person_father.person_mother.person_id,
+        dowryPerson.person_father.person_father.person_id
+      )
+      const proposalPersonArrayFiltered = proposalPersonArray.filter((item) => item != 1 && item != 2);
+      const offerPersonArrayFiltered = offerPersonArray.filter((item) => item != 1 && item != 2);
+      const dowryPersonArrayFiltered = dowryPersonArray.filter((item) => item != 1 && item != 2);
+      const compareAncestorIdsBoolean = proposalPersonArrayFiltered.some(r=> offerPersonArrayFiltered.concat(dowryPersonArrayFiltered).includes(r))
+      if (compareAncestorIdsBoolean) throw "Offer person and / or dowry person share ancestors with proposal person!"
       if (proposal.proposal_person.person_partner_id != null) throw "Proposal person already has partner id!"
       if (offerPerson.person_partner_id != null) throw "Offer person already has partner id!"
       if (dowryPerson.person_partner_id != null) throw "Dowry person already has partner id!"
