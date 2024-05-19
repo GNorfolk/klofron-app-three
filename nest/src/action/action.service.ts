@@ -37,8 +37,9 @@ export class ActionService {
         }, "resource_volume", 1);
         if (food.affected != 1) throw "Cannot decrement house resources!"
       } else if (action.action_type_id == 3) {
+        const storageWood = ( person.person_house.house_storage / 3 ) + 1;
         if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
-        if (person.person_house.house_wood.resource_volume < 3) throw "Not enough wood, 3 required!"
+        if (person.person_house.house_wood.resource_volume < storageWood) throw "Not enough wood, " + storageWood + " required!"
         const food = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "food",
           resource_house_id: person.person_house_id
@@ -46,11 +47,12 @@ export class ActionService {
         const wood = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "wood",
           resource_house_id: person.person_house_id
-        }, "resource_volume", 3);
+        }, "resource_volume", storageWood);
         if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
       } else if (action.action_type_id == 4) {
+        const roomsWood = 2 * ( person.person_house.house_rooms + 1 );
         if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
-        if (person.person_house.house_wood.resource_volume < 6) throw "Not enough wood, 6 required!"
+        if (person.person_house.house_wood.resource_volume < roomsWood) throw "Not enough wood, " + roomsWood + " required!"
         const food = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "food",
           resource_house_id: person.person_house_id
@@ -58,7 +60,7 @@ export class ActionService {
         const wood = await queryRunner.manager.decrement(Resource, {
           resource_type_name: "wood",
           resource_house_id: person.person_house_id
-        }, "resource_volume", 6);
+        }, "resource_volume", roomsWood);
         if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
       } else if (action.action_type_id == 5) {
         if (person.person_house.house_food.resource_volume < 3) throw "Not enough food, 3 required!"
