@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { ProposalOffer } from './entities/ProposalOffer';
 import { ProposalDowry } from './entities/ProposalDowry';
+import { Person } from '../person/entities/Person';
+import { Proposal } from '../proposal/entities/Proposal';
 
 @Injectable()
 export class ProposalOfferService {
@@ -29,9 +31,26 @@ export class ProposalOfferService {
         .andWhere("dowry.proposal_dowry_person_id = :iddd", { iddd: proposalDowry.proposal_dowry_person_id })
         .getMany()
       if (existing.length > 0) throw "This proposal offer already exists!"
+      const proposal = await queryRunner.manager
+        .createQueryBuilder(Proposal, "proposal")
+        .innerJoinAndSelect("proposal.proposal_person", "person")
+        .where("proposal.proposal_id = :id", { id: proposalOffer.proposal_offer_proposal_id })
+        .getOne()
+      const offerPerson = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .where("person.person_id = :id", { id: proposalOffer.proposal_offer_person_id })
+        .getOne()
+      const dowryPerson = await queryRunner.manager
+        .createQueryBuilder(Person, "person")
+        .where("person.person_id = :id", { id: proposalDowry.proposal_dowry_person_id })
+        .getOne()
+      if (proposal.proposal_person.person_partner_id != null) throw "Proposal person already has partner id!"
+      if (offerPerson.person_partner_id != null) throw "Offer person already has partner id!"
+      if (dowryPerson.person_partner_id != null) throw "Dowry person already has partner id!"
       const dowry = await queryRunner.manager.save(ProposalDowry, proposalDowry);
       proposalOffer.proposal_offer_dowry_id = dowry.proposal_dowry_id
       result = await queryRunner.manager.save(ProposalOffer, proposalOffer);
+      throw "shouldnt get this far"
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result

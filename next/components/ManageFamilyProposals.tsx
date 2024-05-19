@@ -56,9 +56,9 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
           <h2 className={styles.headingLg}>Proposal Info</h2>
           {
             familyProposals.length > 0 ?
-              familyProposals.map(({ person_name, person_proposals }) => (
+              familyProposals.map(({ person_id, person_name, person_proposals }) => (
                 <div>
-                  <p>{person_name} has proposal <Link href={"/proposal/" + person_proposals[0].proposal_id}>{person_proposals[0].proposal_id}</Link></p>
+                  <p>{person_name} has proposal <Link href={"/person/" + person_id + "/proposal"}>{person_proposals[0].proposal_id}</Link></p>
                 </div>
               ))
             :
