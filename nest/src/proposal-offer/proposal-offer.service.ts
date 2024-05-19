@@ -50,7 +50,6 @@ export class ProposalOfferService {
       const dowry = await queryRunner.manager.save(ProposalDowry, proposalDowry);
       proposalOffer.proposal_offer_dowry_id = dowry.proposal_dowry_id
       result = await queryRunner.manager.save(ProposalOffer, proposalOffer);
-      throw "shouldnt get this far"
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result
