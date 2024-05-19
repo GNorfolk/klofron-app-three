@@ -12,7 +12,7 @@ export default function DescribePersonProposals({ userId, queryClient }) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['describePersonProposalsData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.person_id).then(
           (res) => res.json(),
         ),
     })

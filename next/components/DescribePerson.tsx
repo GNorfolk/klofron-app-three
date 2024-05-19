@@ -12,9 +12,9 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['personData' + router.query.id],
+      queryKey: ['personData' + router.query.person_id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.person_id).then(
           (res) => res.json(),
         ),
     })
@@ -22,7 +22,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
     const [personInfo, setpersonInfo] = useState({ name: "" })
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
       e.preventDefault();
-      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id, {
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.person_id, {
         name: personInfo.name
       }).then((value) => {
         queryClient.invalidateQueries()
@@ -54,8 +54,8 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
           </li>
         </ul>
         <h2 className={styles.headingLg}>Actions Info</h2>
-        <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.id} />
-        <ListPersonActionsPrevious personId={router.query.id} />
+        <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.person_id} />
+        <ListPersonActionsPrevious personId={router.query.person_id} />
         {
           status === "authenticated" && userId == data.person_family.family_user_id ?
           <div>
@@ -72,7 +72,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
                 <input type="submit" value="Rename" />
               </form>
             </ul>
-            <ListPersonProposals data={data} />
+            <ListPersonProposals data={data} userId={userId} showOffers={false} />
           </div>
           :
           <></>

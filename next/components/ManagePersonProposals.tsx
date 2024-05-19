@@ -19,7 +19,7 @@ export default function ManagePersonProposals({ personData, queryClient, userId 
       mutationFn: (person_id) => {
         return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/accept-proposal', {
           proposer_id: person_id,
-          accepter_id: router.query.id
+          accepter_id: router.query.person_id
         })
       },
     })
@@ -45,7 +45,7 @@ export default function ManagePersonProposals({ personData, queryClient, userId 
             <li className={styles.listItem} key={proposal_id}>
               { personData.person_family.family_user_id === userId ?
                 <div>
-                  <Link href={"/person/" + router.query.id + "/proposal/" + proposal_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</Link>
+                  <Link href={"/person/" + router.query.person_id + "/proposal/" + proposal_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</Link>
                 </div>
               :
                 <div>

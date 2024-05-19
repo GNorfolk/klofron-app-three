@@ -8,10 +8,13 @@ import { useForm, SubmitHandler } from "react-hook-form"
 export default function ManagePersonProposalOffer({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
+    const personId = router.query?.person_id ? router.query.person_id : null
+    const proposalId = router.query?.proposal_id ? router.query.proposal_id : null
+
     const { isLoading, error, data } = useQuery({
       queryKey: ['ManagePersonProposalOfferData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + personId).then(
           (res) => res.json(),
         ),
     })
@@ -29,14 +32,14 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
       axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer', {
-        proposal_offer_person_id: router.query.id,
-        proposal_offer_proposal_id: router.query.idd,
+        proposal_offer_person_id: personId,
+        proposal_offer_proposal_id: proposalId,
         proposal_dowry_person_id: formData.proposal_offer_person_id
       }).then(response => {
         queryClient.invalidateQueries()
-        document.getElementById("cm-" + router.query.id).innerText = ' '
+        document.getElementById("cm-" + personId).innerText = ' '
       }).catch(error => {
-        document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
+        document.getElementById("cm-" + personId).innerText = error.response.data.message
       })
     }
 
@@ -49,7 +52,7 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
     if (error) return <div>Failed to load</div>
 
     const familyBachelors = data.person_family.family_people.filter(ppl =>
-      ppl.person_age >= 18 && ppl.person_partner_id === null && ppl.person_id != router.query.id
+      ppl.person_age >= 18 && ppl.person_partner_id === null && ppl.person_id != personId
     )
 
     return (
@@ -61,7 +64,7 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <select {...register("proposal_offer_person_id", { required: true })}>
                 {
-                  errors.proposal_offer_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                  errors.proposal_offer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
                 }
                 {
                   familyBachelors.map(({ person_id, person_name }) => (
@@ -71,7 +74,7 @@ export default function ManagePersonProposalOffer({ queryClient, userId }) {
                 </select>
                 <input type="submit" />
               </form>
-              <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+              <small className={styles.lightText} id={'cm-' + personId}></small>
             </div>
           :
             <p>No family people are eligible to betrothe!</p>

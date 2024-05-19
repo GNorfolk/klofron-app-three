@@ -5,13 +5,13 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 
-export default function ManagePersonProposalOffer({ queryClient, userId }) {
+export default function DescribeProposal({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['DescribeProposalData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal/' + router.query.idd).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal/' + router.query.proposal_id).then(
           (res) => res.json(),
         ),
     })
