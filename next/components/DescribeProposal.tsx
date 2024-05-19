@@ -28,6 +28,21 @@ export default function DescribeProposal({ queryClient, userId }) {
       <div>
         <h2 className={styles.headingLg}>Proposal Info</h2>
         <p>{data.proposal_person.person_name} is {data.proposal_person.person_age} years old.</p>
+        <h2 className={styles.headingLg}>List Proposal Offers</h2>
+        {
+          data.proposal_offers.length > 0 ?
+            data.proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
+              <div>
+                <p>
+                  Person with proposal is {data.proposal_person.person_name} who is {data.proposal_person.person_gender} and is {data.proposal_person.person_age} years old.
+                  Person {data.proposal_person.person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
+                  They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
+                </p>
+              </div>
+            ))
+          :
+            <p>This family have no proposal offers.</p>
+        }
       </div>
     )
   }

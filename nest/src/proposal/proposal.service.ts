@@ -51,6 +51,12 @@ export class ProposalService {
     const proposal = this.proposalRepository
       .createQueryBuilder("proposal")
       .innerJoinAndSelect("proposal.proposal_person","person")
+      .leftJoinAndSelect("proposal.proposal_offers", "offer", "offer.accepted_at IS NULL AND offer.deleted_at IS NULL")
+      .leftJoinAndSelect("offer.proposal_offer_person", "offer_person")
+      .leftJoinAndSelect("offer.proposal_offer_dowry", "dowry")
+      .leftJoinAndSelect("dowry.proposal_dowry_person", "dowry_person")
+      .innerJoinAndSelect("person.person_family","family")
+      .innerJoinAndSelect("family.family_people","people")
       .where("proposal.proposal_id = :id", { id: id })
     return await proposal.getOne();
   }
