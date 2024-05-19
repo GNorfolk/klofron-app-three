@@ -41,7 +41,7 @@ export default function DescribeProposal({ queryClient, userId }) {
               </div>
             ))
           :
-            <p>This family have no proposal offers.</p>
+            <p>This proposal has no proposal offers.</p>
         }
       </div>
     )
