@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
+import { useForm, SubmitHandler } from "react-hook-form"
 
 export default function ListPersonProposals({ data, showLink = true, queryClient = null, userId, showOffers = true }) {
   const router = useRouter()
@@ -15,9 +16,32 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
       },
     })
 
+    type Inputs = {
+      proposal_offer_id: number
+      accepter_person_id: number
+    }
+
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<Inputs>()
+
+    const onSubmit: SubmitHandler<Inputs> = (formData) => {
+      axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal_offer', {
+        proposal_offer_id: formData.proposal_offer_id,
+        accepter_person_id: formData.accepter_person_id,
+      }).then(response => {
+        queryClient.invalidateQueries()
+        document.getElementById("cm-" + userId).innerText = ' '
+      }).catch(error => {
+        document.getElementById("cm-" + userId).innerText = error.response.data.message
+      })
+    }
+
     return (
       <div>
-        {/* <h2 className={styles.headingLg}>Proposal Info</h2> */}
         <h2 className={styles.headingLg}>Proposal Info</h2>
         <ul className={styles.list}>
           {
@@ -40,6 +64,30 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
                     :
                       null
                   }
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <select {...register("proposal_offer_id", { required: true })}>
+                      {
+                        errors.proposal_offer_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                      }
+                      {
+                        proposal_offers.map(({ proposal_offer_id, proposal_offer_person, proposal_offer_dowry }) => (
+                          <option value={proposal_offer_id}>{proposal_offer_person.person_name + " / " + proposal_offer_dowry.proposal_dowry_person.person_name}</option>
+                        ))
+                      }
+                    </select>
+                    <select {...register("accepter_person_id", { required: true })}>
+                      {
+                        errors.accepter_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                      }
+                      {
+                        data.person_family.family_people.map(({ person_id, person_name }) => (
+                          <option value={person_id}>{person_name}</option>
+                        ))
+                      }
+                    </select>
+                    <input type="submit" />
+                  </form>
+                  <small className={styles.lightText} id={'cm-' + userId}></small>
                 </li>
               ))
             :

@@ -87,7 +87,7 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
           <h2 className={styles.headingLg}>List Proposal Offers</h2>
           {
             familyProposalOffers.length > 0 ?
-              familyProposalOffers.map(({ person_proposals, person_name, person_gender, person_age }) => (
+              familyProposalOffers.map(({ person_proposals, person_id, person_name, person_gender, person_age }) => (
                 person_proposals.map(({ proposal_offers }) => (
                   proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
                     <div>
@@ -95,6 +95,7 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
                         Person with proposal is {person_name} who is {person_gender} and is {person_age} years old.
                         Person {person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
                         They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
+                        Goto <Link href={"/person/" + person_id + "/proposal"}>proposal</Link>.
                       </p>
                     </div>
                   ))
