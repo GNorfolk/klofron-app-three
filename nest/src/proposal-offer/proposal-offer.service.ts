@@ -125,9 +125,142 @@ export class ProposalOfferService {
     return await proposalOffer.getOne();
   }
 
-  // async update(id: number, updateProposalOfferDto: UpdateProposalOfferDto) {
-  //   return await`This action updates a #${id} proposalOffer`;
-  // }
+  async update(proposalOfferId: number, accepterPersonId: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const selected = await queryRunner.manager
+        .createQueryBuilder(ProposalOffer, "offer")
+        .innerJoinAndSelect("offer.proposal_offer_proposal", "proposal")
+        .leftJoinAndSelect("offer.proposal_offer_dowry", "dowry")
+        .where("offer.proposal_offer_id = :id", { id: proposalOfferId })
+        .getOne()
+      const people = await Promise.all([
+        queryRunner.manager // proposalPerson to go to offer person
+          .createQueryBuilder(Person, "person")
+          .innerJoinAndSelect("person.person_mother", "mother")
+          .innerJoinAndSelect("person.person_father", "father")
+          .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+          .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+          .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+          .innerJoinAndSelect("father.person_father", "paternal_grandfather")
+          .where("person.person_id = :id", { id: selected.proposal_offer_proposal.proposal_person_id })
+          .getOne(),
+        queryRunner.manager // offerPerson to take proposal person
+          .createQueryBuilder(Person, "person")
+          .innerJoinAndSelect("person.person_mother", "mother")
+          .innerJoinAndSelect("person.person_father", "father")
+          .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+          .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+          .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+          .innerJoinAndSelect("father.person_father", "paternal_grandfather")
+          .where("person.person_id = :id", { id: selected.proposal_offer_person_id })
+          .getOne(),
+        queryRunner.manager // dowryPerson to go to accepter person
+          .createQueryBuilder(Person, "person")
+          .innerJoinAndSelect("person.person_mother", "mother")
+          .innerJoinAndSelect("person.person_father", "father")
+          .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+          .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+          .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+          .innerJoinAndSelect("father.person_father", "paternal_grandfather")
+          .where("person.person_id = :id", { id: selected.proposal_offer_dowry.proposal_dowry_person_id })
+          .getOne(),
+        queryRunner.manager // accepterPerson take dowry person
+          .createQueryBuilder(Person, "person")
+          .innerJoinAndSelect("person.person_mother", "mother")
+          .innerJoinAndSelect("person.person_father", "father")
+          .innerJoinAndSelect("mother.person_mother", "maternal_grandmother")
+          .innerJoinAndSelect("mother.person_father", "maternal_grandfather")
+          .innerJoinAndSelect("father.person_mother", "paternal_grandmother")
+          .innerJoinAndSelect("father.person_father", "paternal_grandfather")
+          .where("person.person_id = :id", { id: accepterPersonId })
+          .getOne()
+      ])
+      const proposalPerson = people[0]
+      const offerPerson = people[1]
+      const dowryPerson = people[2]
+      const accepterPerson = people[3]
+      const proposalPersonArray = [], offerPersonArray = [], dowryPersonArray = [], accepterPersonArray = []
+      proposalPersonArray.push(
+        proposalPerson.person_id,
+        proposalPerson.person_mother.person_id,
+        proposalPerson.person_father.person_id,
+        proposalPerson.person_mother.person_mother.person_id,
+        proposalPerson.person_mother.person_father.person_id,
+        proposalPerson.person_father.person_mother.person_id,
+        proposalPerson.person_father.person_father.person_id
+      )
+      offerPersonArray.push(
+        offerPerson.person_id,
+        offerPerson.person_mother.person_id,
+        offerPerson.person_father.person_id,
+        offerPerson.person_mother.person_mother.person_id,
+        offerPerson.person_mother.person_father.person_id,
+        offerPerson.person_father.person_mother.person_id,
+        offerPerson.person_father.person_father.person_id
+      )
+      dowryPersonArray.push(
+        dowryPerson.person_id,
+        dowryPerson.person_mother.person_id,
+        dowryPerson.person_father.person_id,
+        dowryPerson.person_mother.person_mother.person_id,
+        dowryPerson.person_mother.person_father.person_id,
+        dowryPerson.person_father.person_mother.person_id,
+        dowryPerson.person_father.person_father.person_id
+      )
+      accepterPersonArray.push(
+        accepterPerson.person_id,
+        accepterPerson.person_mother.person_id,
+        accepterPerson.person_father.person_id,
+        accepterPerson.person_mother.person_mother.person_id,
+        accepterPerson.person_mother.person_father.person_id,
+        accepterPerson.person_father.person_mother.person_id,
+        accepterPerson.person_father.person_father.person_id
+      )
+      const proposalPersonArrayFiltered = proposalPersonArray.filter((item) => item != 1 && item != 2);
+      const offerPersonArrayFiltered = offerPersonArray.filter((item) => item != 1 && item != 2);
+      const dowryPersonArrayFiltered = dowryPersonArray.filter((item) => item != 1 && item != 2);
+      const accepterPersonArrayFiltered = accepterPersonArray.filter((item) => item != 1 && item != 2);
+      const compareAncestorIdsBooleanOne = proposalPersonArrayFiltered.some(r=> offerPersonArrayFiltered.includes(r))
+      const compareAncestorIdsBooleanTwo = accepterPersonArrayFiltered.some(r=> dowryPersonArrayFiltered.includes(r))
+      if (compareAncestorIdsBooleanOne) throw "Offer person share ancestors with proposal person!"
+      if (compareAncestorIdsBooleanTwo) throw "Dowry person share ancestors with accepter person!"
+      const offerPersonUpdate = await queryRunner.manager.update(Person, offerPerson.person_id, {
+        person_partner_id: proposalPerson.person_id,
+      })
+      const proposalPersonUpdate = await queryRunner.manager.update(Person, proposalPerson.person_id , {
+        person_house_id: offerPerson.person_house_id,
+        person_partner_id: offerPerson.person_id,
+        person_family_id: offerPerson.person_family_id
+      })
+      if (offerPersonUpdate.affected != 1) throw "Unable to update offer person!";
+      if (proposalPersonUpdate.affected != 1) throw "Unable to update proposal person!";
+
+      const dowryPersonUpdate = await queryRunner.manager.update(Person, dowryPerson.person_id, {
+        person_house_id: accepterPerson.person_house_id,
+        person_partner_id: accepterPerson.person_id,
+        person_family_id: accepterPerson.person_family_id
+      })
+      const accepterPersonUpdate = await queryRunner.manager.update(Person, accepterPerson.person_id , {
+        person_partner_id: dowryPerson.person_id,
+      })
+      if (dowryPersonUpdate.affected != 1) throw "Unable to update dowry person!";
+      if (accepterPersonUpdate.affected != 1) throw "Unable to update accepter person!";
+      await queryRunner.manager.update(ProposalOffer, selected.proposal_offer_id, { proposal_offer_accepted_at: "CURRENT_TIMESTAMP" })
+      await queryRunner.manager.update(ProposalDowry, selected.proposal_offer_dowry_id, { proposal_dowry_accepted_at: "CURRENT_TIMESTAMP" })
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
+  }
 
   // async remove(id: number) {
   //   return await`This action removes a #${id} proposalOffer`;

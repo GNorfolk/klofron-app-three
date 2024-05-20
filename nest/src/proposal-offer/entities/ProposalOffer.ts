@@ -45,5 +45,5 @@ export class ProposalOffer {
 
   @OneToOne(() => ProposalDowry, (proposalDowry) => proposalDowry.proposal_dowry_offer)
   @JoinColumn([{ name: "dowry_id", referencedColumnName: "proposal_dowry_id" }])
-  proposal_offer_dowry: Relation<ProposalOffer>;
+  proposal_offer_dowry: Relation<ProposalDowry>;
 }

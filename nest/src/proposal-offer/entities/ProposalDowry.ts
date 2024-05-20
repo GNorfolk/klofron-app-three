@@ -30,5 +30,5 @@ export class ProposalDowry {
   proposal_dowry_person: Relation<Person>;
 
   @OneToOne(() => ProposalOffer, (proposalOffer) => proposalOffer.proposal_offer_dowry)
-  proposal_dowry_offer: Relation<ProposalDowry>;
+  proposal_dowry_offer: Relation<ProposalOffer>;
 }

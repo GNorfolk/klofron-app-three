@@ -29,8 +29,7 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
-      axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal_offer', {
-        proposal_offer_id: formData.proposal_offer_id,
+      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer/' + formData.proposal_offer_id, {
         accepter_person_id: formData.accepter_person_id,
       }).then(response => {
         queryClient.invalidateQueries()
