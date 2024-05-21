@@ -63,30 +63,40 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
                     :
                       null
                   }
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <select {...register("proposal_offer_id", { required: true })}>
-                      {
-                        errors.proposal_offer_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
-                      }
-                      {
-                        proposal_offers.map(({ proposal_offer_id, proposal_offer_person, proposal_offer_dowry }) => (
-                          <option value={proposal_offer_id}>{proposal_offer_person.person_name + " / " + proposal_offer_dowry.proposal_dowry_person.person_name}</option>
-                        ))
-                      }
-                    </select>
-                    <select {...register("accepter_person_id", { required: true })}>
-                      {
-                        errors.accepter_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
-                      }
-                      {
-                        data.person_family.family_people.map(({ person_id, person_name }) => (
-                          <option value={person_id}>{person_name}</option>
-                        ))
-                      }
-                    </select>
-                    <input type="submit" />
-                  </form>
-                  <small className={styles.lightText} id={'cm-' + userId}></small>
+                  {
+                    proposal_offers.length > 0 ?
+                      data.person_family.family_people.length > 0 ?
+                        <div>
+                          <form onSubmit={handleSubmit(onSubmit)}>
+                            <select {...register("proposal_offer_id", { required: true })}>
+                              {
+                                errors.proposal_offer_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                              }
+                              {
+                                proposal_offers.map(({ proposal_offer_id, proposal_offer_person, proposal_offer_dowry }) => (
+                                  <option value={proposal_offer_id}>{proposal_offer_person.person_name + " / " + proposal_offer_dowry.proposal_dowry_person.person_name}</option>
+                                ))
+                              }
+                            </select>
+                            <select {...register("accepter_person_id", { required: true })}>
+                              {
+                                errors.accepter_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
+                              }
+                              {
+                                data.person_family.family_people.map(({ person_id, person_name }) => (
+                                  <option value={person_id}>{person_name}</option>
+                                ))
+                              }
+                            </select>
+                            <input type="submit" />
+                          </form>
+                          <small className={styles.lightText} id={'cm-' + userId}></small>
+                        </div>
+                      :
+                        <p>There are no family people eligible to accept an offer.</p>
+                    :
+                      null
+                  }
                 </li>
               ))
             :
