@@ -39,6 +39,10 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
       })
     }
 
+    const familyBachelors = data.person_family.family_people.filter(ppl =>
+      ppl.person_age >= 18 && ppl.person_partner_id === null
+    )
+
     return (
       <div>
         <h2 className={styles.headingLg}>Proposal Info</h2>
@@ -65,7 +69,7 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
                   }
                   {
                     proposal_offers.length > 0 ?
-                      data.person_family.family_people.length > 0 ?
+                      familyBachelors.length > 0 ?
                         <div>
                           <form onSubmit={handleSubmit(onSubmit)}>
                             <select {...register("proposal_offer_id", { required: true })}>
@@ -83,7 +87,7 @@ export default function ListPersonProposals({ data, showLink = true, queryClient
                                 errors.accepter_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null
                               }
                               {
-                                data.person_family.family_people.map(({ person_id, person_name }) => (
+                                familyBachelors.map(({ person_id, person_name }) => (
                                   <option value={person_id}>{person_name}</option>
                                 ))
                               }
