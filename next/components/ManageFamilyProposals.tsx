@@ -102,7 +102,7 @@ export default function ManageFamilyProposals({ queryClient, userId }) {
                 ))
               ))
             :
-              <p>This family have no proposal offers.</p>
+              <p>This family have received no proposal offers.</p>
           }
         </div>
       )
