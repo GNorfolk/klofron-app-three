@@ -126,7 +126,7 @@ export class ActionService {
         .getOne();
       if (person.person_actions.length == 0) throw "No actions cancellable!";
       if (person.person_actions.length > 1) throw "Too many current actions returned!";
-      cancel = await queryRunner.manager.update(Action, person.person_actions[0].action_id, { action_cancelled_at: "CURRENT_TIMESTAMP" });
+      cancel = await queryRunner.manager.update(Action, person.person_actions[0].action_id, { action_cancelled_at: new Date() });
       if (cancel.affected != 1) throw "Unable to cancel action!";
       await queryRunner.commitTransaction();
       await queryRunner.release();

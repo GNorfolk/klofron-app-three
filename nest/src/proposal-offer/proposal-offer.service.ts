@@ -135,6 +135,7 @@ export class ProposalOfferService {
         .createQueryBuilder(ProposalOffer, "offer")
         .innerJoinAndSelect("offer.proposal_offer_proposal", "proposal")
         .leftJoinAndSelect("offer.proposal_offer_dowry", "dowry")
+        .leftJoinAndSelect("proposal.proposal_offers", "offers")
         .where("offer.proposal_offer_id = :id", { id: proposalOfferId })
         .getOne()
       const people = await Promise.all([
@@ -249,8 +250,32 @@ export class ProposalOfferService {
       })
       if (dowryPersonUpdate.affected != 1) throw "Unable to update dowry person!";
       if (accepterPersonUpdate.affected != 1) throw "Unable to update accepter person!";
-      await queryRunner.manager.update(ProposalOffer, selected.proposal_offer_id, { proposal_offer_accepted_at: "CURRENT_TIMESTAMP" })
-      await queryRunner.manager.update(ProposalDowry, selected.proposal_offer_dowry_id, { proposal_dowry_accepted_at: "CURRENT_TIMESTAMP" })
+      // Accept proposal, proposal offer, and proposal dowry and throw error if we can't
+      const proposalAcceptedAt = await queryRunner.manager.update(Proposal, selected.proposal_offer_proposal_id, { proposal_accepted_at: new Date() })
+      if (proposalAcceptedAt.affected != 1) throw "Unable to update proposal accepted_at field!"
+      console.log(selected.proposal_offer_id)
+      const proposalOfferAcceptedAt = await queryRunner.manager.update(ProposalOffer, selected.proposal_offer_id, { proposal_offer_accepted_at: new Date() })
+      if (proposalOfferAcceptedAt.affected != 1) throw "Unable to update offer accepted_at field!"
+      const proposalDowryAcceptedAt = await queryRunner.manager.update(ProposalDowry, selected.proposal_offer_dowry_id, { proposal_dowry_accepted_at: new Date() })
+      if (proposalDowryAcceptedAt.affected != 1) throw "Unable to update dowry accepted_at field!"
+      // Cancel unsuccessful proposal offers on proposal and throw if we can't
+      // ToDo: Check that this doesn't cancel the proposal offer we've just accepted
+      const proposalOffersCancelledAt = await queryRunner.manager.update(
+        ProposalOffer,
+        { proposal_offer_proposal_id: selected.proposal_offer_proposal_id },
+        { proposal_offer_deleted_at: new Date() }
+      )
+      if (proposalOffersCancelledAt.affected == 0) throw "Unable to update offer cancelled_at field!"
+      // Cancel unsuccessful proposal dowrys on offers on proposal and throw if we get unexpected number of affected rows
+      const unsuccessfulProposalOfferArray = selected.proposal_offer_proposal.proposal_offers.filter(offers => offers.proposal_offer_id != proposalOfferId)
+      for (let i = 0; i < unsuccessfulProposalOfferArray.length; i++) {
+        const proposalDowrysCancelledAt = await queryRunner.manager.update(
+          ProposalDowry,
+          { proposal_dowry_id: unsuccessfulProposalOfferArray[i].proposal_offer_dowry_id },
+          { proposal_dowry_deleted_at: new Date() }
+        )
+        if (proposalDowrysCancelledAt.affected != 1) throw "Unable to update dowry cancelled_at field!"
+      }
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result
