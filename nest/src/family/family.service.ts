@@ -40,8 +40,8 @@ export class FamilyService {
       .leftJoinAndSelect("offer.proposal_offer_person", "offer_person")
       .leftJoinAndSelect("offer.proposal_offer_dowry", "dowry")
       .leftJoinAndSelect("dowry.proposal_dowry_person", "dowry_person")
-      .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
-      .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
+      .leftJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+      .leftJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
       .where("family.id = :id", { id: id })
     return await family.getOne();
   }
