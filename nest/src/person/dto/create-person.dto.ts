@@ -5,4 +5,5 @@ export class CreatePersonDto {
   person_mother_id: number
   person_father_id: number
   person_house_id: number
+  person_name: string
 }

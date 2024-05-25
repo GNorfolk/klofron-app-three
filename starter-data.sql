@@ -37,6 +37,11 @@ CREATE TABLE `person` (
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`house_id`) REFERENCES house(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `person_name` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `gender` VARCHAR(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- ACTION -- -- -- -- --
 CREATE TABLE `action` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

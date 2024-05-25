@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Person } from './entities/Person';
+import { PersonName } from './entities/PersonName';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
@@ -62,6 +63,13 @@ export class PersonService {
         action_type_id: 6
       });
       person.person_gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
+      const person_name = await queryRunner.manager
+        .createQueryBuilder(PersonName, "name")
+        .where("name.person_name_gender = :str", { str: person.person_gender })
+        .orderBy("RAND()")
+        .limit(1)
+        .getOne();
+      person.person_name = person_name.person_name_name
       person.person_mother_id = mother.person_id
       person.person_father_id = father.person_id
       const result = await queryRunner.manager.save(Person, person);

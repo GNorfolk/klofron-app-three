@@ -19,10 +19,8 @@ export default function DescribeHouse({ queryClient, userId }) {
     })
 
     const createPerson = useMutation({
-      mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + id, {
-          person_name: "Baby"
-        })
+      mutationFn: (house_id) => {
+        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + house_id)
       },
     })
 
