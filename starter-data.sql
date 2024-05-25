@@ -22,6 +22,16 @@ CREATE TABLE `house` (
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`family_id`) REFERENCES family(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_road_name` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `theme` VARCHAR(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_road_type` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `capacity` INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- PERSON -- -- -- -- --
 CREATE TABLE `person` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

@@ -183,6 +183,21 @@ mysql -u root -p ka3 < dump-2024-05-21.sql
 
 # MySQL
 ```sql
+CREATE TABLE `person_name` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `gender` VARCHAR(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_road_name` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `theme` VARCHAR(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_road_type` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `capacity` INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 # save

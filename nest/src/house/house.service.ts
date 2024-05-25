@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { House } from './entities/House';
 import { Resource } from '../resource/entities/Resource';
+import { HouseRoadName } from './entities/HouseRoadName';
+import { HouseRoadType } from './entities/HouseRoadType';
 
 @Injectable()
 export class HouseService {
@@ -84,5 +86,34 @@ export class HouseService {
       .set({ house_name: body.name })
       .where("id = :id", { id: id })
       .execute();
+  }
+
+  async createRoad() {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const house_road_name = await queryRunner.manager
+        .createQueryBuilder(HouseRoadName, "name")
+        .where("name.house_road_name_theme = :str", { str: "animal" })
+        .orderBy("RAND()")
+        .limit(1)
+        .getOne();
+      const house_road_type = await queryRunner.manager
+        .createQueryBuilder(HouseRoadType, "type")
+        .orderBy("RAND()")
+        .limit(1)
+        .getOne();
+      throw house_road_name.house_road_name_name + " " + house_road_type.house_road_type_name
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 }
