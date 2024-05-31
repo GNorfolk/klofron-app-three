@@ -5,9 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { House } from './entities/House';
 import { HouseRoadName } from './entities/HouseRoadName';
 import { HouseRoadType } from './entities/HouseRoadType';
+import { HouseRoad } from './entities/HouseRoad';
+import { HouseAddress } from './entities/HouseAddress';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([House, HouseRoadName, HouseRoadType])],
+  imports: [TypeOrmModule.forFeature([House, HouseRoadName, HouseRoadType, HouseRoad, HouseAddress])],
   controllers: [HouseController],
   providers: [HouseService],
 })

@@ -13,6 +13,7 @@ import { Family } from "../../family/entities/Family";
 import { Person } from "../../person/entities/Person";
 import { Resource } from "../../resource/entities/Resource";
 import { Trade } from "../../trade/entities/Trade";
+import { HouseAddress } from "./HouseAddress";
 
 @Index("house_family_id", ["house_family_id"], {})
 @Entity("house", { schema: "ka3" })
@@ -31,6 +32,9 @@ export class House {
 
   @Column("int", { name: "family_id" })
   house_family_id: number;
+
+  @Column("int", { name: "address_id" })
+  house_address_id: number;
 
   @Column("timestamp", {
     name: "created_at",
@@ -59,4 +63,8 @@ export class House {
 
   @OneToMany(() => Trade, (trade) => trade.trade_house)
   house_trades: Relation<Trade>[];
+
+  @OneToOne(() => HouseAddress, (houseAddress) => houseAddress.house_address_house)
+  @JoinColumn([{ name: "address_id", referencedColumnName: "house_address_id" }])
+  house_address: Relation<HouseAddress>;
 }

@@ -7,6 +7,8 @@ import { House } from './entities/House';
 import { Resource } from '../resource/entities/Resource';
 import { HouseRoadName } from './entities/HouseRoadName';
 import { HouseRoadType } from './entities/HouseRoadType';
+import { HouseRoad } from './entities/HouseRoad';
+import { HouseAddress } from './entities/HouseAddress';
 
 @Injectable()
 export class HouseService {
@@ -21,6 +23,13 @@ export class HouseService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const road = await this.findRoad()
+      // ToDo: pass next available house number here
+      const address = await queryRunner.manager.save(HouseAddress, {
+        house_address_number: 12,
+        house_address_road_id: road.house_road_id
+      });
+      house.house_address_id = address.house_address_id
       result = await queryRunner.manager.save(House, house);
       const food = {
         resource_type_name: "food",
@@ -86,6 +95,29 @@ export class HouseService {
       .set({ house_name: body.name })
       .where("id = :id", { id: id })
       .execute();
+  }
+
+  async findRoad(): Promise<HouseRoad> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      // ToDo: add way of pulling the next available number
+      result = await queryRunner.manager
+        .createQueryBuilder(HouseRoad, "road")
+        .orderBy("RAND()")
+        .getOne();
+      // ToDo: create new road if none have capacity 
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result
+    } catch (err) {
+      console.log(err)
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw new BadRequestException(err);
+    }
   }
 
   async createRoad() {

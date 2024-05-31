@@ -14,13 +14,26 @@ CREATE TABLE `family` (
 CREATE TABLE `house` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(155) NOT NULL DEFAULT 'House',
+    `address_id` INT NOT NULL,
     `rooms` INT NOT NULL DEFAULT 1,
     `storage` INT NOT NULL DEFAULT 6,
     `food` INT NOT NULL DEFAULT 0,
     `wood` INT NOT NULL DEFAULT 0,
     `family_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    FOREIGN KEY (`family_id`) REFERENCES family(`id`)
+    FOREIGN KEY (`family_id`) REFERENCES family(`id`),
+    FOREIGN KEY (`address_id`) REFERENCES house_address(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_road` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `road_name` VARCHAR(155) NOT NULL,
+    `capacity` INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_address` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `number` INT NOT NULL,
+    `road_id` INT NOT NULL,
+    FOREIGN KEY (`road_id`) REFERENCES house_road(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `house_road_name` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
