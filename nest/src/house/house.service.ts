@@ -23,13 +23,13 @@ export class HouseService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const road = await this.findRoad()
-      // ToDo: pass next available house number here
-      const address = await queryRunner.manager.save(HouseAddress, {
-        house_address_number: 12,
-        house_address_road_id: road.house_road_id
+      const houseRoad = await this.findRoad()
+      const houseNumber = houseRoad?.house_road_addresses.length > 0 ? houseRoad.house_road_addresses.slice(-1)[0].house_address_number : 0
+      const houseAddress = await queryRunner.manager.save(HouseAddress, {
+        house_address_number: houseNumber + 1,
+        house_address_road_id: houseRoad.house_road_id
       });
-      house.house_address_id = address.house_address_id
+      house.house_address_id = houseAddress.house_address_id
       result = await queryRunner.manager.save(House, house);
       const food = {
         resource_type_name: "food",
@@ -99,19 +99,23 @@ export class HouseService {
 
   async findRoad(): Promise<HouseRoad> {
     const queryRunner = this.dataSource.createQueryRunner();
-    let result
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      // ToDo: add way of pulling the next available number
-      result = await queryRunner.manager
+      const roads = await queryRunner.manager
         .createQueryBuilder(HouseRoad, "road")
-        .orderBy("RAND()")
-        .getOne();
+        .leftJoinAndSelect("road.house_road_addresses", "address")
+        .orderBy("address.house_address_number", "ASC")
+        .getMany();
+      const filteredRoads = roads.filter(road =>
+        road.house_road_addresses.length < road.house_road_capacity &&
+        road.house_road_addresses.slice(-1)[0].house_address_number < road.house_road_capacity
+      )
+      const selectedId = Math.floor(Math.random() * filteredRoads.length)
       // ToDo: create new road if none have capacity 
       await queryRunner.commitTransaction();
       await queryRunner.release();
-      return result
+      return filteredRoads[selectedId]
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
