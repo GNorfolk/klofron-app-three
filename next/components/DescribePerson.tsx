@@ -27,12 +27,6 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
       })
     };
 
-    const createProposal = useMutation({
-      mutationFn: (id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/create-proposal/' + id)
-      },
-    })
-
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 

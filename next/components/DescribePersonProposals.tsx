@@ -170,15 +170,6 @@ export function ManagePersonProposals({ personData, queryClient, userId }) {
         ),
     })
 
-    const acceptProposal = useMutation({
-      mutationFn: (person_id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/accept-proposal', {
-          proposer_id: person_id,
-          accepter_id: router.query.person_id
-        })
-      },
-    })
-
     if (isLoading) return (
       <div>
         <h2 className={styles.headingLg}>Proposal Info</h2>
