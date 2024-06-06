@@ -78,11 +78,13 @@ export class HouseService {
       .createQueryBuilder("house")
       .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
-      .innerJoinAndSelect("house.house_family", "family")
+      .innerJoinAndSelect("house.house_family", "house_family")
       .leftJoinAndSelect("house.house_people", "person")
+      .leftJoinAndSelect("house.house_trades", "trade")
+      .leftJoinAndSelect("person.person_family", "person_family")
       .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
-      .leftJoinAndSelect("house.house_trades", "trades")
+      .leftJoinAndSelect("person.person_actions", "action")
       .where("house.house_id = :id", { id: id })
     return await house.getOne();
   }

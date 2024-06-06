@@ -60,15 +60,15 @@ export default function DescribeHouse({ queryClient, userId }) {
               }
             } >Create Person</button>
             <small className={styles.lightText} id={'cm-two-' + house_id}></small>
-            <ListHousePeople queryClient={queryClient} userId={userId} />
+            <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
           </div>
           :
           <div>
-            <ListHousePeople queryClient={queryClient} />
+            <ListHousePeople peopleData={data.house_people} queryClient={queryClient} />
           </div>
         }
-        <ListHouseTrades />
-        <ListHouseResources queryClient={queryClient} userId={userId} />
+        <ListHouseTrades data={data.house_trades} />
+        <ListHouseResources data={data} queryClient={queryClient} userId={userId} />
         {
           userId === data.house_family.family_user_id ?
           <div>
@@ -94,17 +94,9 @@ export default function DescribeHouse({ queryClient, userId }) {
   }
 }
 
-export function ListHousePeople({ queryClient, userId = null }) {
+export function ListHousePeople({ peopleData, queryClient, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
-    const { isLoading, error, data } = useQuery({
-      queryKey: ['familyMemberData' + router.query.id],
-      queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person?house_id=' + router.query.id).then(
-          (res) => res.json(),
-        ),
-    })
-
     const  increaseFood  = useMutation({
       mutationFn: (id) => {
         return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
@@ -150,22 +142,14 @@ export function ListHousePeople({ queryClient, userId = null }) {
       },
     })
 
-    if (isLoading) return (
-      <div>
-        <h2 className={styles.headingLg}>Person Info</h2>
-        <p>Loading...</p>
-      </div>
-    )
-    if (error) return <div>Failed to load</div>
-
-    if (data.length > 0) {
+    if (peopleData.length > 0) {
       return (
         <div>
           <h2 className={styles.headingLg}>Person Info</h2>
           <ul className={styles.list}>
-            {data.map(({ person_id, person_name, person_family_id, person_family, person_gender, person_age, person_house, person_actions }) => (
+            {peopleData.map(({ person_id, person_name, person_family_id, person_family, person_gender, person_age, person_actions }) => (
               <li className={styles.listItem} key={person_id}>
-                <p><Link href={"/person/" + person_id}>{person_name + " " + person_family.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
+                <p><Link href={"/person/" + person_id}>{person_name + " " + person_family.family_name}</Link> is {person_gender} and {person_age} years old.</p>
                 { person_actions[0]?.action_time_remaining ? (<><small className={styles.lightText}>{person_name} is performing an action completing in {person_actions[0].action_time_remaining}.</small><br /></>) : (<></>) }
                 {
                   userId === person_family.family_user_id ?
@@ -255,25 +239,9 @@ export function ListHousePeople({ queryClient, userId = null }) {
   }
 }
 
-export function ListHouseResources({ queryClient, userId = null }) {
+export function ListHouseResources({ data, queryClient, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
-    const { isLoading, error, data } = useQuery({
-      queryKey: ['resourceData' + router.query.id],
-      queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house/' + router.query.id).then(
-          (res) => res.json(),
-        ),
-    })
-
-    if (isLoading) return (
-      <div>
-        <h2 className={styles.headingLg}>Resource Info</h2>
-        <p>Loading...</p>
-      </div>
-    )
-    if (error) return <div>Failed to load</div>
-
     return (
       <div>
         <h2 className={styles.headingLg}>Resource Info</h2>
@@ -284,25 +252,9 @@ export function ListHouseResources({ queryClient, userId = null }) {
   }
 }
 
-export function ListHouseTrades() {
+export function ListHouseTrades({ data }) {
   const router = useRouter()
   if (router.isReady) {
-    const { isLoading, error, data } = useQuery({
-      queryKey: ['houseTradesData' + router.query.id],
-      queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/trade?house_id=' + router.query.id).then(
-          (res) => res.json(),
-        ),
-    })
-
-    if (isLoading) return (
-      <div>
-        <h2 className={styles.headingLg}>Trade Info</h2>
-        <p>Loading...</p>
-      </div>
-    )
-    if (error) return <div>Failed to load</div>
-
     if (data.length > 0) {
       return (
         <div>
