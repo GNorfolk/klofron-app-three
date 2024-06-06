@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styles from '../../../styles/main.module.css'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import Layout from '../../../components/Layout'
-import ManageHouseResources from '../../../components/ManageHouseResources'
+import DescribeHouseResources from '../../../components/DescribeHouseResources'
 import { useSession } from 'next-auth/react'
 
 const queryClient = new QueryClient()
@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>
-        <ManageHouseResources queryClient={queryClient} userId={userId} />
+        <DescribeHouseResources queryClient={queryClient} userId={userId} />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>

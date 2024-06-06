@@ -3,7 +3,7 @@ import styles from '../../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Layout from '../../../components/Layout'
-import ManageFamilyProposals from '../../../components/ManageFamilyProposals'
+import DescribeFamilyProposals from '../../../components/DescribeFamilyProposals'
 import { useSession } from 'next-auth/react'
 
 const queryClient = new QueryClient()
@@ -14,7 +14,7 @@ export default function Family() {
   return (
     <Layout>
       <QueryClientProvider client={queryClient}>
-        <ManageFamilyProposals userId={userId} queryClient={queryClient} />
+        <DescribeFamilyProposals userId={userId} queryClient={queryClient} />
       </QueryClientProvider>
     <div className={styles.backToHome}>
       <Link href="/">← Back to home</Link>

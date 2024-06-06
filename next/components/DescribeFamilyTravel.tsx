@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 
-export default function ManageFamilyTravel({ queryClient, userId }) {
+export default function DescribeFamilyTravel({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({

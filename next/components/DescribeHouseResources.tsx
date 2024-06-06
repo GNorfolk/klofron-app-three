@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 
-export default function ManageHouseResources({ queryClient, userId }) {
+export default function DescribeHouseResources({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
