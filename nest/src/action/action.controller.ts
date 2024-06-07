@@ -30,6 +30,8 @@ export class ActionController {
   update(@Req() req) {
     if (req.body.action == "cancel") {
       return this.actionService.updateCancelPersonAction(req.body.person_id)
+    } else {
+      return this.actionService.updateProcessActions()
     }
   }
 

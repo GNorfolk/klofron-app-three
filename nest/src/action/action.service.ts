@@ -157,4 +157,41 @@ export class ActionService {
       throw new BadRequestException(err);
     }
   }
+
+  // curl --request PATCH localhost:5000/v2/action
+  async updateProcessActions() {
+    const actions = await this.actionRepository
+      .createQueryBuilder("action")
+      .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
+      .getMany();
+    for (const action of actions) {
+      try {
+        if (action.action_type_id == 1) {
+          await this.updateProcessGetFood(action)
+        } else {
+          console.log("pass")
+        }
+      }
+      catch (err) {
+        console.log("Something went wrong: " + err)
+      }
+    }
+  }
+
+  async updateProcessGetFood(action: Action) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      console.log(action.action_type_id)
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
 }
