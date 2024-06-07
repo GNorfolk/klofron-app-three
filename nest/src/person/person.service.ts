@@ -102,6 +102,20 @@ export class PersonService {
       eighteenDate.setDate(eighteenDate.getDate() - 18);
       couple[0].person_created_at = eighteenDate;
       couple[1].person_created_at = eighteenDate;
+      const mother_name = await queryRunner.manager
+        .createQueryBuilder(PersonName, "name")
+        .where("name.person_name_gender = :str", { str: couple[0].person_gender })
+        .orderBy("RAND()")
+        .limit(1)
+        .getOne();
+      couple[0].person_name = mother_name.person_name_name
+      const father_name = await queryRunner.manager
+        .createQueryBuilder(PersonName, "name")
+        .where("name.person_name_gender = :str", { str: couple[1].person_gender })
+        .orderBy("RAND()")
+        .limit(1)
+        .getOne();
+      couple[1].person_name = father_name.person_name_name
       mother = await queryRunner.manager.save(Person, couple[0]);
       father = await queryRunner.manager.save(Person, couple[1]);
       await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });
