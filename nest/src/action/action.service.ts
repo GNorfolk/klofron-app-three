@@ -6,6 +6,7 @@ import { Repository, DataSource } from 'typeorm';
 import { Action } from './entities/Action';
 import { Person } from '../person/entities/Person';
 import { Resource } from '../resource/entities/Resource';
+import { House } from '../house/entities/House';
 
 @Injectable()
 export class ActionService {
@@ -168,10 +169,17 @@ export class ActionService {
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
       .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
       .getMany();
+    console.log("There are " + actions.length + " actions!")
     for (const action of actions) {
       try {
         if (action.action_type_id == 1) {
           await this.updateProcessGetFood(action)
+        } else if (action.action_type_id == 2) {
+          await this.updateProcessGetWood(action)
+        } else if (action.action_type_id == 3) {
+          await this.updateProcessIncreaseStorage(action)
+        } else if (action.action_type_id == 4) {
+          await this.updateProcessIncreaseRooms(action)
         } else {
           console.log("pass")
         }
@@ -194,9 +202,78 @@ export class ActionService {
           resource_type_name: "food",
           resource_house_id: action.action_person.person_house_id
         }, "resource_volume", 2);
+        console.log("GetFoodDone")
       } else {
         await queryRunner.manager.update(Action, action.action_id, { action_cancelled_at: new Date() });
+        console.log("GetFoodNotDone")
       }
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
+
+  async updateProcessGetWood(action: Action) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const house = action.action_person.person_house
+      if (house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 1) {
+        await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+        await queryRunner.manager.increment(Resource, {
+          resource_type_name: "wood",
+          resource_house_id: action.action_person.person_house_id
+        }, "resource_volume", 1);
+        console.log("GetWoodDone")
+      } else {
+        await queryRunner.manager.update(Action, action.action_id, { action_cancelled_at: new Date() });
+        console.log("GetWoodNotDone")
+      }
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
+
+  async updateProcessIncreaseStorage(action: Action) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+      await queryRunner.manager.increment(House, {
+        house_id: action.action_person.person_house_id
+      }, "house_storage", 3);
+      console.log("IncreaseStorageDone")
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
+
+  async updateProcessIncreaseRooms(action: Action) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+      await queryRunner.manager.increment(House, {
+        house_id: action.action_person.person_house_id
+      }, "house_rooms", 1);
+      console.log("IncreaseRoomsDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
