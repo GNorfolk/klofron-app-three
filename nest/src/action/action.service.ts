@@ -162,6 +162,10 @@ export class ActionService {
   async updateProcessActions() {
     const actions = await this.actionRepository
       .createQueryBuilder("action")
+      .innerJoinAndSelect("action.action_person", "person")
+      .leftJoinAndSelect("person.person_house", "house")
+      .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+      .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
       .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
       .getMany();
     for (const action of actions) {
@@ -180,11 +184,19 @@ export class ActionService {
 
   async updateProcessGetFood(action: Action) {
     const queryRunner = this.dataSource.createQueryRunner();
-    let result;
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      console.log(action.action_type_id)
+      const house = action.action_person.person_house
+      if (house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
+        await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+        await queryRunner.manager.increment(Resource, {
+          resource_type_name: "food",
+          resource_house_id: action.action_person.person_house_id
+        }, "resource_volume", 2);
+      } else {
+        await queryRunner.manager.update(Action, action.action_id, { action_cancelled_at: new Date() });
+      }
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
