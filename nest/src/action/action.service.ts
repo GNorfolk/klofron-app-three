@@ -173,13 +173,13 @@ export class ActionService {
     for (const action of actions) {
       try {
         if (action.action_type_id == 1) {
-          await this.updateProcessGetFood(action)
+          await this.updateProcessGetFood(action.action_id)
         } else if (action.action_type_id == 2) {
-          await this.updateProcessGetWood(action)
+          await this.updateProcessGetWood(action.action_id)
         } else if (action.action_type_id == 3) {
-          await this.updateProcessIncreaseStorage(action)
+          await this.updateProcessIncreaseStorage(action.action_id)
         } else if (action.action_type_id == 4) {
-          await this.updateProcessIncreaseRooms(action)
+          await this.updateProcessIncreaseRooms(action.action_id)
         } else {
           console.log("pass")
         }
@@ -190,21 +190,29 @@ export class ActionService {
     }
   }
 
-  async updateProcessGetFood(action: Action) {
+  async updateProcessGetFood(actionId: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const action = await this.actionRepository
+        .createQueryBuilder("action")
+        .innerJoinAndSelect("action.action_person", "person")
+        .leftJoinAndSelect("person.person_house", "house")
+        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+        .where("action.action_id = :id", { id: actionId })
+        .getOne();
       const house = action.action_person.person_house
       if (house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
-        await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         await queryRunner.manager.increment(Resource, {
           resource_type_name: "food",
           resource_house_id: action.action_person.person_house_id
         }, "resource_volume", 2);
         console.log("GetFoodDone")
       } else {
-        await queryRunner.manager.update(Action, action.action_id, { action_cancelled_at: new Date() });
+        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("GetFoodNotDone")
       }
       await queryRunner.commitTransaction();
@@ -217,21 +225,29 @@ export class ActionService {
     }
   }
 
-  async updateProcessGetWood(action: Action) {
+  async updateProcessGetWood(actionId: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const action = await this.actionRepository
+        .createQueryBuilder("action")
+        .innerJoinAndSelect("action.action_person", "person")
+        .leftJoinAndSelect("person.person_house", "house")
+        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+        .where("action.action_id = :id", { id: actionId })
+        .getOne();
       const house = action.action_person.person_house
       if (house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 1) {
-        await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         await queryRunner.manager.increment(Resource, {
           resource_type_name: "wood",
           resource_house_id: action.action_person.person_house_id
         }, "resource_volume", 1);
         console.log("GetWoodDone")
       } else {
-        await queryRunner.manager.update(Action, action.action_id, { action_cancelled_at: new Date() });
+        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("GetWoodNotDone")
       }
       await queryRunner.commitTransaction();
@@ -244,12 +260,17 @@ export class ActionService {
     }
   }
 
-  async updateProcessIncreaseStorage(action: Action) {
+  async updateProcessIncreaseStorage(actionId: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+      const action = await this.actionRepository
+        .createQueryBuilder("action")
+        .innerJoinAndSelect("action.action_person", "person")
+        .where("action.action_id = :id", { id: actionId })
+        .getOne();
+      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
       await queryRunner.manager.increment(House, {
         house_id: action.action_person.person_house_id
       }, "house_storage", 3);
@@ -264,12 +285,17 @@ export class ActionService {
     }
   }
 
-  async updateProcessIncreaseRooms(action: Action) {
+  async updateProcessIncreaseRooms(actionId: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.update(Action, action.action_id, { action_completed_at: new Date() });
+      const action = await this.actionRepository
+        .createQueryBuilder("action")
+        .innerJoinAndSelect("action.action_person", "person")
+        .where("action.action_id = :id", { id: actionId })
+        .getOne();
+      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
       await queryRunner.manager.increment(House, {
         house_id: action.action_person.person_house_id
       }, "house_rooms", 1);
