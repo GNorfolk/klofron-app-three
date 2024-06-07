@@ -169,7 +169,7 @@ export class ActionService {
       .leftJoinAndSelect("person.person_house", "house")
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-      .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 SECOND < now()")
+      .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
       .getMany();
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {

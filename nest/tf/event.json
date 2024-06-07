@@ -1,0 +1,63 @@
+{
+  "version": "1.0",
+  "resource": "/v2/{proxy+}",
+  "path": "/v2/action",
+  "httpMethod": "PATCH",
+  "headers": {
+    "Content-Length": "0",
+    "Host": "api.klofron.uk",
+    "User-Agent": "curl/7.75.0",
+    "X-Amzn-Trace-Id": "Root=1-66637b8f-4ae9d2292956c8bd38c4c7f5",
+    "X-Forwarded-For": "87.114.15.116",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https",
+    "accept": "*/*"
+  },
+  "multiValueHeaders": {
+    "Content-Length": [ "0" ],
+    "Host": [ "api.klofron.uk" ],
+    "User-Agent": [ "curl/7.75.0" ],
+    "X-Amzn-Trace-Id": [ "Root=1-66637b8f-4ae9d2292956c8bd38c4c7f5" ],
+    "X-Forwarded-For": [ "87.114.15.116" ],
+    "X-Forwarded-Port": [ "443" ],
+    "X-Forwarded-Proto": [ "https" ],
+    "accept": [ "*/*" ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "requestContext": {
+    "accountId": "103348857345",
+    "apiId": "2ya1hiwlrc",
+    "domainName": "api.klofron.uk",
+    "domainPrefix": "api",
+    "extendedRequestId": "ZBA-bhTJDoEEM2A=",
+    "httpMethod": "PATCH",
+    "identity": {
+      "accessKey": null,
+      "accountId": null,
+      "caller": null,
+      "cognitoAmr": null,
+      "cognitoAuthenticationProvider": null,
+      "cognitoAuthenticationType": null,
+      "cognitoIdentityId": null,
+      "cognitoIdentityPoolId": null,
+      "principalOrgId": null,
+      "sourceIp": "87.114.15.116",
+      "user": null,
+      "userAgent": "curl/7.75.0",
+      "userArn": null
+    },
+    "path": "/api/v2/action",
+    "protocol": "HTTP/1.1",
+    "requestId": "ZBA-bhTJDoEEM2A=",
+    "requestTime": "07/Jun/2024:21:28:47 +0000",
+    "requestTimeEpoch": 1717795727204,
+    "resourceId": "PATCH /v2/{proxy+}",
+    "resourcePath": "/v2/{proxy+}",
+    "stage": "api"
+  },
+  "pathParameters": { "proxy": "action" },
+  "stageVariables": null,
+  "body": null,
+  "isBase64Encoded": false
+}
