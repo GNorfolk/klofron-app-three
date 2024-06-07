@@ -23,6 +23,7 @@ export class HouseService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      house.house_rooms = 2;
       await this.createHouse(result, queryRunner, house)
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -106,6 +107,7 @@ export class HouseService {
 
   async findRoad(): Promise<HouseRoad> {
     const queryRunner = this.dataSource.createQueryRunner();
+    let result
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
@@ -118,11 +120,20 @@ export class HouseService {
         road.house_road_addresses.length < road.house_road_capacity &&
         road.house_road_addresses.slice(-1)[0].house_address_number < road.house_road_capacity
       )
-      const selectedId = Math.floor(Math.random() * filteredRoads.length)
-      // ToDo: create new road if none have capacity 
+      if (filteredRoads.length > 0) {
+        const selectedId = Math.floor(Math.random() * filteredRoads.length)
+        result = filteredRoads[selectedId]
+      } else {
+        const road = await this.createRoad();
+        result = await queryRunner.manager
+          .createQueryBuilder(HouseRoad, "road")
+          .leftJoinAndSelect("road.house_road_addresses", "address")
+          .where("road.house_road_id = :id", { id: road.house_road_id })
+          .getOne();
+      }
       await queryRunner.commitTransaction();
       await queryRunner.release();
-      return filteredRoads[selectedId]
+      return result
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();
@@ -131,7 +142,7 @@ export class HouseService {
     }
   }
 
-  async createRoad() {
+  async createRoad(): Promise<HouseRoad> {
     const queryRunner = this.dataSource.createQueryRunner();
     let result
     await queryRunner.connect();
@@ -148,7 +159,10 @@ export class HouseService {
         .orderBy("RAND()")
         .limit(1)
         .getOne();
-      throw house_road_name.house_road_name_name + " " + house_road_type.house_road_type_name
+      result = await queryRunner.manager.save(HouseRoad, {
+        house_road_name: house_road_name.house_road_name_name + " " + house_road_type.house_road_type_name,
+        house_road_capacity: house_road_type.house_road_type_capacity
+      });
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result
