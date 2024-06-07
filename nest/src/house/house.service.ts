@@ -23,24 +23,7 @@ export class HouseService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const houseRoad = await this.findRoad()
-      const houseNumber = houseRoad?.house_road_addresses.length > 0 ? houseRoad.house_road_addresses.slice(-1)[0].house_address_number : 0
-      const houseAddress = await queryRunner.manager.save(HouseAddress, {
-        house_address_number: houseNumber + 1,
-        house_address_road_id: houseRoad.house_road_id
-      });
-      house.house_address_id = houseAddress.house_address_id
-      result = await queryRunner.manager.save(House, house);
-      const food = {
-        resource_type_name: "food",
-        resource_house_id: result.house_id
-      }
-      const wood = {
-        resource_type_name: "wood",
-        resource_house_id: result.house_id
-      }
-      await queryRunner.manager.save(Resource, food);
-      await queryRunner.manager.save(Resource, wood);
+      await this.createHouse(result, queryRunner, house)
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result
@@ -50,6 +33,28 @@ export class HouseService {
       await queryRunner.release();
       throw new BadRequestException(err);
     }
+  }
+
+  async createHouse(result, queryRunner, house) {
+    const houseRoad = await this.findRoad()
+    const houseNumber = houseRoad?.house_road_addresses.length > 0 ? houseRoad.house_road_addresses.slice(-1)[0].house_address_number : 0
+    const houseAddress = await queryRunner.manager.save(HouseAddress, {
+      house_address_number: houseNumber + 1,
+      house_address_road_id: houseRoad.house_road_id
+    });
+    house.house_address_id = houseAddress.house_address_id
+    result = await queryRunner.manager.save(House, house);
+    const food = {
+      resource_type_name: "food",
+      resource_house_id: result.house_id
+    }
+    const wood = {
+      resource_type_name: "wood",
+      resource_house_id: result.house_id
+    }
+    await queryRunner.manager.save(Resource, food);
+    await queryRunner.manager.save(Resource, wood);
+    return result;
   }
 
   async findAll(query): Promise<House[]> {

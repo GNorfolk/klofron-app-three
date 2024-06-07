@@ -7,11 +7,13 @@ import { Action } from './entities/Action';
 import { Person } from '../person/entities/Person';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
+import { HouseService } from '../house/house.service';
 
 @Injectable()
 export class ActionService {
   constructor(
     @InjectRepository(Action) private actionRepository: Repository<Action>,
+    private houseService: HouseService,
     private dataSource: DataSource
   ) {}
 
@@ -167,7 +169,7 @@ export class ActionService {
       .leftJoinAndSelect("person.person_house", "house")
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-      .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
+      .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 SECOND < now()")
       .getMany();
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {
@@ -180,6 +182,10 @@ export class ActionService {
           await this.updateProcessIncreaseStorage(action.action_id)
         } else if (action.action_type_id == 4) {
           await this.updateProcessIncreaseRooms(action.action_id)
+        } else if (action.action_type_id == 5) {
+          await this.updateProcessCreateHouse(action.action_id)
+        } else if (action.action_type_id == 6) {
+          await this.updateProcessBirthRecovery(action.action_id)
         } else {
           console.log("pass")
         }
@@ -300,6 +306,52 @@ export class ActionService {
         house_id: action.action_person.person_house_id
       }, "house_rooms", 1);
       console.log("IncreaseRoomsDone")
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
+
+  async updateProcessCreateHouse(actionId: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    let result
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const action = await this.actionRepository
+        .createQueryBuilder("action")
+        .innerJoinAndSelect("action.action_person", "person")
+        .where("action.action_id = :id", { id: actionId })
+        .getOne();
+      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
+      result = await this.houseService.createHouse(result, queryRunner, {
+          house_family_id: action.action_person.person_family_id,
+          house_rooms: 2
+        }
+      )
+      console.log("CreateHouseDone")
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
+
+  async updateProcessBirthRecovery(actionId: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
+      console.log("BirthRecoveryDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {

@@ -12,5 +12,6 @@ import { HouseAddress } from './entities/HouseAddress';
   imports: [TypeOrmModule.forFeature([House, HouseRoadName, HouseRoadType, HouseRoad, HouseAddress])],
   controllers: [HouseController],
   providers: [HouseService],
+  exports: [HouseService]
 })
 export class HouseModule {}
