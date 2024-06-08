@@ -4,12 +4,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Layout from '../../components/Layout'
 import ListAllProposals from '../../components/ListAllProposals'
 
-const queryClient = new QueryClient()
-
-export default function Family() {
+export default function Family({ client }) {
   return (
     <Layout>
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={client}>
         <ListAllProposals />
       </QueryClientProvider>
     <div className={styles.backToHome}>

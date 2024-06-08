@@ -5,15 +5,13 @@ import Layout from '../../../components/Layout'
 import DescribeHouseResources from '../../../components/DescribeHouseResources'
 import { useSession } from 'next-auth/react'
 
-const queryClient = new QueryClient()
-
-export default function Home() {
+export default function Home({ client }) {
   const { status, data } = useSession()
   const userId = data?.user ? data.user.id : null
   return (
     <Layout>
-      <QueryClientProvider client={queryClient}>
-        <DescribeHouseResources queryClient={queryClient} userId={userId} />
+      <QueryClientProvider client={client}>
+        <DescribeHouseResources queryClient={client} userId={userId} />
       </QueryClientProvider>
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>

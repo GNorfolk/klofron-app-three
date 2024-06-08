@@ -7,10 +7,9 @@ import Router from "next/router"
 import { useEffect } from "react"
 import ListAllFamilies from '../components/ListAllFamilies'
 
-const queryClient = new QueryClient()
 let userId
 
-export default function Family() {
+export default function Family({ client }) {
   const { status, data } = useSession()
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/family")
@@ -19,8 +18,8 @@ export default function Family() {
     userId = data.user.id
     return (
       <Layout>
-        <QueryClientProvider client={queryClient}>
-          <ListAllFamilies queryClient={queryClient} userId={userId}/>
+        <QueryClientProvider client={client}>
+          <ListAllFamilies queryClient={client} userId={userId}/>
         </QueryClientProvider>
         <div className={styles.backToHome}>
           <Link href="/">← Back to home</Link>
