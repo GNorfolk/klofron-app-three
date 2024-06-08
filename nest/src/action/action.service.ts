@@ -31,6 +31,7 @@ export class ActionService {
         .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("person.person_id = :id", { id: action.action_person_id })
         .getOne();
+      if (person.person_deleted_at) throw "Person is deceased!";
       if (person.person_actions.length > 0) throw "Action already in progress!";
       if (action.action_type_id == 2) {
         if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
@@ -174,6 +175,10 @@ export class ActionService {
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {
       try {
+        if (action.action_person.person_deleted_at) {
+          await this.actionRepository.update(action.action_id, { action_cancelled_at: new Date() });
+          throw "Person is deceased!"
+        }
         if (action.action_type_id == 1) {
           await this.updateProcessGetFood(action.action_id)
         } else if (action.action_type_id == 2) {
