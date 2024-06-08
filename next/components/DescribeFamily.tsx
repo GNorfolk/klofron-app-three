@@ -90,7 +90,7 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
               unnamedBoolean ?
                 <div>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <input type="submit" />
+                    <input type="submit" value="Create first house" />
                   </form>
                   <small className={styles.lightText} id={'cm-' + familyId}></small>
                 </div>
@@ -105,29 +105,22 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
 
 
 export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean = false }) {
-  type Inputs = {
-    mother_name: string
-    father_name: string
-  }
-
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<Inputs>()
+  } = useForm<{}>()
 
-  const onSubmit: SubmitHandler<Inputs> = (formData) => {
+  const onSubmit: SubmitHandler<{}> = () => {
     axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person', [
       {
-        person_name: formData.mother_name,
         person_gender: "female",
         person_family_id: familyId,
         person_mother_id: 2,
         person_father_id: 1
       },
       {
-        person_name: formData.father_name,
         person_gender: "male",
         person_family_id: familyId,
         person_mother_id: 2,
@@ -169,9 +162,7 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
               unnamedBoolean ?
                 <div>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <input defaultValue="motherName" {...register("mother_name")} />
-                    <input defaultValue="fatherName" {...register("father_name")} />
-                    <input type="submit" />
+                    <input type="submit" value="Create first couple" />
                   </form>
                   <small className={styles.lightText} id={'cm-' + familyId}></small>
                 </div>
