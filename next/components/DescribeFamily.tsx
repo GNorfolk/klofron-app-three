@@ -69,7 +69,7 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
   if (data.family_houses.length > 0) {
     return (
       <div>
-        <h2 className={styles.headingLg}>House Info</h2>
+        <h2 className={styles.headingLg} >House Info</h2>
         <ul className={styles.list}>
           {data.family_houses.map(({ house_id, house_address, house_food, house_wood }) => (
             <li className={styles.listItem} key={house_id}>
