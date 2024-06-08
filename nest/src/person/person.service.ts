@@ -175,6 +175,8 @@ export class PersonService {
       .innerJoinAndSelect("father.person_family", "father_family")
       .innerJoinAndSelect("mother.person_family", "mother_family")
       .leftJoinAndSelect("person.person_house", "house")
+      .leftJoinAndSelect("house.house_address", "address")
+      .leftJoinAndSelect("address.house_address_road", "road")
       .leftJoinAndSelect("person.person_partner", "partner")
       .leftJoinAndSelect("partner.person_family", "partner_family")
       .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'") // TODO switch to inner join when all people have resources

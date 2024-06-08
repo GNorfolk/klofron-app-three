@@ -57,7 +57,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
           {
             data.family_people.length > 0 ? 
               data.family_people.map(({ person_name, person_house_id, person_house }) => (
-                person_house_id ? <p>{person_name} lives at {person_house.house_name}.</p> : <p>{person_name} is unhoused.</p>
+                person_house_id ? <p>{person_name} lives at {person_house.house_address.house_address_number + ", " + person_house.house_address.house_address_road.house_road_name}.</p> : <p>{person_name} is unhoused.</p>
               ))
             :
               <p>This family does not have any people in it.</p>

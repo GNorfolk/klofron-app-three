@@ -35,6 +35,8 @@ export class FamilyService {
       .leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
       .leftJoinAndSelect("family.family_houses", "house")
       .leftJoinAndSelect("person.person_house", "person_house")
+      .leftJoinAndSelect("person_house.house_address", "address")
+      .leftJoinAndSelect("address.house_address_road", "road")
       .leftJoinAndSelect("person.person_proposals", "proposal", "proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
       .leftJoinAndSelect("proposal.proposal_offers", "offer", "offer.accepted_at IS NULL AND offer.deleted_at IS NULL")
       .leftJoinAndSelect("offer.proposal_offer_person", "offer_person")

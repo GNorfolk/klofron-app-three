@@ -61,6 +61,8 @@ export class HouseService {
   async findAll(query): Promise<House[]> {
     let houses = this.houseRepository
       .createQueryBuilder("house")
+      .innerJoinAndSelect("house.house_address", "address")
+      .innerJoinAndSelect("address.house_address_road", "road")
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
       .innerJoinAndSelect("house.house_family", "family")
@@ -82,6 +84,8 @@ export class HouseService {
   async findOne(id: number): Promise<House> {
     const house = this.houseRepository
       .createQueryBuilder("house")
+      .innerJoinAndSelect("house.house_address", "address")
+      .innerJoinAndSelect("address.house_address_road", "road")
       .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
       .innerJoinAndSelect("house.house_family", "house_family")

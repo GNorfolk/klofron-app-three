@@ -152,7 +152,8 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
           {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
             <li className={styles.listItem} key={person_id}>
               { person_house ?
-                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_name}.</p>
+                // ToDo: Remove house.house_name
+                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_address.house_address_number + ", " + person_house.house_address.house_address_road.house_road_name}.</p>
               :
                 <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and is currently unhoused.</p>
               }
