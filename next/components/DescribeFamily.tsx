@@ -43,7 +43,6 @@ export default function DescribeFamily({ queryClient, userId }) {
 
 export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean = false }) {
   type Inputs = {
-    house_name: string
     house_family_id: number
     house_rooms: number
   }
@@ -57,7 +56,6 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
     axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/house', {
-      house_name: formData.house_name,
       house_family_id: familyId,
       house_rooms: 2
     }).then(response => {
@@ -73,9 +71,9 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
       <div>
         <h2 className={styles.headingLg}>House Info</h2>
         <ul className={styles.list}>
-          {data.family_houses.map(({ house_id, house_name, house_family, house_food, house_wood }) => (
+          {data.family_houses.map(({ house_id, house_address, house_food, house_wood }) => (
             <li className={styles.listItem} key={house_id}>
-              <p>The {data.family_name} family own <Link href={`/house/${house_id}`}>{house_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
+              <p>The {data.family_name} family own <Link href={`/house/${house_id}`}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
             </li>
           ))}
         </ul>
@@ -92,7 +90,6 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
               unnamedBoolean ?
                 <div>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <input defaultValue="houseName" {...register("house_name")} />
                     <input type="submit" />
                   </form>
                   <small className={styles.lightText} id={'cm-' + familyId}></small>
@@ -152,8 +149,7 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
           {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
             <li className={styles.listItem} key={person_id}>
               { person_house ?
-                // ToDo: Remove house.house_name
-                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_address.house_address_number + ", " + person_house.house_address.house_address_road.house_road_name}.</p>
+                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</p>
               :
                 <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and is currently unhoused.</p>
               }

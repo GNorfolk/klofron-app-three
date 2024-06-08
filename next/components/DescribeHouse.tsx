@@ -39,11 +39,11 @@ export default function DescribeHouse({ queryClient, userId }) {
 
     return (
       <QueryClientProvider client={queryClient}>
-        <h1 className={styles.heading2Xl}>{data.house_name}</h1>
-        <p className={styles.listItem}>{data.house_name} has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p>
+        <h1 className={styles.heading2Xl}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h1>
+        <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p>
         {/* THIS IS COMMENTED OUT BECAUSE TRADES AREN'T SUPER IMPLEMENTED RIGHT NOW. TODO: Setup handling of trades here. */}
-        {/* <p className={styles.listItem}>{data.house_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
-        <p className={styles.listItem}>{data.house_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
+        {/* <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
+        <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
         {
           userId === data.house_family.family_user_id ?
           <div>
@@ -245,7 +245,7 @@ export function ListHouseResources({ data, queryClient, userId = null }) {
     return (
       <div>
         <h2 className={styles.headingLg}>Resource Info</h2>
-        <p>{data.house_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
+        <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
         { userId === data.house_family.family_user_id ? <p>Go to <Link href={`/house/${router.query.id}/resource`}>Resource Management</Link> page.</p> : null }
       </div>
     )

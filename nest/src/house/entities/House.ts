@@ -21,9 +21,6 @@ export class House {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   house_id: number;
 
-  @Column("varchar", { name: "name", length: 155 })
-  house_name: string;
-
   @Column("int", { name: "rooms" })
   house_rooms: number;
 

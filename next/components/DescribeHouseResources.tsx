@@ -83,7 +83,7 @@ export default function DescribeHouseResources({ queryClient, userId }) {
       return (
         <div>
           <h2 className={styles.headingLg}>Resource Info</h2>
-          <p>{data.house_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
+          <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
           { data.house_people.map(({ person_name, person_food, person_wood }) => (
             <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
           ))}

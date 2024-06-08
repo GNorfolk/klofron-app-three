@@ -183,6 +183,7 @@ mysql -u root -p ka3 < dump-2024-06-08.sql
 
 # MySQL
 ```sql
+ALTER TABLE house DROP COLUMN name;
 ```
 
 # save

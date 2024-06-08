@@ -99,16 +99,6 @@ export class HouseService {
     return await house.getOne();
   }
 
-  // curl --request POST localhost:5000/v2/house/2 --header "Content-Type: application/json" --data '{"name":"SomeHouseName"}'
-  update(id: number, body) {
-    return this.houseRepository
-      .createQueryBuilder()
-      .update(House)
-      .set({ house_name: body.name })
-      .where("id = :id", { id: id })
-      .execute();
-  }
-
   async findRoad(): Promise<HouseRoad> {
     const queryRunner = this.dataSource.createQueryRunner();
     let result

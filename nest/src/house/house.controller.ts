@@ -34,9 +34,4 @@ export class HouseController {
   findOne(@Param('id') id: string) {
     return this.houseService.findOne(+id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: number, @Req() req) {
-    return this.houseService.update(id, req.body);
-  }
 }
