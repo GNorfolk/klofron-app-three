@@ -22,16 +22,6 @@ export default function DescribeHouse({ queryClient, userId }) {
       },
     })
 
-    const [houseInfo, sethouseInfo] = useState({ name: "" })
-    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-      e.preventDefault();
-      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house/' + router.query.id, {
-        name: houseInfo.name
-      }).then((value) => {
-        queryClient.invalidateQueries()
-      })
-    };
-
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
@@ -69,26 +59,6 @@ export default function DescribeHouse({ queryClient, userId }) {
         }
         <ListHouseTrades data={data.house_trades} />
         <ListHouseResources data={data} queryClient={queryClient} userId={userId} />
-        {
-          userId === data.house_family.family_user_id ?
-          <div>
-            <h3 className={styles.headingMd}>Rename House</h3>
-              <ul className={styles.list}>
-                <form onSubmit={handleSubmit}>
-                  <input
-                    value={houseInfo.name}
-                    onChange={({ target }) =>
-                      sethouseInfo({ ...houseInfo, name: target.value })
-                    }
-                    placeholder="Insert name here"
-                  />
-                  <input type="submit" value="Rename" />
-                </form>
-              </ul>
-          </div>
-          :
-          <></>
-        }
       </QueryClientProvider>
     )
   }
