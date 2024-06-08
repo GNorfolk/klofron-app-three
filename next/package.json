@@ -9,12 +9,16 @@
     "deploy": "terraform -chdir=tf init && terraform -chdir=tf apply -auto-approve"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^4.29.19",
     "aws-cdk-lib": "2.96.2",
     "axios": "^1.4.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "constructs": "^10.0.0",
     "date-fns": "^2.30.0",
     "gray-matter": "^4.0.3",
+    "lucide-react": "^0.390.0",
     "next": "^12.3.0",
     "next-auth": "4.10.1",
     "react": "18.2.0",
@@ -24,7 +28,9 @@
     "remark-html": "^15.0.2",
     "serverless": "^1.74.1",
     "source-map-support": "^0.5.21",
-    "swr": "^2.2.0"
+    "swr": "^2.2.0",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.9",

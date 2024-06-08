@@ -4,6 +4,7 @@ import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-quer
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 import Link from 'next/link'
+import { Button } from "../@/components/ui/button"
 
 export default function DescribeHouse({ queryClient, userId }) {
   const router = useRouter()
@@ -37,7 +38,7 @@ export default function DescribeHouse({ queryClient, userId }) {
         {
           userId === data.house_family.family_user_id ?
           <div>
-            <button onClick={
+            <Button onClick={
               () => {
                 createPerson.mutate(house_id, { onSettled: (data, error: any) => {
                   queryClient.invalidateQueries()
@@ -48,7 +49,7 @@ export default function DescribeHouse({ queryClient, userId }) {
                   }
                 }})
               }
-            } >Create Person</button>
+            } >Create Person</Button>
             <small className={styles.lightText} id={'cm-two-' + house_id}></small>
             <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
           </div>
@@ -124,7 +125,7 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
                 {
                   userId === person_family.family_user_id ?
                   <div>
-                    <button onClick={
+                    <Button onClick={
                       () => {
                         increaseFood.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -135,8 +136,8 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
                           }
                         }})
                       }
-                    } >Get Food</button>
-                    <button onClick={
+                    } >Get Food</Button>
+                    <Button onClick={
                       () => {
                         increaseWood.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -147,8 +148,8 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
                           }
                         }})
                       }
-                    } >Get Wood</button>
-                    <button onClick={
+                    } >Get Wood</Button>
+                    <Button onClick={
                       () => {
                         increaseStorage.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -159,8 +160,8 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
                           }
                         }})
                       }
-                    } >Increase Storage</button>
-                    <button onClick={
+                    } >Increase Storage</Button>
+                    <Button onClick={
                       () => {
                         increaseRooms.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -171,8 +172,8 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
                           }
                         }})
                       }
-                    } >Increase Rooms</button>
-                    <button onClick={
+                    } >Increase Rooms</Button>
+                    <Button onClick={
                       () => {
                         createHouse.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -183,7 +184,7 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
                           }
                         }})
                       }
-                    } >Create House</button>
+                    } >Create House</Button>
                     <small className={styles.lightText} id={'cm-' + person_id}></small>
                   </div>
                   :
