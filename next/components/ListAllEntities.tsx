@@ -1,15 +1,20 @@
 import styles from '../styles/main.module.css'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
-
+import { BoxLayoutV2 } from '../@/components/component/box-layout-v2'
 
 export default function ListAllEntities({ queryClient }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <h1 className={styles.heading2Xl}>Index</h1>
-      <ListAllFamilies />
-      <ListAllHouses />
-      <ListAllPeople />
+      <BoxLayoutV2 left={
+        <div>
+          <ListAllFamilies />
+          <br />
+          <ListAllHouses />
+        </div>
+      } right={
+        <ListAllPeople />
+      }/>
     </QueryClientProvider>
   )
 }
@@ -32,7 +37,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
   if (error) return <div>Failed to load</div>
 
   return (
-    <div>
+    <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
       <h2 className={styles.headingLg}>Families</h2>
       <ul className={styles.list}>
         { data.map(({ family_id, family_name }) => (
@@ -63,7 +68,7 @@ export function ListAllHouses() {
   if (error) return <div>Failed to load</div>
 
   return (
-    <div>
+    <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
       <h2 className={styles.headingLg}>Houses</h2>
       <ul className={styles.list}>
         {data.map(({ house_id, house_address, house_rooms, house_storage, house_food, house_wood }) => (
@@ -96,7 +101,7 @@ export function ListAllPeople() {
   console.log(data)
 
   return (
-    <div>
+    <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
       <h2 className={styles.headingLg}>People</h2>
       <ul className={styles.list}>
         {
