@@ -18,6 +18,7 @@ export class FamilyService {
   async findAll(query): Promise<Family[]> {
     let families = this.familyRepository
       .createQueryBuilder("family")
+      .leftJoinAndSelect("family.family_houses", "house")
       if (query?.show_empty && query.show_empty == "true") {
         families = families.leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
       } else {
