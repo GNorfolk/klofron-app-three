@@ -94,10 +94,10 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
             </SheetTrigger>
             <SheetContent className="bg-white dark:bg-gray-950" side="left">
               <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
-                <Link className="flex items-center gap-2 font-semibold" href="#">
+                <p className="flex items-center gap-2 font-semibold">
                   <MountainIcon className="h-6 w-6" />
                   <span className="text-gray-900 dark:text-gray-50">Acme Inc</span>
-                </Link>
+                </p>
               </div>
               <nav className="flex-1 py-4">
                 <ul className="grid gap-1">
