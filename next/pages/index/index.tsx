@@ -3,7 +3,7 @@ import { BaseLayout } from '../../@/components/component/base-layout'
 import styles from '../../styles/main.module.css'
 import { QueryClientProvider } from '@tanstack/react-query'
 import ListAllEntities from '../../components/ListAllEntities'
-import { BoxLayout } from '../../@/components/component/box-layout'
+import { BoxLayoutV2 } from '../../@/components/component/box-layout-v2'
 
 export default function Family({ client }) {
   return (
@@ -15,7 +15,7 @@ export default function Family({ client }) {
       <div className={styles.backToHome}>
         <Link href="/">← Back to home</Link>
       </div> */}
-      <BoxLayout />
+      <BoxLayoutV2 />
     </BaseLayout>
   )
 }
