@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Layout from '../components/Layout'
+import { BaseLayout } from '../@/components/component/base-layout'
 import styles from '../styles/main.module.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
@@ -17,14 +17,14 @@ export default function Family({ client }) {
   if (status === "authenticated") {
     userId = data.user.id
     return (
-      <Layout>
+      <BaseLayout>
         <QueryClientProvider client={client}>
           <ListAllFamilies queryClient={client} userId={userId}/>
         </QueryClientProvider>
         <div className={styles.backToHome}>
           <Link href="/">← Back to home</Link>
         </div>
-      </Layout>
+      </BaseLayout>
     )
   }
   return <div>Loading...</div>

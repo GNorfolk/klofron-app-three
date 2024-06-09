@@ -34,7 +34,7 @@ import Link from "next/link"
 import { Button } from "../../components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "../../components/ui/sheet"
 
-export function BaseLayout() {
+export function BaseLayout({ children } : { children: React.ReactNode }) {
   return (
     <div className="grid md:grid-cols-[280px_1fr] w-full min-h-screen">
       <div className="bg-gray-100 dark:bg-gray-800 hidden md:block">
@@ -136,28 +136,7 @@ export function BaseLayout() {
         </header>
         <main className="flex-1 p-4 md:p-6">
           <div className="prose prose-stone dark:prose-invert">
-            <h1>Welcome to Acme Inc</h1>
-            <p>
-              We are a leading provider of innovative solutions for businesses of all sizes. Our team of experts is
-              dedicated to helping you achieve your goals and reach new heights.
-            </p>
-            <h2>Our Services</h2>
-            <ul>
-              <li>Web Development</li>
-              <li>Mobile App Development</li>
-              <li>Digital Marketing</li>
-              <li>IT Consulting</li>
-            </ul>
-            <h2>Contact Us</h2>
-            <p>Get in touch with us today to learn more about how we can help your business succeed.</p>
-            <p>
-              Email:
-              <a href="#">info@acmeinc.com</a>
-            </p>
-            <p>
-              Phone:
-              <a href="#">+1 (234) 567-890</a>
-            </p>
+            <main>{children}</main>
           </div>
         </main>
       </div>
