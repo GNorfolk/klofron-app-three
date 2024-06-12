@@ -5,6 +5,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayout } from '../@/components/component/box-layout'
+import { Container } from '../@/components/component/container'
 
 export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
@@ -81,7 +82,7 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
 
   if (data.family_houses.length > 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">House Info</h2>
         <ul className={styles.list}>
           {data.family_houses.map(({ house_id, house_address, house_food, house_wood }) => (
@@ -90,11 +91,11 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     )
   } else {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">House Info</h2>
         <ul className={styles.list}>
           <li className={styles.listItem}>
@@ -111,7 +112,7 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
             }
           </li>
         </ul>
-      </div>
+      </Container>
     )
   }
 }
@@ -149,7 +150,7 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
 
   if (data.family_people.length > 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">Person Info</h2>
         <ul className={styles.list}>
           {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
@@ -162,11 +163,11 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     )
   } else {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">Person Info</h2>
         <ul className={styles.list}>
           <li className={styles.listItem}>
@@ -183,7 +184,7 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
             }
           </li>
         </ul>
-      </div>
+      </Container>
     )
   }
 }
@@ -192,10 +193,10 @@ export function ListFamilyProposals({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">Proposal Info</h2>
         <p>Go to <Link href={`/family/${router.query.id}/proposal`}>Proposal Management</Link> page.</p>
-      </div>
+      </Container>
     )
   }
 }
@@ -204,10 +205,10 @@ export function ListFamilyTravel({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">Travel Info</h2>
         <p>Go to <Link href={`/family/${router.query.id}/travel`}>Travel Management</Link> page.</p>
-      </div>
+      </Container>
     )
   }
 }

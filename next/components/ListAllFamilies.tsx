@@ -4,6 +4,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { Container } from '../@/components/component/container'
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
   const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
@@ -50,7 +51,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
   if (userId) { // TODO: Add empty handling like ListHousePeople
     return (
       <BoxLayoutSingle>
-        <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <Container>
           <h2 className="p-6 text-4xl">Families</h2>
           { data.length > 0 ? data.map(({ family_id, family_name, family_people, family_houses }) => (
             <div className="p-6 pt-2 pb-2">
@@ -71,9 +72,9 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
               <h3 className="text-xl font-semibold">The user has no families!</h3>
             </div>
           }
-        </div>
+        </Container>
         <br />
-        <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <Container>
           <h2 className="p-6 text-4xl">Create Family</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <input defaultValue="familyName" {...register("family_name", { required: true })} />
@@ -81,12 +82,12 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
             <input type="submit" />
           </form>
           <small className="" id={'cm-' + userId}></small>
-        </div>
+        </Container>
       </BoxLayoutSingle>
     )
   } else {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">Families</h2>
         { data.map(({ family_id, family_name, family_people, family_houses }) => (
           <div className="p-6 pt-2 pb-2">
@@ -103,7 +104,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
             </div>
           </div>
         ))}
-      </div>
+      </Container>
     )
   }
 }

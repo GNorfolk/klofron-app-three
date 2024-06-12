@@ -2,6 +2,7 @@ import styles from '../styles/main.module.css'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { BoxLayout } from '../@/components/component/box-layout'
+import { Container } from '../@/components/component/container'
 
 export default function ListAllEntities({ queryClient }) {
   return (
@@ -30,16 +31,16 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
 
   if (isLoading) return (
     <div>
-      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+      <Container>
         <h2 className="p-6 text-4xl">Families</h2>
         <p>Loading...</p>
-      </div>
+      </Container>
     </div>
   )
   if (error) return <div>Failed to load</div>
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+    <Container>
       <h2 className="p-6 text-4xl">Families</h2>
       { data.map(({ family_id, family_name, family_people, family_houses }) => (
       <div className="p-6 pt-2 pb-2">
@@ -56,7 +57,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
         </div>
       </div>
       ))}
-    </div>
+    </Container>
   )
 }
 
@@ -78,7 +79,7 @@ export function ListAllHouses() {
   if (error) return <div>Failed to load</div>
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+    <Container>
       <h2 className={styles.headingLg}>Houses</h2>
       <ul className={styles.list}>
         {data.map(({ house_id, house_address, house_rooms, house_storage, house_food, house_wood }) => (
@@ -87,7 +88,7 @@ export function ListAllHouses() {
           </li>
         ))}
       </ul>
-    </div>
+    </Container>
   )
 }
 
@@ -111,7 +112,7 @@ export function ListAllPeople() {
   console.log(data)
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+    <Container>
       <h2 className={styles.headingLg}>People</h2>
       <ul className={styles.list}>
         {
@@ -122,7 +123,7 @@ export function ListAllPeople() {
           ))
         }
       </ul>
-    </div>
+    </Container>
   )
 }
 
