@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
+import { BoxLayout } from '../@/components/component/box-layout'
 
 export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
@@ -23,18 +24,30 @@ export default function DescribeFamily({ queryClient, userId }) {
       return (
         <QueryClientProvider client={queryClient}>
           <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
-          <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
-          <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
-          <ListFamilyTravel data={data} />
-          <ListFamilyProposals data={data} />
+          <BoxLayout left={
+            <div>
+              <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+              <br />
+              <ListFamilyProposals data={data} />
+            </div>
+          } right={
+            <div>
+              <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+              <br />
+              <ListFamilyTravel data={data} />
+            </div>
+          }/>
         </QueryClientProvider>
       )
     } else {
       return (
         <QueryClientProvider client={queryClient}>
           <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
-          <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
-          <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
+          <BoxLayout left={
+            <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
+          } right={
+            <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
+          } />
         </QueryClientProvider>
       )
     }
@@ -68,8 +81,8 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
 
   if (data.family_houses.length > 0) {
     return (
-      <div>
-        <h2 className={styles.headingLg} >House Info</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 className="p-6 text-4xl">House Info</h2>
         <ul className={styles.list}>
           {data.family_houses.map(({ house_id, house_address, house_food, house_wood }) => (
             <li className={styles.listItem} key={house_id}>
@@ -81,8 +94,8 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
     )
   } else {
     return (
-      <div>
-        <h2 className={styles.headingLg}>House Info</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 className="p-6 text-4xl">House Info</h2>
         <ul className={styles.list}>
           <li className={styles.listItem}>
             <p>This family does not own any houses.</p>
@@ -136,8 +149,8 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
 
   if (data.family_people.length > 0) {
     return (
-      <div>
-        <h2 className={styles.headingLg}>Person Info</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 className="p-6 text-4xl">Person Info</h2>
         <ul className={styles.list}>
           {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
             <li className={styles.listItem} key={person_id}>
@@ -153,8 +166,8 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
     )
   } else {
     return (
-      <div>
-        <h2 className={styles.headingLg}>Person Info</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 className="p-6 text-4xl">Person Info</h2>
         <ul className={styles.list}>
           <li className={styles.listItem}>
             <p>This family does not have any people in it.</p>
@@ -179,8 +192,8 @@ export function ListFamilyProposals({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (
-      <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 className="p-6 text-4xl">Proposal Info</h2>
         <p>Go to <Link href={`/family/${router.query.id}/proposal`}>Proposal Management</Link> page.</p>
       </div>
     )
@@ -191,8 +204,8 @@ export function ListFamilyTravel({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (
-      <div>
-        <h2 className={styles.headingLg}>Travel Info</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 className="p-6 text-4xl">Travel Info</h2>
         <p>Go to <Link href={`/family/${router.query.id}/travel`}>Travel Management</Link> page.</p>
       </div>
     )
