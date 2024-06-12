@@ -1,12 +1,12 @@
 import styles from '../styles/main.module.css'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
-import { BoxLayoutV2 } from '../@/components/component/box-layout-v2'
+import { BoxLayout } from '../@/components/component/box-layout'
 
 export default function ListAllEntities({ queryClient }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <BoxLayoutV2 left={
+      <BoxLayout left={
         <div>
           <ListAllFamilies />
           <br />
