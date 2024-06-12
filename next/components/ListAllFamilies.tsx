@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
+import { UsersIcon, HouseIcon } from '../@/components/ui/icon'
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
   const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
@@ -107,45 +108,4 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
       </Container>
     )
   }
-}
-
-function UsersIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  )
-}
-
-function HouseIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-6 h-6"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 9L12 2L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" />
-      <path d="M9 21V12H15V21" />
-    </svg>
-  )
 }
