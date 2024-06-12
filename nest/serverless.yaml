@@ -7,7 +7,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: dist/serverless.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs20.x
       Architectures:
         - arm64
       CodeUri: ./

@@ -2,7 +2,7 @@ resource "aws_lambda_function" "main" {
     s3_bucket = aws_s3_bucket.this.id
     s3_key = aws_s3_object.this.key
     handler = "dist/serverless.handler"
-    runtime = "nodejs16.x"
+    runtime = "nodejs20.x"
     function_name = "${var.app_name}-nestjs"
     role = aws_iam_role.main.arn
     timeout = 30
