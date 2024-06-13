@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { UsersIcon, HouseIcon } from '../ui/icon'
+import { UsersIcon, HomeIcon } from '../ui/icon'
 
 export function FamilyListing({ familyData }) {
   return (
@@ -14,7 +14,7 @@ export function FamilyListing({ familyData }) {
               <span>{family_people.length} members</span>
             </div>
             <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
-              <HouseIcon className="w-5 h-5 mr-2" />
+              <HomeIcon className="w-5 h-5 mr-2" />
               <span>{family_houses.length} houses</span>
             </div>
           </div>

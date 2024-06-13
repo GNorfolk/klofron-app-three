@@ -41,40 +41,36 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
       <div className="bg-gray-100 dark:bg-gray-800 hidden md:block">
         <div className="flex flex-col h-full">
           <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
-            <p className="flex items-center gap-2 font-semibold">
+            <div className="flex items-center gap-2 font-semibold">
               <MountainIcon className="h-6 w-6" />
-              <span className="text-gray-900 dark:text-gray-50">Acme Inc</span>
-            </p>
+              <span className="text-gray-900 dark:text-gray-50">klofroN</span>
+            </div>
           </div>
           <nav className="flex-1 py-4">
             <ul className="grid gap-1">
               <li>
-                <p
-                  className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <HomeIcon className="h-5 w-5" />
-                  Home
-                </p>
+                  <span>Home</span>
+                </div>
               </li>
               <li>
-                <p
-                  className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <UserIcon className="h-5 w-5" />
-                  About
-                </p>
+                  <span>About</span>
+                </div>
               </li>
               <li>
-                <p
-                  className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <BriefcaseIcon className="h-5 w-5" />
-                  Services
-                </p>
+                  <span>Services</span>
+                </div>
               </li>
               <li>
-                <p
-                  className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <MailIcon className="h-5 w-5" />
-                  Contact
-                </p>
+                  <span>Contact</span>
+                </div>
               </li>
             </ul>
           </nav>
@@ -82,10 +78,10 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
       </div>
       <div className="flex flex-col">
         <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-950 md:hidden">
-          <p className="flex items-center gap-2 font-semibold">
+          <div className="flex items-center gap-2 font-semibold">
             <MountainIcon className="h-6 w-6" />
             <span className="text-gray-900 dark:text-gray-50">Acme Inc</span>
-          </p>
+          </div>
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="ghost">
@@ -95,40 +91,36 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
             </SheetTrigger>
             <SheetContent className="bg-white dark:bg-gray-950" side="left">
               <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
-                <p className="flex items-center gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <MountainIcon className="h-6 w-6" />
                   <span className="text-gray-900 dark:text-gray-50">Acme Inc</span>
-                </p>
+                </div>
               </div>
               <nav className="flex-1 py-4">
                 <ul className="grid gap-1">
                   <li>
-                    <p
-                      className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <HomeIcon className="h-5 w-5" />
                       Home
-                    </p>
+                    </div>
                   </li>
                   <li>
-                    <p
-                      className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <UserIcon className="h-5 w-5" />
                       About
-                    </p>
+                    </div>
                   </li>
                   <li>
-                    <p
-                      className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <BriefcaseIcon className="h-5 w-5" />
                       Services
-                    </p>
+                    </div>
                   </li>
                   <li>
-                    <p
-                      className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <MailIcon className="h-5 w-5" />
                       Contact
-                    </p>
+                    </div>
                   </li>
                 </ul>
               </nav>

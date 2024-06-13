@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { FamilyListing } from '../@/components/component/family-listing'
-import { UsersIcon, HouseIcon } from '../@/components/ui/icon'
+import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 
 export default function ListAllEntities({ queryClient }) {
   return (
@@ -54,7 +54,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
             <span>{family_people.length} members</span>
           </div>
           <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
-            <HouseIcon className="w-5 h-5 mr-2" />
+            <HomeIcon className="w-5 h-5 mr-2" />
             <span>{family_houses.length} houses</span>
           </div>
         </div>

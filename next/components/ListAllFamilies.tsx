@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
-import { UsersIcon, HouseIcon } from '../@/components/ui/icon'
+import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 import { FamilyListing } from '../@/components/component/family-listing'
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
