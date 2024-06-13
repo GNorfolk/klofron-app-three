@@ -33,7 +33,7 @@ To read more about using these font, please visit the Next.js documentation:
 import Link from "next/link"
 import { Button } from "../../components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "../../components/ui/sheet"
-import { MountainIcon, HomeIcon, UserIcon, BriefcaseIcon, MailIcon, MenuIcon } from '../ui/icon'
+import { MountainIcon, HomeIcon, MicroscopeIcon, MenuIcon } from '../ui/icon'
 
 export function BaseLayout({ children } : { children: React.ReactNode }) {
   return (
@@ -49,28 +49,16 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
           <nav className="flex-1 py-4">
             <ul className="grid gap-1">
               <li>
-                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <HomeIcon className="h-5 w-5" />
                   <span>Home</span>
-                </div>
+                </a>
               </li>
               <li>
-                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <UserIcon className="h-5 w-5" />
-                  <span>About</span>
-                </div>
-              </li>
-              <li>
-                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <BriefcaseIcon className="h-5 w-5" />
-                  <span>Services</span>
-                </div>
-              </li>
-              <li>
-                <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <MailIcon className="h-5 w-5" />
-                  <span>Contact</span>
-                </div>
+                <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                  <MicroscopeIcon className="h-5 w-5" />
+                  <span>Index</span>
+                </a>
               </li>
             </ul>
           </nav>
@@ -78,10 +66,10 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
       </div>
       <div className="flex flex-col">
         <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-950 md:hidden">
-          <div className="flex items-center gap-2 font-semibold">
+          <a href="/" className="flex items-center gap-2 font-semibold">
             <MountainIcon className="h-6 w-6" />
-            <span className="text-gray-900 dark:text-gray-50">Acme Inc</span>
-          </div>
+            <span className="text-gray-900 dark:text-gray-50">klofroN</span>
+          </a>
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="ghost">
@@ -93,34 +81,22 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
               <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-2 font-semibold">
                   <MountainIcon className="h-6 w-6" />
-                  <span className="text-gray-900 dark:text-gray-50">Acme Inc</span>
+                  <span className="text-gray-900 dark:text-gray-50">klofroN</span>
                 </div>
               </div>
               <nav className="flex-1 py-4">
                 <ul className="grid gap-1">
                   <li>
-                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <HomeIcon className="h-5 w-5" />
-                      Home
-                    </div>
+                      <span>Home</span>
+                    </a>
                   </li>
                   <li>
-                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <UserIcon className="h-5 w-5" />
-                      About
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <BriefcaseIcon className="h-5 w-5" />
-                      Services
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <MailIcon className="h-5 w-5" />
-                      Contact
-                    </div>
+                    <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                      <MicroscopeIcon className="h-5 w-5" />
+                      <span>Index</span>
+                    </a>
                   </li>
                 </ul>
               </nav>
