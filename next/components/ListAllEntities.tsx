@@ -44,22 +44,6 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
   return (
     <Container>
       <FamilyListing familyData={data} />
-      {/* <h2 className="p-6 text-4xl">Families</h2>
-      { data.map(({ family_id, family_name, family_people, family_houses }) => (
-      <div className="p-6 pt-2 pb-2">
-        <h3 className="text-xl font-semibold">The <Link href={`/family/${family_id}`}>{family_name}</Link> family</h3>
-        <div className="flex">
-          <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
-            <UsersIcon className="w-5 h-5 mr-2" />
-            <span>{family_people.length} members</span>
-          </div>
-          <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
-            <HomeIcon className="w-5 h-5 mr-2" />
-            <span>{family_houses.length} houses</span>
-          </div>
-        </div>
-      </div>
-      ))} */}
     </Container>
   )
 }
