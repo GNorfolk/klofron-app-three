@@ -86,14 +86,6 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
     return (
       <Container>
         <HouseListing houseData={data.family_houses} />
-        {/* <h2 className="p-6 text-4xl">House Info</h2>
-        <ul className={styles.list}>
-          {data.family_houses.map(({ house_id, house_address, house_food, house_wood }) => (
-            <li className={styles.listItem} key={house_id}>
-              <p>The {data.family_name} family own <Link href={`/house/${house_id}`}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
-            </li>
-          ))}
-        </ul> */}
       </Container>
     )
   } else {
@@ -155,18 +147,6 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
     return (
       <Container>
         <PersonListing personData={data.family_people} familyName={data.family_name} />
-        {/* <h2 className="p-6 text-4xl">Person Info</h2>
-        <ul className={styles.list}>
-          {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
-            <li className={styles.listItem} key={person_id}>
-              { person_house ?
-                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</p>
-              :
-                <p><Link href={"/person/" + person_id}>{person_name + ' ' + data.family_name}</Link> is {person_gender} and {person_age} years old and is currently unhoused.</p>
-              }
-            </li>
-          ))}
-        </ul> */}
       </Container>
     )
   } else {

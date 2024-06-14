@@ -6,6 +6,7 @@ import { Container } from '../@/components/component/container'
 import { FamilyListing } from '../@/components/component/family-listing'
 import { PersonListing } from '../@/components/component/person-listing'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
+import { HouseListing } from '../@/components/component/house-listing'
 
 export default function ListAllEntities({ queryClient }) {
   return (
@@ -68,14 +69,7 @@ export function ListAllHouses() {
 
   return (
     <Container>
-      <h2 className={styles.headingLg}>Houses</h2>
-      <ul className={styles.list}>
-        {data.map(({ house_id, house_address, house_rooms, house_storage, house_food, house_wood }) => (
-          <li className={styles.listItem} key={house_id}>
-            <p>The {house_address.house_address_number + " " + house_address.house_address_road.house_road_name} house has {house_rooms} rooms and {house_storage} storage. It has {house_food.resource_volume} food and {house_wood.resource_volume} wood in storage.</p>
-          </li>
-        ))}
-      </ul>
+      <HouseListing houseData={data} />
     </Container>
   )
 }
@@ -102,16 +96,6 @@ export function ListAllPeople() {
   return (
     <Container>
       <PersonListing personData={data} />
-      {/* <h2 className={styles.headingLg}>People</h2>
-      <ul className={styles.list}>
-        {
-          data.map(({ person_id, person_name, person_family, person_age }) => (
-            <li className={styles.listItem} key={person_id}>
-              <p>{person_name} {person_family.family_name} is {person_age} years old.</p>
-            </li>
-          ))
-        }
-      </ul> */}
     </Container>
   )
 }
