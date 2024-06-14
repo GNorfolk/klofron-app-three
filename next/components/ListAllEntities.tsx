@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { FamilyListing } from '../@/components/component/family-listing'
+import { PersonListing } from '../@/components/component/person-listing'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 
 export default function ListAllEntities({ queryClient }) {
@@ -100,7 +101,8 @@ export function ListAllPeople() {
 
   return (
     <Container>
-      <h2 className={styles.headingLg}>People</h2>
+      <PersonListing personData={data} />
+      {/* <h2 className={styles.headingLg}>People</h2>
       <ul className={styles.list}>
         {
           data.map(({ person_id, person_name, person_family, person_age }) => (
@@ -109,7 +111,7 @@ export function ListAllPeople() {
             </li>
           ))
         }
-      </ul>
+      </ul> */}
     </Container>
   )
 }

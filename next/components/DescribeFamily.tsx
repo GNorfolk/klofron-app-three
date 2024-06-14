@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
+import { PersonListing } from '../@/components/component/person-listing'
 
 export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
@@ -151,7 +152,8 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
   if (data.family_people.length > 0) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Person Info</h2>
+        <PersonListing personData={data.family_people} familyName={data.family_name} />
+        {/* <h2 className="p-6 text-4xl">Person Info</h2>
         <ul className={styles.list}>
           {data.family_people.map(({ person_id, person_name, person_family, person_gender, person_age, person_house }) => (
             <li className={styles.listItem} key={person_id}>
@@ -162,7 +164,7 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
               }
             </li>
           ))}
-        </ul>
+        </ul> */}
       </Container>
     )
   } else {

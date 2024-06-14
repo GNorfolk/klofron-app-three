@@ -34,6 +34,9 @@ export class FamilyService {
     let family = this.familyRepository
       .createQueryBuilder("family")
       .leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
+      .innerJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
+      .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
+      .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
       .leftJoinAndSelect("family.family_houses", "house")
       .leftJoinAndSelect("house.house_address", "address")
       .leftJoinAndSelect("address.house_address_road", "road")
