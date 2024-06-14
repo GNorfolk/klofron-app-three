@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person-listing'
+import { HouseListing } from '../@/components/component/house-listing'
 
 export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
@@ -84,14 +85,15 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
   if (data.family_houses.length > 0) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">House Info</h2>
+        <HouseListing houseData={data.family_houses} />
+        {/* <h2 className="p-6 text-4xl">House Info</h2>
         <ul className={styles.list}>
           {data.family_houses.map(({ house_id, house_address, house_food, house_wood }) => (
             <li className={styles.listItem} key={house_id}>
               <p>The {data.family_name} family own <Link href={`/house/${house_id}`}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</Link> which holds {house_food.resource_volume} food and {house_wood.resource_volume} wood.</p>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </Container>
     )
   } else {

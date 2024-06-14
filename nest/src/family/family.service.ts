@@ -38,6 +38,7 @@ export class FamilyService {
       .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
       .leftJoinAndSelect("family.family_houses", "house")
+      .leftJoinAndSelect("house.house_people", "house_people")
       .leftJoinAndSelect("house.house_address", "address")
       .leftJoinAndSelect("address.house_address_road", "road")
       .leftJoinAndSelect("person.person_house", "person_house")
