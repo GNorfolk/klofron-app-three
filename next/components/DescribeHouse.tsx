@@ -118,19 +118,26 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                 {
                   userId === person_family.family_user_id ?
                   <div>
-                    <Button onClick={
-                      () => {
-                        increaseFood.mutate(person_id, { onSettled: (data, error: any) => {
-                          queryClient.invalidateQueries()
-                          if (error) {
-                            document.getElementById("cm-" + person_id).innerText = error.response.data.message
-                          } else {
-                            document.getElementById("cm-" + person_id).innerText = ' '
-                          }
-                        }})
-                      }
-                    } >Get Food</Button>
-                    <Button onClick={
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      onClick={
+                        () => {
+                          increaseFood.mutate(person_id, { onSettled: (data, error: any) => {
+                            queryClient.invalidateQueries()
+                            if (error) {
+                              document.getElementById("cm-" + person_id).innerText = error.response.data.message
+                            } else {
+                              document.getElementById("cm-" + person_id).innerText = ' '
+                            }
+                          }})
+                        }
+                      } >Get Food</Button>
+                    <Button size="sm"
+                      variant="ghost"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      onClick={
                       () => {
                         increaseWood.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -142,7 +149,10 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                         }})
                       }
                     } >Get Wood</Button>
-                    <Button onClick={
+                    <Button size="sm"
+                      variant="ghost"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      onClick={
                       () => {
                         increaseStorage.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -154,7 +164,10 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                         }})
                       }
                     } >Increase Storage</Button>
-                    <Button onClick={
+                    <Button size="sm"
+                      variant="ghost"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      onClick={
                       () => {
                         increaseRooms.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -166,7 +179,10 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                         }})
                       }
                     } >Increase Rooms</Button>
-                    <Button onClick={
+                    <Button size="sm"
+                      variant="ghost"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      onClick={
                       () => {
                         createHouse.mutate(person_id, { onSettled: (data, error: any) => {
                           queryClient.invalidateQueries()
@@ -256,8 +272,10 @@ function CreatePerson({ houseId, queryClient }) {
 
   return (
     <Container>
-      <Button onClick={
-        () => {
+      <Button size="sm"
+        variant="ghost"
+        className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+        onClick={ () => {
           createPerson.mutate(houseId, { onSettled: (data, error: any) => {
             queryClient.invalidateQueries()
             if (error) {
@@ -266,8 +284,8 @@ function CreatePerson({ houseId, queryClient }) {
               document.getElementById("cm-two-" + houseId).innerText = ' '
             }
           }})
-        }
-      } >Create Person</Button>
+        }}
+      >Create Person</Button>
       <small className={styles.lightText} id={'cm-two-' + houseId}></small>
     </Container>
   )
