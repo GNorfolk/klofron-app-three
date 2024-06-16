@@ -29,20 +29,30 @@ export default function DescribeHouse({ queryClient, userId }) {
     return (
       <QueryClientProvider client={queryClient}>
         <h1 className={styles.heading2Xl}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h1>
-        <ListHouseInfo data={data} />
-        {
-          userId === data.house_family.family_user_id ?
+        <BoxLayout left={
           <div>
-            <CreatePerson houseId={house_id} queryClient={queryClient} />
-            <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
+            <ListHouseInfo data={data} />
+            <br />
+            {
+              userId === data.house_family.family_user_id ?
+              <div>
+                <CreatePerson houseId={house_id} queryClient={queryClient} />
+                <br />
+                <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
+              </div>
+              :
+              <div>
+                <ListHousePeople peopleData={data.house_people} queryClient={queryClient} />
+              </div>
+            }
           </div>
-          :
+        } right={
           <div>
-            <ListHousePeople peopleData={data.house_people} queryClient={queryClient} />
+            <ListHouseTrades data={data.house_trades} />
+            <br />
+            <ListHouseResources data={data} queryClient={queryClient} userId={userId} />
           </div>
-        }
-        <ListHouseTrades data={data.house_trades} />
-        <ListHouseResources data={data} queryClient={queryClient} userId={userId} />
+        } />
       </QueryClientProvider>
     )
   }
@@ -98,7 +108,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
 
     if (peopleData.length > 0) {
       return (
-        <div>
+        <Container>
           <h2 className={styles.headingLg}>Person Info</h2>
           <ul className={styles.list}>
             {peopleData.map(({ person_id, person_name, person_family_id, person_family, person_gender, person_age, person_actions }) => (
@@ -176,18 +186,18 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
               </li>
             ))}
           </ul>
-        </div>
+        </Container>
       )
     } else {
       return (
-        <div>
+        <Container>
           <h2 className={styles.headingLg}>Person Info</h2>
           <ul className={styles.list}>
               <li className={styles.listItem}>
                 <p>This house does not contain any people.</p>
               </li>
           </ul>
-        </div>
+        </Container>
       )
     }
   }
@@ -197,11 +207,11 @@ function ListHouseResources({ data, queryClient, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     return (
-      <div>
+      <Container>
         <h2 className={styles.headingLg}>Resource Info</h2>
         <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
         { userId === data.house_family.family_user_id ? <p>Go to <Link href={`/house/${router.query.id}/resource`}>Resource Management</Link> page.</p> : null }
-      </div>
+      </Container>
     )
   }
 }
@@ -211,7 +221,7 @@ function ListHouseTrades({ data }) {
   if (router.isReady) {
     if (data.length > 0) {
       return (
-        <div>
+        <Container>
           <h2 className={styles.headingLg}>Trade Info</h2>
           <ul className={styles.list}>
             {data.map(({ trade_id, trade_offered_type, trade_offered_volume, trade_requested_type, trade_requested_volume }) => (
@@ -220,18 +230,18 @@ function ListHouseTrades({ data }) {
               </li>
             ))}
           </ul>
-        </div>
+        </Container>
       )
     } else {
       return (
-        <div>
+        <Container>
           <h2 className={styles.headingLg}>Trade Info</h2>
           <ul className={styles.list}>
             <li className={styles.listItem}>
               <p>No trades active at this house.</p>
             </li>
           </ul>
-        </div>
+        </Container>
       )
     }
   }
@@ -245,7 +255,7 @@ function CreatePerson({ houseId, queryClient }) {
   })
 
   return (
-    <div>
+    <Container>
       <Button onClick={
         () => {
           createPerson.mutate(houseId, { onSettled: (data, error: any) => {
@@ -259,17 +269,18 @@ function CreatePerson({ houseId, queryClient }) {
         }
       } >Create Person</Button>
       <small className={styles.lightText} id={'cm-two-' + houseId}></small>
-    </div>
+    </Container>
   )
 }
 
 function ListHouseInfo({ data }) {
   return (
-    <div>
+    <Container>
+      <h2 className={styles.headingLg}>House Info</h2>
       <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p>
       {/* THIS IS COMMENTED OUT BECAUSE TRADES AREN'T SUPER IMPLEMENTED RIGHT NOW. TODO: Setup handling of trades here. */}
       {/* <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
       <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
-    </div>
+    </Container>
   )
 }
