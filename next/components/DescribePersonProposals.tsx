@@ -34,7 +34,7 @@ export default function DescribePersonProposals({ userId, queryClient }) {
 }
 
 
-export function ListPersonProposals({ data, showLink = true, queryClient = null, userId, showOffers = true }) {
+function ListPersonProposals({ data, showLink = true, queryClient = null, userId, showOffers = true }) {
   const router = useRouter()
   if (router.isReady) {
     const createProposal = useMutation({
@@ -159,7 +159,7 @@ export function ListPersonProposals({ data, showLink = true, queryClient = null,
   }
 }
 
-export function ManagePersonProposals({ personData, queryClient, userId }) {
+function ManagePersonProposals({ personData, queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({

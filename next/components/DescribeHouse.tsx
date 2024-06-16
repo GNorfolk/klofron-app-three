@@ -65,7 +65,7 @@ export default function DescribeHouse({ queryClient, userId }) {
   }
 }
 
-export function ListHousePeople({ peopleData, queryClient, userId = null }) {
+function ListHousePeople({ peopleData, queryClient, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     const  increaseFood  = useMutation({
@@ -210,7 +210,7 @@ export function ListHousePeople({ peopleData, queryClient, userId = null }) {
   }
 }
 
-export function ListHouseResources({ data, queryClient, userId = null }) {
+function ListHouseResources({ data, queryClient, userId = null }) {
   const router = useRouter()
   if (router.isReady) {
     return (
@@ -223,7 +223,7 @@ export function ListHouseResources({ data, queryClient, userId = null }) {
   }
 }
 
-export function ListHouseTrades({ data }) {
+function ListHouseTrades({ data }) {
   const router = useRouter()
   if (router.isReady) {
     if (data.length > 0) {

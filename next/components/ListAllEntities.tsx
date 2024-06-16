@@ -24,7 +24,7 @@ export default function ListAllEntities({ queryClient }) {
   )
 }
 
-export function ListAllFamilies({ queryClient = null, userId = null }) {
+function ListAllFamilies({ queryClient = null, userId = null }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['familiesData'],
     queryFn: () =>
@@ -50,7 +50,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
   )
 }
 
-export function ListAllHouses() {
+function ListAllHouses() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['housesData'],
     queryFn: () =>
@@ -74,7 +74,7 @@ export function ListAllHouses() {
   )
 }
 
-export function ListAllPeople() {
+function ListAllPeople() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['listAllPeopleData'],
     queryFn: () =>

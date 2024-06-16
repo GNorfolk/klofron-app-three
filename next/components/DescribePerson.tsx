@@ -53,7 +53,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
   }
 }
 
-export function ListPersonActionsCurrent({ queryClient, personId }) {
+function ListPersonActionsCurrent({ queryClient, personId }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['personCurentActionsData' + personId],
     queryFn: () =>
@@ -100,7 +100,7 @@ export function ListPersonActionsCurrent({ queryClient, personId }) {
   )
 }
 
-export function ListPersonActionsPrevious({ personId }) {
+function ListPersonActionsPrevious({ personId }) {
   const { isLoading, error, data } = useQuery({
     queryKey: ['personPreviousActionsData' + personId],
     queryFn: () =>
@@ -144,7 +144,7 @@ export function ListPersonActionsPrevious({ personId }) {
   }
 }
 
-export function ListPersonProposals({ data, showLink = true, queryClient = null, userId, showOffers = true }) {
+function ListPersonProposals({ data, showLink = true, queryClient = null, userId, showOffers = true }) {
   const router = useRouter()
   if (router.isReady) {
     const createProposal = useMutation({
@@ -269,7 +269,7 @@ export function ListPersonProposals({ data, showLink = true, queryClient = null,
   }
 }
 
-export function RenamePerson({ queryClient, personId }) {
+function RenamePerson({ queryClient, personId }) {
   const [personInfo, setpersonInfo] = useState({ name: "" })
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -299,7 +299,7 @@ export function RenamePerson({ queryClient, personId }) {
   )
 }
 
-export function ListPersonInfo({ data, queryClient }) {
+function ListPersonInfo({ data, queryClient }) {
   return (
     <Container>
       <h2 className={styles.headingLg}>Person Info</h2>

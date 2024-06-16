@@ -57,7 +57,7 @@ export default function DescribeFamily({ queryClient, userId }) {
   }
 }
 
-export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean = false }) {
+function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean = false }) {
   type Inputs = {
     house_family_id: number
     house_rooms: number
@@ -113,7 +113,7 @@ export function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBo
 }
 
 
-export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean = false }) {
+function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean = false }) {
   const {
     register,
     handleSubmit,
@@ -173,7 +173,7 @@ export function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBo
   }
 }
 
-export function ListFamilyProposals({ data }) {
+function ListFamilyProposals({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (
@@ -185,7 +185,7 @@ export function ListFamilyProposals({ data }) {
   }
 }
 
-export function ListFamilyTravel({ data }) {
+function ListFamilyTravel({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (

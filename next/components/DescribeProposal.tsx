@@ -51,7 +51,7 @@ export default function DescribeProposal({ queryClient, userId, manageOffer }) {
   }
 }
 
-export function ManagePersonProposalOffer({ queryClient, userId }) {
+function ManagePersonProposalOffer({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
