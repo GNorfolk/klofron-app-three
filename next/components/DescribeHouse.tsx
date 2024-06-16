@@ -5,6 +5,10 @@ import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 import Link from 'next/link'
 import { Button } from "../@/components/ui/button"
+import { BoxLayout } from '../@/components/component/box-layout'
+import { Container } from '../@/components/component/container'
+import { PersonListing } from '../@/components/component/person-listing'
+import { HouseListing } from '../@/components/component/house-listing'
 
 export default function DescribeHouse({ queryClient, userId }) {
   const router = useRouter()
@@ -17,12 +21,6 @@ export default function DescribeHouse({ queryClient, userId }) {
         ),
     })
 
-    const createPerson = useMutation({
-      mutationFn: (house_id) => {
-        return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + house_id)
-      },
-    })
-
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>Failed to load</div>
 
@@ -31,26 +29,11 @@ export default function DescribeHouse({ queryClient, userId }) {
     return (
       <QueryClientProvider client={queryClient}>
         <h1 className={styles.heading2Xl}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h1>
-        <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p>
-        {/* THIS IS COMMENTED OUT BECAUSE TRADES AREN'T SUPER IMPLEMENTED RIGHT NOW. TODO: Setup handling of trades here. */}
-        {/* <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
-        <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
+        <ListHouseInfo data={data} />
         {
           userId === data.house_family.family_user_id ?
           <div>
-            <Button onClick={
-              () => {
-                createPerson.mutate(house_id, { onSettled: (data, error: any) => {
-                  queryClient.invalidateQueries()
-                  if (error) {
-                    document.getElementById("cm-two-" + house_id).innerText = error.response.data.message
-                  } else {
-                    document.getElementById("cm-two-" + house_id).innerText = ' '
-                  }
-                }})
-              }
-            } >Create Person</Button>
-            <small className={styles.lightText} id={'cm-two-' + house_id}></small>
+            <CreatePerson houseId={house_id} queryClient={queryClient} />
             <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
           </div>
           :
@@ -252,4 +235,41 @@ function ListHouseTrades({ data }) {
       )
     }
   }
+}
+
+function CreatePerson({ houseId, queryClient }) {
+  const createPerson = useMutation({
+    mutationFn: (house_id) => {
+      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + house_id)
+    },
+  })
+
+  return (
+    <div>
+      <Button onClick={
+        () => {
+          createPerson.mutate(houseId, { onSettled: (data, error: any) => {
+            queryClient.invalidateQueries()
+            if (error) {
+              document.getElementById("cm-two-" + houseId).innerText = error.response.data.message
+            } else {
+              document.getElementById("cm-two-" + houseId).innerText = ' '
+            }
+          }})
+        }
+      } >Create Person</Button>
+      <small className={styles.lightText} id={'cm-two-' + houseId}></small>
+    </div>
+  )
+}
+
+function ListHouseInfo({ data }) {
+  return (
+    <div>
+      <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p>
+      {/* THIS IS COMMENTED OUT BECAUSE TRADES AREN'T SUPER IMPLEMENTED RIGHT NOW. TODO: Setup handling of trades here. */}
+      {/* <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
+      <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
+    </div>
+  )
 }
