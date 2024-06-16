@@ -11,7 +11,7 @@ export function PersonListing({ personData, familyName = null }) {
           <div className="flex">
             <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
               <BriefcaseIcon className="w-5 h-5 mr-2" />
-              <span>{person_actions.length} Action in progress</span>
+              <span>{person_actions.length} Current Action</span>
             </div>
             <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
               <HandPlatterIcon className="w-5 h-5 mr-2" />
