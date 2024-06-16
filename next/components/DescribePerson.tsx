@@ -5,6 +5,10 @@ import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-quer
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
+import { BoxLayout } from '../@/components/component/box-layout'
+import { Container } from '../@/components/component/container'
+import { PersonListing } from '../@/components/component/person-listing'
+import { HouseListing } from '../@/components/component/house-listing'
 
 export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()
@@ -22,19 +26,28 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
 
     return (
       <QueryClientProvider client={queryClient}>
-        <ListPersonInfo queryClient={queryClient} data={data}/>
-        <h2 className={styles.headingLg}>Actions Info</h2>
-        <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.person_id} />
-        <ListPersonActionsPrevious personId={router.query.person_id} />
-        {
-          status === "authenticated" && userId == data.person_family.family_user_id ?
+        <BoxLayout left={
           <div>
-            <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
-            <ListPersonProposals data={data} userId={userId} showOffers={false} />
+            <ListPersonInfo queryClient={queryClient} data={data}/>
+            <br />
+            {
+              status === "authenticated" && userId == data.person_family.family_user_id ?
+              <div>
+                <ListPersonProposals data={data} userId={userId} showOffers={false} />
+              </div>
+              :
+              <></>
+            }
           </div>
-          :
-          <></>
-        }
+        } right={
+          <div>
+            <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.person_id} />
+            <br />
+            <ListPersonActionsPrevious personId={router.query.person_id} />
+            <br />
+            <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
+          </div>
+        } />
       </QueryClientProvider>
     )
   }
@@ -66,7 +79,7 @@ export function ListPersonActionsCurrent({ queryClient, personId }) {
   if (error) return <div>Failed to load</div>
 
   return (
-    <div>
+    <Container>
       <h3 className={styles.headingMd}>Current Action</h3>
       <ul className={styles.list}>
         { data.length > 0 ? 
@@ -83,7 +96,7 @@ export function ListPersonActionsCurrent({ queryClient, personId }) {
             </li>
           )) : <p>No actions currently in progress!</p> }
       </ul>
-    </div>
+    </Container>
   )
 }
 
@@ -106,7 +119,7 @@ export function ListPersonActionsPrevious({ personId }) {
 
   if (data.length > 0) {
     return (
-      <div>
+      <Container>
         <h3 className={styles.headingMd}>Previous Actions</h3>
         <ul className={styles.list}>
           {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
@@ -115,18 +128,18 @@ export function ListPersonActionsPrevious({ personId }) {
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     )
   } else {
     return (
-      <div>
+      <Container>
         <h3 className={styles.headingMd}>Previous Actions</h3>
         <ul className={styles.list}>
             <li className={styles.listItem}>
               <p>This person has no past actions initiated.</p>
             </li>
         </ul>
-      </div>
+      </Container>
     )
   }
 }
@@ -170,7 +183,7 @@ export function ListPersonProposals({ data, showLink = true, queryClient = null,
     )
 
     return (
-      <div>
+      <Container>
         <h2 className={styles.headingLg}>Proposal Info</h2>
         <ul className={styles.list}>
           {
@@ -251,7 +264,7 @@ export function ListPersonProposals({ data, showLink = true, queryClient = null,
         {
           showLink ? <p>Go to <Link href={`/person/${router.query.person_id}/proposal`}>Proposals</Link> page.</p> : null
         }
-      </div>
+      </Container>
     )
   }
 }
@@ -268,7 +281,7 @@ export function RenamePerson({ queryClient, personId }) {
   };
 
   return (
-    <div>
+    <Container>
       <h2 className={styles.headingLg}>Rename Person</h2>
       <ul className={styles.list}>
         <form onSubmit={handleSubmit}>
@@ -282,13 +295,13 @@ export function RenamePerson({ queryClient, personId }) {
           <input type="submit" value="Rename" />
         </form>
       </ul>
-    </div>
+    </Container>
   )
 }
 
 export function ListPersonInfo({ data, queryClient }) {
   return (
-    <div>
+    <Container>
       <h2 className={styles.headingLg}>Person Info</h2>
       <ul className={styles.list}>
         <li className={styles.listItem} key={data.person_id}>
@@ -304,6 +317,6 @@ export function ListPersonInfo({ data, queryClient }) {
           }
         </li>
       </ul>
-    </div>
+    </Container>
   )
 }
