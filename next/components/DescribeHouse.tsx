@@ -7,8 +7,7 @@ import Link from 'next/link'
 import { Button } from "../@/components/ui/button"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { PersonListing } from '../@/components/component/person-listing'
-import { HouseListing } from '../@/components/component/house-listing'
+import { HouseInfo } from '../@/components/component/house-info'
 
 export default function DescribeHouse({ queryClient, userId }) {
   const router = useRouter()
@@ -28,7 +27,6 @@ export default function DescribeHouse({ queryClient, userId }) {
 
     return (
       <QueryClientProvider client={queryClient}>
-        <h1 className={styles.heading2Xl}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h1>
         <BoxLayout left={
           <div>
             <ListHouseInfo data={data} />
@@ -294,11 +292,12 @@ function CreatePerson({ houseId, queryClient }) {
 function ListHouseInfo({ data }) {
   return (
     <Container>
-      <h2 className={styles.headingLg}>House Info</h2>
-      <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p>
+      <h2 className={styles.headingLg}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h2>
+      <HouseInfo houseData={data} />
+      {/* <p className={styles.listItem}>has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p> */}
       {/* THIS IS COMMENTED OUT BECAUSE TRADES AREN'T SUPER IMPLEMENTED RIGHT NOW. TODO: Setup handling of trades here. */}
       {/* <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and {data.house_food_in_trade} food and {data.house_wood_in_trade} wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food - data.house_wood - data.house_food_in_trade - data.house_wood_in_trade} space for more items.</p> */}
-      <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p>
+      {/* <p className={styles.listItem}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage, and UNDEFINED food and UNDEFINED wood in trade. It can hold {data.house_storage} items so has {data.house_storage - data.house_food.resource_volume - data.house_wood.resource_volume } space for more items.</p> */}
     </Container>
   )
 }
