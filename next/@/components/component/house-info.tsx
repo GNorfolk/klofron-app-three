@@ -6,7 +6,7 @@ export function HouseInfo({ houseData }) {
       <div className="flex">
         <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
           <BedIcon className="w-5 h-5 mr-2" />
-          <span>{houseData.house_rooms} Rooms</span>
+          <span>{houseData.house_rooms} Bed</span>
         </div>
         <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
           <UsersIcon className="w-5 h-5 mr-2" />
@@ -14,7 +14,7 @@ export function HouseInfo({ houseData }) {
         </div>
         <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
           <BuildingIcon className="w-5 h-5 mr-2" />
-          <span>{houseData.house_wood.resource_volume} Vacancies</span>
+          <span>{houseData.house_rooms - houseData.house_people.length} Room</span>
         </div>
       </div>
       <div className="flex">
