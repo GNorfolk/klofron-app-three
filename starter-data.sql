@@ -65,6 +65,16 @@ CREATE TABLE `person_name` (
     `name` VARCHAR(155) NOT NULL,
     `gender` VARCHAR(155) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `person_skills` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NOT NULL,
+    `gatherer` INT NOT NULL DEFAULT 0,
+    `lumberjack` INT NOT NULL DEFAULT 0,
+    `builder` INT NOT NULL DEFAULT 0,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- ACTION -- -- -- -- --
 CREATE TABLE `action` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
