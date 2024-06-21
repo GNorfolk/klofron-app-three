@@ -181,8 +181,20 @@ mysql -u root -p ka3 < dump-2024-06-21.sql
 **How to age people:**
 - update person set created_at = created_at - interval 14 day where house_id = 25;
 
+**How to check foreign keys on table:**
+```sql
+SELECT TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 'person';
+```
+
 # MySQL
 ```sql
+ALTER TABLE person ADD `skills_id` INT NOT NULL;
+UPDATE person SET skills_id = id;
+ALTER TABLE person ADD FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`);
+ALTER TABLE person_skills DROP FOREIGN KEY person_skills_ibfk_1;
+ALTER TABLE person_skills DROP COLUMN `person_id`;
 ```
 
 # save

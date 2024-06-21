@@ -55,10 +55,12 @@ CREATE TABLE `person` (
     `partner_id` INT REFERENCES person,
     `gender` VARCHAR(155) NOT NULL,
     `house_id` INT,
+    `skills_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
-    FOREIGN KEY (`house_id`) REFERENCES house(`id`)
+    FOREIGN KEY (`house_id`) REFERENCES house(`id`),
+    FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `person_name` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -67,7 +69,6 @@ CREATE TABLE `person_name` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `person_skills` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NOT NULL,
     `gatherer` INT NOT NULL DEFAULT 0,
     `lumberjack` INT NOT NULL DEFAULT 0,
     `builder` INT NOT NULL DEFAULT 0,

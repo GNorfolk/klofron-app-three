@@ -114,8 +114,11 @@ export class Person {
   @OneToOne(() => Resource, (resource) => resource.resource_person)
   person_food: Relation<Resource>;
 
+  @Column("int", { name: "skills_id" })
+  person_skills_id: number;
+
   @OneToOne(() => PersonSkills, (personSkills) => personSkills.person_skills_person)
-  @JoinColumn([{ name: "person_skills_id", referencedColumnName: "person_skills_id" }])
+  @JoinColumn([{ name: "skills_id", referencedColumnName: "person_skills_id" }])
   person_skills: Relation<PersonSkills>;
 
   @AfterLoad()

@@ -12,9 +12,6 @@ export class PersonSkills {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   person_skills_id: number;
 
-  @Column("int", { name: "person_id" })
-  person_skills_person_id: number;
-
   @Column("int", { name: "gatherer" })
   person_skills_gatherer: number;
 

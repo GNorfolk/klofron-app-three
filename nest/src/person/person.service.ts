@@ -170,6 +170,7 @@ export class PersonService {
   async findOne(id: number): Promise<Person> {
     const person = this.personRepository
       .createQueryBuilder("person")
+      .innerJoinAndSelect("person.person_skills", "skills")
       .innerJoinAndSelect("person.person_family", "person_family")
       .innerJoinAndSelect("person_family.family_people", "family_people")
       .innerJoinAndSelect("person.person_father", "father")
