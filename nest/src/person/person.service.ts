@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Person } from './entities/Person';
 import { PersonName } from './entities/PersonName';
+import { PersonSkills } from '../person/entities/PersonSkills';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
@@ -72,12 +73,18 @@ export class PersonService {
       person.person_name = person_name.person_name_name
       person.person_mother_id = mother.person_id
       person.person_father_id = father.person_id
+      const skills = await queryRunner.manager.save(PersonSkills, {
+        person_skills_gatherer: 0,
+        person_skills_lumberjack: 0,
+        person_skills_builder: 0
+      });
+      person.person_skills_id = skills.person_skills_id;
       const result = await queryRunner.manager.save(Person, person);
       await queryRunner.manager.save(Resource, {
         resource_type_name: "food",
         resource_person_id: result.person_id
       });
-      await queryRunner.manager.save(Resource, {
+      const wood = await queryRunner.manager.save(Resource, {
         resource_type_name: "wood",
         resource_person_id: result.person_id
       });
@@ -116,6 +123,18 @@ export class PersonService {
         .limit(1)
         .getOne();
       couple[1].person_name = father_name.person_name_name
+      const mother_skills = await queryRunner.manager.save(PersonSkills, {
+        person_skills_gatherer: 0,
+        person_skills_lumberjack: 0,
+        person_skills_builder: 0
+      });
+      const father_skills = await queryRunner.manager.save(PersonSkills, {
+        person_skills_gatherer: 0,
+        person_skills_lumberjack: 0,
+        person_skills_builder: 0
+      });
+      couple[0].person_skills_id = mother_skills.person_skills_id;
+      couple[1].person_skills_id = father_skills.person_skills_id;
       mother = await queryRunner.manager.save(Person, couple[0]);
       father = await queryRunner.manager.save(Person, couple[1]);
       await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });

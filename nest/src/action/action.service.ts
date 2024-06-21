@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Action } from './entities/Action';
 import { Person } from '../person/entities/Person';
+import { PersonSkills } from '../person/entities/PersonSkills';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { HouseService } from '../house/house.service';
@@ -221,6 +222,9 @@ export class ActionService {
           resource_type_name: "food",
           resource_house_id: action.action_person.person_house_id
         }, "resource_volume", 2);
+        await queryRunner.manager.increment(PersonSkills, {
+          person_skills_id: action.action_person.person_skills_id
+        }, "person_skills_gatherer", 1);
         console.log("GetFoodDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
@@ -256,6 +260,9 @@ export class ActionService {
           resource_type_name: "wood",
           resource_house_id: action.action_person.person_house_id
         }, "resource_volume", 1);
+        await queryRunner.manager.increment(PersonSkills, {
+          person_skills_id: action.action_person.person_skills_id
+        }, "person_skills_lumberjack", 1);
         console.log("GetWoodDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
@@ -285,6 +292,9 @@ export class ActionService {
       await queryRunner.manager.increment(House, {
         house_id: action.action_person.person_house_id
       }, "house_storage", 3);
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_person.person_skills_id
+      }, "person_skills_builder", 1);
       console.log("IncreaseStorageDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -310,6 +320,9 @@ export class ActionService {
       await queryRunner.manager.increment(House, {
         house_id: action.action_person.person_house_id
       }, "house_rooms", 1);
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_person.person_skills_id
+      }, "person_skills_builder", 1);
       console.log("IncreaseRoomsDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -338,6 +351,9 @@ export class ActionService {
           house_rooms: 2
         }
       )
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_person.person_skills_id
+      }, "person_skills_builder", 1);
       console.log("CreateHouseDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();

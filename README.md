@@ -190,11 +190,6 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 
 # MySQL
 ```sql
-ALTER TABLE person ADD `skills_id` INT NOT NULL;
-UPDATE person SET skills_id = id;
-ALTER TABLE person ADD FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`);
-ALTER TABLE person_skills DROP FOREIGN KEY person_skills_ibfk_1;
-ALTER TABLE person_skills DROP COLUMN `person_id`;
 ```
 
 # save
