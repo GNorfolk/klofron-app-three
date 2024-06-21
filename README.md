@@ -183,17 +183,6 @@ mysql -u root -p ka3 < dump-2024-06-21.sql
 
 # MySQL
 ```sql
-CREATE TABLE `person_skills` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NOT NULL,
-    `gatherer` INT NOT NULL DEFAULT 0,
-    `lumberjack` INT NOT NULL DEFAULT 0,
-    `builder` INT NOT NULL DEFAULT 0,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- execute person_skills.sql script --
 ```
 
 # save
