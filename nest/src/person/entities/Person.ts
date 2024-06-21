@@ -17,6 +17,7 @@ import { Action } from "../../action/entities/Action";
 import { Proposal } from "../../proposal/entities/Proposal";
 import { ProposalOffer } from "../../proposal-offer/entities/ProposalOffer";
 import { ProposalDowry } from "../../proposal-offer/entities/ProposalDowry";
+import { PersonSkills } from "./PersonSkills"
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -112,6 +113,10 @@ export class Person {
 
   @OneToOne(() => Resource, (resource) => resource.resource_person)
   person_food: Relation<Resource>;
+
+  @OneToOne(() => PersonSkills, (personSkills) => personSkills.person_skills_person)
+  @JoinColumn([{ name: "person_skills_id", referencedColumnName: "person_skills_id" }])
+  person_skills: Relation<PersonSkills>;
 
   @AfterLoad()
   calculateAge(): void {

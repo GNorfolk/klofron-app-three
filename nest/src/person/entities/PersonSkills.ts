@@ -2,7 +2,10 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
+  OneToOne,
+  Relation,
 } from "typeorm";
+import { Person } from "./Person"
 
 @Entity("person_skills", { schema: "ka3" })
 export class PersonSkills {
@@ -26,4 +29,7 @@ export class PersonSkills {
 
   @Column("timestamp", { name: "deleted_at", nullable: true })
   person_skills_deleted_at: Date | null;
+
+  @OneToOne(() => Person, (person) => person.person_skills)
+  person_skills_person: Relation<Person>;
 }
