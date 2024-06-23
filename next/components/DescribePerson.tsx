@@ -29,6 +29,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
         <BoxLayout left={
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
+            <ListPersonSkills queryClient={queryClient} data={data}/>
             <br />
             {
               status === "authenticated" && userId == data.person_family.family_user_id ?
@@ -317,6 +318,14 @@ function ListPersonInfo({ data, queryClient }) {
           }
         </li>
       </ul>
+    </Container>
+  )
+}
+
+function ListPersonSkills({ data, queryClient }) {
+  return (
+    <Container>
+      <h2 className={styles.headingLg}>Skills Info</h2>
     </Container>
   )
 }

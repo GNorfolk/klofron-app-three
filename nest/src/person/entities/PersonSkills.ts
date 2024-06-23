@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   Relation,
+  AfterLoad,
 } from "typeorm";
 import { Person } from "./Person"
 
@@ -13,13 +14,13 @@ export class PersonSkills {
   person_skills_id: number;
 
   @Column("int", { name: "gatherer" })
-  person_skills_gatherer: number;
+  person_skills_gatherer_experience: number;
 
   @Column("int", { name: "lumberjack" })
-  person_skills_lumberjack: number;
+  person_skills_lumberjack_experience: number;
 
   @Column("int", { name: "builder" })
-  person_skills_builder: number;
+  person_skills_builder_experience: number;
 
   @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP" })
   person_skills_created_at: Date;
@@ -29,4 +30,25 @@ export class PersonSkills {
 
   @OneToOne(() => Person, (person) => person.person_skills)
   person_skills_person: Relation<Person>;
+
+  @AfterLoad()
+  calculateGathererLevel(): void {
+    const float = Math.log(this.person_skills_gatherer_experience) / Math.log(2);
+    this.person_skills_gatherer_level = Math.floor(float);
+  }
+  person_skills_gatherer_level: number;
+
+  @AfterLoad()
+  calculateLumberjackLevel(): void {
+    const float = Math.log(this.person_skills_lumberjack_experience) / Math.log(2);
+    this.person_skills_lumberjack_level = Math.floor(float);
+  }
+  person_skills_lumberjack_level: number;
+
+  @AfterLoad()
+  calculateBuilderLevel(): void {
+    const float = Math.log(this.person_skills_builder_experience) / Math.log(2);
+    this.person_skills_builder_level = Math.floor(float);
+  }
+  person_skills_builder_level: number;
 }
