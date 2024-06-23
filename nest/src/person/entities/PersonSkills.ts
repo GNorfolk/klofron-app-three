@@ -34,21 +34,21 @@ export class PersonSkills {
   @AfterLoad()
   calculateGathererLevel(): void {
     const float = Math.log(this.person_skills_gatherer_experience) / Math.log(2);
-    this.person_skills_gatherer_level = Math.floor(float);
+    this.person_skills_gatherer_level = float > 0 ? Math.floor(float) : 0;
   }
   person_skills_gatherer_level: number;
 
   @AfterLoad()
   calculateLumberjackLevel(): void {
     const float = Math.log(this.person_skills_lumberjack_experience) / Math.log(2);
-    this.person_skills_lumberjack_level = Math.floor(float);
+    this.person_skills_lumberjack_level = float > 0 ? Math.floor(float) : 0;
   }
   person_skills_lumberjack_level: number;
 
   @AfterLoad()
   calculateBuilderLevel(): void {
     const float = Math.log(this.person_skills_builder_experience) / Math.log(2);
-    this.person_skills_builder_level = Math.floor(float);
+    this.person_skills_builder_level = float > 0 ? Math.floor(float) : 0;
   }
   person_skills_builder_level: number;
 }
