@@ -29,6 +29,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
         <BoxLayout left={
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
+            <br />
             <ListPersonSkills queryClient={queryClient} data={data.person_skills}/>
             <br />
             {
@@ -326,9 +327,12 @@ function ListPersonSkills({ data, queryClient }) {
   return (
     <Container>
       <h2 className={styles.headingLg}>Skills Info</h2>
-      <p>Gatherer: {data.person_skills_gatherer_level}</p>
-      <p>Lumberjack: {data.person_skills_lumberjack_level}</p>
-      <p>Builder: {data.person_skills_builder_level}</p>
+      <p>Gatherer level: {data.person_skills_gatherer_level}.</p>
+      <p>Exp to next level: {Math.pow(2, data.person_skills_gatherer_level + 1) - data.person_skills_gatherer_experience}</p>
+      <p>Lumberjack level: {data.person_skills_lumberjack_level}.</p>
+      <p>Exp to next level: {Math.pow(2, data.person_skills_lumberjack_level + 1) - data.person_skills_lumberjack_experience}</p>
+      <p>Builder level: {data.person_skills_builder_level}.</p>
+      <p>Exp to next level: {Math.pow(2, data.person_skills_builder_level + 1) - data.person_skills_builder_experience}</p>
     </Container>
   )
 }

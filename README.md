@@ -193,6 +193,9 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 ALTER TABLE person_skills CHANGE gatherer gatherer_experience INT NOT NULL DEFAULT 1;
 ALTER TABLE person_skills CHANGE lumberjack lumberjack_experience INT NOT NULL DEFAULT 1;
 ALTER TABLE person_skills CHANGE builder builder_experience INT NOT NULL DEFAULT 1;
+UPDATE person_skills SET gatherer_experience = 1 WHERE gatherer_experience = 0;
+UPDATE person_skills SET lumberjack_experience = 1 WHERE lumberjack_experience = 0;
+UPDATE person_skills SET builder_experience = 1 WHERE builder_experience = 0;
 ```
 
 # save
