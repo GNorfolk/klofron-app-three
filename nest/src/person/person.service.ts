@@ -74,9 +74,9 @@ export class PersonService {
       person.person_mother_id = mother.person_id
       person.person_father_id = father.person_id
       const skills = await queryRunner.manager.save(PersonSkills, {
-        person_skills_gatherer_experience: 0,
-        person_skills_lumberjack_experience: 0,
-        person_skills_builder_experience: 0
+        person_skills_gatherer_experience: 1,
+        person_skills_lumberjack_experience: 1,
+        person_skills_builder_experience: 1
       });
       person.person_skills_id = skills.person_skills_id;
       const result = await queryRunner.manager.save(Person, person);

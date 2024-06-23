@@ -190,6 +190,9 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 
 # MySQL
 ```sql
+ALTER TABLE person_skills CHANGE gatherer gatherer_experience INT NOT NULL DEFAULT 1;
+ALTER TABLE person_skills CHANGE lumberjack lumberjack_experience INT NOT NULL DEFAULT 1;
+ALTER TABLE person_skills CHANGE builder builder_experience INT NOT NULL DEFAULT 1;
 ```
 
 # save

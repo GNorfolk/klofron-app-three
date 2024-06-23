@@ -13,13 +13,13 @@ export class PersonSkills {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   person_skills_id: number;
 
-  @Column("int", { name: "gatherer" })
+  @Column("int", { name: "gatherer_experience" })
   person_skills_gatherer_experience: number;
 
-  @Column("int", { name: "lumberjack" })
+  @Column("int", { name: "lumberjack_experience" })
   person_skills_lumberjack_experience: number;
 
-  @Column("int", { name: "builder" })
+  @Column("int", { name: "builder_experience" })
   person_skills_builder_experience: number;
 
   @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP" })
