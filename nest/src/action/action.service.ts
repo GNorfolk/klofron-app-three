@@ -224,7 +224,7 @@ export class ActionService {
         }, "resource_volume", 2);
         await queryRunner.manager.increment(PersonSkills, {
           person_skills_id: action.action_person.person_skills_id
-        }, "person_skills_gatherer", 1);
+        }, "person_skills_gatherer_experience", 1);
         console.log("GetFoodDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
@@ -262,7 +262,7 @@ export class ActionService {
         }, "resource_volume", 1);
         await queryRunner.manager.increment(PersonSkills, {
           person_skills_id: action.action_person.person_skills_id
-        }, "person_skills_lumberjack", 1);
+        }, "person_skills_lumberjack_experience", 1);
         console.log("GetWoodDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
@@ -294,7 +294,7 @@ export class ActionService {
       }, "house_storage", 3);
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_person.person_skills_id
-      }, "person_skills_builder", 1);
+      }, "person_skills_builder_experience", 1);
       console.log("IncreaseStorageDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -322,7 +322,7 @@ export class ActionService {
       }, "house_rooms", 1);
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_person.person_skills_id
-      }, "person_skills_builder", 1);
+      }, "person_skills_builder_experience", 1);
       console.log("IncreaseRoomsDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -353,7 +353,7 @@ export class ActionService {
       )
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_person.person_skills_id
-      }, "person_skills_builder", 1);
+      }, "person_skills_builder_experience", 1);
       console.log("CreateHouseDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();

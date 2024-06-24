@@ -173,6 +173,8 @@ export class PersonService {
       .createQueryBuilder("person")
       .innerJoinAndSelect("person.person_family", "family")
       .leftJoinAndSelect("person.person_house", "house")
+      .leftJoinAndSelect("house.house_address", "address")
+      .leftJoinAndSelect("address.house_address_road", "road")
       .innerJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
