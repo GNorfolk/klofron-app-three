@@ -28,22 +28,16 @@ export class ActionService {
         .createQueryBuilder(Person, "person")
         .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
         .leftJoinAndSelect("person.person_house", "house")
+        .leftJoinAndSelect("person.person_students", "students")
         .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("person.person_id = :id", { id: action.action_person_id })
         .getOne();
-      if (person.person_deleted_at) throw "Person is deceased!";
-      if (person.person_actions.length > 0) throw "Action already in progress!";
-      if (action.action_type_id == 2) {
-        await this.utilityCreateGetFoodAction(queryRunner, person)
-      } else if (action.action_type_id == 3) {
-        await this.utilityCreateGetWoodAction(queryRunner, person)
-      } else if (action.action_type_id == 4) {
-        await this.utilityCreateIncreaseStorageAction(queryRunner, person)
-      } else if (action.action_type_id == 5) {
-        await this.utilityCreateIncreaseRoomsAction(queryRunner, person)
+      if (person.person_students.length > 0) {
+        result = await this.utilityCreateActionStudents(queryRunner, action, person)
+      } else {
+        result = await this.utilityCreateActionSingle(queryRunner, action, person)
       }
-      result = await queryRunner.manager.save(Action, action);
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return [result];
@@ -53,6 +47,25 @@ export class ActionService {
       await queryRunner.release();
       throw new BadRequestException(err);
     }
+  }
+
+  async utilityCreateActionStudents(queryRunner, action, person) {
+    return null
+  }
+
+  async utilityCreateActionSingle(queryRunner, action, person) {
+    if (person.person_deleted_at) throw "Person is deceased!";
+    if (person.person_actions.length > 0) throw "Action already in progress!";
+    if (action.action_type_id == 2) {
+      await this.utilityCreateGetFoodAction(queryRunner, person)
+    } else if (action.action_type_id == 3) {
+      await this.utilityCreateGetWoodAction(queryRunner, person)
+    } else if (action.action_type_id == 4) {
+      await this.utilityCreateIncreaseStorageAction(queryRunner, person)
+    } else if (action.action_type_id == 5) {
+      await this.utilityCreateIncreaseRoomsAction(queryRunner, person)
+    }
+    return await queryRunner.manager.save(Action, action);
   }
 
   async utilityCreateGetFoodAction(queryRunner, person) {
