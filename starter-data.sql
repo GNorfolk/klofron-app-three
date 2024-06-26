@@ -53,6 +53,7 @@ CREATE TABLE `person` (
     `father_id` INT NOT NULL REFERENCES person,
     `mother_id` INT NOT NULL REFERENCES person,
     `partner_id` INT REFERENCES person,
+    `teacher_id` INT REFERENCES person,
     `gender` VARCHAR(155) NOT NULL,
     `house_id` INT,
     `skills_id` INT NOT NULL,
