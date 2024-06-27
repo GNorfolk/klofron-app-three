@@ -28,7 +28,8 @@ export class ActionService {
         .createQueryBuilder(Person, "person")
         .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
         .leftJoinAndSelect("person.person_house", "house")
-        .leftJoinAndSelect("person.person_students", "students")
+        .leftJoinAndSelect("person.person_students", "student")
+        .leftJoinAndSelect("student.person_actions", "student_action", "student_action.cancelled_at IS NULL AND student_action.completed_at IS NULL")
         .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("person.person_id = :id", { id: action.action_person_id })
@@ -56,6 +57,18 @@ export class ActionService {
     if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
     const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
     if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
+    for (const student of person.person_students) {
+      if (action.action_type_id == 2) {
+        await this.utilityCreateGetFoodAction(queryRunner, student)
+      } else if (action.action_type_id == 3) {
+        await this.utilityCreateGetWoodAction(queryRunner, student)
+      } else if (action.action_type_id == 4) {
+        await this.utilityCreateIncreaseStorageAction(queryRunner, student)
+      } else if (action.action_type_id == 5) {
+        await this.utilityCreateIncreaseRoomsAction(queryRunner, student)
+      }
+    }
+    action.action_type_id = 7;
     return await queryRunner.manager.save(Action, action);
   }
 
@@ -227,6 +240,8 @@ export class ActionService {
           await this.updateProcessCreateHouse(action.action_id)
         } else if (action.action_type_id == 6) {
           await this.updateProcessBirthRecovery(action.action_id)
+        } else if (action.action_type_id == 7) {
+          await this.updateProcessTeachStudents(action.action_id)
         } else {
           console.log("pass")
         }
@@ -433,6 +448,23 @@ export class ActionService {
     try {
       await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
       console.log("BirthRecoveryDone")
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw err
+    }
+  }
+
+  async updateProcessTeachStudents(actionId: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
+      console.log("TeachStudentsDone")
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
