@@ -50,7 +50,13 @@ export class ActionService {
   }
 
   async utilityCreateActionStudents(queryRunner, action, person) {
-    return null
+    const aliveStudents = person.person_students.filter(student => student.person_deleted_at == null)
+    if (person.person_students.length != aliveStudents.length) throw "One or more students are deceased!"
+    const availableStudents = person.person_students.filter(student => student.person_actions.length == 0)
+    if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
+    const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
+    if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
+    return await queryRunner.manager.save(Action, action);
   }
 
   async utilityCreateActionSingle(queryRunner, action, person) {
