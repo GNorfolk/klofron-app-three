@@ -58,15 +58,18 @@ export class ActionService {
     const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
     if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
     for (const student of person.person_students) {
-      if (action.action_type_id == 2) {
-        await this.utilityCreateGetFoodAction(queryRunner, student)
-      } else if (action.action_type_id == 3) {
-        await this.utilityCreateGetWoodAction(queryRunner, student)
-      } else if (action.action_type_id == 4) {
-        await this.utilityCreateIncreaseStorageAction(queryRunner, student)
-      } else if (action.action_type_id == 5) {
-        await this.utilityCreateIncreaseRoomsAction(queryRunner, student)
+      let student_action = structuredClone(action);
+      if (student_action.action_type_id == 2) {
+        await this.utilityPrepareGetWoodAction(queryRunner, student);
+      } else if (student_action.action_type_id == 3) {
+        await this.utilityPrepareIncreaseStorageAction(queryRunner, student);
+      } else if (student_action.action_type_id == 4) {
+        await this.utilityPrepareIncreaseRoomsAction(queryRunner, student);
+      } else if (student_action.action_type_id == 5) {
+        await this.utilityPrepareCreateHouseAction(queryRunner, student);
       }
+      student_action.action_person_id = student.person_id;
+      await queryRunner.manager.save(Action, student_action);
     }
     action.action_type_id = 7;
     return await queryRunner.manager.save(Action, action);
@@ -76,18 +79,18 @@ export class ActionService {
     if (person.person_deleted_at) throw "Person is deceased!";
     if (person.person_actions.length > 0) throw "Action already in progress!";
     if (action.action_type_id == 2) {
-      await this.utilityCreateGetFoodAction(queryRunner, person)
+      await this.utilityPrepareGetWoodAction(queryRunner, person);
     } else if (action.action_type_id == 3) {
-      await this.utilityCreateGetWoodAction(queryRunner, person)
+      await this.utilityPrepareIncreaseStorageAction(queryRunner, person);
     } else if (action.action_type_id == 4) {
-      await this.utilityCreateIncreaseStorageAction(queryRunner, person)
+      await this.utilityPrepareIncreaseRoomsAction(queryRunner, person);
     } else if (action.action_type_id == 5) {
-      await this.utilityCreateIncreaseRoomsAction(queryRunner, person)
+      await this.utilityPrepareCreateHouseAction(queryRunner, person);
     }
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityCreateGetFoodAction(queryRunner, person) {
+  async utilityPrepareGetWoodAction(queryRunner, person) {
     if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
     const food = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "food",
@@ -96,7 +99,7 @@ export class ActionService {
     if (food.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityCreateGetWoodAction(queryRunner, person) {
+  async utilityPrepareIncreaseStorageAction(queryRunner, person) {
     const storageWood = ( person.person_house.house_storage / 3 ) + 1;
     if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
     if (person.person_house.house_wood.resource_volume < storageWood) throw "Not enough wood, " + storageWood + " required!"
@@ -111,7 +114,7 @@ export class ActionService {
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityCreateIncreaseStorageAction(queryRunner, person) {
+  async utilityPrepareIncreaseRoomsAction(queryRunner, person) {
     const roomsWood = 2 * ( person.person_house.house_rooms + 1 );
     if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
     if (person.person_house.house_wood.resource_volume < roomsWood) throw "Not enough wood, " + roomsWood + " required!"
@@ -126,7 +129,7 @@ export class ActionService {
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityCreateIncreaseRoomsAction(queryRunner, person) {
+  async utilityPrepareCreateHouseAction(queryRunner, person) {
     if (person.person_house.house_food.resource_volume < 3) throw "Not enough food, 3 required!"
     if (person.person_house.house_wood.resource_volume < 12) throw "Not enough wood, 12 required!"
     const food = await queryRunner.manager.decrement(Resource, {
