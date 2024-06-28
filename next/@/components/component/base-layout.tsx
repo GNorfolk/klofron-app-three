@@ -4,6 +4,7 @@ import { MountainIcon, HomeIcon, MicroscopeIcon, MenuIcon, LockIcon } from '../u
 import { signIn, signOut, useSession } from "next-auth/react"
 
 export function BaseLayout({ children } : { children: React.ReactNode }) {
+  const { status, data } = useSession()
   return (
     <div className="grid md:grid-cols-[280px_1fr] w-full min-h-screen">
       <div className="bg-gray-100 dark:bg-gray-800 hidden md:block">
@@ -28,12 +29,21 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
                   <span>Index</span>
                 </a>
               </li>
-              <li>
-                <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <LockIcon className="h-5 w-5" />
-                  <span>Login</span>
-                </a>
-              </li>
+              { status === "authenticated" ? (
+                <li>
+                  <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <LockIcon className="h-5 w-5" />
+                    <span>Logout</span>
+                  </a>
+                </li>
+              ) : (
+                <li>
+                  <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <LockIcon className="h-5 w-5" />
+                    <span>Login</span>
+                  </a>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
@@ -72,6 +82,21 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
                       <span>Index</span>
                     </a>
                   </li>
+                  { status === "authenticated" ? (
+                    <li>
+                      <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                        <LockIcon className="h-5 w-5" />
+                        <span>Logout</span>
+                      </a>
+                    </li>
+                  ) : (
+                    <li>
+                      <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                        <LockIcon className="h-5 w-5" />
+                        <span>Login</span>
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </nav>
             </SheetContent>
