@@ -119,7 +119,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
                       onClick={
                         () => {
                           increaseFood.mutate(person_id, { onSettled: (data, error: any) => {
@@ -134,7 +134,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                       } >Get Food</Button>
                     <Button size="sm"
                       variant="ghost"
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
                       onClick={
                       () => {
                         increaseWood.mutate(person_id, { onSettled: (data, error: any) => {
@@ -149,7 +149,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                     } >Get Wood</Button>
                     <Button size="sm"
                       variant="ghost"
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
                       onClick={
                       () => {
                         increaseStorage.mutate(person_id, { onSettled: (data, error: any) => {
@@ -164,7 +164,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                     } >Increase Storage</Button>
                     <Button size="sm"
                       variant="ghost"
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
                       onClick={
                       () => {
                         increaseRooms.mutate(person_id, { onSettled: (data, error: any) => {
@@ -179,7 +179,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
                     } >Increase Rooms</Button>
                     <Button size="sm"
                       variant="ghost"
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
                       onClick={
                       () => {
                         createHouse.mutate(person_id, { onSettled: (data, error: any) => {
@@ -272,7 +272,7 @@ function CreatePerson({ houseId, queryClient }) {
     <Container>
       <Button size="sm"
         variant="ghost"
-        className="bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 m-1 transition-colors"
+        className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
         onClick={ () => {
           createPerson.mutate(houseId, { onSettled: (data, error: any) => {
             queryClient.invalidateQueries()
