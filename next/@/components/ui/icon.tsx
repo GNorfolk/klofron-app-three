@@ -171,6 +171,50 @@ export function BuildingIcon(props) {
   )
 }
 
+export function CherryIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" />
+      <path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" />
+      <path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" />
+      <path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z" />
+    </svg>
+  )
+}
+
+export function CitrusIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" />
+      <path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" />
+      <path d="m14 10-5.5 5.5" />
+      <path d="M14 17.85V10H6.15" />
+    </svg>
+  )
+}
+
 export function ClockIcon(props) {
   return (
     <svg
@@ -207,6 +251,32 @@ export function CompassIcon(props) {
     >
       <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" />
       <circle cx="12" cy="12" r="10" />
+    </svg>
+  )
+}
+
+export function ConstructionIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="6" width="20" height="8" rx="1" />
+      <path d="M17 14v7" />
+      <path d="M7 14v7" />
+      <path d="M17 3v3" />
+      <path d="M7 3v3" />
+      <path d="M10 14 2.3 6.3" />
+      <path d="m14 6 7.7 7.7" />
+      <path d="m8 6 8 8" />
     </svg>
   )
 }
@@ -256,6 +326,76 @@ export function ForkliftIcon(props) {
   )
 }
 
+export function FlameKindlingIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 2c1 3 2.5 3.5 3.5 4.5A5 5 0 0 1 17 10a5 5 0 1 1-10 0c0-.3 0-.6.1-.9a2 2 0 1 0 3.3-2C8 4.5 11 2 12 2Z" />
+      <path d="m5 22 14-4" />
+      <path d="m5 18 14 4" />
+    </svg>
+  )
+}
+
+export function GrapeIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 5V2l-5.89 5.89" />
+      <circle cx="16.6" cy="15.89" r="3" />
+      <circle cx="8.11" cy="7.4" r="3" />
+      <circle cx="12.35" cy="11.65" r="3" />
+      <circle cx="13.91" cy="5.85" r="3" />
+      <circle cx="18.15" cy="10.09" r="3" />
+      <circle cx="6.56" cy="13.2" r="3" />
+      <circle cx="10.8" cy="17.44" r="3" />
+      <circle cx="5" cy="19" r="3" />
+    </svg>
+  )
+}
+
+
+export function HammerIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9" />
+      <path d="m18 15 4-4" />
+      <path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5" />
+    </svg>
+  )
+}
+
 export function HandPlatterIcon(props) {
   return (
     <svg
@@ -276,6 +416,28 @@ export function HandPlatterIcon(props) {
       <path d="M2 14h12a2 2 0 1 1 0 4h-2" />
       <path d="m15.4 17.4 3.2-2.8a2 2 0 0 1 2.8 2.9l-3.6 3.3c-.7.8-1.7 1.2-2.8 1.2h-4c-1.1 0-2.1-.4-2.8-1.2L5 18" />
       <path d="M5 14v7H2" />
+    </svg>
+  )
+}
+
+export function HardHatIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v2z" />
+      <path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5" />
+      <path d="M4 15v-3a6 6 0 0 1 6-6h0" />
+      <path d="M14 6h0a6 6 0 0 1 6 6v3" />
     </svg>
   )
 }
@@ -484,6 +646,27 @@ export function MicroscopeIcon(props) {
   )
 }
 
+export function MilkIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 2h8" />
+      <path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2" />
+      <path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0" />
+    </svg>
+  )
+}
+
 export function MountainIcon(props) {
   return (
     <svg
@@ -499,6 +682,28 @@ export function MountainIcon(props) {
       strokeLinejoin="round"
     >
       <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+    </svg>
+  )
+}
+
+export function PickaxeIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14.531 12.469 6.619 20.38a1 1 0 1 1-3-3l7.912-7.912" />
+      <path d="M15.686 4.314A12.5 12.5 0 0 0 5.461 2.958 1 1 0 0 0 5.58 4.71a22 22 0 0 1 6.318 3.393" />
+      <path d="M17.7 3.7a1 1 0 0 0-1.4 0l-4.6 4.6a1 1 0 0 0 0 1.4l2.6 2.6a1 1 0 0 0 1.4 0l4.6-4.6a1 1 0 0 0 0-1.4z" />
+      <path d="M19.686 8.314a12.501 12.501 0 0 1 1.356 10.225 1 1 0 0 1-1.751-.119 22 22 0 0 0-3.393-6.319" />
     </svg>
   )
 }
@@ -538,6 +743,29 @@ export function PlaneTakeoffIcon(props) {
     >
       <path d="M2 22h20" />
       <path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z" />
+    </svg>
+  )
+}
+
+export function RabbitIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M13 16a3 3 0 0 1 2.24 5" />
+      <path d="M18 12h.01" />
+      <path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3" />
+      <path d="M20 8.54V4a2 2 0 1 0-4 0v3" />
+      <path d="M7.612 12.524a3 3 0 1 0-1.6 4.3" />
     </svg>
   )
 }
@@ -600,6 +828,55 @@ export function SproutIcon(props) {
       <path d="M10 20c5.5-2.5.8-6.4 3-10" />
       <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z" />
       <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z" />
+    </svg>
+  )
+}
+
+export function SwordIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
+      <line x1="13" x2="19" y1="19" y2="13" />
+      <line x1="16" x2="20" y1="16" y2="20" />
+      <line x1="19" x2="21" y1="21" y2="19" />
+    </svg>
+  )
+}
+
+export function TractorIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m10 11 11 .9c.6 0 .9.5.8 1.1l-.8 5h-1" />
+      <path d="M16 18h-5" />
+      <path d="M18 5a1 1 0 0 0-1 1v5.573" />
+      <path d="M3 4h9l1 7.246" />
+      <path d="M4 11V4" />
+      <path d="M7 15h.01" />
+      <path d="M8 10.1V4" />
+      <circle cx="18" cy="18" r="2" />
+      <circle cx="7" cy="15" r="5" />
     </svg>
   )
 }
@@ -730,6 +1007,51 @@ export function WarehouseIcon(props) {
       <path d="M6 18h12" />
       <path d="M6 14h12" />
       <rect width="12" height="12" x="6" y="10" />
+    </svg>
+  )
+}
+
+export function WheatIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 22 16 8" />
+      <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+      <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+      <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+      <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z" />
+      <path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" />
+      <path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" />
+      <path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" />
+    </svg>
+  )
+}
+
+export function WrenchIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
     </svg>
   )
 }
