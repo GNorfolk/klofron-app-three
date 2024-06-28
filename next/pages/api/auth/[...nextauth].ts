@@ -60,8 +60,6 @@ const authOptions: NextAuthOptions = {
     },
     pages: {
         signIn: '/auth/signin',
-        // error: '/auth/error',
-        // signOut: '/auth/signout',
     }
 }
 
