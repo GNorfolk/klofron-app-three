@@ -57,6 +57,11 @@ const authOptions: NextAuthOptions = {
                 secure: process.env.NODE_ENV === 'production' ? true : false
             }
         },
+    },
+    pages: {
+        signIn: '/auth/signin',
+        // error: '/auth/error',
+        // signOut: '/auth/signout',
     }
 }
 
