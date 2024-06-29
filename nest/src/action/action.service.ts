@@ -57,17 +57,17 @@ export class ActionService {
     if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
     const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
     if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
+    if (action.action_type_id == 2) {
+      await this.utilityPrepareGetWoodAction(queryRunner, person, person.person_students.length);
+    } else if (action.action_type_id == 3) {
+      await this.utilityPrepareIncreaseStorageAction(queryRunner, person, person.person_students.length);
+    } else if (action.action_type_id == 4) {
+      await this.utilityPrepareIncreaseRoomsAction(queryRunner, person, person.person_students.length);
+    } else if (action.action_type_id == 5) {
+      await this.utilityPrepareCreateHouseAction(queryRunner, person, person.person_students.length);
+    }
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
-      if (student_action.action_type_id == 2) {
-        await this.utilityPrepareGetWoodAction(queryRunner, student, person.person_students.length);
-      } else if (student_action.action_type_id == 3) {
-        await this.utilityPrepareIncreaseStorageAction(queryRunner, student, person.person_students.length);
-      } else if (student_action.action_type_id == 4) {
-        await this.utilityPrepareIncreaseRoomsAction(queryRunner, student, person.person_students.length);
-      } else if (student_action.action_type_id == 5) {
-        await this.utilityPrepareCreateHouseAction(queryRunner, student, person.person_students.length);
-      }
       student_action.action_person_id = student.person_id;
       await queryRunner.manager.save(Action, student_action);
     }
