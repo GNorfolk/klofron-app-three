@@ -60,13 +60,13 @@ export class ActionService {
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
       if (student_action.action_type_id == 2) {
-        await this.utilityPrepareGetWoodAction(queryRunner, student);
+        await this.utilityPrepareGetWoodAction(queryRunner, student, person.person_students.length);
       } else if (student_action.action_type_id == 3) {
-        await this.utilityPrepareIncreaseStorageAction(queryRunner, student);
+        await this.utilityPrepareIncreaseStorageAction(queryRunner, student, person.person_students.length);
       } else if (student_action.action_type_id == 4) {
-        await this.utilityPrepareIncreaseRoomsAction(queryRunner, student);
+        await this.utilityPrepareIncreaseRoomsAction(queryRunner, student, person.person_students.length);
       } else if (student_action.action_type_id == 5) {
-        await this.utilityPrepareCreateHouseAction(queryRunner, student);
+        await this.utilityPrepareCreateHouseAction(queryRunner, student, person.person_students.length);
       }
       student_action.action_person_id = student.person_id;
       await queryRunner.manager.save(Action, student_action);
@@ -90,56 +90,61 @@ export class ActionService {
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityPrepareGetWoodAction(queryRunner, person) {
-    if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
+  async utilityPrepareGetWoodAction(queryRunner, person, multiplier = 1) {
+    const requiredFood = 1 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "food",
       resource_house_id: person.person_house_id
-    }, "resource_volume", 1);
+    }, "resource_volume", requiredFood);
     if (food.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityPrepareIncreaseStorageAction(queryRunner, person) {
-    const storageWood = ( person.person_house.house_storage / 3 ) + 1;
-    if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
-    if (person.person_house.house_wood.resource_volume < storageWood) throw "Not enough wood, " + storageWood + " required!"
+  async utilityPrepareIncreaseStorageAction(queryRunner, person, multiplier = 1) {
+    const requiredWood = ( multiplier * ( person.person_house.house_storage / 3 ) ) + ( ( multiplier * ( multiplier + 1 ) ) / 2 );
+    const requiredFood = 1 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "food",
       resource_house_id: person.person_house_id
-    }, "resource_volume", 1);
+    }, "resource_volume", requiredFood);
     const wood = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "wood",
       resource_house_id: person.person_house_id
-    }, "resource_volume", storageWood);
+    }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityPrepareIncreaseRoomsAction(queryRunner, person) {
-    const roomsWood = 2 * ( person.person_house.house_rooms + 1 );
-    if (person.person_house.house_food.resource_volume < 1) throw "Not enough food, 1 required!"
-    if (person.person_house.house_wood.resource_volume < roomsWood) throw "Not enough wood, " + roomsWood + " required!"
+  async utilityPrepareIncreaseRoomsAction(queryRunner, person, multiplier = 1) {
+    const requiredWood = ( 2 * multiplier * person.person_house.house_rooms ) + ( multiplier * ( multiplier + 1 ) );
+    const requiredFood = 1 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "food",
       resource_house_id: person.person_house_id
-    }, "resource_volume", 1);
+    }, "resource_volume", requiredFood);
     const wood = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "wood",
       resource_house_id: person.person_house_id
-    }, "resource_volume", roomsWood);
+    }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityPrepareCreateHouseAction(queryRunner, person) {
-    if (person.person_house.house_food.resource_volume < 3) throw "Not enough food, 3 required!"
-    if (person.person_house.house_wood.resource_volume < 12) throw "Not enough wood, 12 required!"
+  async utilityPrepareCreateHouseAction(queryRunner, person, multiplier = 1) {
+    const requiredWood = 12 * multiplier;
+    const requiredFood = 3 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "food",
       resource_house_id: person.person_house_id
-    }, "resource_volume", 3);
+    }, "resource_volume", requiredFood);
     const wood = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "wood",
       resource_house_id: person.person_house_id
-    }, "resource_volume", 12);
+    }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
