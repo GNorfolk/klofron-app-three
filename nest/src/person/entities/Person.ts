@@ -14,6 +14,7 @@ import { Family } from "../../family/entities/Family";
 import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
 import { Action } from "../../action/entities/Action";
+import { ActionQueue } from "../../action/entities/ActionQueue";
 import { Proposal } from "../../proposal/entities/Proposal";
 import { ProposalOffer } from "../../proposal-offer/entities/ProposalOffer";
 import { ProposalDowry } from "../../proposal-offer/entities/ProposalDowry";
@@ -108,6 +109,9 @@ export class Person {
 
   @OneToMany(() => Action, (action) => action.action_person)
   person_actions: Relation<Action>[];
+
+  @OneToOne(() => ActionQueue, (action_queue) => action_queue.action_queue_person)
+  person_action_queue: Relation<ActionQueue>;
 
   @OneToMany(() => Proposal, (proposal) => proposal.proposal_person)
   person_proposals: Relation<Proposal>[];

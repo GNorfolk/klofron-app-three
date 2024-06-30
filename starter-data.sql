@@ -87,6 +87,13 @@ CREATE TABLE `action` (
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `action_queue` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- USER -- -- -- -- --
 CREATE TABLE `user` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
