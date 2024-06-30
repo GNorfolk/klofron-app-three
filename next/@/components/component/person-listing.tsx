@@ -61,15 +61,15 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                 <div className="flex">
                   <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                     <GrapeIcon className="w-5 h-5 mr-2" />
-                    <span>{person_skills.person_skills_gatherer_level} Gatherer</span>
+                    <span>{person_skills.person_skills_gatherer_level} Gather</span>
                   </div>
                   <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                     <TreesIcon className="w-5 h-5 mr-2" />
-                    <span>{person_skills.person_skills_lumberjack_level} Lumberjack</span>
+                    <span>{person_skills.person_skills_lumberjack_level} Lumber</span>
                   </div>
                   <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                     <HardHatIcon className="w-5 h-5 mr-2" />
-                    <span>{person_skills.person_skills_builder_level} Builder</span>
+                    <span>{person_skills.person_skills_builder_level} Build</span>
                   </div>
                 </div>
               </> : <>
