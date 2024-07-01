@@ -35,7 +35,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
             {
               status === "authenticated" && userId == data.person_family.family_user_id ?
               <div>
-                <ListPersonProposals data={data} userId={userId} showOffers={false} />
+                <ListPersonProposals data={data} userId={userId} showOffers={false} queryClient={queryClient} />
               </div>
               :
               <></>

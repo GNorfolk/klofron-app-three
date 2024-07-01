@@ -8,6 +8,7 @@ import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person-listing'
 import { HouseListing } from '../@/components/component/house-listing'
+import { Button } from "../@/components/ui/button"
 
 export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
@@ -179,7 +180,11 @@ function ListFamilyProposals({ data }) {
     return (
       <Container>
         <h2 className="p-6 text-4xl">Proposal Info</h2>
-        <p>Go to <Link href={`/family/${router.query.id}/proposal`}>Proposal Management</Link> page.</p>
+        <Button size="sm"
+          variant="ghost"
+          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          onClick={ () => router.push(`/family/${router.query.id}/proposal`) }
+        >Go to Proposal Management page.</Button>
       </Container>
     )
   }
@@ -191,7 +196,11 @@ function ListFamilyTravel({ data }) {
     return (
       <Container>
         <h2 className="p-6 text-4xl">Travel Info</h2>
-        <p>Go to <Link href={`/family/${router.query.id}/travel`}>Travel Management</Link> page.</p>
+        <Button size="sm"
+          variant="ghost"
+          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          onClick={ () => router.push(`/family/${router.query.id}/travel`) }
+        >Go to Travel Management page.</Button>
       </Container>
     )
   }
