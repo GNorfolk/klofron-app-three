@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
+import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { Container } from '../@/components/component/container'
 
 export default function DescribeFamilyProposals({ queryClient, userId }) {
   const router = useRouter()
@@ -51,59 +53,67 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
 
     if (data.family_user_id === userId) {
       return (
-        <div>
-          <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
-          {
-            familyProposals.length > 0 ?
-              familyProposals.map(({ person_id, person_name, person_proposals }) => (
+        <BoxLayoutSingle>
+          <Container>
+            <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
+            {
+              familyProposals.length > 0 ?
+                familyProposals.map(({ person_id, person_name, person_proposals }) => (
+                  <a href={"/person/" + person_id + "/proposal"}>
+                    <p className="m-2 text-gray-500 dark:text-gray-400">{person_name} has proposal {person_proposals[0].proposal_id}</p>
+                  </a>
+                ))
+              :
+                <p>No proposals!</p>
+            }
+          </Container>
+          <br />
+          <Container>
+            <h2 className="text-2xl leading-snug my-4 mx-0">Manage Proposals</h2>
+            {
+              familyBachelors.length > 0 ?
                 <div>
-                  <p>{person_name} has proposal <Link href={"/person/" + person_id + "/proposal"}>{person_proposals[0].proposal_id}</Link></p>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <select {...register("proposal_person_id", { required: true })}>
+                      { errors.proposal_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
+                      {
+                        familyBachelors.map(({ person_id, person_name }) => (
+                          <option value={person_id}>{person_name}</option>
+                        ))
+                      }
+                    </select>
+                    <input type="submit" />
+                  </form>
+                  <small className="text-stone-500" id={'cm-' + router.query.id}></small>
                 </div>
-              ))
-            :
-              <p>No proposals!</p>
-          }
-          <h2 className="text-2xl leading-snug my-4 mx-0">Manage Proposals</h2>
-          {
-            familyBachelors.length > 0 ?
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <select {...register("proposal_person_id", { required: true })}>
-                    { errors.proposal_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
-                    {
-                      familyBachelors.map(({ person_id, person_name }) => (
-                        <option value={person_id}>{person_name}</option>
-                      ))
-                    }
-                  </select>
-                  <input type="submit" />
-                </form>
-                <small className="text-stone-500" id={'cm-' + router.query.id}></small>
-              </div>
-            :
-              <p>No eligible bachelors!</p>
-          }
-          <h2 className="text-2xl leading-snug my-4 mx-0">List Proposal Offers</h2>
-          {
-            familyProposalOffers.length > 0 ?
-              familyProposalOffers.map(({ person_proposals, person_id, person_name, person_gender, person_age }) => (
-                person_proposals.map(({ proposal_offers }) => (
-                  proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
-                    <div>
-                      <p>
-                        Person with proposal is {person_name} who is {person_gender} and is {person_age} years old.
-                        Person {person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
-                        They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
-                        Goto <Link href={"/person/" + person_id + "/proposal"}>proposal</Link>.
-                      </p>
-                    </div>
+              :
+                <p className="m-2 text-gray-500 dark:text-gray-400">No eligible bachelors!</p>
+            }
+          </Container>
+          <br />
+          <Container>
+            <h2 className="text-2xl leading-snug my-4 mx-0">List Proposal Offers</h2>
+            {
+              familyProposalOffers.length > 0 ?
+                familyProposalOffers.map(({ person_proposals, person_id, person_name, person_gender, person_age }) => (
+                  person_proposals.map(({ proposal_offers }) => (
+                    proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
+                      <div>
+                        <p className="m-2 text-gray-500 dark:text-gray-400">
+                          Person with proposal is {person_name} who is {person_gender} and is {person_age} years old.
+                          Person {person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
+                          They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
+                          Goto <Link href={"/person/" + person_id + "/proposal"}>proposal</Link>.
+                        </p>
+                      </div>
+                    ))
                   ))
                 ))
-              ))
-            :
-              <p>This family have received no proposal offers.</p>
-          }
-        </div>
+              :
+                <p className="m-2 text-gray-500 dark:text-gray-400">This family have received no proposal offers.</p>
+            }
+          </Container>
+        </BoxLayoutSingle>
       )
     } else {
       router.push('/')
