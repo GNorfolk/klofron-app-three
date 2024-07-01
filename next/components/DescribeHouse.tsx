@@ -85,8 +85,12 @@ function ListHouseResources({ data, queryClient, userId = null }) {
     return (
       <Container>
         <h2 className="text-2xl leading-snug my-4 mx-0">Resource Info</h2>
-        <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
-        { userId === data.house_family.family_user_id ? <p>Go to <Link href={`/house/${router.query.id}/resource`}>Resource Management</Link> page.</p> : null }
+        <p className="m-2 text-gray-500 dark:text-gray-400">{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
+        { userId === data.house_family.family_user_id ? <Button size="sm"
+          variant="ghost"
+          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          onClick={ () => router.push(`/house/${router.query.id}/resource`) }
+        >Go to Resource Management page.</Button> : null }
       </Container>
     )
   }
@@ -114,7 +118,7 @@ function ListHouseTrades({ data }) {
           <h2 className="text-2xl leading-snug my-4 mx-0">Trade Info</h2>
           <ul className="list-none p-0 m-0">
             <li className="mt-0 mx-0 mb-5">
-              <p>No trades active at this house.</p>
+              <p className="m-2 text-gray-500 dark:text-gray-400">No trades active at this house.</p>
             </li>
           </ul>
         </Container>
