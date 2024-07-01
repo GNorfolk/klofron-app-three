@@ -13,7 +13,7 @@ export default function Home({ client }) {
       <QueryClientProvider client={client}>
         <DescribeHouseResources queryClient={client} userId={userId} />
       </QueryClientProvider>
-      <div className={styles.backToHome}>
+      <div className="mt-12 mx-0 mb-0">
         <Link href="/">← Back to home</Link>
       </div>
     </BaseLayout>

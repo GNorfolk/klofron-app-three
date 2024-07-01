@@ -93,8 +93,8 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
     return (
       <Container>
         <h2 className="p-6 text-4xl">House Info</h2>
-        <ul className={styles.list}>
-          <li className={styles.listItem}>
+        <ul className="list-none p-0 m-0">
+          <li className="mt-0 mx-0 mb-5">
             <p>This family does not own any houses.</p>
             {
               unnamedBoolean ?
@@ -102,7 +102,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="submit" value="Create first house" />
                   </form>
-                  <small className={styles.lightText} id={'cm-' + familyId}></small>
+                  <small className="text-stone-500" id={'cm-' + familyId}></small>
                 </div>
               : null
             }
@@ -154,8 +154,8 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
     return (
       <Container>
         <h2 className="p-6 text-4xl">Person Info</h2>
-        <ul className={styles.list}>
-          <li className={styles.listItem}>
+        <ul className="list-none p-0 m-0">
+          <li className="mt-0 mx-0 mb-5">
             <p>This family does not have any people in it.</p>
             {
               unnamedBoolean ?
@@ -163,7 +163,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="submit" value="Create first couple" />
                   </form>
-                  <small className={styles.lightText} id={'cm-' + familyId}></small>
+                  <small className="text-stone-500" id={'cm-' + familyId}></small>
                 </div>
               : null
             }

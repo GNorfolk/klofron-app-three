@@ -168,10 +168,10 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
               {
                 queryClient && person_actions[0]?.action_time_remaining ? <>
                   <br />
-                  <small className={styles.lightText}>{person_name} is performing an action completing in {person_actions[0].action_time_remaining}. </small>
+                  <small className="text-stone-500">{person_name} is performing an action completing in {person_actions[0].action_time_remaining}. </small>
                 </> : <></>
               }
-              <small className={styles.lightText} id={'cm-' + person_id}></small>
+              <small className="text-stone-500" id={'cm-' + person_id}></small>
             </div> : null
           }
         </>

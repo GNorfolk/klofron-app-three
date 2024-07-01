@@ -75,11 +75,11 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
     return (
       <div>
         <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
-        <ul className={styles.list}>
+        <ul className="list-none p-0 m-0">
           {
             data.person_proposals.length > 0 ?
               data.person_proposals.map(({ proposal_id, proposal_offers }) => (
-                <li className={styles.listItem} key={data.proposal_id}>
+                <li className="mt-0 mx-0 mb-5" key={data.proposal_id}>
                   <p>{data.person_name} has an existing proposal with id {proposal_id}.</p>
                   {
                     showOffers ?
@@ -123,7 +123,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
                             </select>
                             <input type="submit" />
                           </form>
-                          <small className={styles.lightText} id={'cm-' + userId}></small>
+                          <small className="text-stone-500" id={'cm-' + userId}></small>
                         </div>
                       :
                         <p>There are no family people eligible to accept an offer.</p>
@@ -186,9 +186,9 @@ function ManagePersonProposals({ personData, queryClient, userId }) {
       <div>
         <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>The following people are open to proposals.</p>
-        <ul className={styles.list}>
+        <ul className="list-none p-0 m-0">
           {proposals.map(({ proposal_id, proposal_person }) => (
-            <li className={styles.listItem} key={proposal_id}>
+            <li className="mt-0 mx-0 mb-5" key={proposal_id}>
               { personData.person_family.family_user_id === userId ?
                 <div>
                   <Link href={"/person/" + router.query.person_id + "/proposal/" + proposal_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</Link>

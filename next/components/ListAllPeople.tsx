@@ -23,10 +23,10 @@ export default function ListAllPeople() {
   return (
     <div>
       <h2 className="text-2xl leading-snug my-4 mx-0">People</h2>
-      <ul className={styles.list}>
+      <ul className="list-none p-0 m-0">
         {
           data.map(({ person_id, person_name, person_family, person_age }) => (
-            <li className={styles.listItem} key={person_id}>
+            <li className="mt-0 mx-0 mb-5" key={person_id}>
               <p>{person_name} {person_family.family_name} is {person_age} years old.</p>
             </li>
           ))

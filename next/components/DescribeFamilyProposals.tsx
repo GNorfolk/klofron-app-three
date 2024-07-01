@@ -79,7 +79,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
                   </select>
                   <input type="submit" />
                 </form>
-                <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+                <small className="text-stone-500" id={'cm-' + router.query.id}></small>
               </div>
             :
               <p>No eligible bachelors!</p>

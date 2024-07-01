@@ -5,7 +5,7 @@
 }
 
 .backToHome {
-  margin: 3rem 0 0;
+  margin: 3rem 0 0; /* mt-12 mx-0 mb-0 */
 }
 
 .heading2Xl {
@@ -28,13 +28,13 @@
 }
 
 .list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  list-style: none; /* list-none */
+  padding: 0; /* p-0 */
+  margin: 0; /* m-0 */
 }
 
 .listItem {
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.25rem; /* mt-0 mx-0 mb-5 */
 }
 
 .header {
@@ -53,5 +53,5 @@
 }
 
 .lightText {
-  color: #666;
+  color: #666; /* stone-500 */
 }

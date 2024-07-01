@@ -80,7 +80,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
                   </select>
                   <input type="submit" />
                 </form>
-                <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+                <small className="text-stone-500" id={'cm-' + router.query.id}></small>
               </div>
             :
               <div>

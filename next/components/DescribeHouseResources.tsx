@@ -105,7 +105,7 @@ export default function DescribeHouseResources({ queryClient, userId }) {
                   <input type="submit" value="Deposit" onClick={handleSubmit(onDeposit)} />
                   <input type="submit" value="Withdraw" onClick={handleSubmit(onWithdraw)} />
                 </form>
-                <small className={styles.lightText} id={'cm-' + router.query.id}></small>
+                <small className="text-stone-500" id={'cm-' + router.query.id}></small>
               </div>
             :
               <div>
@@ -113,8 +113,8 @@ export default function DescribeHouseResources({ queryClient, userId }) {
               </div>
           }
           <h2 className="text-2xl leading-snug my-4 mx-0">Delete Resources</h2>
-          <ul className={styles.list}>
-            <li className={styles.listItem}>
+          <ul className="list-none p-0 m-0">
+            <li className="mt-0 mx-0 mb-5">
               <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
                 () => {
                     decreaseWood.mutate(data.house_id, { onSettled: (res) => {
@@ -123,7 +123,7 @@ export default function DescribeHouseResources({ queryClient, userId }) {
                 }
               } >Decrease Wood</button></p>
             </li>
-            <li className={styles.listItem}>
+            <li className="mt-0 mx-0 mb-5">
               <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
                 () => {
                     decreaseFood.mutate(data.house_id, { onSettled: (res) => {

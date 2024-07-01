@@ -83,10 +83,10 @@ function ListPersonActionsCurrent({ queryClient, personId }) {
   return (
     <Container>
       <h3 className="text-xl leading-normal">Current Action</h3>
-      <ul className={styles.list}>
+      <ul className="list-none p-0 m-0">
         { data.length > 0 ? 
           data.map(({ action_id, action_type_name, action_started_time_ago }) => (
-            <li className={styles.listItem} key={action_id}>
+            <li className="mt-0 mx-0 mb-5" key={action_id}>
               <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago.</p>
               <button onClick={
                 () => {
@@ -123,9 +123,9 @@ function ListPersonActionsPrevious({ personId }) {
     return (
       <Container>
         <h3 className="text-xl leading-normal">Previous Actions</h3>
-        <ul className={styles.list}>
+        <ul className="list-none p-0 m-0">
           {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
-            <li className={styles.listItem} key={action_id}>
+            <li className="mt-0 mx-0 mb-5" key={action_id}>
               <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago and finished with reason {action_finish_reason}.</p>
             </li>
           ))}
@@ -136,8 +136,8 @@ function ListPersonActionsPrevious({ personId }) {
     return (
       <Container>
         <h3 className="text-xl leading-normal">Previous Actions</h3>
-        <ul className={styles.list}>
-            <li className={styles.listItem}>
+        <ul className="list-none p-0 m-0">
+            <li className="mt-0 mx-0 mb-5">
               <p>This person has no past actions initiated.</p>
             </li>
         </ul>
@@ -187,11 +187,11 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
     return (
       <Container>
         <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
-        <ul className={styles.list}>
+        <ul className="list-none p-0 m-0">
           {
             data.person_proposals.length > 0 ?
               data.person_proposals.map(({ proposal_id, proposal_offers }) => (
-                <li className={styles.listItem} key={data.proposal_id}>
+                <li className="mt-0 mx-0 mb-5" key={data.proposal_id}>
                   <p>{data.person_name} has an existing proposal with id {proposal_id}.</p>
                   {
                     showOffers ?
@@ -235,7 +235,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
                             </select>
                             <input type="submit" />
                           </form>
-                          <small className={styles.lightText} id={'cm-' + userId}></small>
+                          <small className="text-stone-500" id={'cm-' + userId}></small>
                         </div>
                       :
                         <p>There are no family people eligible to accept an offer.</p>
@@ -285,7 +285,7 @@ function RenamePerson({ queryClient, personId }) {
   return (
     <Container>
       <h2 className="text-2xl leading-snug my-4 mx-0">Rename Person</h2>
-      <ul className={styles.list}>
+      <ul className="list-none p-0 m-0">
         <form onSubmit={handleSubmit}>
           <input
             value={personInfo.name}
@@ -305,8 +305,8 @@ function ListPersonInfo({ data, queryClient }) {
   return (
     <Container>
       <h2 className="text-2xl leading-snug my-4 mx-0">Person Info</h2>
-      <ul className={styles.list}>
-        <li className={styles.listItem} key={data.person_id}>
+      <ul className="list-none p-0 m-0">
+        <li className="mt-0 mx-0 mb-5" key={data.person_id}>
           {
             data.person_partner_id ?
               <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old and is married to <Link href={"/person/" + data.person_partner_id}>{data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</Link>.</p>

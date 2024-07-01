@@ -13,7 +13,7 @@ export default function Person({ client }) {
       <QueryClientProvider client={client}>
         <DescribePerson queryClient={client} status={status} userId={userId} />
       </QueryClientProvider>
-      <div className={styles.backToHome}>
+      <div className="mt-12 mx-0 mb-0">
         <Link href="/">← Back to home</Link>
       </div>
     </BaseLayout>

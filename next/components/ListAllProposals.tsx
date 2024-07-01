@@ -23,9 +23,9 @@ export default function ListAllProposals() {
   return (
     <div>
       <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
-      <ul className={styles.list}>
+      <ul className="list-none p-0 m-0">
         {data.map(({ proposal_id, proposal_person_id, proposal_person }) => (
-          <li className={styles.listItem} key={proposal_id}>
+          <li className="mt-0 mx-0 mb-5" key={proposal_id}>
             <Link href={"/person/" + proposal_person_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name + "."}</Link>
           </li>
         ))}

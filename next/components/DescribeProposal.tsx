@@ -117,7 +117,7 @@ function ManagePersonProposalOffer({ queryClient, userId }) {
                 </select>
                 <input type="submit" />
               </form>
-              <small className={styles.lightText} id={'cm-' + router.query.person_id}></small>
+              <small className="text-stone-500" id={'cm-' + router.query.person_id}></small>
             </div>
           :
             <p>No family people are eligible to betrothe!</p>

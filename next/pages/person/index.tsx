@@ -10,7 +10,7 @@ export default function Home({ client }) {
       <QueryClientProvider client={client}>
         <ListAllPeople />
       </QueryClientProvider>
-      <div className={styles.backToHome}>
+      <div className="mt-12 mx-0 mb-0">
         <Link href="/">← Back to home</Link>
       </div>
     </BaseLayout>
