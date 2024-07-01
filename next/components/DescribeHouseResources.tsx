@@ -2,6 +2,10 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
+import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { Container } from '../@/components/component/container'
+import { Button } from "../@/components/ui/button"
+import { MapPinIcon } from "../@/components/ui/icon"
 
 export default function DescribeHouseResources({ queryClient, userId }) {
   const router = useRouter()
@@ -80,59 +84,71 @@ export default function DescribeHouseResources({ queryClient, userId }) {
 
     if (data.house_family.family_user_id === userId) { 
       return (
-        <div>
-          <h2 className="text-2xl leading-snug my-4 mx-0">Resource Info</h2>
-          <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
-          { data.house_people.map(({ person_name, person_food, person_wood }) => (
-            <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
-          ))}
-          <h2 className="text-2xl leading-snug my-4 mx-0">Manage Resources</h2>
-          {
-            data.house_people.length > 0 ?
-              <div>
-                <form>
-                  <select {...register("person_id")}>
-                  { data.house_people.map(({ person_id, person_name }) => (
-                    <option value={person_id}>{person_name}</option>
-                  ))}
-                  </select>
-                  <select {...register("resource_type")}>
-                    <option value="food">food</option>
-                    <option value="wood">wood</option>
-                  </select>
-                  <input defaultValue="1" {...register("resource_volume")} />
-                  <input type="submit" value="Deposit" onClick={handleSubmit(onDeposit)} />
-                  <input type="submit" value="Withdraw" onClick={handleSubmit(onWithdraw)} />
-                </form>
-                <small className="text-stone-500" id={'cm-' + router.query.id}></small>
-              </div>
-            :
-              <div>
-                <p>This house does not have any people in it.</p>
-              </div>
-          }
-          <h2 className="text-2xl leading-snug my-4 mx-0">Delete Resources</h2>
-          <ul className="list-none p-0 m-0">
-            <li className="mt-0 mx-0 mb-5">
-              <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
-                () => {
-                    decreaseWood.mutate(data.house_id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                  }})
-                }
-              } >Decrease Wood</button></p>
-            </li>
-            <li className="mt-0 mx-0 mb-5">
-              <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
-                () => {
-                    decreaseFood.mutate(data.house_id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                  }})
-                }
-              } >Decrease Food</button></p>
-            </li>
-          </ul>
-        </div>
+        <BoxLayoutSingle>
+          <Container>
+            <h2 className="text-2xl leading-snug my-4 mx-0">Resource Info</h2>
+            <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
+            { data.house_people.map(({ person_name, person_food, person_wood }) => (
+              <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
+            ))}
+          </Container>
+          <br />
+          <Container>
+            <h2 className="text-2xl leading-snug my-4 mx-0">Manage Resources</h2>
+            {
+              data.house_people.length > 0 ?
+                <div>
+                  <form className="space-y-6">
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <select {...register("person_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                      { data.house_people.map(({ person_id, person_name }) => (
+                        <option value={person_id}>{person_name}</option>
+                      ))}
+                      </select>
+                      <select {...register("resource_type")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                        <option value="food">Food</option>
+                        <option value="wood">Wood</option>
+                      </select>
+                      <input defaultValue="1" {...register("resource_volume")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Button type="submit" onClick={handleSubmit(onDeposit)} className="w-full">Deposit</Button>
+                      <Button type="submit" onClick={handleSubmit(onWithdraw)} className="w-full">Withdraw</Button>
+                    </div>
+                  </form>
+                  <small className="text-stone-500" id={'cm-' + router.query.id}></small>
+                </div>
+              :
+                <div>
+                  <p>This house does not have any people in it.</p>
+                </div>
+            }
+          </Container>
+          <br />
+          <Container>
+            <h2 className="text-2xl leading-snug my-4 mx-0">Delete Resources</h2>
+            <ul className="list-none p-0 m-0">
+              <li className="mt-0 mx-0 mb-5">
+                <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
+                  () => {
+                      decreaseWood.mutate(data.house_id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                    }})
+                  }
+                } >Decrease Wood</button></p>
+              </li>
+              <li className="mt-0 mx-0 mb-5">
+                <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
+                  () => {
+                      decreaseFood.mutate(data.house_id, { onSettled: (res) => {
+                      queryClient.invalidateQueries()
+                    }})
+                  }
+                } >Decrease Food</button></p>
+              </li>
+            </ul>
+          </Container>
+        </BoxLayoutSingle>
       )
     } else {
       router.push('/')
