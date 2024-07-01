@@ -73,7 +73,7 @@ export default function DescribeHouseResources({ queryClient, userId }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Resource Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Resource Info</h2>
         <p>Loading...</p>
       </div>
     )
@@ -82,12 +82,12 @@ export default function DescribeHouseResources({ queryClient, userId }) {
     if (data.house_family.family_user_id === userId) { 
       return (
         <div>
-          <h2 className={styles.headingLg}>Resource Info</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Resource Info</h2>
           <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
           { data.house_people.map(({ person_name, person_food, person_wood }) => (
             <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
           ))}
-          <h2 className={styles.headingLg}>Manage Resources</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Manage Resources</h2>
           {
             data.house_people.length > 0 ?
               <div>
@@ -112,7 +112,7 @@ export default function DescribeHouseResources({ queryClient, userId }) {
                 <p>This house does not have any people in it.</p>
               </div>
           }
-          <h2 className={styles.headingLg}>Delete Resources</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Delete Resources</h2>
           <ul className={styles.list}>
             <li className={styles.listItem}>
               <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={

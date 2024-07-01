@@ -44,7 +44,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Travel Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Travel Info</h2>
         <p>Loading...</p>
       </div>
     )
@@ -53,7 +53,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
     if (data.family_user_id === userId) {
       return (
         <div>
-          <h2 className={styles.headingLg}>Travel Info</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Travel Info</h2>
           {
             data.family_people.length > 0 ? 
               data.family_people.map(({ person_name, person_house_id, person_house }) => (
@@ -62,7 +62,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
             :
               <p>This family does not have any people in it.</p>
           }
-          <h2 className={styles.headingLg}>Manage Travel</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Manage Travel</h2>
           {
             data.family_people.length > 0 && data.family_houses.length > 0 ?
               <div>

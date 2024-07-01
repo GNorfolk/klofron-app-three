@@ -18,7 +18,7 @@ export default function DescribePersonProposals({ userId, queryClient }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>Loading...</p>
       </div>
     )
@@ -74,7 +74,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <ul className={styles.list}>
           {
             data.person_proposals.length > 0 ?
@@ -172,7 +172,7 @@ function ManagePersonProposals({ personData, queryClient, userId }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>Loading...</p>
       </div>
     )
@@ -184,7 +184,7 @@ function ManagePersonProposals({ personData, queryClient, userId }) {
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>The following people are open to proposals.</p>
         <ul className={styles.list}>
           {proposals.map(({ proposal_id, proposal_person }) => (

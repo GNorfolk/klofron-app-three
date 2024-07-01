@@ -18,7 +18,7 @@ export default function DescribeProposal({ queryClient, userId, manageOffer }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>Loading...</p>
       </div>
     )
@@ -26,9 +26,9 @@ export default function DescribeProposal({ queryClient, userId, manageOffer }) {
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>{data.proposal_person.person_name} is {data.proposal_person.person_age} years old.</p>
-        <h2 className={styles.headingLg}>List Proposal Offers</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">List Proposal Offers</h2>
         {
           data.proposal_offers.length > 0 ?
             data.proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
@@ -88,7 +88,7 @@ function ManagePersonProposalOffer({ queryClient, userId }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Offer</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Offer</h2>
         <p>Loading...</p>
       </div>
     )
@@ -100,7 +100,7 @@ function ManagePersonProposalOffer({ queryClient, userId }) {
 
     return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Offer</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Offer</h2>
         {
           familyBachelors.length > 0 ?
             <div>

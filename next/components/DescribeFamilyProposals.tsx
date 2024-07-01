@@ -40,7 +40,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
 
     if (isLoading) return (
       <div>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>Loading...</p>
       </div>
     )
@@ -53,7 +53,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
     if (data.family_user_id === userId) {
       return (
         <div>
-          <h2 className={styles.headingLg}>Proposal Info</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
           {
             familyProposals.length > 0 ?
               familyProposals.map(({ person_id, person_name, person_proposals }) => (
@@ -64,7 +64,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
             :
               <p>No proposals!</p>
           }
-          <h2 className={styles.headingLg}>Manage Proposals</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Manage Proposals</h2>
           {
             familyBachelors.length > 0 ?
               <div>
@@ -84,7 +84,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
             :
               <p>No eligible bachelors!</p>
           }
-          <h2 className={styles.headingLg}>List Proposal Offers</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">List Proposal Offers</h2>
           {
             familyProposalOffers.length > 0 ?
               familyProposalOffers.map(({ person_proposals, person_id, person_name, person_gender, person_age }) => (

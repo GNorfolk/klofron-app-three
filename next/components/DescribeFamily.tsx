@@ -27,7 +27,7 @@ export default function DescribeFamily({ queryClient, userId }) {
     if (data.family_user_id === userId) {
       return (
         <QueryClientProvider client={queryClient}>
-          <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
+          <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
           <BoxLayout left={
             <div>
               <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
@@ -46,7 +46,7 @@ export default function DescribeFamily({ queryClient, userId }) {
     } else {
       return (
         <QueryClientProvider client={queryClient}>
-          <h1 className={styles.heading2Xl} key={data.family_id}>The {data.family_name} family</h1>
+          <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
           <BoxLayout left={
             <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
           } right={

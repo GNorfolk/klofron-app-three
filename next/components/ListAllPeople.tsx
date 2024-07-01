@@ -12,7 +12,7 @@ export default function ListAllPeople() {
 
   if (isLoading) return (
     <div>
-      <h2 className={styles.headingLg}>People</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">People</h2>
       <p>Loading...</p>
     </div>
   )
@@ -22,7 +22,7 @@ export default function ListAllPeople() {
 
   return (
     <div>
-      <h2 className={styles.headingLg}>People</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">People</h2>
       <ul className={styles.list}>
         {
           data.map(({ person_id, person_name, person_family, person_age }) => (

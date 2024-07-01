@@ -68,7 +68,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
     } else {
       return (
         <Container>
-          <h2 className={styles.headingLg}>Person Info</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Person Info</h2>
           <ul className={styles.list}>
               <li className={styles.listItem}>
                 <p>This house does not contain any people.</p>
@@ -85,7 +85,7 @@ function ListHouseResources({ data, queryClient, userId = null }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className={styles.headingLg}>Resource Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Resource Info</h2>
         <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
         { userId === data.house_family.family_user_id ? <p>Go to <Link href={`/house/${router.query.id}/resource`}>Resource Management</Link> page.</p> : null }
       </Container>
@@ -99,7 +99,7 @@ function ListHouseTrades({ data }) {
     if (data.length > 0) {
       return (
         <Container>
-          <h2 className={styles.headingLg}>Trade Info</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Trade Info</h2>
           <ul className={styles.list}>
             {data.map(({ trade_id, trade_offered_type, trade_offered_volume, trade_requested_type, trade_requested_volume }) => (
               <li className={styles.listItem} key={trade_id}>
@@ -112,7 +112,7 @@ function ListHouseTrades({ data }) {
     } else {
       return (
         <Container>
-          <h2 className={styles.headingLg}>Trade Info</h2>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Trade Info</h2>
           <ul className={styles.list}>
             <li className={styles.listItem}>
               <p>No trades active at this house.</p>
@@ -155,7 +155,7 @@ function CreatePerson({ houseId, queryClient }) {
 function ListHouseInfo({ data }) {
   return (
     <Container>
-      <h2 className={styles.headingLg}>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</h2>
       <HouseInfo houseData={data} />
       {/* <p className={styles.listItem}>has {data.house_rooms} rooms and contains {data.house_people.length} people, so has room for {data.house_rooms - data.house_people.length} more people.</p> */}
       {/* THIS IS COMMENTED OUT BECAUSE TRADES AREN'T SUPER IMPLEMENTED RIGHT NOW. TODO: Setup handling of trades here. */}

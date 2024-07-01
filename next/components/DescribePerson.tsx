@@ -74,7 +74,7 @@ function ListPersonActionsCurrent({ queryClient, personId }) {
 
   if (isLoading) return (
     <div>
-      <h3 className={styles.headingMd}>Current Action</h3>
+      <h3 className="text-xl leading-normal">Current Action</h3>
       <p>Loading...</p>
     </div>
   )
@@ -82,7 +82,7 @@ function ListPersonActionsCurrent({ queryClient, personId }) {
 
   return (
     <Container>
-      <h3 className={styles.headingMd}>Current Action</h3>
+      <h3 className="text-xl leading-normal">Current Action</h3>
       <ul className={styles.list}>
         { data.length > 0 ? 
           data.map(({ action_id, action_type_name, action_started_time_ago }) => (
@@ -113,7 +113,7 @@ function ListPersonActionsPrevious({ personId }) {
 
   if (isLoading) return (
     <div>
-      <h3 className={styles.headingMd}>Previous Actions</h3>
+      <h3 className="text-xl leading-normal">Previous Actions</h3>
       <p>Loading...</p>
     </div>
   )
@@ -122,7 +122,7 @@ function ListPersonActionsPrevious({ personId }) {
   if (data.length > 0) {
     return (
       <Container>
-        <h3 className={styles.headingMd}>Previous Actions</h3>
+        <h3 className="text-xl leading-normal">Previous Actions</h3>
         <ul className={styles.list}>
           {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
             <li className={styles.listItem} key={action_id}>
@@ -135,7 +135,7 @@ function ListPersonActionsPrevious({ personId }) {
   } else {
     return (
       <Container>
-        <h3 className={styles.headingMd}>Previous Actions</h3>
+        <h3 className="text-xl leading-normal">Previous Actions</h3>
         <ul className={styles.list}>
             <li className={styles.listItem}>
               <p>This person has no past actions initiated.</p>
@@ -186,7 +186,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
 
     return (
       <Container>
-        <h2 className={styles.headingLg}>Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <ul className={styles.list}>
           {
             data.person_proposals.length > 0 ?
@@ -284,7 +284,7 @@ function RenamePerson({ queryClient, personId }) {
 
   return (
     <Container>
-      <h2 className={styles.headingLg}>Rename Person</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Rename Person</h2>
       <ul className={styles.list}>
         <form onSubmit={handleSubmit}>
           <input
@@ -304,7 +304,7 @@ function RenamePerson({ queryClient, personId }) {
 function ListPersonInfo({ data, queryClient }) {
   return (
     <Container>
-      <h2 className={styles.headingLg}>Person Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Person Info</h2>
       <ul className={styles.list}>
         <li className={styles.listItem} key={data.person_id}>
           {
@@ -326,7 +326,7 @@ function ListPersonInfo({ data, queryClient }) {
 function ListPersonSkills({ data, queryClient }) {
   return (
     <Container>
-      <h2 className={styles.headingLg}>Skills Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Skills Info</h2>
       <p>Gatherer level: {data.person_skills_gatherer_level}.</p>
       <p>Exp to next level: {Math.pow(2, data.person_skills_gatherer_level + 1) - data.person_skills_gatherer_experience}</p>
       <p>Lumberjack level: {data.person_skills_lumberjack_level}.</p>

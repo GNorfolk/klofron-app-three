@@ -12,7 +12,7 @@ export default function ListAllHouses() {
 
   if (isLoading) return (
     <div>
-      <h2 className={styles.headingLg}>Houses</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Houses</h2>
       <p>Loading...</p>
     </div>
   )
@@ -20,7 +20,7 @@ export default function ListAllHouses() {
 
   return (
     <div>
-      <h2 className={styles.headingLg}>Houses</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Houses</h2>
       <ul className={styles.list}>
         {data.map(({ house_id, house_address, house_rooms, house_storage, house_food, house_wood }) => (
           <li className={styles.listItem} key={house_id}>
