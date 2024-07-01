@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import styles from '../../../styles/main.module.css'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { BaseLayout } from '../../../@/components/component/base-layout'
 import DescribeHouseResources from '../../../components/DescribeHouseResources'

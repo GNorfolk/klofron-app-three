@@ -1,4 +1,3 @@
-import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { useQuery, QueryClientProvider, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'

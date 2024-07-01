@@ -1,4 +1,3 @@
-import styles from '../styles/main.module.css'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'

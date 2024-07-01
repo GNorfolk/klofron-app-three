@@ -1,4 +1,3 @@
-import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"

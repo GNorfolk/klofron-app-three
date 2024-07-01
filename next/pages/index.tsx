@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { BaseLayout } from '../@/components/component/base-layout'
-import styles from '../styles/main.module.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Router from "next/router"

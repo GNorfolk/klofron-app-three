@@ -1,4 +1,3 @@
-import styles from '../styles/main.module.css'
 import { useQuery } from '@tanstack/react-query'
 
 export default function ListAllPeople() {

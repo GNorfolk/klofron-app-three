@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'

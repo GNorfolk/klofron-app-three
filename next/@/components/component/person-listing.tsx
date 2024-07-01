@@ -1,5 +1,4 @@
 import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon } from '../ui/icon'
-import styles from '../../../styles/main.module.css'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { Button } from "../ui/button"
