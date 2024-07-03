@@ -3,6 +3,10 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
+import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { Container } from '../@/components/component/container'
+import { Button } from "../@/components/ui/button"
+import { ChurchIcon } from "../@/components/ui/icon"
 
 export default function DescribeProposal({ queryClient, userId, manageOffer }) {
   const router = useRouter()
@@ -24,15 +28,18 @@ export default function DescribeProposal({ queryClient, userId, manageOffer }) {
     if (error) return <div>Failed to load</div>
 
     return (
-      <div>
-        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
-        <p>{data.proposal_person.person_name} is {data.proposal_person.person_age} years old.</p>
+      <BoxLayoutSingle>
+        <Container>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
+          <p className="m-2 text-gray-500 dark:text-gray-400">{data.proposal_person.person_name} is {data.proposal_person.person_age} years old.</p>
+        </Container>
+        <Container>
         <h2 className="text-2xl leading-snug my-4 mx-0">List Proposal Offers</h2>
         {
           data.proposal_offers.length > 0 ?
             data.proposal_offers.map(({ proposal_offer_person, proposal_offer_dowry }) => (
               <div>
-                <p>
+                <p className="m-2 text-gray-500 dark:text-gray-400">
                   Person with proposal is {data.proposal_person.person_name} who is {data.proposal_person.person_gender} and is {data.proposal_person.person_age} years old.
                   Person {data.proposal_person.person_name} will be betrothed to {proposal_offer_person.person_name} who is {proposal_offer_person.person_gender} and {proposal_offer_person.person_age} years old. 
                   They are also offering {proposal_offer_dowry.proposal_dowry_person.person_name} who is {proposal_offer_dowry.proposal_dowry_person.person_gender} and {proposal_offer_dowry.proposal_dowry_person.person_age} years old.
@@ -40,12 +47,13 @@ export default function DescribeProposal({ queryClient, userId, manageOffer }) {
               </div>
             ))
           :
-            <p>This proposal has no proposal offers.</p>
+            <p className="m-2 text-gray-500 dark:text-gray-400">This proposal has no proposal offers.</p>
         }
+        </Container>
         {
           manageOffer ? <ManagePersonProposalOffer userId={userId} queryClient={queryClient} /> : null
         }
-      </div>
+      </BoxLayoutSingle>
     )
   }
 }
@@ -98,7 +106,7 @@ function ManagePersonProposalOffer({ queryClient, userId }) {
     )
 
     return (
-      <div>
+      <Container>
         <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Offer</h2>
         {
           familyBachelors.length > 0 ?
@@ -119,9 +127,9 @@ function ManagePersonProposalOffer({ queryClient, userId }) {
               <small className="text-stone-500" id={'cm-' + router.query.person_id}></small>
             </div>
           :
-            <p>No family people are eligible to betrothe!</p>
+            <p className="m-2 text-gray-500 dark:text-gray-400">No family people are eligible to betrothe!</p>
         }
-      </div>
+      </Container>
     )
   }
 }
