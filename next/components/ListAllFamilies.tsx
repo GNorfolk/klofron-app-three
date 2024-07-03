@@ -55,7 +55,6 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
         <Container>
           <FamilyListing familyData={data} />
         </Container>
-        <br />
         <Container>
           <h2 className="p-6 text-4xl">Create Family</h2>
           <form onSubmit={handleSubmit(onSubmit)}>

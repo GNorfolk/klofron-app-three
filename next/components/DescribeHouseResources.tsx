@@ -92,7 +92,6 @@ export default function DescribeHouseResources({ queryClient, userId }) {
               <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
             ))}
           </Container>
-          <br />
           <Container>
             <h2 className="text-2xl leading-snug my-4 mx-0">Manage Resources</h2>
             {
@@ -124,7 +123,6 @@ export default function DescribeHouseResources({ queryClient, userId }) {
                 </div>
             }
           </Container>
-          <br />
           <Container>
             <h2 className="text-2xl leading-snug my-4 mx-0">Delete Resources</h2>
             <ul className="list-none p-0 m-0">

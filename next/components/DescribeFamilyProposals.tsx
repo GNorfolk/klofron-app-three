@@ -5,6 +5,8 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
+import { Button } from "../@/components/ui/button"
+import { ChurchIcon } from "../@/components/ui/icon"
 
 export default function DescribeFamilyProposals({ queryClient, userId }) {
   const router = useRouter()
@@ -59,30 +61,36 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
             {
               familyProposals.length > 0 ?
                 familyProposals.map(({ person_id, person_name, person_proposals }) => (
-                  <a href={"/person/" + person_id + "/proposal"}>
-                    <p className="m-2 text-gray-500 dark:text-gray-400">{person_name} has proposal {person_proposals[0].proposal_id}</p>
+                  <a href={"/person/" + person_id + "/proposal"} className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                    <ChurchIcon className="w-5 h-5 mr-2" />
+                    <span>{person_name} has proposal {person_proposals[0].proposal_id}</span>
                   </a>
                 ))
               :
                 <p>No proposals!</p>
             }
           </Container>
-          <br />
           <Container>
             <h2 className="text-2xl leading-snug my-4 mx-0">Manage Proposals</h2>
             {
               familyBachelors.length > 0 ?
                 <div>
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <select {...register("proposal_person_id", { required: true })}>
-                      { errors.proposal_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
-                      {
-                        familyBachelors.map(({ person_id, person_name }) => (
-                          <option value={person_id}>{person_name}</option>
-                        ))
-                      }
-                    </select>
-                    <input type="submit" />
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <select {...register("proposal_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                        { errors.proposal_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
+                        {
+                          familyBachelors.map(({ person_id, person_name }) => (
+                            <option value={person_id}>{person_name}</option>
+                          ))
+                        }
+                      </select>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+                        >Open to Proposals</Button>
+                    </div>
                   </form>
                   <small className="text-stone-500" id={'cm-' + router.query.id}></small>
                 </div>
@@ -90,7 +98,6 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
                 <p className="m-2 text-gray-500 dark:text-gray-400">No eligible bachelors!</p>
             }
           </Container>
-          <br />
           <Container>
             <h2 className="text-2xl leading-snug my-4 mx-0">List Proposal Offers</h2>
             {

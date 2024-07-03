@@ -166,7 +166,6 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
               } >Create House</Button>
               {
                 queryClient && person_actions[0]?.action_time_remaining ? <>
-                  <br />
                   <small className="text-stone-500">{person_name} is performing an action completing in {person_actions[0].action_time_remaining}. </small>
                 </> : <></>
               }

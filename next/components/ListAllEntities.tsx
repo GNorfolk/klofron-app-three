@@ -13,7 +13,6 @@ export default function ListAllEntities({ queryClient }) {
       <BoxLayout left={
         <div>
           <ListAllFamilies />
-          <br />
           <ListAllHouses />
         </div>
       } right={

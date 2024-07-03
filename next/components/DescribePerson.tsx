@@ -28,9 +28,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
         <BoxLayout left={
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
-            <br />
             <ListPersonSkills queryClient={queryClient} data={data.person_skills}/>
-            <br />
             {
               status === "authenticated" && userId == data.person_family.family_user_id ?
               <div>
@@ -43,9 +41,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
         } right={
           <div>
             <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.person_id} />
-            <br />
             <ListPersonActionsPrevious personId={router.query.person_id} />
-            <br />
             <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
           </div>
         } />

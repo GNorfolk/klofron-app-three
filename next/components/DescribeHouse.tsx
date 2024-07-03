@@ -29,12 +29,10 @@ export default function DescribeHouse({ queryClient, userId }) {
         <BoxLayout left={
           <div>
             <ListHouseInfo data={data} />
-            <br />
             {
               userId === data.house_family.family_user_id ?
               <div>
                 <CreatePerson houseId={house_id} queryClient={queryClient} />
-                <br />
                 <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
               </div>
               :
@@ -46,7 +44,6 @@ export default function DescribeHouse({ queryClient, userId }) {
         } right={
           <div>
             <ListHouseTrades data={data.house_trades} />
-            <br />
             <ListHouseResources data={data} queryClient={queryClient} userId={userId} />
           </div>
         } />

@@ -30,13 +30,11 @@ export default function DescribeFamily({ queryClient, userId }) {
           <BoxLayout left={
             <div>
               <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
-              <br />
               <ListFamilyProposals data={data} />
             </div>
           } right={
             <div>
               <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
-              <br />
               <ListFamilyTravel data={data} />
             </div>
           }/>

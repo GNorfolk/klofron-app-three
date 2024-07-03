@@ -3,6 +3,10 @@ import { useQuery, QueryClientProvider, useMutation } from '@tanstack/react-quer
 import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
+import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { Container } from '../@/components/component/container'
+import { Button } from "../@/components/ui/button"
+import { ChurchIcon } from "../@/components/ui/icon"
 
 export default function DescribePersonProposals({ userId, queryClient }) {
   const router = useRouter()
@@ -25,8 +29,10 @@ export default function DescribePersonProposals({ userId, queryClient }) {
 
     return (
       <QueryClientProvider client={queryClient}>
-        <ListPersonProposals data={data} showLink={false} queryClient={queryClient} userId={userId} />
-        <ManagePersonProposals personData={data} queryClient={queryClient} userId={userId} />
+        <BoxLayoutSingle>
+          <ListPersonProposals data={data} showLink={false} queryClient={queryClient} userId={userId} />
+          <ManagePersonProposals personData={data} queryClient={queryClient} userId={userId} />
+        </BoxLayoutSingle>
       </QueryClientProvider>
     )
   }
@@ -72,7 +78,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
     )
 
     return (
-      <div>
+      <Container>
         <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <ul className="list-none p-0 m-0">
           {
@@ -153,7 +159,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
         {
           showLink ? <p>Go to <Link href={`/person/${router.query.person_id}/proposal`}>Proposals</Link> page.</p> : null
         }
-      </div>
+      </Container>
     )
   }
 }
@@ -182,7 +188,7 @@ function ManagePersonProposals({ personData, queryClient, userId }) {
     )
 
     return (
-      <div>
+      <Container>
         <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
         <p>The following people are open to proposals.</p>
         <ul className="list-none p-0 m-0">
@@ -200,7 +206,7 @@ function ManagePersonProposals({ personData, queryClient, userId }) {
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     )
   }
 }
