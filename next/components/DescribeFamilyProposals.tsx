@@ -7,6 +7,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
+import { ProposalListingTwo } from '../@/components/component/proposal-listing'
 
 export default function DescribeFamilyProposals({ queryClient, userId }) {
   const router = useRouter()
@@ -70,6 +71,9 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
                 <p>No proposals!</p>
             }
           </Container>
+          {/* <Container>
+            <ProposalListingTwo proposalData={familyProposals} />
+          </Container> */}
           <Container>
             <h2 className="text-2xl leading-snug my-4 mx-0">Manage Proposals</h2>
             {

@@ -7,6 +7,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
+import { ProposalListingOne } from '../@/components/component/proposal-listing'
 
 export default function DescribePersonProposals({ userId, queryClient }) {
   const router = useRouter()
@@ -188,25 +189,30 @@ function ManagePersonProposals({ personData, queryClient, userId }) {
     )
 
     return (
-      <Container>
-        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
-        <p>The following people are open to proposals.</p>
-        <ul className="list-none p-0 m-0">
-          {proposals.map(({ proposal_id, proposal_person }) => (
-            <li className="mt-0 mx-0 mb-5" key={proposal_id}>
-              { personData.person_family.family_user_id === userId ?
-                <div>
-                  <Link href={"/person/" + router.query.person_id + "/proposal/" + proposal_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</Link>
-                </div>
-              :
-                <div>
-                  <p>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</p>
-                </div>
-              }
-            </li>
-          ))}
-        </ul>
-      </Container>
+      <>
+        <Container>
+          <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
+          <p>The following people are open to proposals.</p>
+          <ul className="list-none p-0 m-0">
+            {proposals.map(({ proposal_id, proposal_person }) => (
+              <li className="mt-0 mx-0 mb-5" key={proposal_id}>
+                { personData.person_family.family_user_id === userId ?
+                  <div>
+                    <Link href={"/person/" + router.query.person_id + "/proposal/" + proposal_id}>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</Link>
+                  </div>
+                :
+                  <div>
+                    <p>{proposal_person.person_name + " " + proposal_person.person_family.family_name}</p>
+                  </div>
+                }
+              </li>
+            ))}
+          </ul>
+        </Container>
+        {/* <Container>
+          <ProposalListingOne proposalData={data} />
+        </Container> */}
+      </>
     )
   }
 }

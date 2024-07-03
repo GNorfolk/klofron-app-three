@@ -7,6 +7,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
+import { ProposalListingOne } from '../@/components/component/proposal-listing'
 
 export default function DescribeProposal({ queryClient, userId, manageOffer }) {
   const router = useRouter()
@@ -53,6 +54,9 @@ export default function DescribeProposal({ queryClient, userId, manageOffer }) {
         {
           manageOffer ? <ManagePersonProposalOffer userId={userId} queryClient={queryClient} /> : null
         }
+        {/* <Container>
+          <ProposalListingOne proposalData={data} />
+        </Container> */}
       </BoxLayoutSingle>
     )
   }

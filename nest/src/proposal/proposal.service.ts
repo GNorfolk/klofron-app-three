@@ -43,6 +43,7 @@ export class ProposalService {
       .createQueryBuilder("proposal")
       .innerJoinAndSelect("proposal.proposal_person","person")
       .innerJoinAndSelect("person.person_family","family")
+      .leftJoinAndSelect("proposal.proposal_offers", "offer", "offer.accepted_at IS NULL AND offer.deleted_at IS NULL")
       .where("proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
     return await proposals.getMany();
   }
