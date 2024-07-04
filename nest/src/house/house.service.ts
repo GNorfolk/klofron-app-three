@@ -96,6 +96,7 @@ export class HouseService {
       .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
       .leftJoinAndSelect("person.person_skills", "person_skills")
+      .orderBy('person.id', 'ASC')
       .where("house.house_id = :id", { id: id })
     return await house.getOne();
   }
