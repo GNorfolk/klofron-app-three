@@ -61,7 +61,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                     </div>
                   </div>
                 </> : <>
-                  <div className="grid sm:grid-cols-2">
+                  <div className="grid grid-cols-2">
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <BriefcaseIcon className="w-5 h-5 mr-2" />
                       <span className='whitespace-nowrap'>{person_actions.length} Current Action</span>

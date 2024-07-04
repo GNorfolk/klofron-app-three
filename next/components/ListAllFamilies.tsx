@@ -59,7 +59,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
           <h2 className="p-6 text-4xl">Create Family</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <input defaultValue="familyName" {...register("family_name", { required: true })} />
-            { errors.family_name && <span>This field is required</span> }
+            { errors.family_name && <span className='whitespace-nowrap'>This field is required</span> }
             <input type="submit" />
           </form>
           <small className="" id={'cm-' + userId}></small>

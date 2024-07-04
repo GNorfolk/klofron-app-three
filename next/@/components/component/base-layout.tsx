@@ -20,27 +20,27 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
               <li>
                 <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <HomeIcon className="h-5 w-5" />
-                  <span>Home</span>
+                  <span className='whitespace-nowrap'>Home</span>
                 </a>
               </li>
               <li>
                 <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <MicroscopeIcon className="h-5 w-5" />
-                  <span>Index</span>
+                  <span className='whitespace-nowrap'>Index</span>
                 </a>
               </li>
               { status === "authenticated" ? (
                 <li>
                   <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                     <LockIcon className="h-5 w-5" />
-                    <span>Logout</span>
+                    <span className='whitespace-nowrap'>Logout</span>
                   </a>
                 </li>
               ) : (
                 <li>
                   <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                     <LockIcon className="h-5 w-5" />
-                    <span>Login</span>
+                    <span className='whitespace-nowrap'>Login</span>
                   </a>
                 </li>
               )}
@@ -73,27 +73,27 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
                   <li>
                     <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <HomeIcon className="h-5 w-5" />
-                      <span>Home</span>
+                      <span className='whitespace-nowrap'>Home</span>
                     </a>
                   </li>
                   <li>
                     <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <MicroscopeIcon className="h-5 w-5" />
-                      <span>Index</span>
+                      <span className='whitespace-nowrap'>Index</span>
                     </a>
                   </li>
                   { status === "authenticated" ? (
                     <li>
                       <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                         <LockIcon className="h-5 w-5" />
-                        <span>Logout</span>
+                        <span className='whitespace-nowrap'>Logout</span>
                       </a>
                     </li>
                   ) : (
                     <li>
                       <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                         <LockIcon className="h-5 w-5" />
-                        <span>Login</span>
+                        <span className='whitespace-nowrap'>Login</span>
                       </a>
                     </li>
                   )}

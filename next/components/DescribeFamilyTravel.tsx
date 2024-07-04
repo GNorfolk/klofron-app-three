@@ -63,10 +63,10 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
                 data.family_people.map(({ person_name, person_house_id, person_house }) => (
                   person_house_id ? <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
                     <MapPinIcon className="w-5 h-5 mr-2" />
-                    <span>{person_name} lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</span>
+                    <span className='whitespace-nowrap'>{person_name} lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</span>
                   </div> : <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
                     <MapPinIcon className="w-5 h-5 mr-2" />
-                    <span>{person_name} is unhoused.</span>
+                    <span className='whitespace-nowrap'>{person_name} is unhoused.</span>
                   </div>
                 ))
               :

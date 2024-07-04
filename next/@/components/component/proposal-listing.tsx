@@ -10,11 +10,11 @@ export function ProposalListingOne({ proposalData, accepterId = null }) {
           <div className="flex">
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <ChurchIcon className="w-5 h-5 mx-2" />
-              <span>{proposal_person.person_name + " " + proposal_person.person_family.family_name + " is open to proposals."}</span>
+              <span className='whitespace-nowrap'>{proposal_person.person_name + " " + proposal_person.person_family.family_name + " is open to proposals."}</span>
             </div>
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <ChurchIcon className="w-5 h-5 mx-2" />
-              <span>They have {proposal_offers.length} offers.</span>
+              <span className='whitespace-nowrap'>They have {proposal_offers.length} offers.</span>
             </div>
           </div>
         </a>
@@ -34,11 +34,11 @@ export function ProposalListingTwo({ proposalData, accepterId = null }) {
           <div className="flex">
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <ChurchIcon className="w-5 h-5 mx-2" />
-              <span>{person_name} is open to proposals.</span>
+              <span className='whitespace-nowrap'>{person_name} is open to proposals.</span>
             </div>
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <ChurchIcon className="w-5 h-5 mx-2" />
-              <span>They have {person_proposals.length} proposals (not offers).</span>
+              <span className='whitespace-nowrap'>They have {person_proposals.length} proposals (not offers).</span>
             </div>
           </div>
         </a>
