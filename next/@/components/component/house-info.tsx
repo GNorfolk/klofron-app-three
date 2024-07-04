@@ -3,7 +3,7 @@ import { UsersIcon, HandPlatterIcon, TreesIcon, BuildingIcon, BoxIcon, BedIcon, 
 export function HouseInfo({ houseData }) {
   return (
     <main>
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 2xl:grid-cols-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
           <BedIcon className="w-5 h-5 mr-2" />
           <span className='whitespace-nowrap'>{houseData.house_rooms} Bed</span>

@@ -6,7 +6,7 @@ import { signIn, signOut, useSession } from "next-auth/react"
 export function BaseLayout({ children } : { children: React.ReactNode }) {
   const { status, data } = useSession()
   return (
-    <div className="grid md:grid-cols-[280px_1fr] w-full min-h-screen">
+    <div className="grid md:grid-cols-[200px_1fr] w-full min-h-screen">
       <div className="bg-gray-100 dark:bg-gray-800 hidden md:block">
         <div className="flex flex-col h-full">
           <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">

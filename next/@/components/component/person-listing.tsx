@@ -46,29 +46,29 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
               <h3 className="text-xl font-semibold">{person_name} {familyName ? familyName : person_family.family_name}</h3>
               {
                 queryClient ? <>
-                  <div className="flex">
+                  <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <GrapeIcon className="w-5 h-5 mr-2" />
-                      <span>{person_skills.person_skills_gatherer_level} Gather</span>
+                      <span className='whitespace-nowrap'>{person_skills.person_skills_gatherer_level} Gatherer level</span>
                     </div>
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <TreesIcon className="w-5 h-5 mr-2" />
-                      <span>{person_skills.person_skills_lumberjack_level} Lumber</span>
+                      <span className='whitespace-nowrap'>{person_skills.person_skills_lumberjack_level} Lumberjack level</span>
                     </div>
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <HardHatIcon className="w-5 h-5 mr-2" />
-                      <span>{person_skills.person_skills_builder_level} Build</span>
+                      <span className='whitespace-nowrap'>{person_skills.person_skills_builder_level} Builder level</span>
                     </div>
                   </div>
                 </> : <>
-                  <div className="flex">
+                  <div className="grid sm:grid-cols-2">
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <BriefcaseIcon className="w-5 h-5 mr-2" />
-                      <span>{person_actions.length} Current Action</span>
+                      <span className='whitespace-nowrap'>{person_actions.length} Current Action</span>
                     </div>
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <MapPinIcon className="w-5 h-5 mr-2" />
-                      <span>{person_house?.house_address.house_address_number} {person_house?.house_address.house_address_road.house_road_name}</span>
+                      <span className='whitespace-nowrap'>{person_house?.house_address.house_address_number} {person_house?.house_address.house_address_road.house_road_name}</span>
                     </div>
                   </div>
                 </>

@@ -34,7 +34,7 @@ To read more about using these font, please visit the Next.js documentation:
 export function BoxLayout({ left, right } : { left: React.ReactNode, right: React.ReactNode }) {
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8">
         <div className="space-y-8">
           <main>{left}</main>
         </div>
