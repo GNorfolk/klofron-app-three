@@ -10,6 +10,7 @@ import { ActionModule } from './action/action.module';
 import { ProposalModule } from './proposal/proposal.module';
 import { MoveHouseModule } from './move-house/move-house.module';
 import { ProposalOfferModule } from './proposal-offer/proposal-offer.module';
+import { BetrothalModule } from './betrothal/betrothal.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProposalOfferModule } from './proposal-offer/proposal-offer.module';
     ProposalModule,
     MoveHouseModule,
     ProposalOfferModule,
+    BetrothalModule,
   ],
   controllers: [],
   providers: [],
