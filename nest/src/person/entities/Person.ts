@@ -19,6 +19,8 @@ import { Proposal } from "../../proposal/entities/Proposal";
 import { ProposalOffer } from "../../proposal-offer/entities/ProposalOffer";
 import { ProposalDowry } from "../../proposal-offer/entities/ProposalDowry";
 import { PersonSkills } from "./PersonSkills"
+import { Betrothal } from "src/betrothal/entities/Betrothal";
+import { BetrothalDowry } from "src/betrothal/entities/BetrothalDowry";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -121,6 +123,15 @@ export class Person {
 
   @OneToMany(() => ProposalDowry, (proposal_dowry) => proposal_dowry.proposal_dowry_person)
   person_proposal_dowrys: Relation<ProposalDowry>[];
+
+  @OneToMany(() => Betrothal, (betrothal) => betrothal.betrothal_proposer_person)
+  person_betrothal_proposals: Relation<Betrothal>[];
+
+  @OneToMany(() => Betrothal, (betrothal) => betrothal.betrothal_recipient_person)
+  person_betrothal_receipts: Relation<Betrothal>[];
+  
+  @OneToMany(() => BetrothalDowry, (betrothal_dowry) => betrothal_dowry.betrothal_dowry_person)
+  person_betrothal_dowrys: Relation<ProposalDowry>[];
 
   @OneToOne(() => Resource, (resource) => resource.resource_person)
   person_wood: Relation<Resource>;

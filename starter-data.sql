@@ -166,3 +166,24 @@ CREATE TABLE `proposal_dowry` (
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`person_id`) REFERENCES person(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- -- -- -- -- Betrothal -- -- -- -- --
+CREATE TABLE `betrothal` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `proposer_person_id` INT NOT NULL,
+    `recipient_person_id` INT NOT NULL,
+    `dowry_id` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `accepted_at` TIMESTAMP,
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`proposer_person_id`) REFERENCES person(`id`),
+    FOREIGN KEY (`recipient_person_id`) REFERENCES person(`id`),
+    FOREIGN KEY (`dowry_id`) REFERENCES betrothal_dowry(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `betrothal_dowry` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `accepted_at` TIMESTAMP,
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
