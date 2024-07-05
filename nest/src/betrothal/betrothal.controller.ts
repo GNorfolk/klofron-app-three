@@ -22,7 +22,7 @@ export class BetrothalController {
   }
 
   @Post()
-  async create(@Body() proposal: CreateBetrothalDto) {
-    return await this.betrothalService.create(proposal);
+  async create(@Body() betrothal: CreateBetrothalDto) {
+    return await this.betrothalService.create(betrothal);
   }
 }

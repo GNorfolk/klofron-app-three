@@ -26,14 +26,14 @@ export class Betrothal {
   betrothal_deleted_at: Date | null;
 
   @ManyToOne(() => Person, (person) => person.person_betrothal_proposals)
-  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
+  @JoinColumn([{ name: "proposer_person_id", referencedColumnName: "person_id" }])
   betrothal_proposer_person: Relation<Person>;
 
   @ManyToOne(() => Person, (person) => person.person_betrothal_receipts)
-  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
+  @JoinColumn([{ name: "recipient_person_id", referencedColumnName: "person_id" }])
   betrothal_recipient_person: Relation<Person>;
 
   @OneToOne(() => BetrothalDowry, (betrothalDowry) => betrothalDowry.betrothal_dowry_betrothal)
-  @JoinColumn([{ name: "dowry_id", referencedColumnName: "proposal_dowry_id" }])
+  @JoinColumn([{ name: "dowry_id", referencedColumnName: "betrothal_dowry_id" }])
   betrothal_dowry: Relation<BetrothalDowry>;
 }
