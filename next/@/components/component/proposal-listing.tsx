@@ -9,11 +9,11 @@ export function ProposalListingOne({ proposalData, accepterId = null }) {
         <a href={accepterId != null ? "/person/" + accepterId + "/proposal/" + proposal_id : "/person/" + proposal_person_id} className="p-6 pt-2 pb-2">
           <div className="flex">
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-              <ChurchIcon className="w-5 h-5 mx-2" />
+              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{proposal_person.person_name + " " + proposal_person.person_family.family_name + " is open to proposals."}</span>
             </div>
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-              <ChurchIcon className="w-5 h-5 mx-2" />
+              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>They have {proposal_offers.length} offers.</span>
             </div>
           </div>
@@ -33,11 +33,11 @@ export function ProposalListingTwo({ proposalData, accepterId = null }) {
         <a href={"/person/" + person_id + "/proposal"} className="">
           <div className="flex">
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-              <ChurchIcon className="w-5 h-5 mx-2" />
+              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{person_name} is open to proposals.</span>
             </div>
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-              <ChurchIcon className="w-5 h-5 mx-2" />
+              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>They have {person_proposals.length} proposals (not offers).</span>
             </div>
           </div>

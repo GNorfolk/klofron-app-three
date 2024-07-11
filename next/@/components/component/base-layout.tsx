@@ -19,27 +19,27 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
             <ul className="grid gap-1">
               <li>
                 <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <HomeIcon className="h-5 w-5" />
+                  <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
                   <span className='whitespace-nowrap'>Home</span>
                 </a>
               </li>
               <li>
                 <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <MicroscopeIcon className="h-5 w-5" />
+                  <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
                   <span className='whitespace-nowrap'>Index</span>
                 </a>
               </li>
               { status === "authenticated" ? (
                 <li>
                   <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                    <LockIcon className="h-5 w-5" />
+                    <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                     <span className='whitespace-nowrap'>Logout</span>
                   </a>
                 </li>
               ) : (
                 <li>
                   <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                    <LockIcon className="h-5 w-5" />
+                    <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                     <span className='whitespace-nowrap'>Login</span>
                   </a>
                 </li>
@@ -72,27 +72,27 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
                 <ul className="grid gap-1">
                   <li>
                     <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <HomeIcon className="h-5 w-5" />
+                      <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
                       <span className='whitespace-nowrap'>Home</span>
                     </a>
                   </li>
                   <li>
                     <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <MicroscopeIcon className="h-5 w-5" />
+                      <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
                       <span className='whitespace-nowrap'>Index</span>
                     </a>
                   </li>
                   { status === "authenticated" ? (
                     <li>
                       <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                        <LockIcon className="h-5 w-5" />
+                        <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                         <span className='whitespace-nowrap'>Logout</span>
                       </a>
                     </li>
                   ) : (
                     <li>
                       <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                        <LockIcon className="h-5 w-5" />
+                        <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                         <span className='whitespace-nowrap'>Login</span>
                       </a>
                     </li>

@@ -63,7 +63,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
               familyProposals.length > 0 ?
                 familyProposals.map(({ person_id, person_name, person_proposals }) => (
                   <a href={"/person/" + person_id + "/proposal"} className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
-                    <ChurchIcon className="w-5 h-5 mr-2" />
+                    <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
                     <span className='whitespace-nowrap'>{person_name} has proposal {person_proposals[0].proposal_id}</span>
                   </a>
                 ))
