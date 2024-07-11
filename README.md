@@ -160,16 +160,16 @@ watch -n5 ENV=local node consumer.js
 
 **How to backup and restore DB:**
 ```bash
-mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2024-06-21.sql
-sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2024-06-21.sql
-sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2024-06-21.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-06-21.sql
-sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2024-06-21.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-06-21.sql
-sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' dump-2024-06-21.sql
-aws s3 cp dump-2024-06-21.sql s3://ka3-db-dumps
-aws s3 cp s3://ka3-db-dumps/dump-2024-06-21.sql .
-mysql -u root -p ka3 < dump-2024-06-21.sql
+mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2024-07-12.sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2024-07-12.sql
+sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2024-07-12.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-07-12.sql
+sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2024-07-12.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2024-07-12.sql
+sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' dump-2024-07-12.sql
+aws s3 cp dump-2024-07-12.sql s3://ka3-db-dumps
+aws s3 cp s3://ka3-db-dumps/dump-2024-07-12.sql .
+mysql -u root -p ka3 < dump-2024-07-12.sql
 ```
 
 **How to generate NestJS resource:**
@@ -190,33 +190,6 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 
 # MySQL
 ```sql
-CREATE TABLE `action_queue` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `betrothal_dowry` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `betrothal` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `proposer_person_id` INT NOT NULL,
-    `recipient_person_id` INT NOT NULL,
-    `dowry_id` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`proposer_person_id`) REFERENCES person(`id`),
-    FOREIGN KEY (`recipient_person_id`) REFERENCES person(`id`),
-    FOREIGN KEY (`dowry_id`) REFERENCES betrothal_dowry(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 # save
