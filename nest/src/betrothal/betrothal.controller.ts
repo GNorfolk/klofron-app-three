@@ -21,8 +21,8 @@ export class BetrothalController {
     return await this.betrothalService.findOne(+id);
   }
 
-  @Post()
-  async create(@Body() betrothal: CreateBetrothalDto) {
-    return await this.betrothalService.create(betrothal);
+  @Patch(':id')
+  async update(@Param('id') betrothalId: string, @Body() body: any) {
+    return await this.betrothalService.update(+betrothalId, body.accepter_person_id);
   }
 }
