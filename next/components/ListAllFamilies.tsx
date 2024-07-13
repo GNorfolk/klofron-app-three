@@ -6,6 +6,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 import { FamilyListing } from '../@/components/component/family-listing'
+import { Button } from "../@/components/ui/button"
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
   const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
@@ -57,10 +58,16 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
         </Container>
         <Container>
           <h2 className="p-6 text-4xl">Create Family</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <input defaultValue="familyName" {...register("family_name", { required: true })} />
-            { errors.family_name && <span className='whitespace-nowrap'>This field is required</span> }
-            <input type="submit" />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input defaultValue="familyName" {...register("family_name", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />
+              { errors.family_name && <span className='whitespace-nowrap'>This field is required</span> }
+              <Button
+                size="sm"
+                variant="ghost"
+                className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+              >Create Family</Button>
+            </div>
           </form>
           <small className="" id={'cm-' + userId}></small>
         </Container>
