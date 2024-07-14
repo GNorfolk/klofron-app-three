@@ -8,6 +8,7 @@ import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person-listing'
 import { HouseListing } from '../@/components/component/house-listing'
+import { BetrothalInfo } from '../@/components/component/betrothal-listing'
 
 export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()
@@ -32,6 +33,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
             {
               status === "authenticated" && userId == data.person_family.family_user_id ?
               <div>
+                <ListPersonBetrothals data={data} />
                 <ListPersonProposals data={data} userId={userId} showOffers={false} queryClient={queryClient} />
               </div>
               :
@@ -261,6 +263,17 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
         {
           showLink ? <p>Go to <Link href={`/person/${router.query.person_id}/proposal`}>Proposals</Link> page.</p> : null
         }
+      </Container>
+    )
+  }
+}
+
+function ListPersonBetrothals({ data }) {
+  const router = useRouter()
+  if (router.isReady) {
+    return (
+      <Container>
+        <BetrothalInfo personInfo={data} />
       </Container>
     )
   }

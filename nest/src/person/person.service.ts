@@ -211,6 +211,10 @@ export class PersonService {
       .leftJoinAndSelect("offer.proposal_offer_person", "offer_person")
       .leftJoinAndSelect("offer.proposal_offer_dowry", "dowry")
       .leftJoinAndSelect("dowry.proposal_dowry_person", "dowry_person")
+      .leftJoinAndSelect("person.person_betrothal_receipts", "betrothal", "betrothal.accepted_at IS NULL AND betrothal.deleted_at IS NULL")
+      .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
+      .leftJoinAndSelect("betrothal.betrothal_dowry", "betrothal_dowry")
+      .leftJoinAndSelect("betrothal_dowry.betrothal_dowry_person", "betrothal_dowry_person")
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
   }

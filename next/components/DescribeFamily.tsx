@@ -30,7 +30,7 @@ export default function DescribeFamily({ queryClient, userId }) {
           <BoxLayout left={
             <div>
               <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
-              <ListFamilyProposals data={data} />
+              <ListFamilyBetrothals data={data} />
             </div>
           } right={
             <div>
@@ -171,17 +171,17 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
   }
 }
 
-function ListFamilyProposals({ data }) {
+function ListFamilyBetrothals({ data }) {
   const router = useRouter()
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Proposal Info</h2>
+        <h2 className="p-6 text-4xl">Betrothal Info</h2>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.id}/proposal`) }
-        >Go to Proposal Management page.</Button>
+          onClick={ () => router.push(`/family/${router.query.id}/betrothal`) }
+        >Go to Betrothal Management page.</Button>
       </Container>
     )
   }
