@@ -1,3 +1,5 @@
+import { useForm, SubmitHandler } from "react-hook-form"
+import axios from 'axios'
 import { ChurchIcon } from '../ui/icon'
 
 export function BetrothalInfo({ personInfo }) {
@@ -81,22 +83,69 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
   )
 }
 
-export function BetrothalCreation({ peopleData, familyId }) {
-  const bachelors = [peopleData]
+export function BetrothalCreation({ peopleData, familyId, personId, queryClient }) {
+  const familyBachelors = peopleData.filter(ppl =>
+    ppl.person_age >= 18 && ppl.person_partner_id === null && ppl.person_id != personId
+  )
+
+  type Inputs = {
+    betrothal_proposer_person_id: number
+    betrothal_dowry_person_id: number
+  }
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>()
+
+  const onSubmit: SubmitHandler<Inputs> = (formData) => {
+    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer', {
+      betrothal_person_id: personId,
+      betrothal_proposal_id: formData.betrothal_proposer_person_id,
+      proposal_dowry_person_id: formData.betrothal_dowry_person_id
+    }).then(response => {
+      queryClient.invalidateQueries()
+      document.getElementById("cm-" + personId).innerText = ' '
+    }).catch(error => {
+      document.getElementById("cm-" + personId).innerText = error.response.data.message
+    })
+  }
+
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Eligible Info</h2>
-      { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
-        <a href={"/person/" + person_id} className="p-6 pt-2 pb-2">
-          <div className="flex">
-            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
-              <span className='whitespace-nowrap'>{person_name} {person_family.family_name} is {person_gender} and {person_age} years old.</span>
-            </div>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Creation</h2>
+      {
+        familyBachelors.length > 0 ?
+          <div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <select {...register("betrothal_proposer_person_id", { required: true })}>
+              {
+                errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
+              }
+              {
+                familyBachelors.map(({ person_id, person_name }) => (
+                  <option value={person_id}>{person_name}</option>
+                ))
+              }
+              </select>
+              <select {...register("betrothal_dowry_person_id", { required: true })}>
+              {
+                errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
+              }
+              {
+                familyBachelors.map(({ person_id, person_name }) => (
+                  <option value={person_id}>{person_name}</option>
+                ))
+              }
+              </select>
+              <input type="submit" />
+            </form>
+            <small className="text-stone-500" id={'cm-' + personId}></small>
           </div>
-        </a>
-      )) :
-      <p className="m-2 text-gray-500 dark:text-gray-400">Nobody is eligible for betrothal!</p>
+        :
+          <p className="m-2 text-gray-500 dark:text-gray-400">No family people are eligible to betrothe!</p>
       }
     </main>
   )

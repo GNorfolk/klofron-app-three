@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BaseLayout } from '../../../../@/components/component/base-layout'
-import CreateFamilyBetrothals from '../../../../components/CreateFamilyBetrothals'
+import CreateBetrothal from '../../../../components/CreateBetrothal'
 import { useSession } from 'next-auth/react'
 
 export default function Family({ client }) {
@@ -11,7 +11,7 @@ export default function Family({ client }) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>
-        <CreateFamilyBetrothals userId={userId} queryClient={client} />
+        <CreateBetrothal userId={userId} queryClient={client} />
       </QueryClientProvider>
     <div className="mt-12 mx-0 mb-0">
       <Link href="/">← Back to home</Link>
