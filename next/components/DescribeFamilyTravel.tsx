@@ -11,9 +11,9 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyTravelData' + router.query.id],
+      queryKey: ['familyTravelData' + router.query.family_id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.family_id).then(
           (res) => res.json(),
         ),
     })
@@ -36,12 +36,12 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
           house_id: formData.house_id
         }).then(response => {
           queryClient.invalidateQueries()
-          document.getElementById("cm-" + router.query.id).innerText = ' '
+          document.getElementById("cm-" + router.query.family_id).innerText = ' '
         }).catch(error => {
-          document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
+          document.getElementById("cm-" + router.query.family_id).innerText = error.response.data.message
         })
       } else {
-        document.getElementById("cm-" + router.query.id).innerText = 'CustomError: The Person field is required'
+        document.getElementById("cm-" + router.query.family_id).innerText = 'CustomError: The Person field is required'
       }
     }
 
@@ -82,7 +82,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <select {...register("person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
-                        { errors.person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
+                        { errors.person_id ? document.getElementById("cm-" + router.query.family_id).innerText = "The Person field is required" : null }
                         { data.family_people.map(({ person_id, person_name }) => (
                           <option value={person_id}>{person_name}</option>
                         ))}
@@ -100,7 +100,7 @@ export default function DescribeFamilyTravel({ queryClient, userId }) {
                       Submit
                     </Button>
                   </form>
-                  <small className="text-stone-500" id={'cm-' + router.query.id}></small>
+                  <small className="text-stone-500" id={'cm-' + router.query.family_id}></small>
                 </div>
               :
                 <div>

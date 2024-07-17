@@ -10,7 +10,7 @@ export default function CreateFamilyBetrothals({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['createFamilyBetrothalsData' + router.query.id],
+      queryKey: ['createFamilyBetrothalsData' + router.query.family_id],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person').then(
           (res) => res.json(),

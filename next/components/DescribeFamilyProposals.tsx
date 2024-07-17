@@ -13,9 +13,9 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyProposalData' + router.query.id],
+      queryKey: ['familyProposalData' + router.query.family_id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.family_id).then(
           (res) => res.json(),
         ),
     })
@@ -36,9 +36,9 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
         proposal_person_id: formData.proposal_person_id
       }).then(response => {
         queryClient.invalidateQueries()
-        document.getElementById("cm-" + router.query.id).innerText = ' '
+        document.getElementById("cm-" + router.query.family_id).innerText = ' '
       }).catch(error => {
-        document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
+        document.getElementById("cm-" + router.query.family_id).innerText = error.response.data.message
       })
     }
 
@@ -82,7 +82,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <select {...register("proposal_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
-                        { errors.proposal_person_id ? document.getElementById("cm-" + router.query.id).innerText = "The Person field is required" : null }
+                        { errors.proposal_person_id ? document.getElementById("cm-" + router.query.family_id).innerText = "The Person field is required" : null }
                         {
                           familyBachelors.map(({ person_id, person_name }) => (
                             <option value={person_id}>{person_name}</option>
@@ -96,7 +96,7 @@ export default function DescribeFamilyProposals({ queryClient, userId }) {
                         >Open to Proposals</Button>
                     </div>
                   </form>
-                  <small className="text-stone-500" id={'cm-' + router.query.id}></small>
+                  <small className="text-stone-500" id={'cm-' + router.query.family_id}></small>
                 </div>
               :
                 <p className="m-2 text-gray-500 dark:text-gray-400">No eligible bachelors!</p>

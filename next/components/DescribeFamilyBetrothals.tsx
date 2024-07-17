@@ -10,9 +10,9 @@ export default function DescribeFamilyBetrothals({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyProposalData' + router.query.id],
+      queryKey: ['familyProposalData' + router.query.family_id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.family_id).then(
           (res) => res.json(),
         ),
     })

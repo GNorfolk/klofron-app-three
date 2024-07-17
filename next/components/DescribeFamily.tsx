@@ -13,9 +13,9 @@ export default function DescribeFamily({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyData' + router.query.id],
+      queryKey: ['familyData' + router.query.family_id],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.id).then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.family_id).then(
           (res) => res.json(),
         ),
     })
@@ -29,14 +29,14 @@ export default function DescribeFamily({ queryClient, userId }) {
           <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
           <BoxLayout left={
             <div>
-              <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+              <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={true} />
               <ListFamilyTravel data={data} />
               <ListFamilyBetrothals data={data} />
               <CreateFamilyBetrothals data={data} />
             </div>
           } right={
             <div>
-              <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+              <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={true} />
             </div>
           }/>
         </QueryClientProvider>
@@ -46,9 +46,9 @@ export default function DescribeFamily({ queryClient, userId }) {
         <QueryClientProvider client={queryClient}>
           <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
           <BoxLayout left={
-            <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
+            <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={false} />
           } right={
-            <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={false} />
+            <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={false} />
           } />
         </QueryClientProvider>
       )
@@ -181,7 +181,7 @@ function ListFamilyBetrothals({ data }) {
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.id}/betrothal-listing`) }
+          onClick={ () => router.push(`/family/${router.query.family_id}/betrothal-listing`) }
         >Go to Betrothal Listing page.</Button>
       </Container>
     )
@@ -197,7 +197,7 @@ function CreateFamilyBetrothals({ data }) {
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.id}/betrothal-create`) }
+          onClick={ () => router.push(`/family/${router.query.family_id}/betrothal-create`) }
         >Go to Betrothal Creation page.</Button>
       </Container>
     )
@@ -213,7 +213,7 @@ function ListFamilyTravel({ data }) {
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.id}/travel`) }
+          onClick={ () => router.push(`/family/${router.query.family_id}/travel`) }
         >Go to Travel Management page.</Button>
       </Container>
     )
