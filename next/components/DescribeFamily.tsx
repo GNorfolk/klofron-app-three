@@ -31,6 +31,7 @@ export default function DescribeFamily({ queryClient, userId }) {
             <div>
               <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
               <ListFamilyBetrothals data={data} />
+              <CreateFamilyBetrothals data={data} />
             </div>
           } right={
             <div>
@@ -176,12 +177,28 @@ function ListFamilyBetrothals({ data }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Betrothal Info</h2>
+        <h2 className="p-6 text-4xl">Betrothal Listing</h2>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.id}/betrothal`) }
-        >Go to Betrothal Management page.</Button>
+          onClick={ () => router.push(`/family/${router.query.id}/betrothal-listing`) }
+        >Go to Betrothal Listing page.</Button>
+      </Container>
+    )
+  }
+}
+
+function CreateFamilyBetrothals({ data }) {
+  const router = useRouter()
+  if (router.isReady) {
+    return (
+      <Container>
+        <h2 className="p-6 text-4xl">Betrothal Creation</h2>
+        <Button size="sm"
+          variant="ghost"
+          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          onClick={ () => router.push(`/family/${router.query.id}/betrothal-create`) }
+        >Go to Betrothal Creation page.</Button>
       </Container>
     )
   }
