@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
-import { PersonListing } from '../@/components/component/person-listing'
+import { PersonListing } from '../@/components/component/person'
 
 export default function ListAllPeople() {
   const { isLoading, error, data } = useQuery({

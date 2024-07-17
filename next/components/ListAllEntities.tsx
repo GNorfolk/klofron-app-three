@@ -2,10 +2,10 @@ import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-quer
 import Link from 'next/link'
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { FamilyListing } from '../@/components/component/family-listing'
-import { PersonListing } from '../@/components/component/person-listing'
+import { FamilyListing } from '../@/components/component/family'
+import { PersonListing } from '../@/components/component/person'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
-import { HouseListing } from '../@/components/component/house-listing'
+import { HouseListing } from '../@/components/component/house'
 
 export default function ListAllEntities({ queryClient }) {
   return (

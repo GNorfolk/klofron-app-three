@@ -6,9 +6,9 @@ import { FormEventHandler, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { PersonListing } from '../@/components/component/person-listing'
-import { HouseListing } from '../@/components/component/house-listing'
-import { BetrothalInfo } from '../@/components/component/betrothal-listing'
+import { PersonListing } from '../@/components/component/person'
+import { HouseListing } from '../@/components/component/house'
+import { BetrothalInfo } from '../@/components/component/betrothal'
 
 export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()

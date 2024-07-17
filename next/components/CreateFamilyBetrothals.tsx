@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
-import { BetrothalCreation } from '../@/components/component/betrothal-listing'
+import { BetrothalCreation } from '../@/components/component/betrothal'
 
 export default function CreateFamilyBetrothals({ queryClient, userId }) {
   const router = useRouter()

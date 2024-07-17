@@ -3,7 +3,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
-import { ProposalListingOne } from '../@/components/component/proposal-listing'
+import { ProposalListingOne } from '../@/components/component/proposal'
 
 export default function ListAllProposals() {
   const { isLoading, error, data } = useQuery({

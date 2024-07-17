@@ -5,8 +5,8 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { PersonListing } from '../@/components/component/person-listing'
-import { HouseListing } from '../@/components/component/house-listing'
+import { PersonListing } from '../@/components/component/person'
+import { HouseListing } from '../@/components/component/house'
 import { Button } from "../@/components/ui/button"
 
 export default function DescribeFamily({ queryClient, userId }) {

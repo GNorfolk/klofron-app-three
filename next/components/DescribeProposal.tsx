@@ -7,7 +7,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
-import { ProposalListingOne } from '../@/components/component/proposal-listing'
+import { ProposalListingOne } from '../@/components/component/proposal'
 
 export default function DescribeProposal({ queryClient, userId, manageOffer }) {
   const router = useRouter()

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
 import { Container } from '../@/components/component/container'
-import { HouseListing } from '../@/components/component/house-listing'
+import { HouseListing } from '../@/components/component/house'
 
 export default function ListAllHouses() {
   const { isLoading, error, data } = useQuery({

@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { Button } from "../@/components/ui/button"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { HouseInfo } from '../@/components/component/house-info'
-import { PersonListing } from '../@/components/component/person-listing'
+import { HouseInfo } from '../@/components/component/house'
+import { PersonListing } from '../@/components/component/person'
 
 export default function DescribeHouse({ queryClient, userId }) {
   const router = useRouter()
