@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
-import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"

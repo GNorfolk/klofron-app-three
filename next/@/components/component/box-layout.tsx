@@ -45,3 +45,11 @@ export function BoxLayout({ left, right } : { left: React.ReactNode, right: Reac
     </div>
   )
 }
+
+export function BoxLayoutSingle({ children } : { children: React.ReactNode }) {
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <main>{children}</main>
+    </div>
+  )
+}

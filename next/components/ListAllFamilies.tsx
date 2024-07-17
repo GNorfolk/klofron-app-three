@@ -2,7 +2,7 @@ import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-quer
 import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
-import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 import { FamilyListing } from '../@/components/component/family'

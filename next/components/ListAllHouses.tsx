@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { BoxLayoutSingle } from '../@/components/component/box-layout-single'
+import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { HouseListing } from '../@/components/component/house'
 
