@@ -66,7 +66,7 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
     <main>
       <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Eligible Info</h2>
       { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
-        <a href={"betrothal/" + person_id} className="p-6 pt-2 pb-2">
+        <a href={person_id} className="p-6 pt-2 pb-2">
           <div className="flex">
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />

@@ -181,7 +181,7 @@ function ListFamilyBetrothals({ data }) {
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.family_id}/betrothal-listing`) }
+          onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/list`) }
         >Go to Betrothal Listing page.</Button>
       </Container>
     )
@@ -197,7 +197,7 @@ function CreateFamilyBetrothals({ data }) {
         <Button size="sm"
           variant="ghost"
           className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
-          onClick={ () => router.push(`/family/${router.query.family_id}/betrothal-create`) }
+          onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/create`) }
         >Go to Betrothal Creation page.</Button>
       </Container>
     )
