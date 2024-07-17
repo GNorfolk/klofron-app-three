@@ -28,7 +28,7 @@ export default function CreateFamilyBetrothals({ queryClient, userId }) {
     return (
       <BoxLayoutSingle>
         <Container>
-          <BetrothalCreation peopleData={data} />
+          <BetrothalCreation peopleData={data} familyId={router.query.family_id} />
         </Container>
       </BoxLayoutSingle>
     )

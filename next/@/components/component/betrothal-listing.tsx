@@ -58,9 +58,9 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
   )
 }
 
-export function BetrothalCreation({ peopleData }) {
+export function BetrothalCreation({ peopleData, familyId }) {
   const bachelors = peopleData.filter(
-    ppl => ppl.person_age >= 18 && ppl.person_partner_id === null
+    ppl => ppl.person_age >= 18 && ppl.person_partner_id == null && ppl.person_family_id != familyId
   )
   return (
     <main>
