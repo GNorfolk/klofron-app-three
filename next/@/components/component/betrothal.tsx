@@ -58,10 +58,31 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
   )
 }
 
-export function BetrothalCreation({ peopleData, familyId }) {
+export function BetrothalCreationListing({ peopleData, familyId }) {
   const bachelors = peopleData.filter(
     ppl => ppl.person_age >= 18 && ppl.person_partner_id == null && ppl.person_family_id != familyId
   )
+  return (
+    <main>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Eligible Info</h2>
+      { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
+        <a href={"betrothal/" + person_id} className="p-6 pt-2 pb-2">
+          <div className="flex">
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
+              <span className='whitespace-nowrap'>{person_name} {person_family.family_name} is {person_gender} and {person_age} years old.</span>
+            </div>
+          </div>
+        </a>
+      )) :
+      <p className="m-2 text-gray-500 dark:text-gray-400">Nobody is eligible for betrothal!</p>
+      }
+    </main>
+  )
+}
+
+export function BetrothalCreation({ peopleData, familyId }) {
+  const bachelors = [peopleData]
   return (
     <main>
       <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Eligible Info</h2>

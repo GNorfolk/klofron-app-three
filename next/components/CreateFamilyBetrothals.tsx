@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { BetrothalCreation } from '../@/components/component/betrothal'
+import { BetrothalCreationListing } from '../@/components/component/betrothal'
 
 export default function CreateFamilyBetrothals({ queryClient, userId }) {
   const router = useRouter()
@@ -28,7 +28,7 @@ export default function CreateFamilyBetrothals({ queryClient, userId }) {
     return (
       <BoxLayoutSingle>
         <Container>
-          <BetrothalCreation peopleData={data} familyId={router.query.family_id} />
+          <BetrothalCreationListing peopleData={data} familyId={router.query.family_id} />
         </Container>
       </BoxLayoutSingle>
     )
