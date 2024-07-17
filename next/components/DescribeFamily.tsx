@@ -29,14 +29,14 @@ export default function DescribeFamily({ queryClient, userId }) {
           <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
           <BoxLayout left={
             <div>
-              <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+              <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
+              <ListFamilyTravel data={data} />
               <ListFamilyBetrothals data={data} />
               <CreateFamilyBetrothals data={data} />
             </div>
           } right={
             <div>
-              <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
-              <ListFamilyTravel data={data} />
+              <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.id} unnamedBoolean={true} />
             </div>
           }/>
         </QueryClientProvider>
