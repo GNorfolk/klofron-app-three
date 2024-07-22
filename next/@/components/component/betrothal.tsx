@@ -190,13 +190,13 @@ export function BetrothalRecieptResponse({ data, queryClient = null }) {
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
-    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/betrothal/' + formData.betrothal_id, {
+    axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/betrothal/' + formData.betrothal_id, {
       accepter_person_id: formData.accepter_person_id
     }).then(response => {
       queryClient.invalidateQueries()
       document.getElementById("cm-" + data.person_id).innerText = ' '
     }).catch(error => {
-      document.getElementById("cm-" + data.person_id).innerText = error.response.data.message
+      document.getElementById("cm-" + data.person_id).innerText = "error.response.data.message"
     })
   }
 

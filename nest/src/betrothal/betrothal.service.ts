@@ -136,6 +136,8 @@ export class BetrothalService {
       const selected = await queryRunner.manager
         .createQueryBuilder(Betrothal, "betrothal")
         .leftJoinAndSelect("betrothal.betrothal_dowry", "dowry")
+        .leftJoinAndSelect("betrothal.betrothal_recipient_person", "recipient_person")
+        .leftJoinAndSelect("recipient_person.person_betrothal_receipts", "person_betrothal_receipts")
         .where("betrothal.betrothal_id = :id", { id: betrothalId })
         .getOne()
       const people = await Promise.all([
