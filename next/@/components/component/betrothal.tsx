@@ -89,6 +89,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient 
   )
 
   type Inputs = {
+    betrothal_recipient_person_id: number
     betrothal_proposer_person_id: number
     betrothal_dowry_person_id: number
   }
@@ -101,10 +102,10 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient 
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
-    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/proposal-offer', {
-      betrothal_person_id: personId,
-      betrothal_proposal_id: formData.betrothal_proposer_person_id,
-      proposal_dowry_person_id: formData.betrothal_dowry_person_id
+    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/betrothal', {
+      betrothal_recipient_person_id: personId,
+      betrothal_proposer_person_id: formData.betrothal_proposer_person_id,
+      betrothal_dowry_person_id: formData.betrothal_dowry_person_id
     }).then(response => {
       queryClient.invalidateQueries()
       document.getElementById("cm-" + personId).innerText = ' '

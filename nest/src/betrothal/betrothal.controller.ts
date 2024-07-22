@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BetrothalService } from './betrothal.service';
 import { CreateBetrothalDto } from './dto/create-betrothal.dto';
+import { CreateBetrothalDowryDto } from './dto/create-betrothal-dowry.dto';
 import { UpdateBetrothalDto } from './dto/update-betrothal.dto';
 import { Betrothal } from './entities/Betrothal';
 
@@ -10,6 +11,11 @@ import { Betrothal } from './entities/Betrothal';
 })
 export class BetrothalController {
   constructor(private readonly betrothalService: BetrothalService) {}
+
+  @Post()
+  async create(@Body() createBetrothalDto: CreateBetrothalDto, @Body() createBetrothalDowryDto: CreateBetrothalDowryDto, ) {
+    return await this.betrothalService.create(createBetrothalDto, createBetrothalDowryDto);
+  }
 
   @Get()
   async findAll(): Promise<Betrothal[]> {
