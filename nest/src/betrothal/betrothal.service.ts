@@ -130,7 +130,6 @@ export class BetrothalService {
 
   async update(betrothalId: number, accepterPersonId: number) {
     const queryRunner = this.dataSource.createQueryRunner();
-    let result
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
@@ -278,7 +277,7 @@ export class BetrothalService {
       }
       await queryRunner.commitTransaction();
       await queryRunner.release();
-      return result
+      return selected
     } catch (err) {
       console.log(err)
       await queryRunner.rollbackTransaction();

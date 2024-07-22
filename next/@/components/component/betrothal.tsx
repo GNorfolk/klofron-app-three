@@ -211,7 +211,7 @@ export function BetrothalReciepts({ receipts }) {
   )
 }
 
-export function BetrothalRecieptResponse({ data, queryClient = null }) {
+export function BetrothalRecieptResponse({ data, queryClient }) {
   const familyBachelors = data.person_family.family_people.filter(ppl =>
     ppl.person_age >= 18 && ppl.person_partner_id === null && ppl.person_id != data.person_id
   )
@@ -235,7 +235,7 @@ export function BetrothalRecieptResponse({ data, queryClient = null }) {
       queryClient.invalidateQueries()
       document.getElementById("cm-" + data.person_id).innerText = ' '
     }).catch(error => {
-      document.getElementById("cm-" + data.person_id).innerText = "error.response.data.message"
+      document.getElementById("cm-" + data.person_id).innerText = error.response.data.message
     })
   }
 
@@ -245,28 +245,34 @@ export function BetrothalRecieptResponse({ data, queryClient = null }) {
       {
         data.person_betrothal_receipts.length > 0 && familyBachelors.length > 0 ?
           <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <select {...register("betrothal_id", { required: true })}>
-              {
-                errors.betrothal_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
-              }
-              {
-                data.person_betrothal_receipts.map(({ betrothal_id, betrothal_proposer_person, betrothal_dowry }) => (
-                  <option value={betrothal_id}>{betrothal_proposer_person.person_name} {betrothal_proposer_person.person_family.family_name} / {betrothal_dowry.betrothal_dowry_person.person_name} {betrothal_dowry.betrothal_dowry_person.person_family.family_name}</option>
-                ))
-              }
-              </select>
-              <select {...register("accepter_person_id", { required: true })}>
-              {
-                errors.accepter_person_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
-              }
-              {
-                familyBachelors.map(({ person_id, person_name }) => (
-                  <option value={person_id}>{person_name} {data.person_family.family_name}</option>
-                ))
-              }
-              </select>
-              <input type="submit" />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <select {...register("betrothal_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                  {
+                    errors.betrothal_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
+                  }
+                  <option selected disabled>Select a betrothal proposer / dowry person combo</option>
+                  {
+                    data.person_betrothal_receipts.map(({ betrothal_id, betrothal_proposer_person, betrothal_dowry }) => (
+                      <option value={betrothal_id}>{betrothal_proposer_person.person_name} {betrothal_proposer_person.person_family.family_name} / {betrothal_dowry.betrothal_dowry_person.person_name} {betrothal_dowry.betrothal_dowry_person.person_family.family_name}</option>
+                    ))
+                  }
+                </select>
+                <select {...register("accepter_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                  {
+                    errors.accepter_person_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
+                  }
+                  <option selected disabled>Select a betrothal acceptor person</option>
+                  {
+                    familyBachelors.map(({ person_id, person_name }) => (
+                      <option value={person_id}>{person_name} {data.person_family.family_name}</option>
+                    ))
+                  }
+                </select>
+              </div>
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
             </form>
             <small className="text-stone-500" id={'cm-' + data.person_id}></small>
           </div>

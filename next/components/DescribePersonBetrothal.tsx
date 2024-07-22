@@ -35,7 +35,7 @@ export default function DescribePersonBetrothal({ userId, queryClient }) {
           {/* <ListPersonProposals data={data} showLink={false} queryClient={queryClient} userId={userId} /> */}
           {/* <ManagePersonProposals personData={data} queryClient={queryClient} userId={userId} /> */}
           <ListPersonBetrothalReceipts data={data} />
-          <PersonBetrothalReceiptResponse data={data} />
+          <PersonBetrothalReceiptResponse data={data} queryClient={queryClient} />
         </BoxLayoutSingle>
       </QueryClientProvider>
     )
@@ -53,12 +53,12 @@ function ListPersonBetrothalReceipts({ data }) {
   }
 }
 
-function PersonBetrothalReceiptResponse({ data }) {
+function PersonBetrothalReceiptResponse({ data, queryClient }) {
   const router = useRouter()
   if (router.isReady) {
     return (
       <Container>
-        <BetrothalRecieptResponse data={data} />
+        <BetrothalRecieptResponse data={data} queryClient={queryClient} />
       </Container>
     )
   }
