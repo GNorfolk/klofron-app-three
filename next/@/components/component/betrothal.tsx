@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
-import { ChurchIcon } from '../ui/icon'
+import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/icon'
 
 export function BetrothalInfo({ personInfo }) {
   return (
@@ -11,6 +11,38 @@ export function BetrothalInfo({ personInfo }) {
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{personInfo.person_name} has {personInfo.person_betrothal_receipts.length} betrothals.</span>
+            </div>
+          </div>
+        </a>
+    </main>
+  )
+}
+
+export function BetrothalPersonInfo({ personInfo }) {
+  return (
+    <main>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
+        <a href={"/person/" + personInfo.person_id + "/betrothal"} className="p-6 pt-2 pb-2">
+          <div className="grid grid-cols-1">
+            <div className="grid grid-cols-1">
+              <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                <UserIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                <span>{personInfo.person_name} {personInfo.person_family.family_name} is a {personInfo.person_age} year old {personInfo.person_gender}.</span>
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+              <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                <GrapeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_gatherer_level} Gatherer level</span>
+              </div>
+              <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_lumberjack_level} Lumberjack level</span>
+              </div>
+              <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                <HardHatIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_builder_level} Builder level</span>
+              </div>
             </div>
           </div>
         </a>
