@@ -1,6 +1,7 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/icon'
+import { Button } from "../ui/button"
 
 export function BetrothalInfo({ personInfo }) {
   return (
@@ -115,7 +116,7 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
   )
 }
 
-export function BetrothalCreation({ peopleData, familyId, personId, queryClient }) {
+export function BetrothalCreation({ peopleData, familyId, personId, queryClient, familyName }) {
   const familyBachelors = peopleData.filter(ppl =>
     ppl.person_age >= 18 && ppl.person_partner_id === null && ppl.person_id != personId
   )
@@ -152,28 +153,32 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient 
       {
         familyBachelors.length > 0 ?
           <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <select {...register("betrothal_proposer_person_id", { required: true })}>
-              {
-                errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
-              }
-              {
-                familyBachelors.map(({ person_id, person_name }) => (
-                  <option value={person_id}>{person_name}</option>
-                ))
-              }
-              </select>
-              <select {...register("betrothal_dowry_person_id", { required: true })}>
-              {
-                errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
-              }
-              {
-                familyBachelors.map(({ person_id, person_name }) => (
-                  <option value={person_id}>{person_name}</option>
-                ))
-              }
-              </select>
-              <input type="submit" />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <select {...register("betrothal_proposer_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                {
+                  errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
+                }
+                {
+                  familyBachelors.map(({ person_id, person_name }) => (
+                    <option value={person_id}>{person_name} {familyName}</option>
+                  ))
+                }
+                </select>
+                <select {...register("betrothal_dowry_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                {
+                  errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
+                }
+                {
+                  familyBachelors.map(({ person_id, person_name }) => (
+                    <option value={person_id}>{person_name} {familyName}</option>
+                  ))
+                }
+                </select>
+              </div>
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
             </form>
             <small className="text-stone-500" id={'cm-' + personId}></small>
           </div>

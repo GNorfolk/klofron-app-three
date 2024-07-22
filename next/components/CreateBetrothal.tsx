@@ -64,7 +64,7 @@ export function CreateBetrothalForm({ familyId, personId, queryClient }) {
 
   return (
     <Container>
-      <BetrothalCreation peopleData={data.family_people} familyId={familyId} personId={personId} queryClient={queryClient} />
+      <BetrothalCreation peopleData={data.family_people} familyId={familyId} personId={personId} queryClient={queryClient} familyName={data.family_name} />
     </Container>
   )
 }
