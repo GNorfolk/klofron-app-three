@@ -60,6 +60,7 @@ export class BetrothalService {
         .innerJoinAndSelect("father.person_father", "paternal_grandfather")
         .where("person.person_id = :id", { id: betrothalDowry.betrothal_dowry_person_id })
         .getOne()
+      if (!recipientPerson || !proposerPerson || !dowryPerson) throw "People IDs submitted are not valid!"
       const recipientPersonArray = [], proposerPersonArray = [], dowryPersonArray = []
       recipientPersonArray.push(
         recipientPerson.person_id,

@@ -156,24 +156,26 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-2">
                 <select {...register("betrothal_proposer_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
-                {
-                  errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
-                }
-                {
-                  familyBachelors.map(({ person_id, person_name }) => (
-                    <option value={person_id}>{person_name} {familyName}</option>
-                  ))
-                }
+                  {
+                    errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
+                  }
+                  <option selected={true} disabled={true}>Select a betrothal proposer person</option>
+                  {
+                    familyBachelors.map(({ person_id, person_name }) => (
+                      <option value={person_id}>{person_name} {familyName}</option>
+                    ))
+                  }
                 </select>
                 <select {...register("betrothal_dowry_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
-                {
-                  errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
-                }
-                {
-                  familyBachelors.map(({ person_id, person_name }) => (
-                    <option value={person_id}>{person_name} {familyName}</option>
-                  ))
-                }
+                  {
+                    errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
+                  }
+                  <option selected={true} disabled={true}>Select a betrothal dowry person</option>
+                  {
+                    familyBachelors.map(({ person_id, person_name }) => (
+                      <option value={person_id}>{person_name} {familyName}</option>
+                    ))
+                  }
                 </select>
               </div>
               <Button type="submit" className="w-full">
