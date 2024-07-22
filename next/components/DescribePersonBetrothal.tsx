@@ -8,7 +8,7 @@ import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
 import { ProposalListingOne } from '../@/components/component/proposal'
-import { BetrothalInfo } from '../@/components/component/betrothal'
+import { BetrothalInfo, BetrothalReciepts } from '../@/components/component/betrothal'
 
 export default function DescribePersonBetrothal({ userId, queryClient }) {
   const router = useRouter()
@@ -34,9 +34,21 @@ export default function DescribePersonBetrothal({ userId, queryClient }) {
         <BoxLayoutSingle>
           {/* <ListPersonProposals data={data} showLink={false} queryClient={queryClient} userId={userId} /> */}
           {/* <ManagePersonProposals personData={data} queryClient={queryClient} userId={userId} /> */}
+          <ListPersonBetrothalInfo data={data} />
           <ListPersonBetrothalReceipts data={data} />
         </BoxLayoutSingle>
       </QueryClientProvider>
+    )
+  }
+}
+
+function ListPersonBetrothalInfo({ data }) {
+  const router = useRouter()
+  if (router.isReady) {
+    return (
+      <Container>
+        <BetrothalInfo personInfo={data} />
+      </Container>
     )
   }
 }
@@ -46,7 +58,7 @@ function ListPersonBetrothalReceipts({ data }) {
   if (router.isReady) {
     return (
       <Container>
-        <BetrothalInfo personInfo={data} />
+        <BetrothalReciepts receipts={data.person_betrothal_receipts} />
       </Container>
     )
   }

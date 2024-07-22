@@ -151,3 +151,23 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient 
     </main>
   )
 }
+
+export function BetrothalReciepts({ receipts }) {
+  return (
+    <main>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Receipt Info</h2>
+      { receipts.length > 0 ? receipts.map(({ betrothal_proposer_person, betrothal_dowry }) => (
+        <a href="#" className="p-6 pt-2 pb-2">
+          <div className="flex">
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+              <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
+              <span className='whitespace-nowrap'>{betrothal_proposer_person.person_name} {betrothal_proposer_person.person_family.family_name} & {betrothal_dowry.betrothal_dowry_person.person_name} {betrothal_dowry.betrothal_dowry_person.person_family.family_name}.</span>
+            </div>
+          </div>
+        </a>
+      )) :
+      <p className="m-2 text-gray-500 dark:text-gray-400">This person has received no betrothals!</p>
+      }
+    </main>
+  )
+}

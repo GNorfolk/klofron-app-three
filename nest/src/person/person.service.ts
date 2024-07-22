@@ -213,8 +213,10 @@ export class PersonService {
       .leftJoinAndSelect("dowry.proposal_dowry_person", "dowry_person")
       .leftJoinAndSelect("person.person_betrothal_receipts", "betrothal", "betrothal.accepted_at IS NULL AND betrothal.deleted_at IS NULL")
       .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
+      .leftJoinAndSelect("betrothal_person.person_family", "betrothal_person_family")
       .leftJoinAndSelect("betrothal.betrothal_dowry", "betrothal_dowry")
       .leftJoinAndSelect("betrothal_dowry.betrothal_dowry_person", "betrothal_dowry_person")
+      .leftJoinAndSelect("betrothal_dowry_person.person_family", "betrothal_dowry_person_family")
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
   }
