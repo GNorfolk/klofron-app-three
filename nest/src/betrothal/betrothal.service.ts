@@ -64,6 +64,8 @@ export class BetrothalService {
         .where("person.person_id = :id", { id: betrothalDowry.betrothal_dowry_person_id })
         .getOne()
       if (!recipientPerson || !proposerPerson || !dowryPerson) throw "People IDs submitted are not valid!"
+      if (recipientPerson.person_gender == proposerPerson.person_gender) throw "Proposer person cannot have the same gender as the recipient person!"
+      if (proposerPerson.person_house_id != dowryPerson.person_house_id) throw "Proposer person must reside in the same house as the dowry person!"
       const recipientPersonArray = [], proposerPersonArray = [], dowryPersonArray = []
       recipientPersonArray.push(
         recipientPerson.person_id,
@@ -191,6 +193,8 @@ export class BetrothalService {
       const proposerPerson = people[1]
       const dowryPerson = people[2]
       const accepterPerson = people[3]
+      if (dowryPerson.person_gender == accepterPerson.person_gender) throw "Accepter person cannot have the same gender as the dowry person!"
+      if (recipientPerson.person_house_id != accepterPerson.person_house_id) throw "Recipient person must reside in the same house as the acceptor person!"
       const recipientPersonArray = [], proposerPersonArray = [], dowryPersonArray = [], accepterPersonArray = []
       recipientPersonArray.push(
         recipientPerson.person_id,
