@@ -15,9 +15,6 @@ import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
 import { Action } from "../../action/entities/Action";
 import { ActionQueue } from "../../action/entities/ActionQueue";
-import { Proposal } from "../../proposal/entities/Proposal";
-import { ProposalOffer } from "../../proposal-offer/entities/ProposalOffer";
-import { ProposalDowry } from "../../proposal-offer/entities/ProposalDowry";
 import { PersonSkills } from "./PersonSkills"
 import { Betrothal } from "src/betrothal/entities/Betrothal";
 import { BetrothalDowry } from "src/betrothal/entities/BetrothalDowry";
@@ -115,15 +112,6 @@ export class Person {
   @OneToOne(() => ActionQueue, (action_queue) => action_queue.action_queue_person)
   person_action_queue: Relation<ActionQueue>;
 
-  @OneToMany(() => Proposal, (proposal) => proposal.proposal_person)
-  person_proposals: Relation<Proposal>[];
-
-  @OneToMany(() => ProposalOffer, (proposal_offer) => proposal_offer.proposal_offer_person)
-  person_proposal_offers: Relation<ProposalOffer>[];
-
-  @OneToMany(() => ProposalDowry, (proposal_dowry) => proposal_dowry.proposal_dowry_person)
-  person_proposal_dowrys: Relation<ProposalDowry>[];
-
   @OneToMany(() => Betrothal, (betrothal) => betrothal.betrothal_proposer_person)
   person_betrothal_proposals: Relation<Betrothal>[];
 
@@ -131,7 +119,7 @@ export class Person {
   person_betrothal_receipts: Relation<Betrothal>[];
   
   @OneToMany(() => BetrothalDowry, (betrothal_dowry) => betrothal_dowry.betrothal_dowry_person)
-  person_betrothal_dowrys: Relation<ProposalDowry>[];
+  person_betrothal_dowrys: Relation<BetrothalDowry>[];
 
   @OneToOne(() => Resource, (resource) => resource.resource_person)
   person_wood: Relation<Resource>;

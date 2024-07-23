@@ -190,6 +190,9 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 
 # MySQL
 ```sql
+DROP TABLE proposal_offer;
+DROP TABLE proposal_dowry;;
+DROP TABLE proposal;
 ```
 
 # save

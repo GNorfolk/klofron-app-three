@@ -19,7 +19,7 @@ export default function CreateFamilyBetrothals({ queryClient, userId }) {
     
     if (isLoading) return (
       <div>
-        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
         <p>Loading...</p>
       </div>
     )

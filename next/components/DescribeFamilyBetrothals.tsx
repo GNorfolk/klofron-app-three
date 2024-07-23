@@ -10,7 +10,7 @@ export default function DescribeFamilyBetrothals({ queryClient, userId }) {
   const router = useRouter()
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
-      queryKey: ['familyProposalData' + router.query.family_id],
+      queryKey: ['familyBetrothalData' + router.query.family_id],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family/' + router.query.family_id).then(
           (res) => res.json(),
@@ -19,7 +19,7 @@ export default function DescribeFamilyBetrothals({ queryClient, userId }) {
     
     if (isLoading) return (
       <div>
-        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
         <p>Loading...</p>
       </div>
     )

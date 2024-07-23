@@ -206,11 +206,6 @@ export class PersonService {
       .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'") // TODO switch to inner join when all people have resources
       .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'") // TODO switch to inner join when all people have resources
       .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
-      .leftJoinAndSelect("person.person_proposals", "proposal", "proposal.accepted_at IS NULL AND proposal.cancelled_at IS NULL")
-      .leftJoinAndSelect("proposal.proposal_offers", "offer", "offer.accepted_at IS NULL AND offer.deleted_at IS NULL")
-      .leftJoinAndSelect("offer.proposal_offer_person", "offer_person")
-      .leftJoinAndSelect("offer.proposal_offer_dowry", "dowry")
-      .leftJoinAndSelect("dowry.proposal_dowry_person", "dowry_person")
       .leftJoinAndSelect("person.person_betrothal_receipts", "betrothal", "betrothal.accepted_at IS NULL AND betrothal.deleted_at IS NULL")
       .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
       .leftJoinAndSelect("betrothal_person.person_family", "betrothal_person_family")

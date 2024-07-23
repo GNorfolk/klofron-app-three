@@ -137,35 +137,6 @@ CREATE TABLE `move_house` (
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- -- -- -- -- PROPOSAL -- -- -- -- --
-CREATE TABLE `proposal` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `cancelled_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `proposal_offer` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `proposal_id` INT NOT NULL,
-    `person_id` INT NOT NULL,
-    `dowry_id` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`proposal_id`) REFERENCES proposal(`id`),
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`),
-    FOREIGN KEY (`dowry_id`) REFERENCES proposal_dowry(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `proposal_dowry` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- Betrothal -- -- -- -- --
 CREATE TABLE `betrothal` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

@@ -183,7 +183,7 @@ function ListPersonProposals({ data, showLink = true, queryClient = null, userId
 
     return (
       <Container>
-        <h2 className="text-2xl leading-snug my-4 mx-0">Proposal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
         <ul className="list-none p-0 m-0">
           {
             data.person_proposals.length > 0 ?

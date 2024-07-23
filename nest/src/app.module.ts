@@ -7,9 +7,7 @@ import { ResourceModule } from './resource/resource.module';
 import { TradeModule } from './trade/trade.module';
 import { UserModule } from './user/user.module';
 import { ActionModule } from './action/action.module';
-import { ProposalModule } from './proposal/proposal.module';
 import { MoveHouseModule } from './move-house/move-house.module';
-import { ProposalOfferModule } from './proposal-offer/proposal-offer.module';
 import { BetrothalModule } from './betrothal/betrothal.module';
 
 @Module({
@@ -30,9 +28,7 @@ import { BetrothalModule } from './betrothal/betrothal.module';
     TradeModule,
     UserModule,
     ActionModule,
-    ProposalModule,
     MoveHouseModule,
-    ProposalOfferModule,
     BetrothalModule,
   ],
   controllers: [],

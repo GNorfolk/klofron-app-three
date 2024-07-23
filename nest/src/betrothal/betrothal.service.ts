@@ -267,7 +267,7 @@ export class BetrothalService {
       const betrothalDowryAcceptedAt = await queryRunner.manager.update(BetrothalDowry, selected.betrothal_dowry_id, { betrothal_dowry_accepted_at: new Date() })
       if (betrothalDowryAcceptedAt.affected != 1) throw "Unable to update dowry accepted_at field!"
       // Cancel unsuccessful betrothals to person and throw if we can't
-      // ToDo: Check that this doesn't cancel the proposal offer we've just accepted
+      // ToDo: Check that this doesn't cancel the betrothal we've just accepted
       const betrothalsCancelledAt = await queryRunner.manager.update(
         Betrothal,
         { betrothal_recipient_person_id: selected.betrothal_recipient_person_id },
@@ -277,12 +277,12 @@ export class BetrothalService {
       // Cancel unsuccessful betrothal dowrys on betrothals to recipient and throw if we get unexpected number of affected rows
       const unsuccessfulBetrothalArray = selected.betrothal_recipient_person.person_betrothal_receipts.filter(betrothals => betrothals.betrothal_id != betrothalId)
       for (let i = 0; i < unsuccessfulBetrothalArray.length; i++) {
-        const proposalDowrysCancelledAt = await queryRunner.manager.update(
+        const betrothalDowrysCancelledAt = await queryRunner.manager.update(
           BetrothalDowry,
           { betrothal_dowry_id: unsuccessfulBetrothalArray[i].betrothal_dowry_id },
           { betrothal_dowry_deleted_at: new Date() }
         )
-        if (proposalDowrysCancelledAt.affected != 1) throw "Unable to update dowry cancelled_at field!"
+        if (betrothalDowrysCancelledAt.affected != 1) throw "Unable to update dowry cancelled_at field!"
       }
       await queryRunner.commitTransaction();
       await queryRunner.release();
