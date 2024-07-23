@@ -229,6 +229,10 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
+    if (isNaN(formData.betrothal_id)) {
+      document.getElementById("cm-" + data.person_id).innerText = "Invalid betrothal ID"
+      throw "Invalid betrothal ID"
+    }
     axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/betrothal/' + formData.betrothal_id, {
       accepter_person_id: formData.accepter_person_id
     }).then(response => {

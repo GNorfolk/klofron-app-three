@@ -21,6 +21,9 @@ export class BetrothalService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      if (isNaN(betrothal.betrothal_recipient_person_id)) throw "Recipient person ID is not valid!"
+      if (isNaN(betrothal.betrothal_proposer_person_id)) throw "Proposer person ID is not valid!"
+      if (isNaN(betrothalDowry.betrothal_dowry_person_id)) throw "Dowry person ID is not valid!"
       if (betrothal.betrothal_proposer_person_id == betrothalDowry.betrothal_dowry_person_id) throw "Betrothal proposer and dowry person cannot be the same!";
       const existing = await queryRunner.manager
         .createQueryBuilder(Betrothal, "betrothal")
@@ -133,6 +136,8 @@ export class BetrothalService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      if (isNaN(betrothalId)) throw "Betrothal ID is not valid!"
+      if (isNaN(accepterPersonId)) throw "Accepter person ID is not valid!"
       const selected = await queryRunner.manager
         .createQueryBuilder(Betrothal, "betrothal")
         .leftJoinAndSelect("betrothal.betrothal_dowry", "dowry")
