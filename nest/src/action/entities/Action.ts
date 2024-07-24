@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, AfterLoad, Relation, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, AfterLoad, Relation, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import { Person } from "../../person/entities/Person";
 import { ActionQueue } from "./ActionQueue";
 
@@ -47,9 +47,13 @@ export class Action {
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   action_person: Relation<Person>;
 
-  @ManyToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_actions)
+  @ManyToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_previous_actions)
   @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
-  action_queue: Relation<ActionQueue>;
+  action_queue_previous: Relation<ActionQueue>;
+
+  @OneToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_current_action)
+  @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
+  action_queue_current: Relation<ActionQueue>;
 
   @AfterLoad()
   calculateActionStartedTimeAgo(): void {

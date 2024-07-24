@@ -25,6 +25,9 @@ export class ActionQueue {
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   action_queue_person: Relation<Person>;
 
-  @OneToMany(() => Action, (action) => action.action_queue)
-  action_queue_actions: Relation<Action>[];
+  @OneToMany(() => Action, (action) => action.action_queue_previous)
+  action_queue_previous_actions: Relation<Action>[];
+
+  @OneToOne(() => Action, (action) => action.action_queue_current)
+  action_queue_current_action: Relation<Action>;
 }
