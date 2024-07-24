@@ -4,7 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { BetrothalPersonInfo, BetrothalCreation } from '../@/components/component/betrothal'
+import { BetrothalCreation } from '../@/components/component/betrothal'
+import { PersonInfo } from '../@/components/component/person'
 
 export default function CreateBetrothal({ queryClient, userId }) {
   const router = useRouter()
@@ -40,7 +41,7 @@ export function CreateBetrothalInfo({ personId }) {
 
   return (
     <Container>
-      <BetrothalPersonInfo personInfo={data} />
+      <PersonInfo title="Betrothal" personInfo={data} />
     </Container>
   )
 }
