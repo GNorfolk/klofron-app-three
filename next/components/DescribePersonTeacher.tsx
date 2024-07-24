@@ -34,6 +34,7 @@ export default function DescribePersonTeacher({ userId, queryClient }) {
           {
             data.person_teacher_id ? <>
               <PersonTeacherInfo data={data} />
+              <RemovePersonTeacher queryClient={queryClient} personId={router.query.person_id} />
             </> : <>
               <ListPersonEligibleTeachers data={data} queryClient={queryClient} />
               <SelectPersonTeacher data={data} queryClient={queryClient} personId={router.query.person_id} />
@@ -108,6 +109,46 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
             variant="ghost"
             className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
           >Select Teacher</Button>
+        </div>
+      </form>
+      <small className="" id={'cm-' + personId}></small>
+    </Container>
+  )
+}
+
+function RemovePersonTeacher({ queryClient, personId }) {
+  type Inputs = {
+    person_teacher_id: number
+  }
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>()
+
+  const onSubmit: SubmitHandler<Inputs> = (formData) => {
+    axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + personId, {
+      person_teacher_id: null
+    }).then(response => {
+      queryClient.invalidateQueries()
+      document.getElementById("cm-" + personId).innerText = ' '
+    }).catch(error => {
+      document.getElementById("cm-" + personId).innerText = error.toString()
+    })
+  }
+
+  return (
+    <Container>
+      <h2 className="p-6 text-4xl">Remove Teacher</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid gap-4 grid-cols-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          >Remove Teacher</Button>
         </div>
       </form>
       <small className="" id={'cm-' + personId}></small>
