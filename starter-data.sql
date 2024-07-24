@@ -81,11 +81,13 @@ CREATE TABLE `person_skills` (
 CREATE TABLE `action` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `person_id` INT NOT NULL,
+    `queue_id` INT NOT NULL,
     `type_id` INT NOT NULL,
     `infinite` BOOL NOT NULL DEFAULT 0,
     `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `completed_at` TIMESTAMP,
-    `cancelled_at` TIMESTAMP
+    `cancelled_at` TIMESTAMP,
+    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `action_queue` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

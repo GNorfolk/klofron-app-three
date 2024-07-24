@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation, ManyToOne, JoinColumn, OneToOne } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Relation, OneToMany, JoinColumn, OneToOne } from "typeorm";
 import { Person } from "../../person/entities/Person";
+import { Action } from "./Action";
 
 @Entity("action_queue", { schema: "ka3" })
 export class ActionQueue {
@@ -23,4 +24,7 @@ export class ActionQueue {
   @OneToOne(() => Person, (person) => person.person_action_queue)
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   action_queue_person: Relation<Person>;
+
+  @OneToMany(() => Action, (action) => action.action_queue)
+  action_queue_actions: Relation<Action>[];
 }

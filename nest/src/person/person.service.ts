@@ -193,6 +193,7 @@ export class PersonService {
     const person = this.personRepository
       .createQueryBuilder("person")
       .innerJoinAndSelect("person.person_skills", "skills")
+      .innerJoinAndSelect("person.person_action_queue", "queue")
       .innerJoinAndSelect("person.person_family", "person_family")
       .innerJoinAndSelect("person_family.family_people", "family_people")
       .innerJoinAndSelect("family_people.person_skills", "family_people_skills")

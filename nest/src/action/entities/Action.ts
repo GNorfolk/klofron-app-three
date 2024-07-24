@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, AfterLoad, Relation, ManyToOne, JoinColumn } from "typeorm";
 import { Person } from "../../person/entities/Person";
+import { ActionQueue } from "./ActionQueue";
 
 const day_in_ms = 24 * 3600 * 1000
 const hour_in_ms = 3600 * 1000
@@ -16,6 +17,9 @@ export class Action {
 
   @Column("int", { name: "person_id" })
   action_person_id: number;
+
+  @Column("int", { name: "queue_id" })
+  action_queue_id: number;
 
   @Column("int", { name: "type_id" })
   action_type_id: number;
@@ -42,6 +46,10 @@ export class Action {
   })
   @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   action_person: Relation<Person>;
+
+  @ManyToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_actions)
+  @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
+  action_queue: Relation<ActionQueue>;
 
   @AfterLoad()
   calculateActionStartedTimeAgo(): void {
