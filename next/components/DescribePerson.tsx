@@ -30,14 +30,8 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
             <ListPersonSkills queryClient={queryClient} data={data.person_skills}/>
-            {
-              status === "authenticated" && userId == data.person_family.family_user_id ?
-              <div>
-                <ListPersonBetrothals data={data} />
-              </div>
-              :
-              <></>
-            }
+            { status === "authenticated" && userId == data.person_family.family_user_id ? <ListPersonBetrothals data={data} /> : <></> }
+            <DescribePersonTeacher data={data} personId={router.query.person_id} />
           </div>
         } right={
           <div>
@@ -215,6 +209,23 @@ function ListPersonSkills({ data, queryClient }) {
       <p>Exp to next level: {Math.pow(2, data.person_skills_lumberjack_level + 1) - data.person_skills_lumberjack_experience}</p>
       <p>Builder level: {data.person_skills_builder_level}.</p>
       <p>Exp to next level: {Math.pow(2, data.person_skills_builder_level + 1) - data.person_skills_builder_experience}</p>
+    </Container>
+  )
+}
+
+function DescribePersonTeacher({ data, personId }) {
+  return (
+    <Container>
+      <h2 className="text-2xl leading-snug my-4 mx-0">Teacher Info</h2>
+      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+        {
+          data.person_teacher_id ? <>
+            <a href={data.person_teacher_id} className="p-6 pt-2 pb-2">This person has a teacher with id {data.person_teacher_id}.</a>
+          </> : <>
+            <a href={personId + "/teacher"} className="p-6 pt-2 pb-2">This person does not have a teacher.</a>
+          </>
+        }
+      </div>
     </Container>
   )
 }

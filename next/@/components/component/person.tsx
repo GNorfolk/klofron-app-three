@@ -75,7 +75,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
               }
             </a>
             {
-              queryClient && userId === person_family.family_user_id ? <>
+              queryClient && userId === person_family?.family_user_id ? <>
                 <div>
                   <form className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
