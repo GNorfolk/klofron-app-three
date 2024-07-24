@@ -225,7 +225,7 @@ export class PersonService {
     return this.personRepository
       .createQueryBuilder()
       .update(Person)
-      .set({ person_teacher_id: person.person_teacher_id })
+      .set({ person_teacher_id: person.person_teacher_id == -1 ? null : person.person_teacher_id })
       .where("id = :id", { id: id })
       .execute();
   }

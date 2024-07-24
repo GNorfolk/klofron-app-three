@@ -130,7 +130,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
     axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + personId, {
-      person_teacher_id: null
+      person_teacher_id: -1
     }).then(response => {
       queryClient.invalidateQueries()
       document.getElementById("cm-" + personId).innerText = ' '
