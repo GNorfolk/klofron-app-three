@@ -5,6 +5,7 @@ import { Person } from './entities/Person';
 import { PersonName } from './entities/PersonName';
 import { PersonSkills } from '../person/entities/PersonSkills';
 import { CreatePersonDto } from './dto/create-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { Action } from '../action/entities/Action';
@@ -215,6 +216,15 @@ export class PersonService {
       .leftJoinAndSelect("betrothal_dowry_person.person_family", "betrothal_dowry_person_family")
       .where("person.person_id = :person_id", { person_id: id })
     return await person.getOne();
+  }
+
+  async update(id: number, person: UpdatePersonDto) {
+    return this.personRepository
+      .createQueryBuilder()
+      .update(Person)
+      .set({ person_teacher_id: person.person_teacher_id })
+      .where("id = :id", { id: id })
+      .execute();
   }
 
   // curl --request PATCH localhost:5000/v2/person/41 --header "Content-Type: application/json" --data '{"name":"Cassie"}'

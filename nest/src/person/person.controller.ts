@@ -46,6 +46,8 @@ export class PersonController {
       return this.personService.updateName(id, req.body.name);
     } else if (req.body?.house_id) {
       return this.personService.updateTravel(id, req.body.house_id);
+    } else if (req.body?.person_teacher_id) {
+      return this.personService.update(id, req.body);
     }
   }
 }
