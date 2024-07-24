@@ -7,7 +7,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
-import { PersonListing } from '../@/components/component/person'
+import { PersonListing, PersonInfo } from '../@/components/component/person'
 
 export default function DescribePersonTeacher({ userId, queryClient }) {
   const router = useRouter()
@@ -31,8 +31,14 @@ export default function DescribePersonTeacher({ userId, queryClient }) {
     return (
       <QueryClientProvider client={queryClient}>
         <BoxLayoutSingle>
-          <ListPersonEligibleTeachers data={data} queryClient={queryClient} />
-          <SelectPersonTeacher data={data} queryClient={queryClient} personId={router.query.person_id} />
+          {
+            data.person_teacher_id ? <>
+              <PersonTeacherInfo data={data} />
+            </> : <>
+              <ListPersonEligibleTeachers data={data} queryClient={queryClient} />
+              <SelectPersonTeacher data={data} queryClient={queryClient} personId={router.query.person_id} />
+            </>
+          }
         </BoxLayoutSingle>
       </QueryClientProvider>
     )
@@ -46,6 +52,14 @@ function ListPersonEligibleTeachers({ data, queryClient }) {
   return (
     <Container>
       <PersonListing personData={filteredList} familyName={data.person_family.family_name} queryClient={queryClient} />
+    </Container>
+  )
+}
+
+function PersonTeacherInfo({ data }) {
+  return (
+    <Container>
+      <PersonInfo title="Teacher" personInfo={data.person_teacher} />
     </Container>
   )
 }
