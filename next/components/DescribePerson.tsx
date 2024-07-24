@@ -220,9 +220,9 @@ function DescribePersonTeacher({ data, personId }) {
       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
         {
           data.person_teacher_id ? <>
-            <a href={data.person_teacher_id} className="p-6 pt-2 pb-2">This person has a teacher with id {data.person_teacher_id}.</a>
+            <a href={personId + "/teacher"}>This person has a teacher with id {data.person_teacher_id}.</a>
           </> : <>
-            <a href={personId + "/teacher"} className="p-6 pt-2 pb-2">This person does not have a teacher.</a>
+            <a href={personId + "/teacher"}>This person does not have a teacher.</a>
           </>
         }
       </div>
