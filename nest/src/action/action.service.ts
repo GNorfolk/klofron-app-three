@@ -33,8 +33,9 @@ export class ActionService {
         .leftJoinAndSelect("student.person_actions", "student_action", "student_action.cancelled_at IS NULL AND student_action.completed_at IS NULL")
         .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-        .where("person.person_id = :id", { id: action.action_person_id })
+        .where("person.person_action_queue_id = :id", { id: action.action_queue_id })
         .getOne();
+      if (!person) throw "Action person cannot be found on the backend!"
       if (person.person_students.length > 0) {
         result = await this.utilityCreateActionStudents(queryRunner, action, person)
       } else {
