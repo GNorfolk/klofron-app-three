@@ -12,9 +12,6 @@ export class ActionQueue {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   action_queue_id: number;
 
-  @Column("int", { name: "person_id" })
-  action_queue_person_id: number;
-
   @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP", nullable: false })
   action_queue_created_at: Date;
 
@@ -22,7 +19,6 @@ export class ActionQueue {
   action_queue_deleted_at: Date | null;
 
   @OneToOne(() => Person, (person) => person.person_action_queue)
-  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
   action_queue_person: Relation<Person>;
 
   @OneToMany(() => Action, (action) => action.action_queue_previous)

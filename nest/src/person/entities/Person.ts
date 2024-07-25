@@ -61,6 +61,9 @@ export class Person {
   @Column("int", { name: "teacher_id", nullable: true })
   person_teacher_id: number | null;
 
+  @Column("int", { name: "action_queue_id" })
+  person_action_queue_id: number;
+
   @ManyToOne(() => Family, (family) => family.family_people, { //////////////////////////
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
@@ -110,6 +113,7 @@ export class Person {
   person_actions: Relation<Action>[];
 
   @OneToOne(() => ActionQueue, (action_queue) => action_queue.action_queue_person)
+  @JoinColumn([{ name: "action_queue_id", referencedColumnName: "action_queue_id" }])
   person_action_queue: Relation<ActionQueue>;
 
   @OneToMany(() => Betrothal, (betrothal) => betrothal.betrothal_proposer_person)

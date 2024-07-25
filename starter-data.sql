@@ -57,6 +57,7 @@ CREATE TABLE `person` (
     `gender` VARCHAR(155) NOT NULL,
     `house_id` INT,
     `skills_id` INT NOT NULL,
+    `action_queue_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
@@ -91,10 +92,8 @@ CREATE TABLE `action` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `action_queue` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+    `deleted_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- USER -- -- -- -- --
 CREATE TABLE `user` (
