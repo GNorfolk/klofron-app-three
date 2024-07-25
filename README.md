@@ -151,7 +151,7 @@ AWS_PROFILE=react-app sam local invoke
 
 **How to run consumer app locally:**
 ```bash
-watch -n5 ENV=local node consumer.js
+curl --request PATCH localhost:5000/v2/action
 ```
 
 **How to deploy CFN app:**

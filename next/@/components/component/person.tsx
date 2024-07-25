@@ -6,8 +6,8 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
-    action_id: number,
-    person_id: number
+    action_type_id: number,
+    action_queue_id: number
   }
 
   const onAction: SubmitHandler<Inputs> = (formData) => {
@@ -20,8 +20,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
 
   const onSubmit = (formData, addToQueue) => {
     axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
-      action_person_id: formData.person_id,
-      action_type_id: formData.action_id
+      action_queue_id: formData.action_queue_id,
+      action_type_id: formData.action_type_id
     }).then(response => {
       queryClient.invalidateQueries()
       document.getElementById("cm-" + formData.person_id).innerText = ' '
@@ -33,7 +33,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
   return (
     <main>
       <h2 className="p-6 text-4xl">People</h2>
-      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_actions, person_house_id, person_house, person_skills }) => {
+      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_actions, person_queue_id, person_house, person_skills }) => {
         const {
           register,
           handleSubmit,
@@ -79,8 +79,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                 <div>
                   <form className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
-                      <input type="hidden" value={person_id} {...register("person_id")} />
-                      <select {...register("action_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                      <input type="hidden" value={person_queue_id} {...register("action_queue_id")} />
+                      <select {...register("action_type_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
                         <option value="1">Get Food</option>
                         <option value="2">Get Wood</option>
                         <option value="3">Increase Storage</option>

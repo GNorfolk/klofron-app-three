@@ -26,7 +26,8 @@ export class ActionService {
     try {
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
-        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .innerJoinAndSelect("person.person_action_queue", "queue")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("person.person_students", "student")
         .leftJoinAndSelect("student.person_actions", "student_action", "student_action.cancelled_at IS NULL AND student_action.completed_at IS NULL")
@@ -50,7 +51,7 @@ export class ActionService {
     }
   }
 
-  async utilityCreateActionStudents(queryRunner, action, person) {
+  async utilityCreateActionStudents(queryRunner, action: CreateActionDto, person: Person) {
     const aliveStudents = person.person_students.filter(student => student.person_deleted_at == null)
     if (person.person_students.length != aliveStudents.length) throw "One or more students are deceased!"
     const availableStudents = person.person_students.filter(student => student.person_actions.length == 0)
@@ -75,9 +76,9 @@ export class ActionService {
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityCreateActionSingle(queryRunner, action, person) {
+  async utilityCreateActionSingle(queryRunner, action: CreateActionDto, person: Person) {
     if (person.person_deleted_at) throw "Person is deceased!";
-    if (person.person_actions.length > 0) throw "Action already in progress!";
+    if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
     if (action.action_type_id == 2) {
       await this.utilityPrepareGetWoodAction(queryRunner, person);
     } else if (action.action_type_id == 3) {
@@ -90,7 +91,7 @@ export class ActionService {
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityPrepareGetWoodAction(queryRunner, person, multiplier = 1) {
+  async utilityPrepareGetWoodAction(queryRunner, person: Person, multiplier = 1) {
     const requiredFood = 1 * multiplier;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
@@ -100,7 +101,7 @@ export class ActionService {
     if (food.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityPrepareIncreaseStorageAction(queryRunner, person, multiplier = 1) {
+  async utilityPrepareIncreaseStorageAction(queryRunner, person: Person, multiplier = 1) {
     const requiredWood = ( multiplier * ( person.person_house.house_storage / 3 ) ) + ( ( multiplier * ( multiplier + 1 ) ) / 2 );
     const requiredFood = 1 * multiplier;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
@@ -116,7 +117,7 @@ export class ActionService {
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityPrepareIncreaseRoomsAction(queryRunner, person, multiplier = 1) {
+  async utilityPrepareIncreaseRoomsAction(queryRunner, person: Person, multiplier = 1) {
     const requiredWood = ( 2 * multiplier * person.person_house.house_rooms ) + ( multiplier * ( multiplier + 1 ) );
     const requiredFood = 1 * multiplier;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
@@ -132,7 +133,7 @@ export class ActionService {
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
   }
 
-  async utilityPrepareCreateHouseAction(queryRunner, person, multiplier = 1) {
+  async utilityPrepareCreateHouseAction(queryRunner, person: Person, multiplier = 1) {
     const requiredWood = 12 * multiplier;
     const requiredFood = 3 * multiplier;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
@@ -174,7 +175,7 @@ export class ActionService {
     });
   }
 
-  async updateCancelPersonAction(person_id) {
+  async updateCancelPersonAction(person_id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     let cancel;
     await queryRunner.connect();
@@ -182,12 +183,12 @@ export class ActionService {
     try {
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
-        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .innerJoinAndSelect("person.person_action_queue", "queue")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .where("person.person_id = :id", { id: person_id })
         .getOne();
-      if (person.person_actions.length == 0) throw "No actions cancellable!";
-      if (person.person_actions.length > 1) throw "Too many current actions returned!";
-      cancel = await queryRunner.manager.update(Action, person.person_actions[0].action_id, { action_cancelled_at: new Date() });
+      if (!person.person_action_queue.action_queue_current_action) throw "No actions cancellable!";
+      cancel = await queryRunner.manager.update(Action, person.person_action_queue.action_queue_current_action.action_id, { action_cancelled_at: new Date() });
       if (cancel.affected != 1) throw "Unable to cancel action!";
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -200,7 +201,7 @@ export class ActionService {
     }
   }
 
-  async updateCancelAction(action_id) {
+  async updateCancelAction(action_id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     let cancel;
     await queryRunner.connect();
