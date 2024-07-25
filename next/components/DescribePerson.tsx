@@ -35,8 +35,8 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
           </div>
         } right={
           <div>
-            <ListPersonActionsCurrent queryClient={queryClient} personId={router.query.person_id} />
-            <ListPersonActionsPrevious personId={router.query.person_id} />
+            <ListPersonActionsCurrent currentAction={data.person_action_queue?.action_queue_current_action} queryClient={queryClient} personId={router.query.person_id} />
+            <ListPersonActionsPrevious previousActions={data.person_action_queue.action_queue_previous_actions} personId={router.query.person_id} />
             <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
           </div>
         } />
@@ -45,15 +45,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
   }
 }
 
-function ListPersonActionsCurrent({ queryClient, personId }) {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['personCurentActionsData' + personId],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action?person_id=' + personId + '&limit=1&current=true').then(
-        (res) => res.json(),
-      ),
-  })
-
+function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
   const cancelAction = useMutation({
     mutationFn: (id) => {
       return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action/' + id, {
@@ -62,59 +54,39 @@ function ListPersonActionsCurrent({ queryClient, personId }) {
     },
   })
 
-  if (isLoading) return (
-    <div>
-      <h3 className="text-xl leading-normal">Current Action</h3>
-      <p>Loading...</p>
-    </div>
-  )
-  if (error) return <div>Failed to load</div>
-
   return (
     <Container>
       <h3 className="text-xl leading-normal">Current Action</h3>
       <ul className="list-none p-0 m-0">
-        { data.length > 0 ? 
-          data.map(({ action_id, action_type_name, action_started_time_ago }) => (
-            <li className="mt-0 mx-0 mb-5" key={action_id}>
-              <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago.</p>
+        {
+          currentAction ? <>
+            <li className="mt-0 mx-0 mb-5" key={currentAction.action_id}>
+              <p>Action with id {currentAction.action_id} of type {currentAction.action_type_name} was started {currentAction.action_started_time_ago} ago.</p>
               <button onClick={
                 () => {
-                    cancelAction.mutate(action_id, { onSettled: (res) => {
+                    cancelAction.mutate(currentAction.action_id, { onSettled: (res) => {
                     queryClient.invalidateQueries()
                   }})
                 }
               } >Cancel Action</button>
             </li>
-          )) : <p>No actions currently in progress!</p> }
+          </> : <>
+          <p>No actions currently in progress!</p>
+          </>
+        }
       </ul>
     </Container>
   )
 }
 
-function ListPersonActionsPrevious({ personId }) {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['personPreviousActionsData' + personId],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action?person_id=' + personId + '&limit=5&current=false').then(
-        (res) => res.json(),
-      ),
-  })
-
-  if (isLoading) return (
-    <div>
-      <h3 className="text-xl leading-normal">Previous Actions</h3>
-      <p>Loading...</p>
-    </div>
-  )
-  if (error) return <div>Failed to load</div>
-
-  if (data.length > 0) {
+function ListPersonActionsPrevious({ previousActions, personId }) {
+  const fivePreviousActions = previousActions.slice(-5)
+  if (fivePreviousActions.length > 0) {
     return (
       <Container>
         <h3 className="text-xl leading-normal">Previous Actions</h3>
         <ul className="list-none p-0 m-0">
-          {data.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
+          {fivePreviousActions.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
             <li className="mt-0 mx-0 mb-5" key={action_id}>
               <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago and finished with reason {action_finish_reason}.</p>
             </li>
