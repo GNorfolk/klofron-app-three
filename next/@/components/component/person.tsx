@@ -24,16 +24,16 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
       action_type_id: formData.action_type_id
     }).then(response => {
       queryClient.invalidateQueries()
-      document.getElementById("cm-" + formData.person_id).innerText = ' '
+      document.getElementById("cm-" + formData.action_queue_id).innerText = ' '
     }).catch(error => {
-      document.getElementById("cm-" + formData.person_id).innerText = error.response.data.message
+      document.getElementById("cm-" + formData.action_queue_id).innerText = error.response.data.message
     })
   }
 
   return (
     <main>
       <h2 className="p-6 text-4xl">People</h2>
-      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_queue_id, person_house, person_skills }) => {
+      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_action_queue_id, person_house, person_skills }) => {
         const {
           register,
           handleSubmit,
@@ -80,7 +80,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                 <div>
                   <form className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
-                      <input type="hidden" value={person_queue_id} {...register("action_queue_id")} />
+                      <input type="hidden" value={person_action_queue_id} {...register("action_queue_id")} />
                       <select {...register("action_type_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
                         <option value="1">Get Food</option>
                         <option value="2">Get Wood</option>
@@ -105,7 +105,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                       <small className="text-stone-500 ml-2">{person_name} is performing an action completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>
                     </> : <></>
                   }
-                  <small className="text-stone-500" id={'cm-' + person_id}></small>
+                  <small className="text-stone-500" id={'cm-' + person_action_queue_id}></small>
                 </div>
               </> : null
             }
