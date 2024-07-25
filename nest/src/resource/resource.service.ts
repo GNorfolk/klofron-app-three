@@ -47,10 +47,11 @@ export class ResourceService {
         .createQueryBuilder(Person, "person")
         .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
         .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
-        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .innerJoinAndSelect("person.person_action_queue", "queue")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .where("person.person_id = :id", { id: body.person_id })
         .getOne()
-      if (person.person_actions.length > 0) throw "Person cannot move resources while performing an action!"
+      if (person.person_action_queue.action_queue_current_action) throw "Person cannot move resources while performing an action!"
       if (person.person_food.resource_volume + person.person_wood.resource_volume > 3) throw "Person has too many resources!"
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")

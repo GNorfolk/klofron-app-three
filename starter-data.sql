@@ -62,7 +62,8 @@ CREATE TABLE `person` (
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`house_id`) REFERENCES house(`id`),
-    FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`)
+    FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`),
+    FOREIGN KEY (`action_queue_id`) REFERENCES action_queue(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `person_name` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -81,7 +82,6 @@ CREATE TABLE `person_skills` (
 -- -- -- -- -- ACTION -- -- -- -- --
 CREATE TABLE `action` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NOT NULL,
     `queue_id` INT NOT NULL,
     `type_id` INT NOT NULL,
     `infinite` BOOL NOT NULL DEFAULT 0,

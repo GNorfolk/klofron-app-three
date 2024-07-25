@@ -11,7 +11,7 @@ import { Action } from './entities/Action';
 export class ActionController {
   constructor(private readonly actionService: ActionService) {}
 
-  // curl --request POST localhost:5000/v2/action --header "Content-Type: application/json" --data '{"action_person_id": 144, "action_type_id": 1}'
+  // curl --request POST localhost:5000/v2/action --header "Content-Type: application/json" --data '{"action_queue_id": 144, "action_type_id": 1}'
   @Post()
   async create(@Body() action: CreateActionDto) {
     return await this.actionService.create(action);

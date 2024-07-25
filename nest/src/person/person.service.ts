@@ -29,7 +29,8 @@ export class PersonService {
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")
         .leftJoinAndSelect("house.house_people", "person", "person.person_partner_id IS NOT NULL")
-        .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+        .innerJoinAndSelect("person.person_action_queue", "queue")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
         .where("house.house_id = :id", { id: house_id })
         .getOne();
@@ -55,13 +56,13 @@ export class PersonService {
         resource_house_id: house_id
       }, "resource_volume", 2);
       if (resource.affected != 1) throw "Cannot decrement house resrouces!"
-      if (mother.person_actions.length > 0 || father.person_actions.length > 0) throw "Parent already has an action in progress!"
+      if (mother.person_action_queue.action_queue_current_action || father.person_action_queue.action_queue_current_action) throw "Parent already has an action in progress!"
       await queryRunner.manager.save(Action, {
-        action_person_id: mother.person_id,
+        action_queue_id: mother.person_action_queue_id,
         action_type_id: 6
       });
       await queryRunner.manager.save(Action, {
-        action_person_id: father.person_id,
+        action_queue_id: father.person_action_queue_id,
         action_type_id: 6
       });
       person.person_gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
@@ -178,7 +179,8 @@ export class PersonService {
       .leftJoinAndSelect("address.house_address_road", "road")
       .innerJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
-      .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+      .innerJoinAndSelect("person.person_action_queue", "queue")
+      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .where("person.person_deleted_at IS NULL")
     if (query?.house_id) {
       people = people.andWhere("person.person_house_id = :house_id", { house_id: query.house_id })
@@ -213,7 +215,8 @@ export class PersonService {
       .leftJoinAndSelect("partner.person_family", "partner_family")
       .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'") // TODO switch to inner join when all people have resources
       .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'") // TODO switch to inner join when all people have resources
-      .leftJoinAndSelect("person.person_actions", "action", "action.cancelled_at IS NULL AND action.completed_at IS NULL")
+      .innerJoinAndSelect("person.person_action_queue", "queue")
+      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .leftJoinAndSelect("person.person_betrothal_receipts", "betrothal", "betrothal.accepted_at IS NULL AND betrothal.deleted_at IS NULL")
       .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
       .leftJoinAndSelect("betrothal_person.person_family", "betrothal_person_family")

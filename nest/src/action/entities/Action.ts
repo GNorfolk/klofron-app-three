@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn, AfterLoad, Relation, ManyToOne, JoinColumn, OneToOne } from "typeorm";
-import { Person } from "../../person/entities/Person";
 import { ActionQueue } from "./ActionQueue";
 
 const day_in_ms = 24 * 3600 * 1000
@@ -14,9 +13,6 @@ export class Action {
 
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   action_id: number;
-
-  @Column("int", { name: "person_id" })
-  action_person_id: number;
 
   @Column("int", { name: "queue_id" })
   action_queue_id: number;
@@ -39,13 +35,6 @@ export class Action {
 
   @Column("tinyint", { name: "infinite", width: 1, default: () => "'0'" })
   action_infinite: boolean;
-
-  @ManyToOne(() => Person, (person) => person.person_actions, {
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
-  })
-  @JoinColumn([{ name: "person_id", referencedColumnName: "person_id" }])
-  action_person: Relation<Person>;
 
   @ManyToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_previous_actions)
   @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])

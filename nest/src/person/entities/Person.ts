@@ -13,7 +13,6 @@ import {
 import { Family } from "../../family/entities/Family";
 import { House } from "../../house/entities/House";
 import { Resource } from "../../resource/entities/Resource";
-import { Action } from "../../action/entities/Action";
 import { ActionQueue } from "../../action/entities/ActionQueue";
 import { PersonSkills } from "./PersonSkills"
 import { Betrothal } from "src/betrothal/entities/Betrothal";
@@ -108,9 +107,6 @@ export class Person {
   @ManyToOne(() => Person, (person) => person.person_students)
   @JoinColumn([{ name: "teacher_id", referencedColumnName: "person_id" }])
   person_teacher: Relation<Person>;
-
-  @OneToMany(() => Action, (action) => action.action_person)
-  person_actions: Relation<Action>[];
 
   @OneToOne(() => ActionQueue, (action_queue) => action_queue.action_queue_person)
   @JoinColumn([{ name: "action_queue_id", referencedColumnName: "action_queue_id" }])
