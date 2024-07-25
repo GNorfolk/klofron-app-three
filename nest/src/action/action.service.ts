@@ -30,7 +30,6 @@ export class ActionService {
         .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("person.person_students", "student")
-        .leftJoinAndSelect("student.person_actions", "student_action", "student_action.cancelled_at IS NULL AND student_action.completed_at IS NULL")
         .innerJoinAndSelect("student.person_action_queue", "student_queue")
         .leftJoinAndSelect("student_queue.action_queue_current_action", "student_current_action", "student_current_action.cancelled_at IS NULL AND student_current_action.completed_at IS NULL")
         .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")

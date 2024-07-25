@@ -33,7 +33,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
   return (
     <main>
       <h2 className="p-6 text-4xl">People</h2>
-      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_actions, person_queue_id, person_house, person_skills }) => {
+      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_queue_id, person_house, person_skills }) => {
         const {
           register,
           handleSubmit,
@@ -64,7 +64,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                   <div className="grid grid-cols-2">
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <BriefcaseIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                      <span className='whitespace-nowrap'>{person_actions.length} Current Action</span>
+                      {/* TODO FIX */}
+                      <span className='whitespace-nowrap'>{person_action_queue.action_queue_current_action ? "One" : "No"} Current Action</span>
                     </div>
                     <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                       <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
@@ -100,8 +101,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                     </div>
                   </form>
                   {
-                    queryClient && person_actions[0]?.action_time_remaining ? <>
-                      <small className="text-stone-500 ml-2">{person_name} is performing an action completing in {person_actions[0].action_time_remaining}. </small>
+                    queryClient && person_action_queue.action_queue_current_action?.action_time_remaining ? <>
+                      <small className="text-stone-500 ml-2">{person_name} is performing an action completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>
                     </> : <></>
                   }
                   <small className="text-stone-500" id={'cm-' + person_id}></small>
