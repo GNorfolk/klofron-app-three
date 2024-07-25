@@ -72,7 +72,7 @@ export class ActionService {
     }
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
-      student_action.action_person_id = student.person_id;
+      student_action.action_queue_id = student.person_action_queue_id;
       await queryRunner.manager.save(Action, student_action);
     }
     action.action_type_id = 7;
@@ -227,7 +227,8 @@ export class ActionService {
   async updateProcessActions() {
     const actions = await this.actionRepository
       .createQueryBuilder("action")
-      .innerJoinAndSelect("action.action_person", "person")
+      .innerJoinAndSelect("action.action_queue", "queue")
+      .innerJoinAndSelect("queue.action_queue_person", "person")
       .leftJoinAndSelect("person.person_house", "house")
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
@@ -236,7 +237,7 @@ export class ActionService {
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {
       try {
-        if (action.action_person.person_deleted_at) {
+        if (action.action_queue_previous.action_queue_person.person_deleted_at) {
           await this.actionRepository.update(action.action_id, { action_cancelled_at: new Date() });
           throw "Person is deceased!"
         }
@@ -271,23 +272,24 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_person", "person")
+        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_house", "house")
         .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("action.action_id = :id", { id: actionId })
         .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_person.person_skills.person_skills_gatherer_level)
-      const house = action.action_person.person_house
+      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_gatherer_level)
+      const house = action.action_queue_previous.action_queue_person.person_house
       if (diceRoll && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
         await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         await queryRunner.manager.increment(Resource, {
           resource_type_name: "food",
-          resource_house_id: action.action_person.person_house_id
+          resource_house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "resource_volume", 2);
         await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_person.person_skills_id
+          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
         }, "person_skills_gatherer_experience", 1);
         console.log("GetFoodDone")
       } else {
@@ -311,23 +313,24 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_person", "person")
+        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_house", "house")
         .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("action.action_id = :id", { id: actionId })
         .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_person.person_skills.person_skills_lumberjack_level)
-      const house = action.action_person.person_house
+      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_lumberjack_level)
+      const house = action.action_queue_previous.action_queue_person.person_house
       if (diceRoll && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 1) {
         await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         await queryRunner.manager.increment(Resource, {
           resource_type_name: "wood",
-          resource_house_id: action.action_person.person_house_id
+          resource_house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "resource_volume", 1);
         await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_person.person_skills_id
+          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
         }, "person_skills_lumberjack_experience", 1);
         console.log("GetWoodDone")
       } else {
@@ -351,18 +354,19 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_person", "person")
+        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .where("action.action_id = :id", { id: actionId })
         .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_person.person_skills.person_skills_builder_level)
+      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_builder_level)
       if (diceRoll) {
         await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         await queryRunner.manager.increment(House, {
-          house_id: action.action_person.person_house_id
+          house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "house_storage", 3);
         await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_person.person_skills_id
+          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
         }, "person_skills_builder_experience", 1);
         console.log("IncreaseStorageDone")
       } else {
@@ -386,18 +390,19 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_person", "person")
+        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .where("action.action_id = :id", { id: actionId })
         .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_person.person_skills.person_skills_builder_level)
+      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_builder_level)
       if (diceRoll) {
         await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         await queryRunner.manager.increment(House, {
-          house_id: action.action_person.person_house_id
+          house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "house_rooms", 1);
         await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_person.person_skills_id
+          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
         }, "person_skills_builder_experience", 1);
         console.log("IncreaseRoomsDone")
       } else {
@@ -422,20 +427,21 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_person", "person")
+        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .where("action.action_id = :id", { id: actionId })
         .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_person.person_skills.person_skills_builder_level)
+      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_builder_level)
       if (diceRoll) {
         await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
         result = await this.houseService.createHouse(result, queryRunner, {
-            house_family_id: action.action_person.person_family_id,
+            house_family_id: action.action_queue_previous.action_queue_person.person_family_id,
             house_rooms: 2
           }
         )
         await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_person.person_skills_id
+          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
         }, "person_skills_builder_experience", 1);
         console.log("CreateHouseDone")
       } else {
