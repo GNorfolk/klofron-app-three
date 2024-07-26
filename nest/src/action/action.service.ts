@@ -56,7 +56,7 @@ export class ActionService {
   async utilityCreateActionStudents(queryRunner, action: CreateActionDto, person: Person) {
     const aliveStudents = person.person_students.filter(student => student.person_deleted_at == null)
     if (person.person_students.length != aliveStudents.length) throw "One or more students are deceased!"
-    const availableStudents = person.person_students.filter(student => student.person_action_queue.action_queue_current_action)
+    const availableStudents = person.person_students.filter(student => !student.person_action_queue.action_queue_current_action)
     if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
     const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
     if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
