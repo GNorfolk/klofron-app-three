@@ -242,7 +242,7 @@ export class ActionService {
   async updateProcessActions() {
     const actions = await this.actionRepository
       .createQueryBuilder("action")
-      .innerJoinAndSelect("action.action_queue", "queue")
+      .innerJoinAndSelect("action.action_queue_previous", "queue")
       .innerJoinAndSelect("queue.action_queue_person", "person")
       .leftJoinAndSelect("person.person_house", "house")
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
@@ -287,7 +287,7 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("action.action_queue_previous", "queue")
         .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_house", "house")
@@ -328,7 +328,7 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("action.action_queue_previous", "queue")
         .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_house", "house")
@@ -369,7 +369,7 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("action.action_queue_previous", "queue")
         .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .where("action.action_id = :id", { id: actionId })
@@ -405,7 +405,7 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("action.action_queue_previous", "queue")
         .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .where("action.action_id = :id", { id: actionId })
@@ -442,7 +442,7 @@ export class ActionService {
     try {
       const action = await this.actionRepository
         .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue", "queue")
+        .innerJoinAndSelect("action.action_queue_previous", "queue")
         .innerJoinAndSelect("queue.action_queue_person", "person")
         .leftJoinAndSelect("person.person_skills", "skills")
         .where("action.action_id = :id", { id: actionId })
