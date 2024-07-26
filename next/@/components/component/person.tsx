@@ -33,7 +33,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
   return (
     <main>
       <h2 className="p-6 text-4xl">People</h2>
-      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_action_queue_id, person_house, person_skills }) => {
+      { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_action_queue_id, person_house, person_skills, person_teacher_id }) => {
         const {
           register,
           handleSubmit,
@@ -82,11 +82,17 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                     <div className="grid gap-4 sm:grid-cols-3">
                       <input type="hidden" value={person_action_queue_id} {...register("action_queue_id")} />
                       <select {...register("action_type_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
-                        <option value="1">Get Food</option>
-                        <option value="2">Get Wood</option>
-                        <option value="3">Increase Storage</option>
-                        <option value="4">Increase Rooms</option>
-                        <option value="5">Create House</option>
+                        {
+                          person_teacher_id ? <>
+                            <option selected disabled value="-1">Unavailable</option>
+                          </> : <>
+                            <option value="1">Get Food</option>
+                            <option value="2">Get Wood</option>
+                            <option value="3">Increase Storage</option>
+                            <option value="4">Increase Rooms</option>
+                            <option value="5">Create House</option>
+                          </>
+                        }
                       </select>
                       <Button size="sm"
                         variant="ghost"

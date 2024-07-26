@@ -60,7 +60,11 @@ export class ActionService {
     if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
     const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
     if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
-    if (action.action_type_id == 2) {
+    if (action.action_type_id == -1) {
+      throw "Cannot perform action when teacher is set!"
+    } else if (action.action_type_id == 1) {
+      // Do nothing
+    } else if (action.action_type_id == 2) {
       await this.utilityPrepareGetWoodAction(queryRunner, person, person.person_students.length);
     } else if (action.action_type_id == 3) {
       await this.utilityPrepareIncreaseStorageAction(queryRunner, person, person.person_students.length);
@@ -68,6 +72,10 @@ export class ActionService {
       await this.utilityPrepareIncreaseRoomsAction(queryRunner, person, person.person_students.length);
     } else if (action.action_type_id == 5) {
       await this.utilityPrepareCreateHouseAction(queryRunner, person, person.person_students.length);
+    } else if (action.action_type_id == 6) {
+      // Do nothing
+    } else {
+      throw "Invalid action_type_id, got: " + action.action_type_id;
     }
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
@@ -81,7 +89,11 @@ export class ActionService {
   async utilityCreateActionSingle(queryRunner, action: CreateActionDto, person: Person) {
     if (person.person_deleted_at) throw "Person is deceased!";
     if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
-    if (action.action_type_id == 2) {
+    if (action.action_type_id == -1) {
+      throw "Cannot perform action when teacher is set!"
+    } else if (action.action_type_id == 1) {
+      // Do nothing
+    } else if (action.action_type_id == 2) {
       await this.utilityPrepareGetWoodAction(queryRunner, person);
     } else if (action.action_type_id == 3) {
       await this.utilityPrepareIncreaseStorageAction(queryRunner, person);
@@ -89,6 +101,10 @@ export class ActionService {
       await this.utilityPrepareIncreaseRoomsAction(queryRunner, person);
     } else if (action.action_type_id == 5) {
       await this.utilityPrepareCreateHouseAction(queryRunner, person);
+    } else if (action.action_type_id == 6) {
+      // Do nothing
+    } else {
+      throw "Invalid action_type_id, got: " + action.action_type_id;
     }
     return await queryRunner.manager.save(Action, action);
   }
