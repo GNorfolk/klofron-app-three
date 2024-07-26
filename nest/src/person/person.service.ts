@@ -9,6 +9,7 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { Action } from '../action/entities/Action';
+import { ActionQueue } from '../action/entities/ActionQueue';
 
 @Injectable()
 export class PersonService {
@@ -81,6 +82,8 @@ export class PersonService {
         person_skills_builder_experience: 1
       });
       person.person_skills_id = skills.person_skills_id;
+      const queue = await queryRunner.manager.create(ActionQueue);
+      person.person_action_queue_id = queue.action_queue_id;
       const result = await queryRunner.manager.save(Person, person);
       await queryRunner.manager.save(Resource, {
         resource_type_name: "food",
@@ -137,6 +140,10 @@ export class PersonService {
       });
       couple[0].person_skills_id = mother_skills.person_skills_id;
       couple[1].person_skills_id = father_skills.person_skills_id;
+      const mother_queue = await queryRunner.manager.create(ActionQueue);
+      const father_queue = await queryRunner.manager.create(ActionQueue);
+      couple[0].person_action_queue_id = mother_queue.action_queue_id;
+      couple[1].person_action_queue_id = father_queue.action_queue_id;
       mother = await queryRunner.manager.save(Person, couple[0]);
       father = await queryRunner.manager.save(Person, couple[1]);
       await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });
