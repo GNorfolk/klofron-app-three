@@ -303,14 +303,14 @@ export class ActionService {
           resource_type_name: "food",
           resource_house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "resource_volume", 2);
-        await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-        }, "person_skills_gatherer_experience", 1);
         console.log("GetFoodDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("GetFoodNotDone")
       }
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
+      }, "person_skills_gatherer_experience", 1);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -344,14 +344,14 @@ export class ActionService {
           resource_type_name: "wood",
           resource_house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "resource_volume", 1);
-        await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-        }, "person_skills_lumberjack_experience", 1);
         console.log("GetWoodDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("GetWoodNotDone")
       }
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
+      }, "person_skills_lumberjack_experience", 1);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -380,14 +380,14 @@ export class ActionService {
         await queryRunner.manager.increment(House, {
           house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "house_storage", 3);
-        await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-        }, "person_skills_builder_experience", 1);
         console.log("IncreaseStorageDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("IncreaseStorageNotDone")
       }
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
+      }, "person_skills_builder_experience", 1);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -416,14 +416,14 @@ export class ActionService {
         await queryRunner.manager.increment(House, {
           house_id: action.action_queue_previous.action_queue_person.person_house_id
         }, "house_rooms", 1);
-        await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-        }, "person_skills_builder_experience", 1);
         console.log("IncreaseRoomsDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("IncreaseRoomsNotDone")
       }
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
+      }, "person_skills_builder_experience", 1);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -455,14 +455,14 @@ export class ActionService {
             house_rooms: 2
           }
         )
-        await queryRunner.manager.increment(PersonSkills, {
-          person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-        }, "person_skills_builder_experience", 1);
         console.log("CreateHouseDone")
       } else {
         await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
         console.log("CreateHouseNotDone")
       }
+      await queryRunner.manager.increment(PersonSkills, {
+        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
+      }, "person_skills_builder_experience", 1);
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result
