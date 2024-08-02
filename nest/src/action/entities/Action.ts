@@ -20,6 +20,9 @@ export class Action {
   @Column("int", { name: "type_id" })
   action_type_id: number;
 
+  @Column("int", { name: "experience_multiplier" })
+  action_experience_multiplier: number;
+
   @Column("timestamp", {
     name: "started_at",
     default: () => "CURRENT_TIMESTAMP",

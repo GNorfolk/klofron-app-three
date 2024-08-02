@@ -85,6 +85,7 @@ CREATE TABLE `action` (
     `queue_id` INT NOT NULL,
     `type_id` INT NOT NULL,
     `infinite` BOOL NOT NULL DEFAULT 0,
+    `experience_multiplier` INT NOT NULL DEFAULT 1,
     `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP,

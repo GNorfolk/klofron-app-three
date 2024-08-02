@@ -29,6 +29,7 @@ export class ActionService {
         .innerJoinAndSelect("person.person_action_queue", "queue")
         .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .leftJoinAndSelect("person.person_house", "house")
+        .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_students", "student")
         .leftJoinAndSelect("student.person_action_queue", "student_queue")
         .leftJoinAndSelect("student_queue.action_queue_current_action", "student_current_action", "student_current_action.cancelled_at IS NULL AND student_current_action.completed_at IS NULL")
@@ -80,6 +81,16 @@ export class ActionService {
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
       student_action.action_queue_id = student.person_action_queue_id;
+      if (student_action.action_type_id == 1) {
+        student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_gatherer_level);
+      } else if (student_action.action_type_id == 2) {
+        student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_lumberjack_level);
+      } else if (student_action.action_type_id == 3 || student_action.action_type_id == 4 || student_action.action_type_id == 5) {
+        student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_builder_level);
+      } else {
+        student_action.action_experience_multiplier = 1
+      }
+      console.log(student_action)
       await queryRunner.manager.save(Action, student_action);
     }
     action.action_type_id = 7;
@@ -310,7 +321,7 @@ export class ActionService {
       }
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_gatherer_experience", 1);
+      }, "person_skills_gatherer_experience", action.action_experience_multiplier);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -351,7 +362,7 @@ export class ActionService {
       }
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_lumberjack_experience", 1);
+      }, "person_skills_lumberjack_experience", action.action_experience_multiplier);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -387,7 +398,7 @@ export class ActionService {
       }
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_builder_experience", 1);
+      }, "person_skills_builder_experience", action.action_experience_multiplier);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -423,7 +434,7 @@ export class ActionService {
       }
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_builder_experience", 1);
+      }, "person_skills_builder_experience", action.action_experience_multiplier);
       await queryRunner.commitTransaction();
       await queryRunner.release();
     } catch (err) {
@@ -462,7 +473,7 @@ export class ActionService {
       }
       await queryRunner.manager.increment(PersonSkills, {
         person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_builder_experience", 1);
+      }, "person_skills_builder_experience", action.action_experience_multiplier);
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result
@@ -512,5 +523,13 @@ export class ActionService {
     const blackRoll = Math.floor(12 * Math.random() + 1);
     const redRoll = Math.floor(12 * Math.random() + 1);
     return blackRoll + skillLevel > redRoll;
+  }
+
+  async utilityCalculateExperienceMultiplier(studentsLength: number, teacherSkillLevel: number) {
+    if (teacherSkillLevel > studentsLength) {
+      return teacherSkillLevel + 1 - studentsLength;
+    } else {
+      return 1;
+    }
   }
 }
