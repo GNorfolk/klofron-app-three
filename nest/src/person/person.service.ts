@@ -140,8 +140,8 @@ export class PersonService {
       });
       couple[0].person_skills_id = mother_skills.person_skills_id;
       couple[1].person_skills_id = father_skills.person_skills_id;
-      const mother_queue = await queryRunner.manager.create(ActionQueue);
-      const father_queue = await queryRunner.manager.create(ActionQueue);
+      const mother_queue = await queryRunner.manager.save(ActionQueue, { action_queue_id: null });
+      const father_queue = await queryRunner.manager.save(ActionQueue, { action_queue_id: null });
       couple[0].person_action_queue_id = mother_queue.action_queue_id;
       couple[1].person_action_queue_id = father_queue.action_queue_id;
       mother = await queryRunner.manager.save(Person, couple[0]);
@@ -220,8 +220,8 @@ export class PersonService {
       .leftJoinAndSelect("address.house_address_road", "road")
       .leftJoinAndSelect("person.person_partner", "partner")
       .leftJoinAndSelect("partner.person_family", "partner_family")
-      .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'") // TODO switch to inner join when all people have resources
-      .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'") // TODO switch to inner join when all people have resources
+      .innerJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'")
+      .innerJoinAndSelect("person.person_food", "food", "food.type_name = 'food'")
       .leftJoinAndSelect("person.person_betrothal_receipts", "betrothal", "betrothal.accepted_at IS NULL AND betrothal.deleted_at IS NULL")
       .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
       .leftJoinAndSelect("betrothal_person.person_family", "betrothal_person_family")
@@ -265,15 +265,15 @@ export class PersonService {
       if (house.house_people.length > house.house_rooms) throw "Too many people live at this address!";
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
-        .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'")
-        .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'")
+        .innerJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'")
+        .innerJoinAndSelect("person.person_food", "food", "food.type_name = 'food'")
         .leftJoinAndSelect("person.person_house", "house")
-        .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
-        .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'food'")
+        .leftJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+        .leftJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'food'")
         .where("person.id = :id", { id: person_id })
         .getOne();
-      if (person.person_house_id == house_id) throw "Person already living at this address!";
-      if (person.person_house_id) {
+      if (person?.person_house_id == house_id) throw "Person already living at this address!";
+      if (person?.person_house_id) {
         if (person.person_house.house_food.resource_volume < 1) throw "Not enough house food to move!";
         result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
         const resource = await queryRunner.manager.decrement(Resource, {
