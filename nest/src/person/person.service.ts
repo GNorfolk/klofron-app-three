@@ -82,7 +82,7 @@ export class PersonService {
         person_skills_builder_experience: 1
       });
       person.person_skills_id = skills.person_skills_id;
-      const queue = await queryRunner.manager.create(ActionQueue);
+      const queue = await queryRunner.manager.save(ActionQueue, { action_queue_id: null });
       person.person_action_queue_id = queue.action_queue_id;
       const result = await queryRunner.manager.save(Person, person);
       await queryRunner.manager.save(Resource, {
