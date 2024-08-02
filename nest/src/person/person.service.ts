@@ -257,29 +257,39 @@ export class PersonService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const food = await queryRunner.manager
-        .createQueryBuilder(Resource, "resource")
-        .where("resource.person_id = :id", { id: person_id })
-        .andWhere("resource.type_name = 'food'")
-        .getOne();
-      if (food.resource_volume < 1) throw "Not enough food to move!"
+      const house = await queryRunner.manager
+          .createQueryBuilder(House, "house")
+          .leftJoinAndSelect("house.house_people", "person")
+          .where("house.house_id = :id", { id: house_id })
+          .getOne();
+      if (house.house_people.length > house.house_rooms) throw "Too many people live at this address!";
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
+        .leftJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'")
+        .leftJoinAndSelect("person.person_food", "food", "food.type_name = 'food'")
+        .leftJoinAndSelect("person.person_house", "house")
+        .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+        .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'food'")
         .where("person.id = :id", { id: person_id })
         .getOne();
-      if (person.person_house_id == house_id) throw "Already living at this address!"
-      result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
-      const resource = await queryRunner.manager.decrement(Resource, {
-        resource_type_name: "food",
-        resource_person_id: person_id
-      }, "resource_volume", 1);
-      if (resource.affected != 1) throw "Cannot decrement person resrouces!"
-      const house = await queryRunner.manager
-        .createQueryBuilder(House, "house")
-        .leftJoinAndSelect("house.house_people", "person")
-        .where("house.house_id = :id", { id: house_id })
-        .getOne();
-      if (house.house_people.length > house.house_rooms) throw "Too many people live at this address!";
+      if (person.person_house_id == house_id) throw "Person already living at this address!";
+      if (person.person_house_id) {
+        if (person.person_house.house_food.resource_volume < 1) throw "Not enough house food to move!";
+        result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
+        const resource = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "food",
+          resource_house_id: person.person_house_id
+        }, "resource_volume", 1);
+        if (resource.affected != 1) throw "Cannot decrement house resrouces!";
+      } else {
+        if (person.person_food.resource_volume < 1) throw "Not enough person food to move!";
+        result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
+        const resource = await queryRunner.manager.decrement(Resource, {
+          resource_type_name: "food",
+          resource_person_id: person_id
+        }, "resource_volume", 1);
+        if (resource.affected != 1) throw "Cannot decrement person resrouces!";
+      }
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return [result];
