@@ -27,18 +27,24 @@ export class ActionService {
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
         .innerJoinAndSelect("person.person_action_queue", "queue")
-        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_students", "student")
         .leftJoinAndSelect("student.person_action_queue", "student_queue")
-        .leftJoinAndSelect("student_queue.action_queue_current_action", "student_current_action", "student_current_action.cancelled_at IS NULL AND student_current_action.completed_at IS NULL")
+        .leftJoinAndSelect("student_queue.action_queue_current_action", "student_current_action", "student_current_action.started_at IS NOT NULL AND student_current_action.cancelled_at IS NULL AND student_current_action.completed_at IS NULL")
         .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
         .where("person.person_action_queue_id = :id", { id: action.action_queue_id })
         .getOne();
       if (!person) throw "Action person cannot be found on the backend!"
-      if (person.person_students.length > 0) {
+      if (action.action_add_to_queue) {
+        if (person.person_action_queue.action_queue_current_action) {
+          result = await queryRunner.manager.save(Action, action);
+        } else {
+          throw "Cannot add action to queue when an action is not in progress!"
+        }
+      } else if (person.person_students.length > 0) {
         result = await this.utilityCreateActionStudents(queryRunner, action, person)
       } else {
         result = await this.utilityCreateActionSingle(queryRunner, action, person)
@@ -215,7 +221,7 @@ export class ActionService {
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
         .innerJoinAndSelect("person.person_action_queue", "queue")
-        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .where("person.person_id = :id", { id: person_id })
         .getOne();
       if (!person.person_action_queue.action_queue_current_action) throw "No actions cancellable!";
@@ -260,7 +266,7 @@ export class ActionService {
       .leftJoinAndSelect("person.person_house", "house")
       .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-      .where("action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
+      .where("action.started_at IS NOT NULL AND action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
       .getMany();
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {

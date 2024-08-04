@@ -95,7 +95,7 @@ export class HouseService {
       .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .innerJoinAndSelect("person.person_action_queue", "queue")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .leftJoinAndSelect("person.person_skills", "person_skills")
       .orderBy('person.id', 'ASC')
       .where("house.house_id = :id", { id: id })

@@ -31,7 +31,7 @@ export class PersonService {
         .createQueryBuilder(House, "house")
         .leftJoinAndSelect("house.house_people", "person", "person.person_partner_id IS NOT NULL")
         .innerJoinAndSelect("person.person_action_queue", "queue")
-        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
         .where("house.house_id = :id", { id: house_id })
         .getOne();
@@ -187,7 +187,7 @@ export class PersonService {
       .innerJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .innerJoinAndSelect("person.person_action_queue", "queue")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .where("person.person_deleted_at IS NULL")
     if (query?.house_id) {
       people = people.andWhere("person.person_house_id = :house_id", { house_id: query.house_id })
@@ -204,7 +204,7 @@ export class PersonService {
       .innerJoinAndSelect("person.person_skills", "skills")
       .innerJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_previous_actions", "previous_actions", "previous_actions.cancelled_at IS NOT NULL OR previous_actions.completed_at IS NOT NULL")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .innerJoinAndSelect("person.person_family", "person_family")
       .innerJoinAndSelect("person_family.family_people", "family_people")
       .innerJoinAndSelect("family_people.person_skills", "family_people_skills")

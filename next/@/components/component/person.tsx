@@ -11,17 +11,18 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
   }
 
   const onAction: SubmitHandler<Inputs> = (formData) => {
-    onSubmit(formData, false)
+    onSubmit(formData, 0)
   }
 
   const onQueue: SubmitHandler<Inputs> = (formData) => {
-    onSubmit(formData, true)
+    onSubmit(formData, 1)
   }
 
-  const onSubmit = (formData, addToQueue) => {
+  const onSubmit = (formData: Inputs, addToQueue: number) => {
     axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
       action_queue_id: formData.action_queue_id,
-      action_type_id: formData.action_type_id
+      action_type_id: formData.action_type_id,
+      action_add_to_queue: addToQueue
     }).then(response => {
       queryClient.invalidateQueries()
       document.getElementById("cm-" + formData.action_queue_id).innerText = ' '

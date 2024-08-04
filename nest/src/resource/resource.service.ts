@@ -48,7 +48,7 @@ export class ResourceService {
         .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
         .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
         .innerJoinAndSelect("person.person_action_queue", "queue")
-        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
         .where("person.person_id = :id", { id: body.person_id })
         .getOne()
       if (person.person_action_queue.action_queue_current_action) throw "Person cannot move resources while performing an action!"

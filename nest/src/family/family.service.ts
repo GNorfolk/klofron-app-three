@@ -37,7 +37,7 @@ export class FamilyService {
       .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .leftJoinAndSelect("person.person_action_queue", "queue")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .leftJoinAndSelect("family.family_houses", "house")
       .leftJoinAndSelect("house.house_people", "house_people")
       .leftJoinAndSelect("house.house_address", "address")
