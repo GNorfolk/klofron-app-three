@@ -23,11 +23,10 @@ export class Action {
   @Column("int", { name: "experience_multiplier" })
   action_experience_multiplier: number;
 
-  @Column("timestamp", {
-    name: "started_at",
-    default: () => "CURRENT_TIMESTAMP",
-    nullable: false
-  })
+  @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP", nullable: false })
+  action_created_at: Date;
+
+  @Column("timestamp", { name: "started_at" })
   action_started_at: Date;
 
   @Column("timestamp", { name: "completed_at", nullable: true })

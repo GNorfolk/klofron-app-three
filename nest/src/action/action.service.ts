@@ -81,6 +81,7 @@ export class ActionService {
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
       student_action.action_queue_id = student.person_action_queue_id;
+      student_action.action_started_at = new Date();
       if (student_action.action_type_id == 1) {
         student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_gatherer_level);
       } else if (student_action.action_type_id == 2) {
@@ -90,10 +91,10 @@ export class ActionService {
       } else {
         student_action.action_experience_multiplier = 1
       }
-      console.log(student_action)
       await queryRunner.manager.save(Action, student_action);
     }
     action.action_type_id = 7;
+    action.action_started_at = new Date();
     return await queryRunner.manager.save(Action, action);
   }
 
@@ -117,6 +118,7 @@ export class ActionService {
     } else {
       throw "Invalid action_type_id, got: " + action.action_type_id;
     }
+    action.action_started_at = new Date();
     return await queryRunner.manager.save(Action, action);
   }
 

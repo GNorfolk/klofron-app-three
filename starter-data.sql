@@ -86,7 +86,8 @@ CREATE TABLE `action` (
     `type_id` INT NOT NULL,
     `infinite` BOOL NOT NULL DEFAULT 0,
     `experience_multiplier` INT NOT NULL DEFAULT 1,
-    `started_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `started_at` TIMESTAMP,
     `completed_at` TIMESTAMP,
     `cancelled_at` TIMESTAMP,
     FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
