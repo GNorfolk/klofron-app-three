@@ -26,4 +26,7 @@ export class ActionQueue {
 
   @OneToOne(() => Action, (action) => action.action_queue_current)
   action_queue_current_action: Relation<Action>;
+
+  @OneToMany(() => Action, (action) => action.action_queue_next)
+  action_queue_next_actions: Relation<Action>[];
 }

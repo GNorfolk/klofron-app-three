@@ -46,12 +46,20 @@ export class Action {
   @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
   action_queue_current: Relation<ActionQueue>;
 
+  @ManyToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_next_actions)
+  @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
+  action_queue_next: Relation<ActionQueue>;
+
   @AfterLoad()
   calculateActionStartedTimeAgo(): void {
-    const days = ( (new Date()).valueOf() - (new Date(this.action_started_at)).valueOf()) / day_in_ms
-    const hours = days > 1 ? (days - Math.floor(days)) * 24 : days * 24
-    const minutes = hours > 1 ? (hours - Math.floor(hours)) * 60 : hours * 60
-    this.action_started_time_ago = Math.floor(days) + "days " + Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+    if (this.action_started_at) {
+      const days = ( (new Date()).valueOf() - (new Date(this.action_started_at)).valueOf()) / day_in_ms;
+      const hours = days > 1 ? (days - Math.floor(days)) * 24 : days * 24;
+      const minutes = hours > 1 ? (hours - Math.floor(hours)) * 60 : hours * 60;
+      this.action_started_time_ago = Math.floor(days) + "days " + Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins";
+    } else {
+      this.action_started_time_ago = null;
+    }
   }
 
   @AfterLoad()

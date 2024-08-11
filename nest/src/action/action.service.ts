@@ -262,11 +262,12 @@ export class ActionService {
     const actions = await this.actionRepository
       .createQueryBuilder("action")
       .innerJoinAndSelect("action.action_queue_previous", "queue")
+      .leftJoinAndSelect("queue.action_queue_next_actions", "next_actions", "next_actions.started_at IS NULL AND next_actions.cancelled_at IS NULL AND next_actions.completed_at IS NULL")
       .innerJoinAndSelect("queue.action_queue_person", "person")
       .leftJoinAndSelect("person.person_house", "house")
-      .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-      .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-      .where("action.started_at IS NOT NULL AND action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
+      .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+      .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+      .where("action.started_at IS NOT NULL AND action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 0 HOUR < now()")
       .getMany();
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {
@@ -291,6 +292,23 @@ export class ActionService {
           await this.updateProcessTeachStudents(action.action_id)
         } else {
           console.log("pass")
+        }
+        if (action.action_queue_previous.action_queue_next_actions.length > 0) {
+          try {
+            await this.create(
+              {
+                action_type_id: action.action_queue_previous.action_queue_next_actions[0].action_type_id,
+                action_queue_id: action.action_queue_previous.action_queue_next_actions[0].action_queue_id,
+                action_experience_multiplier: action.action_queue_previous.action_queue_next_actions[0].action_experience_multiplier,
+                action_started_at: new Date(),
+                action_add_to_queue: 0
+              }
+            );
+          } catch {
+            for (const actions of action.action_queue_previous.action_queue_next_actions) {
+              await this.updateCancelAction(actions.action_id);
+            }
+          }
         }
       }
       catch (err) {
