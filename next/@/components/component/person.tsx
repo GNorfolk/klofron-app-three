@@ -104,7 +104,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                         variant="ghost"
                         className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
                         onClick={handleSubmit(onQueue)}
-                      >Add to Queue</Button>
+                      >{"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"}</Button>
                     </div>
                   </form>
                   {

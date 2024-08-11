@@ -267,7 +267,7 @@ export class ActionService {
       .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
       .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-      .where("action.started_at IS NOT NULL AND action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 0 HOUR < now()")
+      .where("action.started_at IS NOT NULL AND action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
       .getMany();
     console.log("There are " + actions.length + " actions!")
     for (const action of actions) {
@@ -297,6 +297,7 @@ export class ActionService {
           try {
             await this.create(
               {
+                action_id: action.action_queue_previous.action_queue_next_actions[0].action_id,
                 action_type_id: action.action_queue_previous.action_queue_next_actions[0].action_type_id,
                 action_queue_id: action.action_queue_previous.action_queue_next_actions[0].action_queue_id,
                 action_experience_multiplier: action.action_queue_previous.action_queue_next_actions[0].action_experience_multiplier,
