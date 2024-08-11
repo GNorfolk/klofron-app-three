@@ -36,6 +36,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
         } right={
           <div>
             <ListPersonActionsCurrent currentAction={data.person_action_queue?.action_queue_current_action} queryClient={queryClient} personId={router.query.person_id} />
+            <ListPersonActionsNext nextActions={data.person_action_queue.action_queue_next_actions} personId={router.query.person_id} />
             <ListPersonActionsPrevious previousActions={data.person_action_queue.action_queue_previous_actions} personId={router.query.person_id} />
             <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
           </div>
@@ -77,6 +78,34 @@ function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
       </ul>
     </Container>
   )
+}
+
+function ListPersonActionsNext({ nextActions, personId }) {
+  if (nextActions.length > 0) {
+    return (
+      <Container>
+        <h3 className="text-xl leading-normal">Next Actions</h3>
+        <ul className="list-none p-0 m-0">
+          {nextActions.map(({ action_id, action_type_name, action_created_at }, index) => (
+            <li className="mt-0 mx-0 mb-5" key={action_id}>
+              <p>Action with id {action_id} of type {action_type_name} is number {index + 1} in the queue.</p>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    )
+  } else {
+    return (
+      <Container>
+        <h3 className="text-xl leading-normal">Next Actions</h3>
+        <ul className="list-none p-0 m-0">
+            <li className="mt-0 mx-0 mb-5">
+              <p>This person has no future actions initiated.</p>
+            </li>
+        </ul>
+      </Container>
+    )
+  }
 }
 
 function ListPersonActionsPrevious({ previousActions, personId }) {

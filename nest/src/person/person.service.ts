@@ -204,6 +204,7 @@ export class PersonService {
       .innerJoinAndSelect("person.person_skills", "skills")
       .innerJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_previous_actions", "previous_actions", "previous_actions.cancelled_at IS NOT NULL OR previous_actions.completed_at IS NOT NULL")
+      .leftJoinAndSelect("queue.action_queue_next_actions", "next_actions", "next_actions.started_at IS NULL AND next_actions.cancelled_at IS NULL AND next_actions.completed_at IS NULL")
       .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
       .innerJoinAndSelect("person.person_family", "person_family")
       .innerJoinAndSelect("person_family.family_people", "family_people")
