@@ -87,6 +87,7 @@ export class Action {
       case 4: { this.action_type_name = "Increase Rooms"; break }
       case 5: { this.action_type_name = "Create House"; break }
       case 6: { this.action_type_name = "Create Baby"; break }
+      case 7: { this.action_type_name = "Teach Students"; break }
       default: { this.action_type_name = "Unknown"; break }
     }
   }

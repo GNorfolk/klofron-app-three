@@ -39,7 +39,9 @@ export class ActionService {
         .getOne();
       if (!person) throw "Action person cannot be found on the backend!"
       if (action.action_add_to_queue) {
-        if (person.person_action_queue.action_queue_current_action) {
+        if (person.person_teacher_id) {
+          throw "Cannot queue action when teacher is set!"
+        } else if (person.person_action_queue.action_queue_current_action) {
           result = await queryRunner.manager.save(Action, action);
         } else {
           throw "Cannot add action to queue when an action is not in progress!"
@@ -86,6 +88,7 @@ export class ActionService {
     }
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
+      student_action.action_id = null;
       student_action.action_queue_id = student.person_action_queue_id;
       student_action.action_started_at = new Date();
       if (student_action.action_type_id == 1) {
