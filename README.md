@@ -190,10 +190,6 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 
 # MySQL
 ```sql
-ALTER TABLE action ADD created_at TIMESTAMP NOT NULL DEFAULT current_timestamp();
-UPDATE ACTION SET created_at = started_at;
-ALTER TABLE action ALTER COLUMN started_at DROP DEFAULT;
-ALTER TABLE action CHANGE started_at started_at TIMESTAMP NULL;
 ```
 
 # save
