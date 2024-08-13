@@ -30,7 +30,7 @@ export class ActionController {
   @Patch()
   update(@Req() req) {
     if (req.body.action == "cancel") {
-      return this.actionService.updateCancelPersonAction(req.body.person_id)
+      return "Deprecated!"
     } else {
       return this.actionService.updateProcessActions()
     }
@@ -39,7 +39,7 @@ export class ActionController {
   @Patch(':id')
   updateOne(@Req() req, @Param('id') id: number) {
     if (req.body.action == "cancel") {
-      return this.actionService.updateCancelAction(id)
+      return this.actionService.updateCancelAction(id, true)
     }
   }
 }

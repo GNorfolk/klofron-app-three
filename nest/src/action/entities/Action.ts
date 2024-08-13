@@ -26,7 +26,7 @@ export class Action {
   @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP", nullable: false })
   action_created_at: Date;
 
-  @Column("timestamp", { name: "started_at" })
+  @Column("timestamp", { name: "started_at", nullable: true })
   action_started_at: Date;
 
   @Column("timestamp", { name: "completed_at", nullable: true })
