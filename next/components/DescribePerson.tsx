@@ -9,6 +9,7 @@ import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person'
 import { HouseListing } from '../@/components/component/house'
 import { BetrothalInfo } from '../@/components/component/betrothal'
+import { Button } from "../@/components/ui/button"
 
 export default function DescribePerson({ queryClient, status, userId = null }) {
   const router = useRouter()
@@ -36,7 +37,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
         } right={
           <div>
             <ListPersonActionsCurrent currentAction={data.person_action_queue?.action_queue_current_action} queryClient={queryClient} personId={router.query.person_id} />
-            <ListPersonActionsNext nextActions={data.person_action_queue.action_queue_next_actions} personId={router.query.person_id} />
+            <ListPersonActionsNext nextActions={data.person_action_queue.action_queue_next_actions} queryClient={queryClient} />
             <ListPersonActionsPrevious previousActions={data.person_action_queue.action_queue_previous_actions} personId={router.query.person_id} />
             <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
           </div>
@@ -80,7 +81,15 @@ function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
   )
 }
 
-function ListPersonActionsNext({ nextActions, personId }) {
+function ListPersonActionsNext({ nextActions, queryClient }) {
+  const cancelAction = useMutation({
+    mutationFn: (id) => {
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action/' + id, {
+        action: "cancel"
+      })
+    },
+  })
+
   if (nextActions.length > 0) {
     return (
       <Container>
@@ -89,6 +98,13 @@ function ListPersonActionsNext({ nextActions, personId }) {
           {nextActions.map(({ action_id, action_type_name, action_created_at }, index) => (
             <li className="mt-0 mx-0 mb-5" key={action_id}>
               <p>Action with id {action_id} of type {action_type_name} is number {index + 1} in the queue.</p>
+              <button onClick={
+                () => {
+                    cancelAction.mutate(action_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries()
+                  }})
+                }
+              } >Cancel Action</button>
             </li>
           ))}
         </ul>

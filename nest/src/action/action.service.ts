@@ -250,14 +250,17 @@ export class ActionService {
           .innerJoinAndSelect("action.action_queue_current", "queue")
           .where("action.action_id = :id", { id: action_id })
           .getOne();
-        await queryRunner.manager.update(Action, {
-          action_queue_id: action.action_queue_id,
-          action_started_at: IsNull(),
-          action_cancelled_at: IsNull(),
-          action_completed_at: IsNull()
-        }, {
-          action_cancelled_at: new Date()
-        });
+        // If action is the current action, also cancel queue
+        if (action.action_started_at) {
+          await queryRunner.manager.update(Action, {
+            action_queue_id: action.action_queue_id,
+            action_started_at: IsNull(),
+            action_cancelled_at: IsNull(),
+            action_completed_at: IsNull()
+          }, {
+            action_cancelled_at: new Date()
+          });
+        }
       }
       cancel = await queryRunner.manager.update(Action, action_id, { action_cancelled_at: new Date() });
       if (cancel.affected != 1) throw "Unable to cancel action!";
