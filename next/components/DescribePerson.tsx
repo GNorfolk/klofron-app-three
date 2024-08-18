@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
@@ -11,8 +10,7 @@ import { HouseListing } from '../@/components/component/house'
 import { BetrothalInfo } from '../@/components/component/betrothal'
 import { Button } from "../@/components/ui/button"
 
-export default function DescribePerson({ queryClient, status, userId = null }) {
-  const router = useRouter()
+export default function DescribePerson({ queryClient, status, userId = null, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['personData' + router.query.person_id],
@@ -31,7 +29,7 @@ export default function DescribePerson({ queryClient, status, userId = null }) {
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
             <ListPersonSkills queryClient={queryClient} data={data.person_skills}/>
-            { status === "authenticated" && userId == data.person_family.family_user_id ? <ListPersonBetrothals data={data} /> : <></> }
+            { status === "authenticated" && userId == data.person_family.family_user_id ? <ListPersonBetrothals data={data} router={router} /> : <></> }
             <DescribePersonTeacher data={data} personId={router.query.person_id} />
           </div>
         } right={
@@ -153,8 +151,7 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
   }
 }
 
-function ListPersonBetrothals({ data }) {
-  const router = useRouter()
+function ListPersonBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>

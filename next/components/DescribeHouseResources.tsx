@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
@@ -7,8 +6,7 @@ import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"
 
-export default function DescribeHouseResources({ queryClient, userId }) {
-  const router = useRouter()
+export default function DescribeHouseResources({ queryClient, userId, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['houseResourceData' + router.query.id],

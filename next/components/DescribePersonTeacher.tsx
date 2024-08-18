@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useQuery, QueryClientProvider, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
@@ -9,8 +8,7 @@ import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
 import { PersonListing, PersonInfo } from '../@/components/component/person'
 
-export default function DescribePersonTeacher({ userId, queryClient }) {
-  const router = useRouter()
+export default function DescribePersonTeacher({ userId, queryClient, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['DescribePersonTeacherData'],

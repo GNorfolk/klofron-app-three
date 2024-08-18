@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useQuery, QueryClientProvider, useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import axios from 'axios'
@@ -9,8 +8,7 @@ import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
 import { BetrothalReciepts, BetrothalRecieptResponse } from '../@/components/component/betrothal'
 
-export default function DescribePersonBetrothal({ userId, queryClient }) {
-  const router = useRouter()
+export default function DescribePersonBetrothal({ userId, queryClient, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['describePersonBetrothalData'],
@@ -31,16 +29,15 @@ export default function DescribePersonBetrothal({ userId, queryClient }) {
     return (
       <QueryClientProvider client={queryClient}>
         <BoxLayoutSingle>
-          <ListPersonBetrothalReceipts data={data} />
-          <PersonBetrothalReceiptResponse data={data} queryClient={queryClient} />
+          <ListPersonBetrothalReceipts data={data} router={router} />
+          <PersonBetrothalReceiptResponse data={data} queryClient={queryClient} router={router} />
         </BoxLayoutSingle>
       </QueryClientProvider>
     )
   }
 }
 
-function ListPersonBetrothalReceipts({ data }) {
-  const router = useRouter()
+function ListPersonBetrothalReceipts({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
@@ -50,8 +47,7 @@ function ListPersonBetrothalReceipts({ data }) {
   }
 }
 
-function PersonBetrothalReceiptResponse({ data, queryClient }) {
-  const router = useRouter()
+function PersonBetrothalReceiptResponse({ data, queryClient, router }) {
   if (router.isReady) {
     return (
       <Container>

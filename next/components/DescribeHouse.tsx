@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import Link from 'next/link'
@@ -8,8 +7,7 @@ import { Container } from '../@/components/component/container'
 import { HouseInfo } from '../@/components/component/house'
 import { PersonListing } from '../@/components/component/person'
 
-export default function DescribeHouse({ queryClient, userId }) {
-  const router = useRouter()
+export default function DescribeHouse({ queryClient, userId, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['houseDatav2' + router.query.id],
@@ -33,18 +31,18 @@ export default function DescribeHouse({ queryClient, userId }) {
               userId === data.house_family.family_user_id ?
               <div>
                 <CreatePerson houseId={house_id} queryClient={queryClient} />
-                <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} />
+                <ListHousePeople peopleData={data.house_people} queryClient={queryClient} userId={userId} router={router} />
               </div>
               :
               <div>
-                <ListHousePeople peopleData={data.house_people} queryClient={queryClient} />
+                <ListHousePeople peopleData={data.house_people} queryClient={queryClient} router={router} />
               </div>
             }
           </div>
         } right={
           <div>
-            <ListHouseTrades data={data.house_trades} />
-            <ListHouseResources data={data} queryClient={queryClient} userId={userId} />
+            <ListHouseTrades data={data.house_trades} router={router} />
+            <ListHouseResources data={data} queryClient={queryClient} userId={userId} router={router} />
           </div>
         } />
       </QueryClientProvider>
@@ -52,8 +50,7 @@ export default function DescribeHouse({ queryClient, userId }) {
   }
 }
 
-function ListHousePeople({ peopleData, queryClient, userId = null }) {
-  const router = useRouter()
+function ListHousePeople({ peopleData, queryClient, userId = null, router }) {
   if (router.isReady) {
     if (peopleData.length > 0) {
       return (
@@ -76,8 +73,7 @@ function ListHousePeople({ peopleData, queryClient, userId = null }) {
   }
 }
 
-function ListHouseResources({ data, queryClient, userId = null }) {
-  const router = useRouter()
+function ListHouseResources({ data, queryClient, userId = null, router }) {
   if (router.isReady) {
     return (
       <Container>
@@ -93,8 +89,7 @@ function ListHouseResources({ data, queryClient, userId = null }) {
   }
 }
 
-function ListHouseTrades({ data }) {
-  const router = useRouter()
+function ListHouseTrades({ data, router }) {
   if (router.isReady) {
     if (data.length > 0) {
       return (

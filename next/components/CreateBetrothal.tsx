@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useQuery, QueryClientProvider } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
@@ -7,8 +6,7 @@ import { Container } from '../@/components/component/container'
 import { BetrothalCreation } from '../@/components/component/betrothal'
 import { PersonInfo } from '../@/components/component/person'
 
-export default function CreateBetrothal({ queryClient, userId }) {
-  const router = useRouter()
+export default function CreateBetrothal({ queryClient, userId, router }) {
   if (router.isReady) {
     return (
       <QueryClientProvider client={queryClient}>

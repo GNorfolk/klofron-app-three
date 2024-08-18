@@ -7,10 +7,9 @@ const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }) {
   const router = useRouter()
-
   return (
     <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} key={router.asPath} client={queryClient} />
+      <Component {...pageProps} key={router.asPath} client={queryClient} router={router} />
     </SessionProvider>
   )
 }

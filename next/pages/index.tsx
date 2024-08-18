@@ -8,7 +8,7 @@ import ListAllFamilies from '../components/ListAllFamilies'
 
 let userId
 
-export default function Family({ client }) {
+export default function Family({ client, router }) {
   const { status, data } = useSession()
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/family")

@@ -1,5 +1,4 @@
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
@@ -9,8 +8,7 @@ import { PersonListing } from '../@/components/component/person'
 import { HouseListing } from '../@/components/component/house'
 import { Button } from "../@/components/ui/button"
 
-export default function DescribeFamily({ queryClient, userId }) {
-  const router = useRouter()
+export default function DescribeFamily({ queryClient, userId, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyData' + router.query.family_id],
@@ -30,9 +28,9 @@ export default function DescribeFamily({ queryClient, userId }) {
           <BoxLayout left={
             <div>
               <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={true} />
-              <ListFamilyTravel data={data} />
-              <ListFamilyBetrothals data={data} />
-              <CreateFamilyBetrothals data={data} />
+              <ListFamilyTravel data={data} router={router} />
+              <ListFamilyBetrothals data={data} router={router} />
+              <CreateFamilyBetrothals data={data} router={router} />
             </div>
           } right={
             <div>
@@ -172,8 +170,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
   }
 }
 
-function ListFamilyBetrothals({ data }) {
-  const router = useRouter()
+function ListFamilyBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
@@ -188,8 +185,7 @@ function ListFamilyBetrothals({ data }) {
   }
 }
 
-function CreateFamilyBetrothals({ data }) {
-  const router = useRouter()
+function CreateFamilyBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
@@ -204,8 +200,7 @@ function CreateFamilyBetrothals({ data }) {
   }
 }
 
-function ListFamilyTravel({ data }) {
-  const router = useRouter()
+function ListFamilyTravel({ data, router }) {
   if (router.isReady) {
     return (
       <Container>

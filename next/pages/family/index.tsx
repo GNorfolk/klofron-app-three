@@ -4,7 +4,7 @@ import { BaseLayout } from '../../@/components/component/base-layout'
 import ListAllFamilies from '../../components/ListAllFamilies'
 
 
-export default function Home({ client }) {
+export default function Home({ client, router }) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>

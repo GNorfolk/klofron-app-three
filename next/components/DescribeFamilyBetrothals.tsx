@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
@@ -6,8 +5,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { BetrothalListing, BetrothalEligibleListing } from '../@/components/component/betrothal'
 
-export default function DescribeFamilyBetrothals({ queryClient, userId }) {
-  const router = useRouter()
+export default function DescribeFamilyBetrothals({ queryClient, userId, router }) {
   if (router.isReady) {
     const { isLoading, error, data } = useQuery({
       queryKey: ['familyBetrothalData' + router.query.family_id],

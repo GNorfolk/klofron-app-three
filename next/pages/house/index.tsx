@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 import { BaseLayout } from '../../@/components/component/base-layout'
 import ListAllHouses from '../../components/ListAllHouses'
 
-export default function Home({ client }) {
+export default function Home({ client, router }) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>
