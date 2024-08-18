@@ -180,7 +180,7 @@ function ListFamilyBetrothals({ data }) {
         <h2 className="p-6 text-4xl">Betrothal Listing</h2>
         <Button size="sm"
           variant="ghost"
-          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
           onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/list`) }
         >Go to Betrothal Listing page.</Button>
       </Container>
@@ -196,7 +196,7 @@ function CreateFamilyBetrothals({ data }) {
         <h2 className="p-6 text-4xl">Betrothal Creation</h2>
         <Button size="sm"
           variant="ghost"
-          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
           onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/create`) }
         >Go to Betrothal Creation page.</Button>
       </Container>
@@ -212,7 +212,7 @@ function ListFamilyTravel({ data }) {
         <h2 className="p-6 text-4xl">Travel Info</h2>
         <Button size="sm"
           variant="ghost"
-          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
           onClick={ () => router.push(`/family/${router.query.family_id}/travel`) }
         >Go to Travel Management page.</Button>
       </Container>

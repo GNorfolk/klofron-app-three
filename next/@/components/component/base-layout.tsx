@@ -8,8 +8,8 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
   return (
     <div className="grid md:grid-cols-[200px_1fr] w-full min-h-screen">
       <div className="bg-gray-100 dark:bg-gray-800 hidden md:block">
-        <div className="flex flex-col h-full">
-          <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col h-full bg-black">
+          <div className="flex h-16 items-center px-6 border-b border-gray-700 dark:border-gray-700">
             <div className="flex items-center gap-2 font-semibold">
               <MountainIcon className="h-6 w-6" />
               <span className="text-gray-900 dark:text-gray-50">klofroN</span>
@@ -18,27 +18,27 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
           <nav className="flex-1 py-4">
             <ul className="grid gap-1">
               <li>
-                <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
                   <span className='whitespace-nowrap'>Home</span>
                 </a>
               </li>
               <li>
-                <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                   <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
                   <span className='whitespace-nowrap'>Index</span>
                 </a>
               </li>
               { status === "authenticated" ? (
                 <li>
-                  <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                  <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                     <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                     <span className='whitespace-nowrap'>Logout</span>
                   </a>
                 </li>
               ) : (
                 <li>
-                  <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                  <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                     <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                     <span className='whitespace-nowrap'>Login</span>
                   </a>
@@ -49,10 +49,10 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
         </div>
       </div>
       <div className="flex flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-950 md:hidden">
+        <header className="flex h-16 items-center justify-between border-b border-gray-800 bg-black px-4 dark:border-gray-700 dark:bg-gray-950 md:hidden">
           <a href="/" className="flex items-center gap-2 font-semibold">
             <MountainIcon className="h-6 w-6" />
-            <span className="text-gray-900 dark:text-gray-50">klofroN</span>
+            <span className="text-gray-500 dark:text-gray-50">klofroN</span>
           </a>
           <Sheet>
             <SheetTrigger asChild>
@@ -61,37 +61,37 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
                 <span className="sr-only">Toggle navigation</span>
               </Button>
             </SheetTrigger>
-            <SheetContent className="bg-white dark:bg-gray-950" side="left">
-              <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
+            <SheetContent className="bg-black dark:bg-gray-950" side="left">
+              <div className="flex h-16 items-center px-6 border-b border-gray-700 dark:border-gray-700">
                 <div className="flex items-center gap-2 font-semibold">
                   <MountainIcon className="h-6 w-6" />
-                  <span className="text-gray-900 dark:text-gray-50">klofroN</span>
+                  <span className="text-gray-500 dark:text-gray-50">klofroN</span>
                 </div>
               </div>
               <nav className="flex-1 py-4">
                 <ul className="grid gap-1">
                   <li>
-                    <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
                       <span className='whitespace-nowrap'>Home</span>
                     </a>
                   </li>
                   <li>
-                    <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                       <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
                       <span className='whitespace-nowrap'>Index</span>
                     </a>
                   </li>
                   { status === "authenticated" ? (
                     <li>
-                      <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                      <a onClick={(e) => { e.preventDefault(); signOut() }} className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                         <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                         <span className='whitespace-nowrap'>Logout</span>
                       </a>
                     </li>
                   ) : (
                     <li>
-                      <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                      <a onClick={(e) => { e.preventDefault(); signIn() }} className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
                         <LockIcon className="w-5 h-5 min-w-5 min-h-5" />
                         <span className='whitespace-nowrap'>Login</span>
                       </a>
@@ -102,7 +102,7 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
             </SheetContent>
           </Sheet>
         </header>
-        <main className="flex-1 p-4 md:p-6">
+        <main className="flex-1 p-4 md:p-6 bg-slate-950">
           <div className="prose prose-stone dark:prose-invert">
             <main>{children}</main>
           </div>

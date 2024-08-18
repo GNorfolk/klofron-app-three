@@ -107,7 +107,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
           <Button
             size="sm"
             variant="ghost"
-            className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+            className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
           >Select Teacher</Button>
         </div>
       </form>
@@ -147,7 +147,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
           <Button
             size="sm"
             variant="ghost"
-            className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+            className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
           >Remove Teacher</Button>
         </div>
       </form>

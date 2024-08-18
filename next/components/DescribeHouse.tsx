@@ -85,7 +85,7 @@ function ListHouseResources({ data, queryClient, userId = null }) {
         <p className="m-2 text-gray-500 dark:text-gray-400">{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
         { userId === data.house_family.family_user_id ? <Button size="sm"
           variant="ghost"
-          className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
           onClick={ () => router.push(`/house/${router.query.id}/resource`) }
         >Go to Resource Management page.</Button> : null }
       </Container>
@@ -135,7 +135,7 @@ function CreatePerson({ houseId, queryClient }) {
     <Container>
       <Button size="sm"
         variant="ghost"
-        className="bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 border-2 hover:text-gray-800 m-1 transition-colors"
+        className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
         onClick={ () => {
           createPerson.mutate(houseId, { onSettled: (data, error: any) => {
             queryClient.invalidateQueries()
