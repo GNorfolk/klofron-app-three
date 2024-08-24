@@ -4,6 +4,7 @@ import axios from 'axios'
 import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { BetrothalListing, BetrothalEligibleListing } from '../@/components/component/betrothal'
+import { HeaderTwo } from '../@/components/ui/header'
 
 export default function DescribeFamilyBetrothals({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -17,7 +18,7 @@ export default function DescribeFamilyBetrothals({ queryClient, userId, router }
     
     if (isLoading) return (
       <div>
-        <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Info</h2>
+        <HeaderTwo>Betrothal Info</HeaderTwo>
         <p>Loading...</p>
       </div>
     )

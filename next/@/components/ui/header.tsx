@@ -4,14 +4,14 @@ export function HeaderOne({ children } : { children: string }) {
   )
 }
 
-export function HeaderTwo({ text }) {
+export function HeaderTwo({ children } : { children: string }) {
   return (
-    <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">{text}</h2>
+    <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">{children}</h2>
   )
 }
 
-export function HeaderThree({ text }) {
+export function HeaderThree({ children } : { children: string })  {
   return (
-    <h3 className="text-xl font-semibold text-gray-200">{text}</h3>
+    <h3 className="text-xl font-semibold text-gray-200">{children}</h3>
   )
 }

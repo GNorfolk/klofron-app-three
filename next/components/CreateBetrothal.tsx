@@ -5,6 +5,7 @@ import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { BetrothalCreation } from '../@/components/component/betrothal'
 import { PersonInfo } from '../@/components/component/person'
+import { HeaderTwo } from '../@/components/ui/header'
 
 export default function CreateBetrothal({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -31,7 +32,7 @@ export function CreateBetrothalInfo({ personId }) {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Info</h2>
+      <HeaderTwo>Betrothal Info</HeaderTwo>
       <p>Loading...</p>
     </div>
   )
@@ -55,7 +56,7 @@ export function CreateBetrothalForm({ familyId, personId, queryClient }) {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Info</h2>
+      <HeaderTwo>Betrothal Info</HeaderTwo>
       <p>Loading...</p>
     </div>
   )

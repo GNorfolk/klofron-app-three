@@ -5,6 +5,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"
+import { HeaderTwo } from '../@/components/ui/header'
 
 export default function DescribeHouseResources({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -74,7 +75,7 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
 
     if (isLoading) return (
       <div>
-        <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Resource Info</h2>
+        <HeaderTwo>Resource Info</HeaderTwo>
         <p>Loading...</p>
       </div>
     )
@@ -84,14 +85,14 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
       return (
         <BoxLayoutSingle>
           <Container>
-            <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Resource Info</h2>
+            <HeaderTwo>Resource Info</HeaderTwo>
             <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
             { data.house_people.map(({ person_name, person_food, person_wood }) => (
               <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
             ))}
           </Container>
           <Container>
-            <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Manage Resources</h2>
+            <HeaderTwo>Manage Resources</HeaderTwo>
             {
               data.house_people.length > 0 ?
                 <div>
@@ -122,7 +123,7 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
             }
           </Container>
           <Container>
-            <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Delete Resources</h2>
+            <HeaderTwo>Delete Resources</HeaderTwo>
             <ul className="list-none p-0 m-0">
               <li className="mt-0 mx-0 mb-5">
                 <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={

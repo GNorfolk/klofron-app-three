@@ -9,6 +9,7 @@ import { PersonListing } from '../@/components/component/person'
 import { HouseListing } from '../@/components/component/house'
 import { BetrothalInfo } from '../@/components/component/betrothal'
 import { Button } from "../@/components/ui/button"
+import { HeaderTwo } from '../@/components/ui/header'
 
 export default function DescribePerson({ queryClient, status, userId = null, router }) {
   if (router.isReady) {
@@ -174,7 +175,7 @@ function RenamePerson({ queryClient, personId }) {
 
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Rename Person</h2>
+      <HeaderTwo>Rename Person</HeaderTwo>
       <ul className="list-none p-0 m-0">
         <form onSubmit={handleSubmit}>
           <input
@@ -194,7 +195,7 @@ function RenamePerson({ queryClient, personId }) {
 function ListPersonInfo({ data, queryClient }) {
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Person Info</h2>
+      <HeaderTwo>Person Info</HeaderTwo>
       <ul className="list-none p-0 m-0">
         <li className="mt-0 mx-0 mb-5" key={data.person_id}>
           {
@@ -216,7 +217,7 @@ function ListPersonInfo({ data, queryClient }) {
 function ListPersonSkills({ data, queryClient }) {
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Skills Info</h2>
+      <HeaderTwo>Skills Info</HeaderTwo>
       <p>Gatherer level: {data.person_skills_gatherer_level}.</p>
       <p>Exp to next level: {Math.pow(2, data.person_skills_gatherer_level + 1) - data.person_skills_gatherer_experience}</p>
       <p>Lumberjack level: {data.person_skills_lumberjack_level}.</p>
@@ -230,7 +231,7 @@ function ListPersonSkills({ data, queryClient }) {
 function DescribePersonTeacher({ data, personId }) {
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Teacher Info</h2>
+      <HeaderTwo>Teacher Info</HeaderTwo>
       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
         {
           data.person_teacher_id ? <>

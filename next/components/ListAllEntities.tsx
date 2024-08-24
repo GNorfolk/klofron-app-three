@@ -60,7 +60,7 @@ function ListAllHouses() {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Houses</h2>
+      <HeaderTwo>Houses</HeaderTwo>
       <p>Loading...</p>
     </div>
   )
@@ -84,7 +84,7 @@ function ListAllPeople() {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">People</h2>
+      <HeaderTwo>People</HeaderTwo>
       <p>Loading...</p>
     </div>
   )

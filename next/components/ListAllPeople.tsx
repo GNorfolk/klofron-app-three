@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person'
+import { HeaderTwo } from '../@/components/ui/header'
 
 export default function ListAllPeople() {
   const { isLoading, error, data } = useQuery({
@@ -14,7 +15,7 @@ export default function ListAllPeople() {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">People</h2>
+      <HeaderTwo>People</HeaderTwo>
       <p>Loading...</p>
     </div>
   )

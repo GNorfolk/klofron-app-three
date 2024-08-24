@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { Button } from "../ui/button"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { HeaderOne } from '../ui/header'
+import { HeaderOne, HeaderTwo } from '../ui/header'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
@@ -131,7 +131,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
 export function PersonInfo({ title, personInfo }) {
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">{title + " Info"}</h2>
+      <HeaderTwo>{title + " Info"}</HeaderTwo>
         <a href={"/person/" + personInfo.person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="grid grid-cols-1">
             <div className="grid grid-cols-1">
