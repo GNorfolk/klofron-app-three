@@ -57,7 +57,7 @@ function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
 
   return (
     <Container>
-      <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Current Action</h3>
+      <HeaderTwo>Current Action</HeaderTwo>
       <ul className="list-none p-0 m-0">
         {
           currentAction ? <>
@@ -92,7 +92,7 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
   if (nextActions.length > 0) {
     return (
       <Container>
-        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Next Actions</h3>
+        <HeaderTwo>Next Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
           {nextActions.map(({ action_id, action_type_name, action_created_at }, index) => (
             <li className="mt-0 mx-0 mb-5" key={action_id}>
@@ -112,7 +112,7 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
   } else {
     return (
       <Container>
-        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Next Actions</h3>
+        <HeaderTwo>Next Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
             <li className="mt-0 mx-0 mb-5">
               <p>This person has no future actions initiated.</p>
@@ -128,7 +128,7 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
   if (fivePreviousActions.length > 0) {
     return (
       <Container>
-        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Previous Actions</h3>
+        <HeaderTwo>Previous Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
           {fivePreviousActions.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
             <li className="mt-0 mx-0 mb-5" key={action_id}>
@@ -141,7 +141,7 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
   } else {
     return (
       <Container>
-        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Previous Actions</h3>
+        <HeaderTwo>Previous Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
             <li className="mt-0 mx-0 mb-5">
               <p>This person has no past actions initiated.</p>

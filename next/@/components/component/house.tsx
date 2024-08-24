@@ -1,5 +1,5 @@
 import { UsersIcon, HandPlatterIcon, TreesIcon, BuildingIcon, BoxIcon, BedIcon, WarehouseIcon, TruckIcon } from '../ui/icon'
-import { HeaderOne } from '../ui/header'
+import { HeaderOne, HeaderThree } from '../ui/header'
 
 export function HouseListing({ houseData }) {
   return (
@@ -7,7 +7,7 @@ export function HouseListing({ houseData }) {
       <HeaderOne>Houses</HeaderOne>
       { houseData.length > 0 ? houseData.map(({ house_id, house_address, house_food, house_wood, house_people }) => (
         <a href={`/house/${house_id}`} className="p-6 pt-2 pb-2">
-          <h3 className="text-xl font-semibold text-gray-200">{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</h3>
+          <HeaderThree>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</HeaderThree>
           <div className="grid grid-cols-3">
             <div className="flex items-center mt-4 mr-4 text-sm text-gray-500 dark:text-gray-400">
               <UsersIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
@@ -25,7 +25,7 @@ export function HouseListing({ houseData }) {
         </a>
       )) :
         <a className="p-6 pt-2 pb-2">
-          <h3 className="text-xl font-semibold text-gray-200">There are no houses to show!</h3>
+          <HeaderThree>There are no houses to show!</HeaderThree>
         </a>
       }
     </main>

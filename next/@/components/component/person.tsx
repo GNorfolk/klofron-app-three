@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { Button } from "../ui/button"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { HeaderOne, HeaderTwo } from '../ui/header'
+import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
@@ -45,7 +45,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         return (
           <>
             <a href={`/person/${person_id}`} className="p-6 pt-2 pb-2">
-              <h3 className="text-xl font-semibold text-gray-200">{person_name} {familyName ? familyName : person_family.family_name}</h3>
+              <HeaderThree>{person_name + " " + familyName ? familyName : person_family.family_name}</HeaderThree>
               {
                 queryClient ? <>
                   <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
@@ -121,7 +121,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         )
       }) :
         <a className="p-6 pt-2 pb-2">
-          <h3 className="text-xl font-semibold text-gray-200">There are no people to show!</h3>
+          <HeaderThree>There are no people to show!</HeaderThree>
         </a>
       }
     </main>
