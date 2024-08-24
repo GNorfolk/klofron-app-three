@@ -7,7 +7,7 @@ import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
 import { PersonListing, PersonInfo } from '../@/components/component/person'
-import { HeaderTwo } from '../@/components/ui/header'
+import { HeaderOne, HeaderTwo } from '../@/components/ui/header'
 
 export default function DescribePersonTeacher({ userId, queryClient, router }) {
   if (router.isReady) {
