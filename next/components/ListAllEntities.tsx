@@ -34,7 +34,7 @@ function ListAllFamilies({ queryClient = null, userId = null }) {
   if (isLoading) return (
     <div>
       <Container>
-        <h2 className="p-6 text-4xl">Families</h2>
+        <h2 className="p-6 text-4xl text-gray-200">Families</h2>
         <p>Loading...</p>
       </Container>
     </div>
@@ -59,7 +59,7 @@ function ListAllHouses() {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Houses</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Houses</h2>
       <p>Loading...</p>
     </div>
   )
@@ -83,7 +83,7 @@ function ListAllPeople() {
 
   if (isLoading) return (
     <div>
-      <h2 className="text-2xl leading-snug my-4 mx-0">People</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">People</h2>
       <p>Loading...</p>
     </div>
   )

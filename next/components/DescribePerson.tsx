@@ -56,7 +56,7 @@ function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
 
   return (
     <Container>
-      <h3 className="text-xl leading-normal">Current Action</h3>
+      <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Current Action</h3>
       <ul className="list-none p-0 m-0">
         {
           currentAction ? <>
@@ -91,7 +91,7 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
   if (nextActions.length > 0) {
     return (
       <Container>
-        <h3 className="text-xl leading-normal">Next Actions</h3>
+        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Next Actions</h3>
         <ul className="list-none p-0 m-0">
           {nextActions.map(({ action_id, action_type_name, action_created_at }, index) => (
             <li className="mt-0 mx-0 mb-5" key={action_id}>
@@ -111,7 +111,7 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
   } else {
     return (
       <Container>
-        <h3 className="text-xl leading-normal">Next Actions</h3>
+        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Next Actions</h3>
         <ul className="list-none p-0 m-0">
             <li className="mt-0 mx-0 mb-5">
               <p>This person has no future actions initiated.</p>
@@ -127,7 +127,7 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
   if (fivePreviousActions.length > 0) {
     return (
       <Container>
-        <h3 className="text-xl leading-normal">Previous Actions</h3>
+        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Previous Actions</h3>
         <ul className="list-none p-0 m-0">
           {fivePreviousActions.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
             <li className="mt-0 mx-0 mb-5" key={action_id}>
@@ -140,7 +140,7 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
   } else {
     return (
       <Container>
-        <h3 className="text-xl leading-normal">Previous Actions</h3>
+        <h3 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Previous Actions</h3>
         <ul className="list-none p-0 m-0">
             <li className="mt-0 mx-0 mb-5">
               <p>This person has no past actions initiated.</p>
@@ -174,7 +174,7 @@ function RenamePerson({ queryClient, personId }) {
 
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Rename Person</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Rename Person</h2>
       <ul className="list-none p-0 m-0">
         <form onSubmit={handleSubmit}>
           <input
@@ -194,7 +194,7 @@ function RenamePerson({ queryClient, personId }) {
 function ListPersonInfo({ data, queryClient }) {
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Person Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Person Info</h2>
       <ul className="list-none p-0 m-0">
         <li className="mt-0 mx-0 mb-5" key={data.person_id}>
           {
@@ -216,7 +216,7 @@ function ListPersonInfo({ data, queryClient }) {
 function ListPersonSkills({ data, queryClient }) {
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Skills Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Skills Info</h2>
       <p>Gatherer level: {data.person_skills_gatherer_level}.</p>
       <p>Exp to next level: {Math.pow(2, data.person_skills_gatherer_level + 1) - data.person_skills_gatherer_experience}</p>
       <p>Lumberjack level: {data.person_skills_lumberjack_level}.</p>
@@ -230,7 +230,7 @@ function ListPersonSkills({ data, queryClient }) {
 function DescribePersonTeacher({ data, personId }) {
   return (
     <Container>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Teacher Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Teacher Info</h2>
       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
         {
           data.person_teacher_id ? <>

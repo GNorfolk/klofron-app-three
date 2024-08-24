@@ -33,7 +33,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
 
   return (
     <main>
-      <h2 className="p-6 text-4xl">People</h2>
+      <h2 className="p-6 text-4xl text-gray-200">People</h2>
       { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_action_queue_id, person_house, person_skills, person_teacher_id }) => {
         const {
           register,
@@ -44,7 +44,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         return (
           <>
             <a href={`/person/${person_id}`} className="p-6 pt-2 pb-2">
-              <h3 className="text-xl font-semibold">{person_name} {familyName ? familyName : person_family.family_name}</h3>
+              <h3 className="text-xl font-semibold text-gray-200">{person_name} {familyName ? familyName : person_family.family_name}</h3>
               {
                 queryClient ? <>
                   <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
@@ -120,7 +120,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         )
       }) :
         <a className="p-6 pt-2 pb-2">
-          <h3 className="text-xl font-semibold">There are no people to show!</h3>
+          <h3 className="text-xl font-semibold text-gray-200">There are no people to show!</h3>
         </a>
       }
     </main>
@@ -130,7 +130,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
 export function PersonInfo({ title, personInfo }) {
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">{title + " Info"}</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">{title + " Info"}</h2>
         <a href={"/person/" + personInfo.person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="grid grid-cols-1">
             <div className="grid grid-cols-1">

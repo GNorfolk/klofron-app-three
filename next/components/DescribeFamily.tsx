@@ -24,7 +24,7 @@ export default function DescribeFamily({ queryClient, userId, router }) {
     if (data.family_user_id === userId) {
       return (
         <QueryClientProvider client={queryClient}>
-          <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
+          {/* <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1> */}
           <BoxLayout left={
             <div>
               <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={true} />
@@ -42,7 +42,7 @@ export default function DescribeFamily({ queryClient, userId, router }) {
     } else {
       return (
         <QueryClientProvider client={queryClient}>
-          <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1>
+          {/* <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1> */}
           <BoxLayout left={
             <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={false} />
           } right={
@@ -88,7 +88,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
   } else {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">House Info</h2>
+        <h2 className="p-6 text-4xl text-gray-200">House Info</h2>
         <ul className="list-none p-0 m-0">
           <li className="mt-0 mx-0 mb-5">
             <p>This family does not own any houses.</p>
@@ -149,7 +149,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
   } else {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Person Info</h2>
+        <h2 className="p-6 text-4xl text-gray-200">Person Info</h2>
         <ul className="list-none p-0 m-0">
           <li className="mt-0 mx-0 mb-5">
             <p>This family does not have any people in it.</p>
@@ -174,7 +174,7 @@ function ListFamilyBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Betrothal Listing</h2>
+        <h2 className="p-6 text-4xl text-gray-200">Betrothal Listing</h2>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
@@ -189,7 +189,7 @@ function CreateFamilyBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Betrothal Creation</h2>
+        <h2 className="p-6 text-4xl text-gray-200">Betrothal Creation</h2>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
@@ -204,7 +204,7 @@ function ListFamilyTravel({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl">Travel Info</h2>
+        <h2 className="p-6 text-4xl text-gray-200">Travel Info</h2>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"

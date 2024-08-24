@@ -6,7 +6,7 @@ import { Button } from "../ui/button"
 export function BetrothalInfo({ personInfo }) {
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Info</h2>
         <a href={"/person/" + personInfo.person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="flex">
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
@@ -23,7 +23,7 @@ export function BetrothalListing({ familyPeople, accepterId = null }) {
   const familyPeopleBetrothals = familyPeople.filter(ppl => ppl.person_betrothal_receipts.length > 0)
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Info</h2>
       { familyPeopleBetrothals.length > 0 ? familyPeopleBetrothals.map(({ person_id, person_name, person_betrothal_receipts }) => (
         <a href={"/person/" + person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="flex">
@@ -44,7 +44,7 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
   const familyPeopleBachelors = familyPeople.filter(ppl => ppl.person_age >= 18 && ppl.person_partner_id === null)
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Eligible Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Eligible Info</h2>
       { familyPeopleBachelors.length > 0 ? familyPeopleBachelors.map(({ person_id, person_name, person_betrothal_receipts }) => (
         <a href={"/person/" + person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="flex">
@@ -67,7 +67,7 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
   )
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Eligible Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Eligible Info</h2>
       { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
         <a href={person_id} className="p-6 pt-2 pb-2">
           <div className="flex">
@@ -117,7 +117,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
 
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Creation</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Creation</h2>
       {
         familyBachelors.length > 0 ?
           <div>
@@ -162,7 +162,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
 export function BetrothalReciepts({ receipts }) {
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Receipt Info</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Receipt Info</h2>
       { receipts.length > 0 ? receipts.map(({ betrothal_proposer_person, betrothal_dowry }) => (
         <a href="#" className="p-6 pt-2 pb-2">
           <div className="flex">
@@ -213,7 +213,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
 
   return (
     <main>
-      <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Response</h2>
+      <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Response</h2>
       {
         data.person_betrothal_receipts.length > 0 && familyBachelors.length > 0 ?
           <div>

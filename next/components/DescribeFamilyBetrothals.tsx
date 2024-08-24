@@ -17,7 +17,7 @@ export default function DescribeFamilyBetrothals({ queryClient, userId, router }
     
     if (isLoading) return (
       <div>
-        <h2 className="text-2xl leading-snug my-4 mx-0">Betrothal Info</h2>
+        <h2 className="text-2xl leading-snug my-4 mx-0 text-gray-200">Betrothal Info</h2>
         <p>Loading...</p>
       </div>
     )
