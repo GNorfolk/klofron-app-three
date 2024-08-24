@@ -7,6 +7,7 @@ import { Container } from '../@/components/component/container'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 import { FamilyListing } from '../@/components/component/family'
 import { Button } from "../@/components/ui/button"
+import { HeaderOne } from "../@/components/ui/header"
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
   const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
@@ -44,7 +45,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
 
   if (isLoading) return (
     <div>
-      <h2 className="p-6 text-4xl text-gray-200">Families</h2>
+      <HeaderOne>Families</HeaderOne>
       <p>Loading...</p>
     </div>
   )
@@ -57,7 +58,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
           <FamilyListing familyData={data} />
         </Container>
         <Container>
-          <h2 className="p-6 text-4xl text-gray-200">Create Family</h2>
+          <HeaderOne>Create Family</HeaderOne>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <input defaultValue="familyName" {...register("family_name", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />

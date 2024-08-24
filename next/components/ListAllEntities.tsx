@@ -6,6 +6,7 @@ import { FamilyListing } from '../@/components/component/family'
 import { PersonListing } from '../@/components/component/person'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 import { HouseListing } from '../@/components/component/house'
+import { HeaderOne } from '../@/components/ui/header'
 
 export default function ListAllEntities({ queryClient }) {
   return (
@@ -34,7 +35,7 @@ function ListAllFamilies({ queryClient = null, userId = null }) {
   if (isLoading) return (
     <div>
       <Container>
-        <h2 className="p-6 text-4xl text-gray-200">Families</h2>
+        <HeaderOne>Families</HeaderOne>
         <p>Loading...</p>
       </Container>
     </div>

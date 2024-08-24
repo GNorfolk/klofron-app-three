@@ -92,7 +92,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
 
   return (
     <Container>
-      <h2 className="p-6 text-4xl text-gray-200">Select Teacher</h2>
+      <HeaderOne>Select Teacher</HeaderOne>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <select {...register("person_teacher_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
@@ -139,7 +139,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
 
   return (
     <Container>
-      <h2 className="p-6 text-4xl text-gray-200">Remove Teacher</h2>
+      <HeaderOne>Remove Teacher</HeaderOne>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 grid-cols-1">
           <Button

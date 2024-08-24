@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { Button } from "../ui/button"
 import { useForm, SubmitHandler } from "react-hook-form"
+import { HeaderOne } from '../ui/header'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
@@ -33,7 +34,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
 
   return (
     <main>
-      <h2 className="p-6 text-4xl text-gray-200">People</h2>
+      <HeaderOne>People</HeaderOne>
       { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_action_queue_id, person_house, person_skills, person_teacher_id }) => {
         const {
           register,

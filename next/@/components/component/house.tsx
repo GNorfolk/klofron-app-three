@@ -1,9 +1,10 @@
 import { UsersIcon, HandPlatterIcon, TreesIcon, BuildingIcon, BoxIcon, BedIcon, WarehouseIcon, TruckIcon } from '../ui/icon'
+import { HeaderOne } from '../ui/header'
 
 export function HouseListing({ houseData }) {
   return (
     <main>
-      <h2 className="p-6 text-4xl text-gray-200">Houses</h2>
+      <HeaderOne>Houses</HeaderOne>
       { houseData.length > 0 ? houseData.map(({ house_id, house_address, house_food, house_wood, house_people }) => (
         <a href={`/house/${house_id}`} className="p-6 pt-2 pb-2">
           <h3 className="text-xl font-semibold text-gray-200">{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</h3>

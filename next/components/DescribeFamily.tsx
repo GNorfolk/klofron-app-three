@@ -7,6 +7,7 @@ import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person'
 import { HouseListing } from '../@/components/component/house'
 import { Button } from "../@/components/ui/button"
+import { HeaderOne } from "../@/components/ui/header"
 
 export default function DescribeFamily({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -88,7 +89,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
   } else {
     return (
       <Container>
-        <h2 className="p-6 text-4xl text-gray-200">House Info</h2>
+        <HeaderOne>House Info</HeaderOne>
         <ul className="list-none p-0 m-0">
           <li className="mt-0 mx-0 mb-5">
             <p>This family does not own any houses.</p>
@@ -149,7 +150,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
   } else {
     return (
       <Container>
-        <h2 className="p-6 text-4xl text-gray-200">Person Info</h2>
+        <HeaderOne>Person Info</HeaderOne>
         <ul className="list-none p-0 m-0">
           <li className="mt-0 mx-0 mb-5">
             <p>This family does not have any people in it.</p>
@@ -174,7 +175,7 @@ function ListFamilyBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl text-gray-200">Betrothal Listing</h2>
+        <HeaderOne>Betrothal Listing</HeaderOne>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
@@ -189,7 +190,7 @@ function CreateFamilyBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl text-gray-200">Betrothal Creation</h2>
+        <HeaderOne>Betrothal Creation</HeaderOne>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
@@ -204,7 +205,7 @@ function ListFamilyTravel({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        <h2 className="p-6 text-4xl text-gray-200">Travel Info</h2>
+        <HeaderOne>Travel Info</HeaderOne>
         <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
