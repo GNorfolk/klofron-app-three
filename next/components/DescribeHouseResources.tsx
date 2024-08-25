@@ -6,6 +6,7 @@ import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"
 import { HeaderTwo } from '../@/components/ui/header'
+import { StyledSelect } from '../@/components/ui/input'
 
 export default function DescribeHouseResources({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -98,15 +99,15 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
                 <div>
                   <form className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
-                      <select {...register("person_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                      <StyledSelect {...register("person_id")}>
                       { data.house_people.map(({ person_id, person_name }) => (
                         <option value={person_id}>{person_name}</option>
                       ))}
-                      </select>
-                      <select {...register("resource_type")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                      </StyledSelect>
+                      <StyledSelect {...register("resource_type")}>
                         <option value="food">Food</option>
                         <option value="wood">Wood</option>
-                      </select>
+                      </StyledSelect>
                       <input defaultValue="1" {...register("resource_volume")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">

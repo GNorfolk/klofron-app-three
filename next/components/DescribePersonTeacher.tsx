@@ -8,6 +8,7 @@ import { GrayButton } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
 import { PersonListing, PersonInfo } from '../@/components/component/person'
 import { HeaderOne, HeaderTwo } from '../@/components/ui/header'
+import { StyledSelect } from '../@/components/ui/input'
 
 export default function DescribePersonTeacher({ userId, queryClient, router }) {
   if (router.isReady) {
@@ -96,13 +97,13 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
       <HeaderOne>Select Teacher</HeaderOne>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
-          <select {...register("person_teacher_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+          <StyledSelect {...register("person_teacher_id")}>
             {
               filteredList.map(({ person_id, person_name }) => (
                 <option value={person_id}>{person_name}</option>
               ))
             }
-          </select>{ errors.person_teacher_id && <span className='whitespace-nowrap'>This field is required</span> }
+          </StyledSelect>{ errors.person_teacher_id && <span className='whitespace-nowrap'>This field is required</span> }
           <GrayButton>Select Teacher</GrayButton>
         </div>
       </form>

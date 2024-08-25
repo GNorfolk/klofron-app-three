@@ -8,6 +8,7 @@ import { MapPinIcon } from "../@/components/ui/icon"
 import { HeaderTwo } from '../@/components/ui/header'
 import { DivIconInfo } from '../@/components/ui/div'
 import { Paragraph } from '../@/components/ui/paragraph'
+import { StyledSelect } from '../@/components/ui/input'
 
 export default function DescribeFamilyTravel({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -82,19 +83,19 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
-                        <select {...register("person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                        <StyledSelect {...register("person_id", { required: true })}>
                         { errors.person_id ? document.getElementById("cm-" + router.query.family_id).innerText = "The Person field is required" : null }
                         { data.family_people.map(({ person_id, person_name }) => (
                           <option value={person_id}>{person_name}</option>
                         ))}
-                        </select>
+                        </StyledSelect>
                       </div>
                       <div>
-                        <select {...register("house_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                        <StyledSelect {...register("house_id")}>
                         { data.family_houses.map(({ house_id, house_address }) => (
                           <option value={house_id}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</option>
                         ))}
-                        </select>
+                        </StyledSelect>
                       </div>
                     </div>
                     <Button type="submit" className="w-full">

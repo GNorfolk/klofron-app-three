@@ -5,6 +5,7 @@ import { GrayButton } from "../ui/button"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
+import { StyledSelect } from '../ui/input'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
@@ -83,7 +84,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                   <form className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
                       <input type="hidden" value={person_action_queue_id} {...register("action_queue_id")} />
-                      <select {...register("action_type_id")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                      <StyledSelect {...register("action_type_id")}>
                         {
                           person_teacher_id ? <>
                             <option selected disabled value="-1">Unavailable</option>
@@ -95,7 +96,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                             <option value="5">Create House</option>
                           </>
                         }
-                      </select>
+                      </StyledSelect>
                       <GrayButton onClick={handleSubmit(onAction)}>Start Action</GrayButton>
                       <GrayButton onClick={handleSubmit(onQueue)}>
                         {"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"}

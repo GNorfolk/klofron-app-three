@@ -5,6 +5,7 @@ import { Button } from "../ui/button"
 import { HeaderTwo } from "../ui/header"
 import { DivIconInfo } from '../ui/div'
 import { Paragraph } from '../ui/paragraph'
+import { StyledSelect } from "../ui/input"
 
 export function BetrothalInfo({ personInfo }) {
   return (
@@ -126,7 +127,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
           <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-2">
-                <select {...register("betrothal_proposer_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                <StyledSelect {...register("betrothal_proposer_person_id", { required: true })}>
                   {
                     errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
                   }
@@ -136,8 +137,8 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
                       <option value={person_id}>{person_name} {familyName}</option>
                     ))
                   }
-                </select>
-                <select {...register("betrothal_dowry_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                </StyledSelect>
+                <StyledSelect {...register("betrothal_dowry_person_id", { required: true })}>
                   {
                     errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
                   }
@@ -147,7 +148,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
                       <option value={person_id}>{person_name} {familyName}</option>
                     ))
                   }
-                </select>
+                </StyledSelect>
               </div>
               <Button type="submit" className="w-full">
                 Submit
@@ -222,7 +223,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
           <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-2">
-                <select {...register("betrothal_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                <StyledSelect {...register("betrothal_id", { required: true })}>
                   {
                     errors.betrothal_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
                   }
@@ -232,8 +233,8 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
                       <option value={betrothal_id}>{betrothal_proposer_person.person_name} {betrothal_proposer_person.person_family.family_name} / {betrothal_dowry.betrothal_dowry_person.person_name} {betrothal_dowry.betrothal_dowry_person.person_family.family_name}</option>
                     ))
                   }
-                </select>
-                <select {...register("accepter_person_id", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
+                </StyledSelect>
+                <StyledSelect {...register("accepter_person_id", { required: true })}>
                   {
                     errors.accepter_person_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
                   }
@@ -243,7 +244,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
                       <option value={person_id}>{person_name} {data.person_family.family_name}</option>
                     ))
                   }
-                </select>
+                </StyledSelect>
               </div>
               <Button type="submit" className="w-full">
                 Submit
