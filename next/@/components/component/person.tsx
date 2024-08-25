@@ -45,7 +45,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         return (
           <>
             <a href={`/person/${person_id}`} className="p-6 pt-2 pb-2">
-              <HeaderThree>{person_name + " " + familyName ? familyName : person_family.family_name}</HeaderThree>
+              <HeaderThree>{person_name + " " + familyName ? person_name + " " + familyName : person_name + " " + person_family.family_name}</HeaderThree>
               {
                 queryClient ? <>
                   <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
