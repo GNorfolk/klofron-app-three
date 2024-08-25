@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Button } from "../../components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "../../components/ui/sheet"
 import { MountainIcon, HomeIcon, MicroscopeIcon, MenuIcon, LockIcon } from '../ui/icon'
@@ -17,17 +18,21 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
           </div>
           <nav className="flex-1 py-4">
             <ul className="grid gap-1">
-              <li>
-                <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                  <span className='whitespace-nowrap'>Home</span>
-                </a>
+              <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <Link href="/">
+                  <section className="flex">
+                    <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                    <span className='ml-2'>Home</span>
+                  </section>
+                </Link>
               </li>
-              <li>
-                <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                  <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                  <span className='whitespace-nowrap'>Index</span>
-                </a>
+              <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                <Link href="/index">
+                  <section className="flex">
+                    <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                    <span className='ml-2'>Index</span>
+                  </section>
+                </Link>
               </li>
               { status === "authenticated" ? (
                 <li>
@@ -70,17 +75,21 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
               </div>
               <nav className="flex-1 py-4">
                 <ul className="grid gap-1">
-                  <li>
-                    <a href="/" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                      <span className='whitespace-nowrap'>Home</span>
-                    </a>
+                  <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <Link href="/">
+                      <section className="flex">
+                        <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                        <span className='ml-2'>Home</span>
+                      </section>
+                    </Link>
                   </li>
-                  <li>
-                    <a href="/index" className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                      <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                      <span className='whitespace-nowrap'>Index</span>
-                    </a>
+                  <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
+                    <Link href="/index">
+                      <section className="flex">
+                        <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                        <span className='ml-2'>Index</span>
+                      </section>
+                    </Link>
                   </li>
                   { status === "authenticated" ? (
                     <li>
