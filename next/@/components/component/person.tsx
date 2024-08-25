@@ -104,7 +104,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                   </form>
                   {
                     queryClient && person_action_queue.action_queue_current_action?.action_time_remaining ? <>
-                      <small className="text-gray-500 ml-2">{person_name} is performing an action completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>
+                      <small className="text-gray-500 ml-2">{person_name} is performing {person_action_queue.action_queue_current_action.action_type_name	} completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>
                     </> : <></>
                   }
                   <small className="text-gray-500" id={'cm-' + person_action_queue_id}></small>

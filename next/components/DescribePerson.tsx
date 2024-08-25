@@ -236,7 +236,7 @@ function DescribePersonTeacher({ data, personId }) {
       <DivIconInfo>
         {
           data.person_teacher_id ? <>
-            <a href={personId + "/teacher"}>This person has a teacher with id {data.person_teacher_id}.</a>
+            <a href={personId + "/teacher"}>This person has {data.person_teacher.person_name} as their teacher.</a>
           </> : <>
             <a href={personId + "/teacher"}>This person does not have a teacher.</a>
           </>
