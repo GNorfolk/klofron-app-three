@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/icon'
 import { Button } from "../ui/button"
 import { HeaderTwo } from "../ui/header"
+import { DivIconInfo } from '../ui/div'
 
 export function BetrothalInfo({ personInfo }) {
   return (
@@ -10,10 +11,10 @@ export function BetrothalInfo({ personInfo }) {
       <HeaderTwo>Betrothal Info</HeaderTwo>
         <a href={"/person/" + personInfo.person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="flex">
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            <DivIconInfo>
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{personInfo.person_name} has {personInfo.person_betrothal_receipts.length} betrothals.</span>
-            </div>
+            </DivIconInfo>
           </div>
         </a>
     </main>
@@ -28,10 +29,10 @@ export function BetrothalListing({ familyPeople, accepterId = null }) {
       { familyPeopleBetrothals.length > 0 ? familyPeopleBetrothals.map(({ person_id, person_name, person_betrothal_receipts }) => (
         <a href={"/person/" + person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="flex">
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            <DivIconInfo>
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{person_name} has {person_betrothal_receipts.length} betrothals.</span>
-            </div>
+            </DivIconInfo>
           </div>
         </a>
       )) :
@@ -49,10 +50,10 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
       { familyPeopleBachelors.length > 0 ? familyPeopleBachelors.map(({ person_id, person_name, person_betrothal_receipts }) => (
         <a href={"/person/" + person_id + "/betrothal"} className="p-6 pt-2 pb-2">
           <div className="flex">
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            <DivIconInfo>
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{person_name} is eligible for betrothal.</span>
-            </div>
+            </DivIconInfo>
           </div>
         </a>
       )) :
@@ -72,10 +73,10 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
       { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
         <a href={person_id} className="p-6 pt-2 pb-2">
           <div className="flex">
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            <DivIconInfo>
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{person_name} {person_family.family_name} is {person_gender} and {person_age} years old.</span>
-            </div>
+            </DivIconInfo>
           </div>
         </a>
       )) :
@@ -167,10 +168,10 @@ export function BetrothalReciepts({ receipts }) {
       { receipts.length > 0 ? receipts.map(({ betrothal_proposer_person, betrothal_dowry }) => (
         <a href="#" className="p-6 pt-2 pb-2">
           <div className="flex">
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            <DivIconInfo>
               <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
               <span className='whitespace-nowrap'>{betrothal_proposer_person.person_name} {betrothal_proposer_person.person_family.family_name} & {betrothal_dowry.betrothal_dowry_person.person_name} {betrothal_dowry.betrothal_dowry_person.person_family.family_name}.</span>
-            </div>
+            </DivIconInfo>
           </div>
         </a>
       )) :

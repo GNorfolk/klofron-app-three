@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { UsersIcon, HomeIcon } from '../ui/icon'
 import { HeaderOne, HeaderThree } from '../ui/header'
+import { DivIconInfo } from '../ui/div'
 
 export function FamilyListing({ familyData }) {
   return (
@@ -10,14 +11,14 @@ export function FamilyListing({ familyData }) {
         <a href={`/family/${family_id}`} className="p-6 pt-2 pb-2">
           <HeaderThree>{"The " + family_name + " family"}</HeaderThree>
           <div className="grid grid-cols-2">
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            <DivIconInfo>
               <UsersIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
               <span className='whitespace-nowrap'>{family_people.length} people</span>
-            </div>
-            <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+            </DivIconInfo>
+            <DivIconInfo>
               <HomeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
               <span className='whitespace-nowrap'>{family_houses.length} houses</span>
-            </div>
+            </DivIconInfo>
           </div>
         </a>
       )) :

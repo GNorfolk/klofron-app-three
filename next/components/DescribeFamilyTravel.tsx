@@ -6,6 +6,7 @@ import { Container } from '../@/components/component/container'
 import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"
 import { HeaderTwo } from '../@/components/ui/header'
+import { DivIconInfo } from '../@/components/ui/div'
 
 export default function DescribeFamilyTravel({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -60,13 +61,13 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
             {
               data.family_people.length > 0 ? 
                 data.family_people.map(({ person_name, person_house_id, person_house }) => (
-                  person_house_id ? <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                  person_house_id ? <DivIconInfo>
                     <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
                     <span className='whitespace-nowrap'>{person_name} lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</span>
-                  </div> : <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+                  </DivIconInfo> : <DivIconInfo>
                     <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
                     <span className='whitespace-nowrap'>{person_name} is unhoused.</span>
-                  </div>
+                  </DivIconInfo>
                 ))
               :
                 <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">This family does not have any people in it.</p>

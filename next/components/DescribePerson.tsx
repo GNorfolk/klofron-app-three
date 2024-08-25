@@ -10,6 +10,7 @@ import { HouseListing } from '../@/components/component/house'
 import { BetrothalInfo } from '../@/components/component/betrothal'
 import { Button } from "../@/components/ui/button"
 import { HeaderTwo } from '../@/components/ui/header'
+import { DivIconInfo } from '../@/components/ui/div'
 
 export default function DescribePerson({ queryClient, status, userId = null, router }) {
   if (router.isReady) {
@@ -232,7 +233,7 @@ function DescribePersonTeacher({ data, personId }) {
   return (
     <Container>
       <HeaderTwo>Teacher Info</HeaderTwo>
-      <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
+      <DivIconInfo>
         {
           data.person_teacher_id ? <>
             <a href={personId + "/teacher"}>This person has a teacher with id {data.person_teacher_id}.</a>
@@ -240,7 +241,7 @@ function DescribePersonTeacher({ data, personId }) {
             <a href={personId + "/teacher"}>This person does not have a teacher.</a>
           </>
         }
-      </div>
+      </DivIconInfo>
     </Container>
   )
 }
