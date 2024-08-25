@@ -232,7 +232,7 @@ function DescribePersonTeacher({ data, personId }) {
   return (
     <Container>
       <HeaderTwo>Teacher Info</HeaderTwo>
-      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+      <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
         {
           data.person_teacher_id ? <>
             <a href={personId + "/teacher"}>This person has a teacher with id {data.person_teacher_id}.</a>

@@ -103,7 +103,7 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
           </Sheet>
         </header>
         <main className="flex-1 p-4 md:p-6 bg-slate-900">
-          <div className="prose prose-stone dark:prose-invert">
+          <div className="prose prose-gray dark:prose-invert">
             <main>{children}</main>
           </div>
         </main>

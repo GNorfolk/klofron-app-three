@@ -99,7 +99,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="submit" value="Create first house" />
                   </form>
-                  <small className="text-stone-500" id={'cm-' + familyId}></small>
+                  <small className="text-gray-500" id={'cm-' + familyId}></small>
                 </div>
               : null
             }
@@ -160,7 +160,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="submit" value="Create first couple" />
                   </form>
-                  <small className="text-stone-500" id={'cm-' + familyId}></small>
+                  <small className="text-gray-500" id={'cm-' + familyId}></small>
                 </div>
               : null
             }

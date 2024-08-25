@@ -60,16 +60,16 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
             {
               data.family_people.length > 0 ? 
                 data.family_people.map(({ person_name, person_house_id, person_house }) => (
-                  person_house_id ? <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+                  person_house_id ? <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                     <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
                     <span className='whitespace-nowrap'>{person_name} lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</span>
-                  </div> : <div className="flex items-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+                  </div> : <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
                     <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
                     <span className='whitespace-nowrap'>{person_name} is unhoused.</span>
                   </div>
                 ))
               :
-                <p className="m-2 text-gray-500 dark:text-gray-400">This family does not have any people in it.</p>
+                <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">This family does not have any people in it.</p>
             }
           </Container>
           <Container>
@@ -99,7 +99,7 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
                       Submit
                     </Button>
                   </form>
-                  <small className="text-stone-500" id={'cm-' + router.query.family_id}></small>
+                  <small className="text-gray-500" id={'cm-' + router.query.family_id}></small>
                 </div>
               :
                 <div>

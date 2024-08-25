@@ -114,7 +114,7 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
                       <Button type="submit" onClick={handleSubmit(onWithdraw)} className="w-full">Withdraw</Button>
                     </div>
                   </form>
-                  <small className="text-stone-500" id={'cm-' + router.query.id}></small>
+                  <small className="text-gray-500" id={'cm-' + router.query.id}></small>
                 </div>
               :
                 <div>
