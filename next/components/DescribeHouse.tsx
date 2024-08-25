@@ -7,6 +7,7 @@ import { Container } from '../@/components/component/container'
 import { HouseInfo } from '../@/components/component/house'
 import { PersonListing } from '../@/components/component/person'
 import { HeaderTwo } from '../@/components/ui/header'
+import { Paragraph } from '../@/components/ui/paragraph'
 
 export default function DescribeHouse({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -79,7 +80,7 @@ function ListHouseResources({ data, queryClient, userId = null, router }) {
     return (
       <Container>
         <HeaderTwo>Resource Info</HeaderTwo>
-        <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
+        <Paragraph>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name + " has " + data.house_food.resource_volume + " food and " + data.house_wood.resource_volume + " wood in storage!"}</Paragraph>
         { userId === data.house_family.family_user_id ? <Button size="sm"
           variant="ghost"
           className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
@@ -111,7 +112,7 @@ function ListHouseTrades({ data, router }) {
           <HeaderTwo>Trade Info</HeaderTwo>
           <ul className="list-none p-0 m-0">
             <li className="mt-0 mx-0 mb-5">
-              <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">No trades active at this house.</p>
+              <Paragraph>No trades active at this house.</Paragraph>
             </li>
           </ul>
         </Container>

@@ -7,6 +7,7 @@ import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"
 import { HeaderTwo } from '../@/components/ui/header'
 import { DivIconInfo } from '../@/components/ui/div'
+import { Paragraph } from '../@/components/ui/paragraph'
 
 export default function DescribeFamilyTravel({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -70,7 +71,7 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
                   </DivIconInfo>
                 ))
               :
-                <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">This family does not have any people in it.</p>
+                <Paragraph>This family does not have any people in it.</Paragraph>
             }
           </Container>
           <Container>

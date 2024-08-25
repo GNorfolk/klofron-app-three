@@ -4,6 +4,7 @@ import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/i
 import { Button } from "../ui/button"
 import { HeaderTwo } from "../ui/header"
 import { DivIconInfo } from '../ui/div'
+import { Paragraph } from '../ui/paragraph'
 
 export function BetrothalInfo({ personInfo }) {
   return (
@@ -36,7 +37,7 @@ export function BetrothalListing({ familyPeople, accepterId = null }) {
           </div>
         </a>
       )) :
-      <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">No family members have betrothals!</p>
+      <Paragraph>No family members have betrothals!</Paragraph>
       }
     </main>
   )
@@ -57,7 +58,7 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
           </div>
         </a>
       )) :
-      <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">No family members are eligible for betrothal!</p>
+      <Paragraph>No family members are eligible for betrothal!</Paragraph>
       }
     </main>
   )
@@ -80,7 +81,7 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
           </div>
         </a>
       )) :
-      <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">Nobody is eligible for betrothal!</p>
+      <Paragraph>Nobody is eligible for betrothal!</Paragraph>
       }
     </main>
   )
@@ -155,7 +156,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
             <small className="text-gray-500" id={'cm-' + personId}></small>
           </div>
         :
-          <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">No family people are eligible to betrothe!</p>
+          <Paragraph>No family people are eligible to betrothe!</Paragraph>
       }
     </main>
   )
@@ -175,7 +176,7 @@ export function BetrothalReciepts({ receipts }) {
           </div>
         </a>
       )) :
-      <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">This person has received no betrothals!</p>
+      <Paragraph>This person has received no betrothals!</Paragraph>
       }
     </main>
   )
@@ -251,7 +252,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
             <small className="text-gray-500" id={'cm-' + data.person_id}></small>
           </div>
         :
-          <p className="mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">No betrothals or no family people are eligible to betrothe!</p>
+          <Paragraph>No betrothals or no family people are eligible to betrothe!</Paragraph>
       }
     </main>
   )
