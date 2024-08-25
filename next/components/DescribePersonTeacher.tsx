@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
-import { Button } from "../@/components/ui/button"
+import { GrayButton } from "../@/components/ui/button"
 import { ChurchIcon } from "../@/components/ui/icon"
 import { PersonListing, PersonInfo } from '../@/components/component/person'
 import { HeaderOne, HeaderTwo } from '../@/components/ui/header'
@@ -103,11 +103,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
               ))
             }
           </select>{ errors.person_teacher_id && <span className='whitespace-nowrap'>This field is required</span> }
-          <Button
-            size="sm"
-            variant="ghost"
-            className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
-          >Select Teacher</Button>
+          <GrayButton>Select Teacher</GrayButton>
         </div>
       </form>
       <small className="" id={'cm-' + personId}></small>
@@ -143,11 +139,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
       <HeaderOne>Remove Teacher</HeaderOne>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 grid-cols-1">
-          <Button
-            size="sm"
-            variant="ghost"
-            className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
-          >Remove Teacher</Button>
+          <GrayButton>Remove Teacher</GrayButton>
         </div>
       </form>
       <small className="" id={'cm-' + personId}></small>

@@ -1,7 +1,7 @@
 import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon, UserIcon } from '../ui/icon'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { Button } from "../ui/button"
+import { GrayButton } from "../ui/button"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
@@ -96,16 +96,10 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                           </>
                         }
                       </select>
-                      <Button size="sm"
-                        variant="ghost"
-                        className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
-                        onClick={handleSubmit(onAction)}
-                      >Start Action</Button>
-                      <Button size="sm"
-                        variant="ghost"
-                        className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
-                        onClick={handleSubmit(onQueue)}
-                      >{"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"}</Button>
+                      <GrayButton onClick={handleSubmit(onAction)}>Start Action</GrayButton>
+                      <GrayButton onClick={handleSubmit(onQueue)}>
+                        {"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"}
+                      </GrayButton>
                     </div>
                   </form>
                   {

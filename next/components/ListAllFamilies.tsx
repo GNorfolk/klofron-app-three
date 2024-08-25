@@ -6,7 +6,7 @@ import { BoxLayoutSingle } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { UsersIcon, HomeIcon } from '../@/components/ui/icon'
 import { FamilyListing } from '../@/components/component/family'
-import { Button } from "../@/components/ui/button"
+import { GrayButton } from "../@/components/ui/button"
 import { HeaderOne } from "../@/components/ui/header"
 
 export default function ListAllFamilies({ queryClient = null, userId = null }) {
@@ -63,11 +63,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
             <div className="grid gap-4 sm:grid-cols-2">
               <input defaultValue="familyName" {...register("family_name", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />
               { errors.family_name && <span className='whitespace-nowrap'>This field is required</span> }
-              <Button
-                size="sm"
-                variant="ghost"
-                className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
-              >Create Family</Button>
+              <GrayButton>Create Family</GrayButton>
             </div>
           </form>
           <small className="" id={'cm-' + userId}></small>

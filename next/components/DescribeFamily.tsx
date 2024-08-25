@@ -6,7 +6,7 @@ import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { PersonListing } from '../@/components/component/person'
 import { HouseListing } from '../@/components/component/house'
-import { Button } from "../@/components/ui/button"
+import { GrayButton } from "../@/components/ui/button"
 import { HeaderOne } from "../@/components/ui/header"
 
 export default function DescribeFamily({ queryClient, userId, router }) {
@@ -176,11 +176,9 @@ function ListFamilyBetrothals({ data, router }) {
     return (
       <Container>
         <HeaderOne>Betrothal Listing</HeaderOne>
-        <Button size="sm"
-          variant="ghost"
-          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
+        <GrayButton
           onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/list`) }
-        >Go to Betrothal Listing page.</Button>
+        >Go to Betrothal Listing page.</GrayButton>
       </Container>
     )
   }
@@ -191,11 +189,9 @@ function CreateFamilyBetrothals({ data, router }) {
     return (
       <Container>
         <HeaderOne>Betrothal Creation</HeaderOne>
-        <Button size="sm"
-          variant="ghost"
-          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
+        <GrayButton
           onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/create`) }
-        >Go to Betrothal Creation page.</Button>
+        >Go to Betrothal Creation page.</GrayButton>
       </Container>
     )
   }
@@ -206,11 +202,9 @@ function ListFamilyTravel({ data, router }) {
     return (
       <Container>
         <HeaderOne>Travel Info</HeaderOne>
-        <Button size="sm"
-          variant="ghost"
-          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
+        <GrayButton
           onClick={ () => router.push(`/family/${router.query.family_id}/travel`) }
-        >Go to Travel Management page.</Button>
+        >Go to Travel Management page.</GrayButton>
       </Container>
     )
   }

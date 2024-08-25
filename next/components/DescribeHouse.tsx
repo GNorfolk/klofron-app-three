@@ -1,7 +1,7 @@
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import Link from 'next/link'
-import { Button } from "../@/components/ui/button"
+import { GrayButton } from "../@/components/ui/button"
 import { BoxLayout } from '../@/components/component/box-layout'
 import { Container } from '../@/components/component/container'
 import { HouseInfo } from '../@/components/component/house'
@@ -81,11 +81,9 @@ function ListHouseResources({ data, queryClient, userId = null, router }) {
       <Container>
         <HeaderTwo>Resource Info</HeaderTwo>
         <Paragraph>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name + " has " + data.house_food.resource_volume + " food and " + data.house_wood.resource_volume + " wood in storage!"}</Paragraph>
-        { userId === data.house_family.family_user_id ? <Button size="sm"
-          variant="ghost"
-          className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
+        { userId === data.house_family.family_user_id ? <GrayButton
           onClick={ () => router.push(`/house/${router.query.id}/resource`) }
-        >Go to Resource Management page.</Button> : null }
+        >Go to Resource Management page.</GrayButton> : null }
       </Container>
     )
   }
@@ -130,9 +128,7 @@ function CreatePerson({ houseId, queryClient }) {
 
   return (
     <Container>
-      <Button size="sm"
-        variant="ghost"
-        className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
+      <GrayButton
         onClick={ () => {
           createPerson.mutate(houseId, { onSettled: (data, error: any) => {
             queryClient.invalidateQueries()
@@ -143,7 +139,7 @@ function CreatePerson({ houseId, queryClient }) {
             }
           }})
         }}
-      >Create Person</Button>
+      >Create Person</GrayButton>
       <small className="text-gray-500" id={'cm-two-' + houseId}></small>
     </Container>
   )
