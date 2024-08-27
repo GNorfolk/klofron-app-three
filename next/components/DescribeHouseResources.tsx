@@ -99,12 +99,12 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
                 <div>
                   <form className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
-                      <StyledSelect {...register("person_id")}>
+                      <StyledSelect fieldName="person_id" fieldRequired={false}>
                       { data.house_people.map(({ person_id, person_name }) => (
                         <option value={person_id}>{person_name}</option>
                       ))}
                       </StyledSelect>
-                      <StyledSelect {...register("resource_type")}>
+                      <StyledSelect fieldName="resource_type" fieldRequired={false}>
                         <option value="food">Food</option>
                         <option value="wood">Wood</option>
                       </StyledSelect>

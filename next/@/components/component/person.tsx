@@ -2,7 +2,7 @@ import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon, UserIcon 
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { GrayButton } from "../ui/button"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
 import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
 import { StyledSelect } from '../ui/input'
@@ -38,12 +38,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
     <main>
       <HeaderOne>People</HeaderOne>
       { personData.length > 0 ? personData.map(({ person_id, person_name, person_family, person_action_queue, person_action_queue_id, person_house, person_skills, person_teacher_id }) => {
-        const {
-          register,
-          handleSubmit,
-          watch,
-          formState: { errors },
-        } = useForm<Inputs>()
+        const methods = useForm<Inputs>();
         return (
           <>
             <a href={`/person/${person_id}`} className="p-6 pt-2 pb-2">
@@ -81,26 +76,28 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
             {
               queryClient && userId === person_family?.family_user_id ? <>
                 <div>
-                  <form className="space-y-6">
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <input type="hidden" value={person_action_queue_id} {...register("action_queue_id")} />
-                      <StyledSelect {...register("action_type_id")}>
-                        {
-                          person_teacher_id ? <>
-                            <option selected disabled value="-1">Unavailable</option>
-                          </> : <>
-                            <option value="1">Get Food</option>
-                            <option value="2">Get Wood</option>
-                            <option value="3">Increase Storage</option>
-                            <option value="4">Increase Rooms</option>
-                            <option value="5">Create House</option>
-                          </>
-                        }
-                      </StyledSelect>
-                      <GrayButton onClick={handleSubmit(onAction)} text="Start Action" />
-                      <GrayButton onClick={handleSubmit(onQueue)} text={"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"} />
-                    </div>
-                  </form>
+                  <FormProvider {...methods}>
+                    <form className="space-y-6">
+                      <div className="grid gap-4 sm:grid-cols-3">
+                        <input type="hidden" value={person_action_queue_id} {...methods.register("action_queue_id")} />
+                        <StyledSelect fieldName="action_type_id" fieldRequired={true}>
+                          {
+                            person_teacher_id ? <>
+                              <option selected disabled value="-1">Unavailable</option>
+                            </> : <>
+                              <option value="1">Get Food</option>
+                              <option value="2">Get Wood</option>
+                              <option value="3">Increase Storage</option>
+                              <option value="4">Increase Rooms</option>
+                              <option value="5">Create House</option>
+                            </>
+                          }
+                        </StyledSelect>
+                        <GrayButton onClick={methods.handleSubmit(onAction)} text="Start Action" />
+                        <GrayButton onClick={methods.handleSubmit(onQueue)} text={"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"} />
+                      </div>
+                    </form>
+                  </FormProvider>
                   {
                     queryClient && person_action_queue.action_queue_current_action?.action_time_remaining ? <>
                       <small className="text-gray-500 ml-2">{person_name} is performing {person_action_queue.action_queue_current_action.action_type_name} completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>

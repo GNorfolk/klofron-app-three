@@ -83,7 +83,7 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
-                        <StyledSelect {...register("person_id", { required: true })}>
+                        <StyledSelect fieldName="person_id" fieldRequired={true}>
                         { errors.person_id ? document.getElementById("cm-" + router.query.family_id).innerText = "The Person field is required" : null }
                         { data.family_people.map(({ person_id, person_name }) => (
                           <option value={person_id}>{person_name}</option>
@@ -91,7 +91,7 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
                         </StyledSelect>
                       </div>
                       <div>
-                        <StyledSelect {...register("house_id")}>
+                        <StyledSelect fieldName="house_id" fieldRequired={false}>
                         { data.family_houses.map(({ house_id, house_address }) => (
                           <option value={house_id}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</option>
                         ))}

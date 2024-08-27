@@ -188,6 +188,11 @@ FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
 WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 'person';
 ```
 
+**How to run action processing locally:**
+```bash
+curl --request PATCH localhost:5000/v2/action
+```
+
 # MySQL
 ```sql
 ```

@@ -127,7 +127,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
           <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-2">
-                <StyledSelect {...register("betrothal_proposer_person_id", { required: true })}>
+                <StyledSelect fieldName="betrothal_proposer_person_id" fieldRequired={true}>
                   {
                     errors.betrothal_proposer_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
                   }
@@ -138,7 +138,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
                     ))
                   }
                 </StyledSelect>
-                <StyledSelect {...register("betrothal_dowry_person_id", { required: true })}>
+                <StyledSelect fieldName="betrothal_dowry_person_id" fieldRequired={true}>
                   {
                     errors.betrothal_dowry_person_id ? document.getElementById("cm-" + personId).innerText = "The Person field is required" : null
                   }
@@ -223,7 +223,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
           <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-2">
-                <StyledSelect {...register("betrothal_id", { required: true })}>
+                <StyledSelect fieldName="betrothal_id" fieldRequired={true}>
                   {
                     errors.betrothal_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
                   }
@@ -234,7 +234,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
                     ))
                   }
                 </StyledSelect>
-                <StyledSelect {...register("accepter_person_id", { required: true })}>
+                <StyledSelect fieldName="accepter_person_id" fieldRequired={true}>
                   {
                     errors.accepter_person_id ? document.getElementById("cm-" + data.person_id).innerText = "The Person field is required" : null
                   }

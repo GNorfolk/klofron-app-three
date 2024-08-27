@@ -97,7 +97,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
       <HeaderOne>Select Teacher</HeaderOne>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
-          <StyledSelect {...register("person_teacher_id")}>
+          <StyledSelect fieldName="person_teacher_id" fieldRequired={false}>
             {
               filteredList.map(({ person_id, person_name }) => (
                 <option value={person_id}>{person_name}</option>
