@@ -178,7 +178,8 @@ function ListFamilyBetrothals({ data, router }) {
         <HeaderOne>Betrothal Listing</HeaderOne>
         <GrayButton
           onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/list`) }
-        >Go to Betrothal Listing page.</GrayButton>
+          text="Go to Betrothal Listing page."
+        />
       </Container>
     )
   }
@@ -191,7 +192,8 @@ function CreateFamilyBetrothals({ data, router }) {
         <HeaderOne>Betrothal Creation</HeaderOne>
         <GrayButton
           onClick={ () => router.push(`/family/${router.query.family_id}/betrothal/create`) }
-        >Go to Betrothal Creation page.</GrayButton>
+          text="Go to Betrothal Creation page."
+        />
       </Container>
     )
   }
@@ -204,7 +206,8 @@ function ListFamilyTravel({ data, router }) {
         <HeaderOne>Travel Info</HeaderOne>
         <GrayButton
           onClick={ () => router.push(`/family/${router.query.family_id}/travel`) }
-        >Go to Travel Management page.</GrayButton>
+          text="Go to Travel Management page."
+        />
       </Container>
     )
   }

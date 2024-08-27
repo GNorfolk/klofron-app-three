@@ -63,7 +63,7 @@ export default function ListAllFamilies({ queryClient = null, userId = null }) {
             <div className="grid gap-4 sm:grid-cols-2">
               <input defaultValue="familyName" {...register("family_name", { required: true })} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />
               { errors.family_name && <span className='whitespace-nowrap'>This field is required</span> }
-              <GrayButton>Create Family</GrayButton>
+              <GrayButton text="Create Family" />
             </div>
           </form>
           <small className="" id={'cm-' + userId}></small>

@@ -83,7 +83,8 @@ function ListHouseResources({ data, queryClient, userId = null, router }) {
         <Paragraph>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name + " has " + data.house_food.resource_volume + " food and " + data.house_wood.resource_volume + " wood in storage!"}</Paragraph>
         { userId === data.house_family.family_user_id ? <GrayButton
           onClick={ () => router.push(`/house/${router.query.id}/resource`) }
-        >Go to Resource Management page.</GrayButton> : null }
+          text="Go to Resource Management page."
+        /> : null }
       </Container>
     )
   }
@@ -129,6 +130,7 @@ function CreatePerson({ houseId, queryClient }) {
   return (
     <Container>
       <GrayButton
+        text="Create Person"
         onClick={ () => {
           createPerson.mutate(houseId, { onSettled: (data, error: any) => {
             queryClient.invalidateQueries()
@@ -139,7 +141,7 @@ function CreatePerson({ houseId, queryClient }) {
             }
           }})
         }}
-      >Create Person</GrayButton>
+      />
       <small className="text-gray-500" id={'cm-two-' + houseId}></small>
     </Container>
   )

@@ -104,7 +104,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
               ))
             }
           </StyledSelect>{ errors.person_teacher_id && <span className='whitespace-nowrap'>This field is required</span> }
-          <GrayButton>Select Teacher</GrayButton>
+          <GrayButton text="Select Teacher" />
         </div>
       </form>
       <small className="" id={'cm-' + personId}></small>
@@ -140,7 +140,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
       <HeaderOne>Remove Teacher</HeaderOne>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 grid-cols-1">
-          <GrayButton>Remove Teacher</GrayButton>
+          <GrayButton text="Remove Teacher" />
         </div>
       </form>
       <small className="" id={'cm-' + personId}></small>

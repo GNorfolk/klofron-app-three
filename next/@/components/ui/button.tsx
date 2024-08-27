@@ -53,13 +53,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export function GrayButton(props) {
+export function GrayButton({text, ...props}) {
   return <Button
     size="sm"
     variant="ghost"
     className="bg-gray-900 text-gray-500 hover:bg-gray-950 border-gray-950 border-2 hover:text-gray-400 m-1 transition-colors"
     {...props}
-  >Start Action</Button>
+  >{text}</Button>
 }
 
 export { Button, buttonVariants }

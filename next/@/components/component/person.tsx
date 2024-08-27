@@ -97,10 +97,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                           </>
                         }
                       </StyledSelect>
-                      <GrayButton onClick={handleSubmit(onAction)}>Start Action</GrayButton>
-                      <GrayButton onClick={handleSubmit(onQueue)}>
-                        {"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"}
-                      </GrayButton>
+                      <GrayButton onClick={handleSubmit(onAction)} text="Start Action" />
+                      <GrayButton onClick={handleSubmit(onQueue)} text={"(" + person_action_queue.action_queue_next_actions.length + ") Add to Queue"} />
                     </div>
                   </form>
                   {
