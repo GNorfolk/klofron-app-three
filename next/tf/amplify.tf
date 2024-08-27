@@ -48,7 +48,7 @@ resource "aws_amplify_app" "this" {
   environment_variables = {
     "AMPLIFY_DIFF_DEPLOY"       = "false"
     "AMPLIFY_MONOREPO_APP_ROOT" = "next"
-    "NEXTAUTH_URL"              = "https://www.klofron.uk"
+    "NEXTAUTH_URL"              = "https://amplify.klofron.uk"
     "NEXT_PUBLIC_API_HOST"      = "https://api.klofron.uk"
   }
 }
@@ -63,7 +63,7 @@ resource "aws_amplify_branch" "this" {
   environment_variables = {
     "AMPLIFY_DIFF_DEPLOY"       = "false"
     "AMPLIFY_MONOREPO_APP_ROOT" = "next"
-    "NEXTAUTH_URL"              = "https://www.klofron.uk"
+    "NEXTAUTH_URL"              = "https://amplify.klofron.uk"
     "NEXT_PUBLIC_API_HOST"      = "https://api.klofron.uk"
   }
 }
@@ -74,13 +74,13 @@ resource "aws_amplify_domain_association" "this" {
 
   sub_domain {
     branch_name = aws_amplify_branch.this.branch_name
-    prefix      = "www"
+    prefix      = "amplify"
   }
 }
 
 resource "aws_route53_record" "amplify" {
   zone_id = data.aws_route53_zone.this.zone_id
-  name = "www.klofron.uk"
+  name = "amplify.klofron.uk"
   type = "CNAME"
   records = [aws_amplify_app.this.default_domain]
   ttl = 60

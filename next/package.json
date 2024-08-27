@@ -5,8 +5,10 @@
   },
   "scripts": {
     "dev": "clear && next dev",
-    "build": "next build",
-    "deploy": "terraform -chdir=tf init && terraform -chdir=tf apply -auto-approve"
+    "clean": "rm -rf .next .serverless .serverless_nextjs tf/.terraform tf/.terraform.lock.hcl tf/ka3-nextjs.zip",
+    "build": "next build && serverless || VER > NUL",
+    "terraform": "terraform -chdir=tf init && terraform -chdir=tf apply -auto-approve",
+    "deploy": "npm run clean && npm install && npm run build && npm run terraform"
   },
   "dependencies": {
     "@next/font": "^14.2.3",

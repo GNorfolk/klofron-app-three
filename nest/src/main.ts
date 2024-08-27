@@ -7,7 +7,8 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://www.klofron.uk',
-      'https://old.klofron.uk'
+      'https://old.klofron.uk',
+      'https://amplify.klofron.uk'
     ]
   });
   await app.listen(5000);
