@@ -39,6 +39,7 @@
 .vercel
 .serverless
 .serverless_nextjs
+next.out
 
 # typescript
 *.tsbuildinfo

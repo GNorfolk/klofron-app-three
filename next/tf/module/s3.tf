@@ -59,18 +59,11 @@ resource "aws_s3_object" "this" {
   provider = aws.eu-west-1
   bucket = aws_s3_bucket.deployment.id
   key = "${var.app_name}-nextjs.zip"
-  source = data.archive_file.this.output_path
-  source_hash = filemd5(data.archive_file.this.output_path)
+  source = "../../next.out/code.zip"
+  source_hash = filemd5("../../next.out/code.zip")
   bucket_key_enabled = false
   server_side_encryption = "AES256"
   storage_class = "STANDARD"
   content_type = "binary/octet-stream"
   tags = {}
-}
-
-data "archive_file" "this" {
-  type = "zip"
-  output_file_mode = "0666"
-  output_path = "${var.app_name}-nextjs.zip"
-  source_dir = "../../.serverless_nextjs/default-lambda"
 }

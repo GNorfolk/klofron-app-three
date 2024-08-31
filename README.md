@@ -104,6 +104,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - TypeORM QueryRunner Manager: https://orkhan.gitbook.io/typeorm/docs/entity-manager-api
 - NextJS HTTP exceptions: https://docs.nestjs.com/exception-filters
 - NextJS response interceptors: https://blog.stackademic.com/crafting-a-uniform-response-structure-in-nestjs-a-guide-to-mastering-interceptors-706820b5aa0b
+- NextJS packaging and deployment: https://github.com/sladg/nextjs-lambda
 
 # Development
 **How to clone repo**:

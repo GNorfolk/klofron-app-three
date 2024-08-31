@@ -8,7 +8,7 @@ resource "aws_lambda_function" "this" {
   runtime = "nodejs16.x"
   publish = true
   timeout = 10
-  source_code_hash = data.archive_file.this.output_base64sha256
+  source_code_hash = filemd5("../../next.out/code.zip")
 }
 
 resource "aws_iam_role" "this" {
@@ -31,4 +31,9 @@ resource "aws_iam_role" "this" {
       },
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.this.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }

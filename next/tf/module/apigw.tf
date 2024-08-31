@@ -9,6 +9,19 @@ resource "aws_apigatewayv2_stage" "this" {
   api_id = aws_apigatewayv2_api.this.id
   name = "next"
   auto_deploy = false
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api.arn
+    format = jsonencode({
+      httpMethod = "$context.httpMethod"
+      ip = "$context.identity.sourceIp"
+      protocol = "$context.protocol"
+      requestId = "$context.requestId"
+      requestTime = "$context.requestTime"
+      responseLength = "$context.responseLength"
+      routeKey = "$context.routeKey"
+      status = "$context.status"
+    })
+  }
 }
 
 resource "aws_apigatewayv2_integration" "this" {

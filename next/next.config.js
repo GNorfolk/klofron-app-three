@@ -6,6 +6,12 @@ const headers = [
 
 module.exports = {
   reactStrictMode: true,
+  compress: false,
+  output: 'standalone',
+  experimental: {
+		esmExternals: false, // optional
+		externalDir: true, // optional
+	},
   async headers() {
     return [
       {
