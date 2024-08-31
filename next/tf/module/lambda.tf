@@ -1,4 +1,5 @@
 resource "aws_lambda_function" "this" {
+  provider = aws.eu-west-1
   s3_bucket = aws_s3_bucket.deployment.id
   s3_key = aws_s3_object.this.id
   function_name = "${var.app_name}-nextjs"
@@ -11,6 +12,7 @@ resource "aws_lambda_function" "this" {
 }
 
 resource "aws_iam_role" "this" {
+  provider = aws.eu-west-1
   name = "${var.app_name}-nextjs-lambda"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

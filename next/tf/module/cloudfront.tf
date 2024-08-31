@@ -1,6 +1,16 @@
-resource "aws_cloudfront_origin_access_identity" "this" {}
+data "aws_acm_certificate" "this" {
+  provider = aws.us-east-1
+  domain = "klofron.uk"
+  types = ["AMAZON_ISSUED"]
+  most_recent = true
+}
+
+resource "aws_cloudfront_origin_access_identity" "this" {
+  provider = aws.us-east-1
+}
 
 resource "aws_cloudfront_origin_access_control" "this" {
+  provider = aws.us-east-1
   name = var.app_name
   origin_access_control_origin_type = "s3"
   signing_behavior = "always"
@@ -8,6 +18,7 @@ resource "aws_cloudfront_origin_access_control" "this" {
 }
 
 resource "aws_cloudfront_distribution" "this" {
+  provider = aws.us-east-1
   enabled = true
   price_class = "PriceClass_100"
   aliases = [var.fqdn]
@@ -17,10 +28,22 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   origin {
-    domain_name              = aws_s3_bucket.this.bucket_domain_name
-    origin_id                = aws_cloudfront_origin_access_identity.this.id
+    domain_name = aws_s3_bucket.this.bucket_domain_name
+    origin_id = "s3"
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
+    }
+  }
+
+  origin {
+    domain_name = split("/", aws_apigatewayv2_api.this.api_endpoint)[2]
+    origin_id = "api-gateway"
+    origin_path = "/next"
+    custom_origin_config {
+      http_port = 80
+      https_port = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols = ["TLSv1.2"]
     }
   }
 
@@ -30,23 +53,19 @@ resource "aws_cloudfront_distribution" "this" {
     origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
     allowed_methods = ["GET", "HEAD", "DELETE" ,"OPTIONS" ,"PATCH" ,"POST" ,"PUT"]
     cached_methods = ["GET", "HEAD"]
-    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    target_origin_id = "api-gateway"
     min_ttl = 0
     default_ttl = 0
     max_ttl = 0
     compress = false
     viewer_protocol_policy = "https-only"
-    lambda_function_association {
-      event_type = "origin-request"
-      lambda_arn = aws_lambda_function.this.qualified_arn
-    }
   }
 
   ordered_cache_behavior {
     path_pattern = "_next/static/*"
     allowed_methods = ["GET", "HEAD"]
     cached_methods = ["GET", "HEAD"]
-    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    target_origin_id = "s3"
     min_ttl = 86400
     default_ttl = 86400
     max_ttl = 86400
@@ -64,7 +83,7 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods = ["GET", "HEAD"]
     cached_methods = ["GET", "HEAD"]
-    target_origin_id = aws_cloudfront_origin_access_identity.this.id
+    target_origin_id = "api-gateway"
     compress = false
     min_ttl = 0
     default_ttl = 3600
@@ -74,10 +93,6 @@ resource "aws_cloudfront_distribution" "this" {
       cookies {
         forward = "all"
       }
-    }
-    lambda_function_association {
-      event_type = "origin-request"
-      lambda_arn = aws_lambda_function.this.qualified_arn
     }
   }
 

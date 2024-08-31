@@ -1,0 +1,27 @@
+resource "aws_apigatewayv2_api" "this" {
+  provider = aws.eu-west-1
+  name = "next"
+  protocol_type = "HTTP"
+}
+
+resource "aws_apigatewayv2_stage" "this" {
+  provider = aws.eu-west-1
+  api_id = aws_apigatewayv2_api.this.id
+  name = "next"
+  auto_deploy = false
+}
+
+resource "aws_apigatewayv2_integration" "this" {
+  provider = aws.eu-west-1
+  api_id = aws_apigatewayv2_api.this.id
+  integration_uri = aws_lambda_function.this.invoke_arn
+  integration_type = "AWS_PROXY"
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "any" {
+  provider = aws.eu-west-1
+  api_id = aws_apigatewayv2_api.this.id
+  route_key = "ANY /{proxy+}"
+  target = "integrations/${aws_apigatewayv2_integration.this.id}"
+}
