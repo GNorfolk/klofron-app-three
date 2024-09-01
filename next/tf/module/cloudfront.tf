@@ -38,7 +38,7 @@ resource "aws_cloudfront_distribution" "this" {
   origin {
     domain_name = split("/", aws_apigatewayv2_api.this.api_endpoint)[2]
     origin_id = "api-gateway"
-    origin_path = "/next"
+    origin_path = "/_server"
     custom_origin_config {
       http_port = 80
       https_port = 443
@@ -48,9 +48,9 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   ordered_cache_behavior {
-    path_pattern = "/api/auth/*"
+    path_pattern = "/api/*"
     cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
+    # origin_request_policy_id = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
     allowed_methods = ["GET", "HEAD", "DELETE" ,"OPTIONS" ,"PATCH" ,"POST" ,"PUT"]
     cached_methods = ["GET", "HEAD"]
     target_origin_id = "api-gateway"
@@ -58,11 +58,35 @@ resource "aws_cloudfront_distribution" "this" {
     default_ttl = 0
     max_ttl = 0
     compress = false
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "redirect-to-https"
+    # forwarded_values {
+    #   query_string = true
+    #   cookies {
+    #     forward = "all"
+    #   }
+    # }
   }
 
   ordered_cache_behavior {
-    path_pattern = "_next/static/*"
+    path_pattern = "_next/data/*"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id = "api-gateway"
+    compress = false
+    min_ttl = 0
+    default_ttl = 3600
+    max_ttl = 31536000
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "all"
+      }
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern = "_next/*"
     allowed_methods = ["GET", "HEAD"]
     cached_methods = ["GET", "HEAD"]
     target_origin_id = "s3"
@@ -70,7 +94,25 @@ resource "aws_cloudfront_distribution" "this" {
     default_ttl = 86400
     max_ttl = 86400
     compress = true
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "redirect-to-https"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "all"
+      }
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern = "assets/*"
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id = "s3"
+    min_ttl = 86400
+    default_ttl = 86400
+    max_ttl = 86400
+    compress = true
+    viewer_protocol_policy = "redirect-to-https"
     forwarded_values {
       query_string = false
       cookies {

@@ -7,7 +7,7 @@ resource "aws_apigatewayv2_api" "this" {
 resource "aws_apigatewayv2_stage" "this" {
   provider = aws.eu-west-1
   api_id = aws_apigatewayv2_api.this.id
-  name = "next"
+  name = "$default"
   auto_deploy = false
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api.arn
@@ -35,6 +35,6 @@ resource "aws_apigatewayv2_integration" "this" {
 resource "aws_apigatewayv2_route" "any" {
   provider = aws.eu-west-1
   api_id = aws_apigatewayv2_api.this.id
-  route_key = "ANY /{proxy+}"
+  route_key = "ANY /_server/{proxy+}"
   target = "integrations/${aws_apigatewayv2_integration.this.id}"
 }

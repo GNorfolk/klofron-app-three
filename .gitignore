@@ -52,14 +52,5 @@ next-env.d.ts
 # cloudformation
 */packaged-template.yaml
 
-# cdk stuff
-!jest.config.js
-*.d.ts
-node_modules
-
-# cdk asset staging directory
-.cdk.staging
-cdk.out
-
 # mysql dumps
 dump-*.sql

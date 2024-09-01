@@ -1,18 +1,14 @@
 {
   "private": true,
-  "bin": {
-    "cdk": "bin/cdk.js"
-  },
   "scripts": {
     "dev": "clear && next dev",
     "clean": "rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nextjs.zip next-env.d.ts",
-    "build": "next build && npx --package @sladg/nextjs-lambda cli pack && npx --package @sladg/nextjs-lambda cli deploy",
+    "build": "next build && npx --package @sladg/nextjs-lambda cli pack && unzip next.out/assetsLayer.zip -d next.out/assets-layer",
     "copy": "cp -R .next/serverless/ .serverless_nextjs/default-lambda/ && cp .env .serverless_nextjs/default-lambda/.env.production.local",
-    "terraform": "terraform -chdir=tf/deploy init && terraform -chdir=tf/deploy apply -auto-approve",
+    "terraform": "terraform -chdir=tf/deploy init && terraform -chdir=tf/deploy apply",
     "sync": "aws s3 sync --acl private .serverless_nextjs/assets/ s3://ka3-nextjs-app/",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E189BFSDXO7RRK --invalidation-batch \"{ \\\"Paths\\\": { \\\"Quantity\\\": 2, \\\"Items\\\": [ \\\"/\\\", \\\"/*\\\" ] }, \\\"CallerReference\\\": \\\"%RANDOM%\\\" }\"",
-    "deploy": "npm run clean && npm install && npm run build && npm run copy && npm run terraform && npm run sync && npm run invalidate",
-    "test": "npm run clean && npm install && npm run build"
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E1AACFG4H0AQC2 --invalidation-batch \"{ \\\"Paths\\\": { \\\"Quantity\\\": 2, \\\"Items\\\": [ \\\"/\\\", \\\"/*\\\" ] }, \\\"CallerReference\\\": \\\"%RANDOM%\\\" }\"",
+    "deploy": "npm run clean && npm install && npm run build && npm run terraform && npm run invalidate"
   },
   "dependencies": {
     "@next/font": "^14.2.3",
@@ -21,7 +17,6 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^4.29.19",
-    "aws-cdk-lib": "2.96.2",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -48,7 +43,6 @@
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "autoprefixer": "^10.4.19",
-    "aws-cdk": "2.96.2",
     "jest": "^29.6.4",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",

@@ -67,3 +67,40 @@ resource "aws_s3_object" "this" {
   content_type = "binary/octet-stream"
   tags = {}
 }
+
+resource "aws_s3_object" "that" {
+  provider = aws.eu-west-1
+  bucket = aws_s3_bucket.deployment.id
+  key = "${var.app_name}-nextjs-deps.zip"
+  source = "../../next.out/dependenciesLayer.zip"
+  source_hash = filemd5("../../next.out/dependenciesLayer.zip")
+  bucket_key_enabled = false
+  server_side_encryption = "AES256"
+  storage_class = "STANDARD"
+  content_type = "binary/octet-stream"
+  tags = {}
+}
+
+resource "aws_s3_object" "javascript" {
+  for_each = fileset("../../next.out/assets-layer/", "**/*.js")
+  provider = aws.eu-west-1
+  bucket = aws_s3_bucket.this.id
+  key = "${each.key}"
+  source = "../../next.out/assets-layer/${each.key}"
+  source_hash = filemd5("../../next.out/assetsLayer.zip")
+  bucket_key_enabled = false
+  server_side_encryption = "AES256"
+  content_type = "text/javascript"
+}
+
+resource "aws_s3_object" "css" {
+  for_each = fileset("../../next.out/assets-layer/", "**/*.css")
+  provider = aws.eu-west-1
+  bucket = aws_s3_bucket.this.id
+  key = "${each.key}"
+  source = "../../next.out/assets-layer/${each.key}"
+  source_hash = filemd5("../../next.out/assetsLayer.zip")
+  bucket_key_enabled = false
+  server_side_encryption = "AES256"
+  content_type = "text/css"
+}
