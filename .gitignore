@@ -54,3 +54,6 @@ next-env.d.ts
 
 # mysql dumps
 dump-*.sql
+
+# open-next
+.open-next

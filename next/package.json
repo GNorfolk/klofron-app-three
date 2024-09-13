@@ -2,13 +2,13 @@
   "private": true,
   "scripts": {
     "dev": "clear && next dev",
-    "clean": "rm -rf .next .serverless .serverless_nextjs node_modules tf/.terraform tf/.terraform.lock.hcl tf/ka3-nextjs.zip next-env.d.ts",
-    "build": "next build && npx --package @sladg/nextjs-lambda cli pack && unzip next.out/assetsLayer.zip -d next.out/assets-layer",
-    "copy": "cp -R .next/serverless/ .serverless_nextjs/default-lambda/ && cp .env .serverless_nextjs/default-lambda/.env.production.local",
-    "terraform": "terraform -chdir=tf/deploy init && terraform -chdir=tf/deploy apply",
-    "sync": "aws s3 sync --acl private .serverless_nextjs/assets/ s3://ka3-nextjs-app/",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E1AACFG4H0AQC2 --invalidation-batch \"{ \\\"Paths\\\": { \\\"Quantity\\\": 2, \\\"Items\\\": [ \\\"/\\\", \\\"/*\\\" ] }, \\\"CallerReference\\\": \\\"%RANDOM%\\\" }\"",
-    "deploy": "npm run clean && npm install && npm run build && npm run terraform && npm run invalidate"
+    "clean": "rm -rf .next .open-next .serverless_nextjs node_modules tf/deploy/.terraform tf/deploy/.terraform.lock.hcl tf/deploy/ka3-nextjs.zip next-env.d.ts",
+    "build": "next build",
+    "build:open-next": "npx open-next@2.3.9 build",
+    "terraform": "terraform -chdir=tf/deploy init && terraform -chdir=tf/deploy apply -auto-approve",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E7MMBC8I0ONGT --invalidation-batch \"{ \\\"Paths\\\": { \\\"Quantity\\\": 2, \\\"Items\\\": [ \\\"/\\\", \\\"/*\\\" ] }, \\\"CallerReference\\\": \\\"%RANDOM%\\\" }\"",
+    "deploy": "npm run clean && npm install && npm run build:open-next && npm run terraform && npm run invalidate",
+    "deploy:quick": "npm run build:open-next && npm run terraform && npm run invalidate"
   },
   "dependencies": {
     "@next/font": "^14.2.3",
