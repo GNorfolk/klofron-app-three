@@ -1,6 +1,6 @@
 module "this" {
   source  = "nhs-england-tools/opennext/aws"
-  version = "1.0.6" # Use the latest release from https://github.com/nhs-england-tools/terraform-aws-opennext/releases
+  version = "1.0.0" # Use the latest release from https://github.com/nhs-england-tools/terraform-aws-opennext/releases
 
   prefix              = "ka3"                               # Prefix for all created resources
   opennext_build_path = "../../.open-next"                  # Path to your .open-next folder
