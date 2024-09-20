@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserService } from '../user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +13,8 @@ export class AuthService {
 
   async signIn(email: string, pass: string): Promise<any> {
     const user = await this.userService.findOne(email);
-    if (user?.user_password !== pass) {
-      console.log(pass)
-      console.log(user)
+    const isMatch = await bcrypt.compare(pass, user?.user_password);
+    if (!isMatch) {
       throw new UnauthorizedException();
     }
     const { user_password, ...result } = user;

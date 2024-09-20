@@ -34,11 +34,11 @@ const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password", placeholder: "********"}
             },
             authorize(credentials, req) {
-                return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v1/login', {
+                return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/auth/login', {
                     email: credentials.email,
                     password: credentials.password
                 }).then((value) => {
-                    if (value.data.success) {
+                    if (value.data) {
                         return value.data
                     } else {
                         return null
