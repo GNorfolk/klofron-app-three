@@ -17,9 +17,14 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException();
     }
-    const { user_password, ...result } = user;
+    // const { user_password, ...result } = user;
     // TODO: Generate a JWT and return it here
     // instead of the user object
-    return result;
+    return {
+      success: true,
+      id: user.user_id,
+      username: user.user_username,
+      email: user.user_email
+    };
   }
 }
