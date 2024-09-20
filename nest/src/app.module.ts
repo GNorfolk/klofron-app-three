@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ActionModule } from './action/action.module';
 import { MoveHouseModule } from './move-house/move-house.module';
 import { BetrothalModule } from './betrothal/betrothal.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { BetrothalModule } from './betrothal/betrothal.module';
     ActionModule,
     MoveHouseModule,
     BetrothalModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

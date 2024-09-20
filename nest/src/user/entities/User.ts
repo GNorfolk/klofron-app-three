@@ -22,7 +22,7 @@ export class User {
   user_email: string;
 
   @Column("varchar", { name: "password", length: 155 })
-  _userpassword: string;
+  user_password: string;
 
   @Column("timestamp", {
     name: "created_at",
