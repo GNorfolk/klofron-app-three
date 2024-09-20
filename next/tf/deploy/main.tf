@@ -10,4 +10,11 @@ module "this" {
     aliases             = ["www.klofron.uk"]                        # Your domain name
     acm_certificate_arn = data.aws_acm_certificate.this.arn         # The ACM (SSL) certificate for your domain
   }
+
+  server_options = {
+    environment_variables = {
+      NEXTAUTH_URL: "https://www.klofron.uk",
+      NEXTAUTH_SECRET: "say_lalisa_love_me_lalisa_love_me_hey",
+    }
+  }
 }
