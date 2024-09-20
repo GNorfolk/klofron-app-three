@@ -16,9 +16,9 @@ export function Register({ queryClient }) {
       retypePassword: userInfo.retypePassword
     }).then(response => {
       queryClient.invalidateQueries()
-      // document.getElementById("cm-nothing").innerText = ' '
+      document.getElementById("cm-register").innerText = ' '
     }).catch(error => {
-      // document.getElementById("cm-nothing").innerText = error.response.data.message
+      document.getElementById("cm-register").innerText = error.response.data.message
     })
     console.log(res)
   }
@@ -74,6 +74,9 @@ export function Register({ queryClient }) {
           <Button type="submit" className="w-full">
             Register
           </Button>
+        </div>
+        <div className="text-center text-muted-foreground">
+          <small className="text-gray-500" id={'cm-register'}></small>
         </div>
       </form>
     </div>
