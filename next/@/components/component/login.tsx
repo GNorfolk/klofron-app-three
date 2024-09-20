@@ -23,22 +23,22 @@ export function Login() {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">Sign in to your account</h2>
         <p className="mt-2 text-center text-sm text-muted-foreground">
             Or{" "}
-            <Link href="#" className="font-medium text-primary hover:underline" prefetch={false}>
+            <Link href="/register" className="font-medium text-primary hover:underline" prefetch={false}>
               register for a new account
             </Link>
           </p>
       </div>
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="space-y-2">
-          <Label htmlFor="username">Username</Label>
+          <Label htmlFor="email">Email</Label>
           <Input
             value={userInfo.email}
             onChange={({ target }) =>
               setUserInfo({ ...userInfo, email: target.value })
             }
-            id="username"
+            id="email"
             type="text"
-            placeholder="johndoe"
+            placeholder="johndoe@example.com"
           />
         </div>
         <div className="space-y-2">
