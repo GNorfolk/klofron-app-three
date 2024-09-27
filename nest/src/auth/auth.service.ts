@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserService } from '../user/user.service';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
