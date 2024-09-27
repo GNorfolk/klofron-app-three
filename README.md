@@ -105,6 +105,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - NextJS HTTP exceptions: https://docs.nestjs.com/exception-filters
 - NextJS response interceptors: https://blog.stackademic.com/crafting-a-uniform-response-structure-in-nestjs-a-guide-to-mastering-interceptors-706820b5aa0b
 - NextJS packaging and deployment: https://github.com/sladg/nextjs-lambda
+- React Hook Forms SmartFormComponent: https://www.react-hook-form.com/advanced-usage/#SmartFormComponent
 
 # Development
 **How to clone repo**:

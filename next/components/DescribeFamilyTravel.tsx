@@ -9,6 +9,7 @@ import { HeaderTwo } from '../@/components/ui/header'
 import { DivIconInfo } from '../@/components/ui/div'
 import { Paragraph } from '../@/components/ui/paragraph'
 import { StyledSelect } from '../@/components/ui/input'
+import { Form, Input, Select } from '../@/components/ui/form'
 
 export default function DescribeFamilyTravel({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -33,6 +34,7 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
+      console.log("formData: " + JSON.stringify(formData));
       if (formData.person_id) {
         axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + formData.person_id, {
           house_id: formData.house_id
@@ -80,28 +82,18 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
             {
               data.family_people.length > 0 && data.family_houses.length > 0 ?
                 <div>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <StyledSelect fieldName="person_id" fieldRequired={true}>
-                        { errors.person_id ? document.getElementById("cm-" + router.query.family_id).innerText = "The Person field is required" : null }
-                        { data.family_people.map(({ person_id, person_name }) => (
-                          <option value={person_id}>{person_name}</option>
-                        ))}
-                        </StyledSelect>
-                      </div>
-                      <div>
-                        <StyledSelect fieldName="house_id" fieldRequired={false}>
-                        { data.family_houses.map(({ house_id, house_address }) => (
-                          <option value={house_id}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</option>
-                        ))}
-                        </StyledSelect>
-                      </div>
-                    </div>
-                    <Button type="submit" className="w-full">
-                      Submit
-                    </Button>
-                  </form>
+                  <Form<Inputs> onSubmit={onSubmit}>
+                    <Select name="person_id">
+                      { data.family_people.map(({ person_id, person_name }) => (
+                        <option value={person_id}>{person_name}</option>
+                      ))}
+                    </Select>
+                    <Select name="house_id">
+                      { data.family_houses.map(({ house_id, house_address }) => (
+                        <option value={house_id}>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</option>
+                      ))}
+                    </Select>
+                  </Form>
                   <small className="text-gray-500" id={'cm-' + router.query.family_id}></small>
                 </div>
               :
