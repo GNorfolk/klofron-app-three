@@ -10,10 +10,10 @@ export function Register({ queryClient }) {
   const handleSubmit:FormEventHandler<HTMLFormElement> = async (e) => {
     // validate your userinfo
     e.preventDefault()
-    const res = await axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/register',{
-      email: userInfo.email,
-      setPassword: userInfo.setPassword,
-      retypePassword: userInfo.retypePassword
+    const res = await axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/user',{
+      user_email: userInfo.email,
+      user_password: userInfo.setPassword,
+      retype_password: userInfo.retypePassword
     }).then(response => {
       queryClient.invalidateQueries()
       document.getElementById("cm-register").innerText = ' '
