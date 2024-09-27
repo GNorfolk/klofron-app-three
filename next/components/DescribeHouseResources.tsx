@@ -7,6 +7,7 @@ import { Button } from "../@/components/ui/button"
 import { MapPinIcon } from "../@/components/ui/icon"
 import { HeaderTwo } from '../@/components/ui/header'
 import { StyledSelect } from '../@/components/ui/input'
+import { Form, Input, Select } from '../@/components/ui/form'
 
 export default function DescribeHouseResources({ queryClient, userId, router }) {
   if (router.isReady) {
@@ -97,24 +98,18 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
             {
               data.house_people.length > 0 ?
                 <div>
-                  <form className="space-y-6">
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <StyledSelect fieldName="person_id" fieldRequired={false}>
+                  <Form<Inputs> onSubmit={onDeposit} styling={"grid gap-4 sm:grid-cols-3"}>
+                    <Select name="person_id">
                       { data.house_people.map(({ person_id, person_name }) => (
                         <option value={person_id}>{person_name}</option>
                       ))}
-                      </StyledSelect>
-                      <StyledSelect fieldName="resource_type" fieldRequired={false}>
-                        <option value="food">Food</option>
-                        <option value="wood">Wood</option>
-                      </StyledSelect>
-                      <input defaultValue="1" {...register("resource_volume")} className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1" />
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Button type="submit" onClick={handleSubmit(onDeposit)} className="w-full">Deposit</Button>
-                      <Button type="submit" onClick={handleSubmit(onWithdraw)} className="w-full">Withdraw</Button>
-                    </div>
-                  </form>
+                    </Select>
+                    <Select name="resource_type">
+                      <option value="food">Food</option>
+                      <option value="wood">Wood</option>
+                    </Select>
+                    <Input name="resource_volume" defaultValue="1" />
+                  </Form>
                   <small className="text-gray-500" id={'cm-' + router.query.id}></small>
                 </div>
               :
