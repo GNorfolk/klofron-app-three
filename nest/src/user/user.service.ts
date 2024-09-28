@@ -32,6 +32,15 @@ export class UserService {
         .getMany();
       if (existing.length > 0) throw "This email is already in use!"
       if (user.user_password !== user.retype_password) throw "Passwords do not match!"
+      if (user.user_password.length < 8) throw "Password must be at least 8 characters long!"
+      const lower = /^(?=.*[a-z])/;
+      const upper = /^(?=.*[A-Z])/;
+      const nums = /^(?=.*\d)/;
+      const special = /^(?=.*[-+_!@#$%^&*., ?]).+$/;
+      if (!lower.test(user.user_password)) throw "Password must contain a lowercase character!"
+      if (!upper.test(user.user_password)) throw "Password must contain an uppercase character!"
+      if (!nums.test(user.user_password)) throw "Password must contain a number!"
+      if (!special.test(user.user_password)) throw "Password must contain a special character!"
       user.user_username = user.user_email;
       user.user_password = await bcrypt.hash(user.user_password, 10);
       result = await queryRunner.manager.save(User, user);
