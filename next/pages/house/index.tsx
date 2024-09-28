@@ -1,9 +1,12 @@
 import Link from 'next/link'
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { BaseLayout } from '../../@/components/component/base-layout'
-import ListAllHouses from '../../components/ListAllHouses'
+import { BoxLayoutSingle } from '../../@/components/component/box-layout'
+import { Container } from '../../@/components/component/container'
+import { HouseListing } from '../../@/components/component/house'
+import { HeaderTwo } from '../../@/components/ui/header'
 
-export default function Home({ client, router }) {
+export default function Main({ client, router }) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>
@@ -13,5 +16,31 @@ export default function Home({ client, router }) {
         <Link href="/">← Back to home</Link>
       </div>
     </BaseLayout>
+  )
+}
+
+export function ListAllHouses() {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['housesData'],
+    queryFn: () =>
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isLoading) return (
+    <div>
+      <HeaderTwo>Houses</HeaderTwo>
+      <p>Loading...</p>
+    </div>
+  )
+  if (error) return <div>Failed to load</div>
+
+  return (
+    <BoxLayoutSingle>
+      <Container>
+        <HouseListing houseData={data} />
+      </Container>
+    </BoxLayoutSingle>
   )
 }
