@@ -25,7 +25,6 @@ export class AuthService {
     return {
       success: true,
       id: user.user_id,
-      username: user.user_username,
       email: user.user_email
     };
   }

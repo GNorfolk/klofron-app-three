@@ -100,7 +100,6 @@ CREATE TABLE `action_queue` (
 -- -- -- -- -- USER -- -- -- -- --
 CREATE TABLE `user` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(155) NOT NULL UNIQUE,
     `email` VARCHAR(155) NOT NULL UNIQUE,
     `password` VARCHAR(155) NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),

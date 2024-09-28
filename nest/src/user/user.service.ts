@@ -43,7 +43,6 @@ export class UserService {
       if (!upper.test(user.user_password)) throw "Password must contain an uppercase character!"
       if (!nums.test(user.user_password)) throw "Password must contain a number!"
       if (!special.test(user.user_password)) throw "Password must contain a special character!"
-      user.user_username = user.user_email;
       user.user_password = await bcrypt.hash(user.user_password, 10);
       result = await queryRunner.manager.save(User, user);
       await queryRunner.commitTransaction();

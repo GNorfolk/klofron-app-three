@@ -197,6 +197,7 @@ curl --request PATCH localhost:5000/v2/action
 
 # MySQL
 ```sql
+ALTER TABLE user DROP COLUMN username;
 ```
 
 # save
