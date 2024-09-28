@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
-import { BaseLayout } from '../../@/components/component/base-layout'
+import { BaseLayout } from 'components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
-import { BoxLayout } from '../../@/components/component/box-layout'
-import { Container } from '../../@/components/component/container'
-import { BetrothalInfo } from '../../@/components/component/betrothal'
-import { HeaderTwo } from '../../@/components/ui/header'
-import { DivIconInfo } from '../../@/components/ui/div'
+import { BoxLayout } from 'components/component/box-layout'
+import { Container } from 'components/component/container'
+import { BetrothalInfo } from 'components/component/betrothal'
+import { HeaderTwo } from 'components/ui/header'
+import { DivIconInfo } from 'components/ui/div'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()

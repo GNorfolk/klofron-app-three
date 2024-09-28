@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
-import { BaseLayout } from '../../../@/components/component/base-layout'
+import { BaseLayout } from 'components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
-import { BoxLayoutSingle } from '../../../@/components/component/box-layout'
-import { Container } from '../../../@/components/component/container'
-import { HeaderTwo } from '../../../@/components/ui/header'
-import { Form, Input, Select } from '../../../@/components/ui/form'
+import { BoxLayoutSingle } from 'components/component/box-layout'
+import { Container } from 'components/component/container'
+import { HeaderTwo } from 'components/ui/header'
+import { Form, Input, Select } from 'components/ui/form'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()

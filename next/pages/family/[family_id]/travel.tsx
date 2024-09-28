@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { BaseLayout } from '../../../@/components/component/base-layout'
+import { BaseLayout } from 'components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import { useQuery } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
-import { BoxLayoutSingle } from '../../../@/components/component/box-layout'
-import { Container } from '../../../@/components/component/container'
-import { MapPinIcon } from "../../../@/components/ui/icon"
-import { HeaderTwo } from '../../../@/components/ui/header'
-import { DivIconInfo } from '../../../@/components/ui/div'
-import { Paragraph } from '../../../@/components/ui/paragraph'
-import { Form, Select } from '../../../@/components/ui/form'
+import { BoxLayoutSingle } from 'components/component/box-layout'
+import { Container } from 'components/component/container'
+import { MapPinIcon } from "components/ui/icon"
+import { HeaderTwo } from 'components/ui/header'
+import { DivIconInfo } from 'components/ui/div'
+import { Paragraph } from 'components/ui/paragraph'
+import { Form, Select } from 'components/ui/form'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()

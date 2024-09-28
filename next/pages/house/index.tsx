@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
-import { BaseLayout } from '../../@/components/component/base-layout'
-import { BoxLayoutSingle } from '../../@/components/component/box-layout'
-import { Container } from '../../@/components/component/container'
-import { HouseListing } from '../../@/components/component/house'
-import { HeaderTwo } from '../../@/components/ui/header'
+import { BaseLayout } from 'components/component/base-layout'
+import { BoxLayoutSingle } from 'components/component/box-layout'
+import { Container } from 'components/component/container'
+import { HouseListing } from 'components/component/house'
+import { HeaderTwo } from 'components/ui/header'
 
 export default function Main({ client, router }) {
   return (
