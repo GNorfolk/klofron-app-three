@@ -98,7 +98,7 @@ export default function DescribeHouseResources({ queryClient, userId, router }) 
             {
               data.house_people.length > 0 ?
                 <div>
-                  <Form<Inputs> onSubmit={onDeposit} styling={"grid gap-4 sm:grid-cols-3"}>
+                  <Form<Inputs> onSubmit={[{ name: "Desposit", func: onDeposit }, { name: "Withdraw", func: onWithdraw }]} styling={"grid gap-4 sm:grid-cols-3"}>
                     <Select name="person_id">
                       { data.house_people.map(({ person_id, person_name }) => (
                         <option value={person_id}>{person_name}</option>

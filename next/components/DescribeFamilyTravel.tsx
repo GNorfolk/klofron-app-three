@@ -82,7 +82,7 @@ export default function DescribeFamilyTravel({ queryClient, userId, router }) {
             {
               data.family_people.length > 0 && data.family_houses.length > 0 ?
                 <div>
-                  <Form<Inputs> onSubmit={onSubmit} styling={"grid gap-4 sm:grid-cols-2"}>
+                  <Form<Inputs> onSubmit={[{ name: "Submit", func: onSubmit }]} styling={"grid gap-4 sm:grid-cols-2"}>
                     <Select name="person_id">
                       { data.family_people.map(({ person_id, person_name }) => (
                         <option value={person_id}>{person_name}</option>

@@ -21,8 +21,12 @@ export function Form<Inputs>({ children, onSubmit, styling }) {
             : child;
         })}
       </div>
-      <div className="grid gap-4 sm:grid-cols-1">
-        <Button type="submit" onClick={handleSubmit(onSubmit)} className="w-full">Submit</Button>
+      <div className={"grid gap-4 sm:grid-cols-" + onSubmit.length}>
+        {
+          onSubmit.map(({ name, func }) => {
+            return <Button type="submit" onClick={handleSubmit(func)} className="w-full">{name}</Button>
+          })
+        }
       </div>
     </form>
   );
