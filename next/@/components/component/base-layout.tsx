@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { Button } from "components/ui/button"
-import { SheetTrigger, SheetContent, Sheet } from "components/ui/sheet"
+import { Button } from "../../components/ui/button"
+import { SheetTrigger, SheetContent, Sheet } from "../../components/ui/sheet"
 import { MountainIcon, HomeIcon, MicroscopeIcon, MenuIcon, LockIcon } from '../ui/icon'
 import { signIn, signOut, useSession } from "next-auth/react"
 

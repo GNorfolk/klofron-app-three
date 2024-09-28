@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { BaseLayout } from 'components/component/base-layout'
+import { BaseLayout } from '../../@/components/component/base-layout'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
-import { BoxLayout } from 'components/component/box-layout'
-import { Container } from 'components/component/container'
-import { FamilyListing } from 'components/component/family'
-import { PersonListing } from 'components/component/person'
-import { HouseListing } from 'components/component/house'
-import { HeaderOne, HeaderTwo } from 'components/ui/header'
+import { BoxLayout } from '../../@/components/component/box-layout'
+import { Container } from '../../@/components/component/container'
+import { FamilyListing } from '../../@/components/component/family'
+import { PersonListing } from '../../@/components/component/person'
+import { HouseListing } from '../../@/components/component/house'
+import { HeaderOne, HeaderTwo } from '../../@/components/ui/header'
 
 export default function Main({ client, router }) {
   return (

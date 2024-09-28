@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
-import { BaseLayout } from 'components/component/base-layout'
+import { BaseLayout } from '../../@/components/component/base-layout'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
-import { BoxLayoutSingle } from 'components/component/box-layout'
-import { Container } from 'components/component/container'
-import { FamilyListing } from 'components/component/family'
-import { GrayButton } from "components/ui/button"
-import { HeaderOne } from "components/ui/header"
+import { BoxLayoutSingle } from '../../@/components/component/box-layout'
+import { Container } from '../../@/components/component/container'
+import { FamilyListing } from '../../@/components/component/family'
+import { GrayButton } from "../../@/components/ui/button"
+import { HeaderOne } from "../../@/components/ui/header"
 
 export default function Home({ client, router }) {
   return (
