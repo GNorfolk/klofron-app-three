@@ -12,6 +12,8 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, pass: string): Promise<any> {
+    const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    if (!email.match(regex)) throw "This is not a valid email address!"
     const user = await this.userService.findOne(email);
     const isMatch = await bcrypt.compare(pass, user?.user_password);
     if (!isMatch) {
