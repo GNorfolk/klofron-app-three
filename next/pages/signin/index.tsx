@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 
 const queryClient = new QueryClient()
 
-export default function LogIn() {
+export default function Main() {
   return (
     <BaseLayout>
       <QueryClientProvider client={queryClient}>

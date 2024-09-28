@@ -10,7 +10,7 @@ import { BetrothalInfo } from '../../@/components/component/betrothal'
 import { HeaderTwo } from '../../@/components/ui/header'
 import { DivIconInfo } from '../../@/components/ui/div'
 
-export default function Person({ client, router }) {
+export default function Main({ client, router }) {
   const { status, data } = useSession()
   const userId = data?.user ? data.user.id : null
   return (
