@@ -30,6 +30,8 @@ export class UserService {
         .createQueryBuilder(User, "user")
         .where("user.user_email = :email", { email: user.user_email })
         .getMany();
+      const email = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if (!user.user_email.match(email)) throw "This is not a valid email address!"
       if (existing.length > 0) throw "This email is already in use!"
       if (user.user_password !== user.retype_password) throw "Passwords do not match!"
       if (user.user_password.length < 8) throw "Password must be at least 8 characters long!"
