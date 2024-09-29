@@ -4,7 +4,7 @@ import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/i
 import { Button } from "../ui/button"
 import { HeaderTwo } from "../ui/header"
 import { DivIconInfo } from '../ui/div'
-import { Paragraph } from '../ui/paragraph'
+import { Paragraph } from '../ui/text'
 import { StyledSelect } from "../ui/input"
 import Link from 'next/link'
 
@@ -80,7 +80,7 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
     <main>
       <HeaderTwo>Betrothal Eligible Info</HeaderTwo>
       { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
-        <Link href={person_id}>
+        <Link href={person_id.toString()}>
           <a className="p-6 pt-2 pb-2">
             <div className="flex">
               <DivIconInfo>

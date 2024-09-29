@@ -92,7 +92,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
               <GrayButton text="Create Family" />
             </div>
           </form>
-          <small className="" id={'cm-' + userId}></small>
+          <small className="text-gray-500" id={'cm-' + userId}></small>
         </Container>
       </BoxLayoutSingle>
     )

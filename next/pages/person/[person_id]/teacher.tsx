@@ -123,7 +123,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
           <GrayButton text="Select Teacher" />
         </div>
       </form>
-      <small className="" id={'cm-' + personId}></small>
+      <small className="text-gray-500" id={'cm-' + personId}></small>
     </Container>
   )
 }
@@ -159,7 +159,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
           <GrayButton text="Remove Teacher" />
         </div>
       </form>
-      <small className="" id={'cm-' + personId}></small>
+      <small className="text-gray-500" id={'cm-' + personId}></small>
     </Container>
   )
 }
