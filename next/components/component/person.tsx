@@ -1,11 +1,11 @@
 import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon, UserIcon } from '../ui/icon'
-import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { GrayButton } from "../ui/button"
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
 import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
 import { StyledSelect } from '../ui/input'
+import { Small } from '../ui/text'
 import Link from 'next/link'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
@@ -106,7 +106,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                       <small className="text-gray-500 ml-2">{person_name} is performing {person_action_queue.action_queue_current_action.action_type_name} completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>
                     </> : <></>
                   }
-                  <small className="text-gray-500" id={'cm-' + person_action_queue_id}></small>
+                  <Small uid={person_action_queue_id}></Small>
                 </div>
               </> : null
             }

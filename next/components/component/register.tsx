@@ -5,6 +5,7 @@ import Link from "next/link"
 import { FormEventHandler, useState } from "react"
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { Small } from '../ui/text'
 
 export function Register({ queryClient }) {
   const router = useRouter();
@@ -80,7 +81,7 @@ export function Register({ queryClient }) {
             </Button>
           </div>
           <div className="text-center text-muted-foreground">
-            <small className="text-gray-500" id={'cm-register'}></small>
+            <Small uid='register'></Small>
           </div>
         </form>
       </div>

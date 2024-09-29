@@ -4,7 +4,7 @@ import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/i
 import { Button } from "../ui/button"
 import { HeaderTwo } from "../ui/header"
 import { DivIconInfo } from '../ui/div'
-import { Paragraph } from '../ui/text'
+import { Paragraph, Small } from '../ui/text'
 import { StyledSelect } from "../ui/input"
 import Link from 'next/link'
 
@@ -163,7 +163,7 @@ export function BetrothalCreation({ peopleData, familyId, personId, queryClient,
                 Submit
               </Button>
             </form>
-            <small className="text-gray-500" id={'cm-' + personId}></small>
+            <Small uid={personId}></Small>
           </div>
         :
           <Paragraph>No family people are eligible to betrothe!</Paragraph>
@@ -261,7 +261,7 @@ export function BetrothalRecieptResponse({ data, queryClient }) {
                 Submit
               </Button>
             </form>
-            <small className="text-gray-500" id={'cm-' + data.person_id}></small>
+            <Small uid={data.person_id}></Small>
           </div>
         :
           <Paragraph>No betrothals or no family people are eligible to betrothe!</Paragraph>

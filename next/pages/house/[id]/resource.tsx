@@ -8,6 +8,7 @@ import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { HeaderTwo } from '@/components/ui/header'
 import { Form, Input, Select } from '@/components/ui/form'
+import { Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -125,7 +126,7 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
                     </Select>
                     <Input name="resource_volume" defaultValue="1" />
                   </Form>
-                  <small className="text-gray-500" id={'cm-' + router.query.id}></small>
+                  <Small uid={router.query.id}></Small>
                 </div>
               :
                 <div>

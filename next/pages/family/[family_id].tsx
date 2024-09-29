@@ -10,6 +10,7 @@ import { PersonListing } from '@/components/component/person'
 import { HouseListing } from '@/components/component/house'
 import { GrayButton } from "@/components/ui/button"
 import { HeaderOne } from "@/components/ui/header"
+import { Small } from "@/components/ui/text"
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -116,7 +117,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="submit" value="Create first house" />
                   </form>
-                  <small className="text-gray-500" id={'cm-' + familyId}></small>
+                  <Small uid={familyId}></Small>
                 </div>
               : null
             }
@@ -177,7 +178,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="submit" value="Create first couple" />
                   </form>
-                  <small className="text-gray-500" id={'cm-' + familyId}></small>
+                  <Small uid={familyId}></Small>
                 </div>
               : null
             }

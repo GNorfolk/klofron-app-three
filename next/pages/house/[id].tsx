@@ -9,7 +9,7 @@ import { Container } from '@/components/component/container'
 import { HouseInfo } from '@/components/component/house'
 import { PersonListing } from '@/components/component/person'
 import { HeaderTwo } from '@/components/ui/header'
-import { Paragraph } from '@/components/ui/paragraph'
+import { Paragraph, Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -159,7 +159,7 @@ function CreatePerson({ houseId, queryClient }) {
           }})
         }}
       />
-      <small className="text-gray-500" id={'cm-two-' + houseId}></small>
+      <Small uid={'two-' + houseId}></Small>
     </Container>
   )
 }

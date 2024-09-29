@@ -10,7 +10,7 @@ import { Container } from '@/components/component/container'
 import { MapPinIcon } from "@/components/ui/icon"
 import { HeaderTwo } from '@/components/ui/header'
 import { DivIconInfo } from '@/components/ui/div'
-import { Paragraph } from '@/components/ui/paragraph'
+import { Paragraph, Small } from '@/components/ui/text'
 import { Form, Select } from '@/components/ui/form'
 
 export default function Main({ client, router }) {
@@ -111,7 +111,7 @@ export function DescribeFamilyTravel({ queryClient, userId, router }) {
                       ))}
                     </Select>
                   </Form>
-                  <small className="text-gray-500" id={'cm-' + router.query.family_id}></small>
+                  <Small uid={router.query.family_id}></Small>
                 </div>
               :
                 <div>

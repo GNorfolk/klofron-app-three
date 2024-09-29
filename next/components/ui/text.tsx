@@ -4,7 +4,7 @@ export function Paragraph({ children } : { children: string }) {
   )
 }
 
-export function Small({ children = null, uid } : { children: string | null, uid: string | number }) {
+export function Small({ children = null, uid }) {
   return (
     <small className="text-gray-500" id={"cm-" + String(uid)}>{children}</small>
   )

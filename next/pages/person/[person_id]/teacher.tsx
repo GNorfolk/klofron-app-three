@@ -10,6 +10,7 @@ import { GrayButton } from "@/components/ui/button"
 import { PersonListing, PersonInfo } from '@/components/component/person'
 import { HeaderOne, HeaderTwo } from '@/components/ui/header'
 import { StyledSelect } from '@/components/ui/input'
+import { Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -123,7 +124,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
           <GrayButton text="Select Teacher" />
         </div>
       </form>
-      <small className="text-gray-500" id={'cm-' + personId}></small>
+      <Small uid={personId}></Small>
     </Container>
   )
 }
@@ -159,7 +160,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
           <GrayButton text="Remove Teacher" />
         </div>
       </form>
-      <small className="text-gray-500" id={'cm-' + personId}></small>
+      <Small uid={personId}></Small>
     </Container>
   )
 }

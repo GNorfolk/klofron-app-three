@@ -8,6 +8,7 @@ import { Container } from '@/components/component/container'
 import { FamilyListing } from '@/components/component/family'
 import { GrayButton } from "@/components/ui/button"
 import { HeaderOne } from "@/components/ui/header"
+import { Small } from "@/components/ui/text"
 
 export default function Home({ client, router }) {
   return (
@@ -79,7 +80,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
               <GrayButton text="Create Family" />
             </div>
           </form>
-          <small className="text-gray-500" id={'cm-' + userId}></small>
+          <Small uid={userId}></Small>
         </Container>
       </BoxLayoutSingle>
     )
