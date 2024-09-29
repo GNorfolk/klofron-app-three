@@ -6,6 +6,7 @@ import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
 import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
 import { StyledSelect } from '../ui/input'
+import Link from 'next/link'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
@@ -41,38 +42,40 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         const methods = useForm<Inputs>();
         return (
           <>
-            <a href={`/person/${person_id}`} className="p-6 pt-2 pb-2">
-              <HeaderThree>{familyName ? person_name + " " + familyName : person_name + " " + person_family.family_name}</HeaderThree>
-              {
-                queryClient ? <>
-                  <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
-                    <DivIconInfo>
-                      <GrapeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                      <span className='whitespace-nowrap'>{person_skills.person_skills_gatherer_level} Gatherer level</span>
-                    </DivIconInfo>
-                    <DivIconInfo>
-                      <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                      <span className='whitespace-nowrap'>{person_skills.person_skills_lumberjack_level} Lumberjack level</span>
-                    </DivIconInfo>
-                    <DivIconInfo>
-                      <HardHatIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                      <span className='whitespace-nowrap'>{person_skills.person_skills_builder_level} Builder level</span>
-                    </DivIconInfo>
-                  </div>
-                </> : <>
-                  <div className="grid grid-cols-2">
-                    <DivIconInfo>
-                      <BriefcaseIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                      <span className='whitespace-nowrap'>{person_action_queue.action_queue_current_action ? "One" : "No"} Current Action</span>
-                    </DivIconInfo>
-                    <DivIconInfo>
-                      <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                      <span className='whitespace-nowrap'>{person_house?.house_address.house_address_number} {person_house?.house_address.house_address_road.house_road_name}</span>
-                    </DivIconInfo>
-                  </div>
-                </>
-              }
-            </a>
+            <Link href={`/person/${person_id}`}>
+              <a className="p-6 pt-2 pb-2">
+                <HeaderThree>{familyName ? person_name + " " + familyName : person_name + " " + person_family.family_name}</HeaderThree>
+                {
+                  queryClient ? <>
+                    <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+                      <DivIconInfo>
+                        <GrapeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                        <span className='whitespace-nowrap'>{person_skills.person_skills_gatherer_level} Gatherer level</span>
+                      </DivIconInfo>
+                      <DivIconInfo>
+                        <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                        <span className='whitespace-nowrap'>{person_skills.person_skills_lumberjack_level} Lumberjack level</span>
+                      </DivIconInfo>
+                      <DivIconInfo>
+                        <HardHatIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                        <span className='whitespace-nowrap'>{person_skills.person_skills_builder_level} Builder level</span>
+                      </DivIconInfo>
+                    </div>
+                  </> : <>
+                    <div className="grid grid-cols-2">
+                      <DivIconInfo>
+                        <BriefcaseIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                        <span className='whitespace-nowrap'>{person_action_queue.action_queue_current_action ? "One" : "No"} Current Action</span>
+                      </DivIconInfo>
+                      <DivIconInfo>
+                        <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                        <span className='whitespace-nowrap'>{person_house?.house_address.house_address_number} {person_house?.house_address.house_address_road.house_road_name}</span>
+                      </DivIconInfo>
+                    </div>
+                  </>
+                }
+              </a>
+            </Link>
             {
               queryClient && userId === person_family?.family_user_id ? <>
                 <div>
@@ -122,30 +125,32 @@ export function PersonInfo({ title, personInfo }) {
   return (
     <main>
       <HeaderTwo>{title + " Info"}</HeaderTwo>
-        <a href={"/person/" + personInfo.person_id + "/betrothal"} className="p-6 pt-2 pb-2">
-          <div className="grid grid-cols-1">
+        <Link href={"/person/" + personInfo.person_id + "/betrothal"}>
+          <a className="p-6 pt-2 pb-2">
             <div className="grid grid-cols-1">
-              <DivIconInfo>
-                <UserIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span>{personInfo.person_name} {personInfo.person_family.family_name} is a {personInfo.person_age} year old {personInfo.person_gender}.</span>
-              </DivIconInfo>
+              <div className="grid grid-cols-1">
+                <DivIconInfo>
+                  <UserIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                  <span>{personInfo.person_name} {personInfo.person_family.family_name} is a {personInfo.person_age} year old {personInfo.person_gender}.</span>
+                </DivIconInfo>
+              </div>
+              <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+                <DivIconInfo>
+                  <GrapeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                  <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_gatherer_level} Gatherer level</span>
+                </DivIconInfo>
+                <DivIconInfo>
+                  <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                  <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_lumberjack_level} Lumberjack level</span>
+                </DivIconInfo>
+                <DivIconInfo>
+                  <HardHatIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
+                  <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_builder_level} Builder level</span>
+                </DivIconInfo>
+              </div>
             </div>
-            <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
-              <DivIconInfo>
-                <GrapeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_gatherer_level} Gatherer level</span>
-              </DivIconInfo>
-              <DivIconInfo>
-                <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_lumberjack_level} Lumberjack level</span>
-              </DivIconInfo>
-              <DivIconInfo>
-                <HardHatIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{personInfo.person_skills.person_skills_builder_level} Builder level</span>
-              </DivIconInfo>
-            </div>
-          </div>
-        </a>
+          </a>
+        </Link>
     </main>
   )
 }
