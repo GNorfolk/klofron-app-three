@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { BaseLayout } from '../../../../@/components/component/base-layout'
+import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import { useQuery } from '@tanstack/react-query'
-import { BoxLayoutSingle } from '../../../../@/components/component/box-layout'
-import { Container } from '../../../../@/components/component/container'
-import { BetrothalListing, BetrothalEligibleListing } from '../../../../@/components/component/betrothal'
-import { HeaderTwo } from '../../../../@/components/ui/header'
+import { BoxLayoutSingle } from '@/components/component/box-layout'
+import { Container } from '@/components/component/container'
+import { BetrothalListing, BetrothalEligibleListing } from '@/components/component/betrothal'
+import { HeaderTwo } from '@/components/ui/header'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()

@@ -1,15 +1,15 @@
 import Link from 'next/link'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
-import { BaseLayout } from '../../@/components/component/base-layout'
+import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
-import { GrayButton } from "../../@/components/ui/button"
-import { BoxLayout } from '../../@/components/component/box-layout'
-import { Container } from '../../@/components/component/container'
-import { HouseInfo } from '../../@/components/component/house'
-import { PersonListing } from '../../@/components/component/person'
-import { HeaderTwo } from '../../@/components/ui/header'
-import { Paragraph } from '../../@/components/ui/paragraph'
+import { GrayButton } from "@/components/ui/button"
+import { BoxLayout } from '@/components/component/box-layout'
+import { Container } from '@/components/component/container'
+import { HouseInfo } from '@/components/component/house'
+import { PersonListing } from '@/components/component/person'
+import { HeaderTwo } from '@/components/ui/header'
+import { Paragraph } from '@/components/ui/paragraph'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()

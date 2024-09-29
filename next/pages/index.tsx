@@ -1,16 +1,16 @@
 import Link from 'next/link'
-import { BaseLayout } from '../@/components/component/base-layout'
+import { BaseLayout } from '@/components/component/base-layout'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Router from "next/router"
 import { useEffect } from "react"
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
-import { BoxLayoutSingle } from '../@/components/component/box-layout'
-import { Container } from '../@/components/component/container'
-import { FamilyListing } from '../@/components/component/family'
-import { GrayButton } from "../@/components/ui/button"
-import { HeaderOne } from "../@/components/ui/header"
+import { BoxLayoutSingle } from '@/components/component/box-layout'
+import { Container } from '@/components/component/container'
+import { FamilyListing } from '@/components/component/family'
+import { GrayButton } from "@/components/ui/button"
+import { HeaderOne } from "@/components/ui/header"
 
 let userId
 

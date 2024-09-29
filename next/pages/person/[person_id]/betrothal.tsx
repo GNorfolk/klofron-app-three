@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { useQuery, QueryClientProvider } from '@tanstack/react-query'
-import { BaseLayout } from '../../../@/components/component/base-layout'
+import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
-import { BoxLayoutSingle } from '../../../@/components/component/box-layout'
-import { Container } from '../../../@/components/component/container'
-import { BetrothalReciepts, BetrothalRecieptResponse } from '../../../@/components/component/betrothal'
-import { HeaderTwo } from '../../../@/components/ui/header'
+import { BoxLayoutSingle } from '@/components/component/box-layout'
+import { Container } from '@/components/component/container'
+import { BetrothalReciepts, BetrothalRecieptResponse } from '@/components/component/betrothal'
+import { HeaderTwo } from '@/components/ui/header'
 
 
 export default function Main({ client, router }) {
