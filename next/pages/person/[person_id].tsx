@@ -8,7 +8,6 @@ import { BoxLayout } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { BetrothalInfo } from '@/components/component/betrothal'
 import { HeaderTwo } from '@/components/ui/header'
-import { DivIconInfo } from '@/components/ui/div'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -246,7 +245,7 @@ function DescribePersonTeacher({ data, personId }) {
   return (
     <Container>
       <HeaderTwo>Teacher Info</HeaderTwo>
-      <DivIconInfo>
+      <div className="flex items-center mt-4 mx-2 text-sm text-gray-500 dark:text-gray-400">
         {
           data.person_teacher_id ? <>
             <Link href={personId + "/teacher"}>This person has {data.person_teacher.person_name} as their teacher.</Link>
@@ -254,7 +253,7 @@ function DescribePersonTeacher({ data, personId }) {
             <Link href={personId + "/teacher"}>This person does not have a teacher.</Link>
           </>
         }
-      </DivIconInfo>
+      </div>
     </Container>
   )
 }
