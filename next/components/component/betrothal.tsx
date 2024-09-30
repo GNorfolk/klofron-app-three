@@ -6,18 +6,17 @@ import { DivIconInfo } from '../ui/div'
 import { Paragraph, Small } from '../ui/text'
 import { StyledSelect } from "../ui/input"
 import Link from 'next/link'
+import { StyledLink } from "../ui/link"
 
 export function BetrothalInfo({ personInfo }) {
   return (
     <main>
       <HeaderTwo>Betrothal Info</HeaderTwo>
-        <Link href={"/person/" + personInfo.person_id + "/betrothal"}>
-          <a className="p-6 pt-2 pb-2">
-            <div className="flex">
-              <DivIconInfo iconType="ChurchIcon">{personInfo.person_name + " has " + personInfo.person_betrothal_receipts.length + " betrothals."}</DivIconInfo>
-            </div>
-          </a>
-        </Link>
+      <StyledLink href={"/person/" + personInfo.person_id + "/betrothal"}>
+        <div className="flex">
+          <DivIconInfo iconType="ChurchIcon">{personInfo.person_name + " has " + personInfo.person_betrothal_receipts.length + " betrothals."}</DivIconInfo>
+        </div>
+      </StyledLink>
     </main>
   )
 }
@@ -28,13 +27,11 @@ export function BetrothalListing({ familyPeople, accepterId = null }) {
     <main>
       <HeaderTwo>Betrothal Info</HeaderTwo>
       { familyPeopleBetrothals.length > 0 ? familyPeopleBetrothals.map(({ person_id, person_name, person_betrothal_receipts }) => (
-        <Link href={"/person/" + person_id + "/betrothal"}>
-          <a className="p-6 pt-2 pb-2">
-            <div className="flex">
-              <DivIconInfo iconType="ChurchIcon">{person_name + " has " + person_betrothal_receipts.length + " betrothals."}</DivIconInfo>
-            </div>
-          </a>
-        </Link>
+        <StyledLink href={"/person/" + person_id + "/betrothal"}>
+          <div className="flex">
+            <DivIconInfo iconType="ChurchIcon">{person_name + " has " + person_betrothal_receipts.length + " betrothals."}</DivIconInfo>
+          </div>
+        </StyledLink>
       )) :
       <Paragraph>No family members have betrothals!</Paragraph>
       }
@@ -48,13 +45,11 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
     <main>
       <HeaderTwo>Betrothal Eligible Info</HeaderTwo>
       { familyPeopleBachelors.length > 0 ? familyPeopleBachelors.map(({ person_id, person_name, person_betrothal_receipts }) => (
-        <Link href={"/person/" + person_id + "/betrothal"}>
-          <a className="p-6 pt-2 pb-2">
-            <div className="flex">
-              <DivIconInfo iconType="ChurchIcon">{person_name + " is eligible for betrothal."}</DivIconInfo>
-            </div>
-          </a>
-        </Link>
+        <StyledLink href={"/person/" + person_id + "/betrothal"}>
+          <div className="flex">
+            <DivIconInfo iconType="ChurchIcon">{person_name + " is eligible for betrothal."}</DivIconInfo>
+          </div>
+        </StyledLink>
       )) :
       <Paragraph>No family members are eligible for betrothal!</Paragraph>
       }
@@ -70,13 +65,11 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
     <main>
       <HeaderTwo>Betrothal Eligible Info</HeaderTwo>
       { bachelors.length > 0 ? bachelors.map(({ person_id, person_name, person_family, person_gender, person_age }) => (
-        <Link href={person_id.toString()}>
-          <a className="p-6 pt-2 pb-2">
-            <div className="flex">
-              <DivIconInfo iconType="ChurchIcon">{person_name + " " + person_family.family_name + " is " + person_gender + " and " + person_age + " years old."}</DivIconInfo>
-            </div>
-          </a>
-        </Link>
+        <StyledLink href={person_id.toString()}>
+          <div className="flex">
+            <DivIconInfo iconType="ChurchIcon">{person_name + " " + person_family.family_name + " is " + person_gender + " and " + person_age + " years old."}</DivIconInfo>
+          </div>
+        </StyledLink>
       )) :
       <Paragraph>Nobody is eligible for betrothal!</Paragraph>
       }
@@ -164,13 +157,11 @@ export function BetrothalReciepts({ receipts }) {
     <main>
       <HeaderTwo>Betrothal Receipt Info</HeaderTwo>
       { receipts.length > 0 ? receipts.map(({ betrothal_proposer_person, betrothal_dowry }) => (
-        <Link href="#">
-          <a className="p-6 pt-2 pb-2">
-            <div className="flex">
-              <DivIconInfo iconType="ChurchIcon">{betrothal_proposer_person.person_name + " " + betrothal_proposer_person.person_family.family_name + " & " + betrothal_dowry.betrothal_dowry_person.person_name + " " + betrothal_dowry.betrothal_dowry_person.person_family.family_name + "."}</DivIconInfo>
-            </div>
-          </a>
-        </Link>
+        <StyledLink href="#">
+          <div className="flex">
+            <DivIconInfo iconType="ChurchIcon">{betrothal_proposer_person.person_name + " " + betrothal_proposer_person.person_family.family_name + " & " + betrothal_dowry.betrothal_dowry_person.person_name + " " + betrothal_dowry.betrothal_dowry_person.person_family.family_name + "."}</DivIconInfo>
+          </div>
+        </StyledLink>
       )) :
       <Paragraph>This person has received no betrothals!</Paragraph>
       }

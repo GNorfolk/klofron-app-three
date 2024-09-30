@@ -2,22 +2,21 @@ import { UsersIcon, HandPlatterIcon, TreesIcon, BuildingIcon, BoxIcon, BedIcon, 
 import { HeaderOne, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
 import Link from 'next/link'
+import { StyledLink } from '../ui/link'
 
 export function HouseListing({ houseData }) {
   return (
     <main>
       <HeaderOne>Houses</HeaderOne>
       { houseData.length > 0 ? houseData.map(({ house_id, house_address, house_food, house_wood, house_people }) => (
-        <Link href={`/house/${house_id}`}>
-          <a className="p-6 pt-2 pb-2">
-            <HeaderThree>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</HeaderThree>
-            <div className="grid grid-cols-3">
-              <DivIconInfo iconType="UsersIcon">{house_people.length + " people"}</DivIconInfo>
-              <DivIconInfo iconType="HandPlatterIcon">{house_food.resource_volume + " Food"}</DivIconInfo>
-              <DivIconInfo iconType="TreesIcon">{house_wood.resource_volume + " Wood"}</DivIconInfo>
-            </div>
-          </a>
-        </Link>
+        <StyledLink href={`/house/${house_id}`}>
+          <HeaderThree>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</HeaderThree>
+          <div className="grid grid-cols-3">
+            <DivIconInfo iconType="UsersIcon">{house_people.length + " people"}</DivIconInfo>
+            <DivIconInfo iconType="HandPlatterIcon">{house_food.resource_volume + " Food"}</DivIconInfo>
+            <DivIconInfo iconType="TreesIcon">{house_wood.resource_volume + " Wood"}</DivIconInfo>
+          </div>
+        </StyledLink>
       )) :
         <a className="p-6 pt-2 pb-2">
           <HeaderThree>There are no houses to show!</HeaderThree>

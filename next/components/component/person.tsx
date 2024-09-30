@@ -7,6 +7,7 @@ import { DivIconInfo } from '../ui/div'
 import { StyledSelect } from '../ui/input'
 import { Small } from '../ui/text'
 import Link from 'next/link'
+import { StyledLink } from '../ui/link'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
   type Inputs = {
@@ -42,25 +43,23 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
         const methods = useForm<Inputs>();
         return (
           <>
-            <Link href={`/person/${person_id}`}>
-              <a className="p-6 pt-2 pb-2">
-                <HeaderThree>{familyName ? person_name + " " + familyName : person_name + " " + person_family.family_name}</HeaderThree>
-                {
-                  queryClient ? <>
-                    <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
-                      <DivIconInfo iconType="GrapeIcon">{person_skills.person_skills_gatherer_level + " Gatherer level"}</DivIconInfo>
-                      <DivIconInfo iconType="TreesIcon">{person_skills.person_skills_lumberjack_level + " Lumberjack level"}</DivIconInfo>
-                      <DivIconInfo iconType="HardHatIcon">{person_skills.person_skills_builder_level + " Builder level"}</DivIconInfo>
-                    </div>
-                  </> : <>
-                    <div className="grid grid-cols-2">
-                      <DivIconInfo iconType="BriefcaseIcon">{person_action_queue.action_queue_current_action ? "One Current Action" : "No Current Action"}</DivIconInfo>
-                      <DivIconInfo iconType="MapPinIcon">{person_house?.house_address.house_address_number + " " + person_house?.house_address.house_address_road.house_road_name}</DivIconInfo>
-                    </div>
-                  </>
+            <StyledLink href={`/person/${person_id}`}>
+              <HeaderThree>{familyName ? person_name + " " + familyName : person_name + " " + person_family.family_name}</HeaderThree>
+              {
+                queryClient ? <>
+                  <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+                    <DivIconInfo iconType="GrapeIcon">{person_skills.person_skills_gatherer_level + " Gatherer level"}</DivIconInfo>
+                    <DivIconInfo iconType="TreesIcon">{person_skills.person_skills_lumberjack_level + " Lumberjack level"}</DivIconInfo>
+                    <DivIconInfo iconType="HardHatIcon">{person_skills.person_skills_builder_level + " Builder level"}</DivIconInfo>
+                  </div>
+                </> : <>
+                  <div className="grid grid-cols-2">
+                    <DivIconInfo iconType="BriefcaseIcon">{person_action_queue.action_queue_current_action ? "One Current Action" : "No Current Action"}</DivIconInfo>
+                    <DivIconInfo iconType="MapPinIcon">{person_house?.house_address.house_address_number + " " + person_house?.house_address.house_address_road.house_road_name}</DivIconInfo>
+                  </div>
+                </>
                 }
-              </a>
-            </Link>
+            </StyledLink>
             {
               queryClient && userId === person_family?.family_user_id ? <>
                 <div>
@@ -110,20 +109,18 @@ export function PersonInfo({ title, personInfo }) {
   return (
     <main>
       <HeaderTwo>{title + " Info"}</HeaderTwo>
-        <Link href={"/person/" + personInfo.person_id + "/betrothal"}>
-          <a className="p-6 pt-2 pb-2">
+        <StyledLink href={"/person/" + personInfo.person_id + "/betrothal"}>
+          <div className="grid grid-cols-1">
             <div className="grid grid-cols-1">
-              <div className="grid grid-cols-1">
-                <DivIconInfo iconType="UserIcon">{personInfo.person_name + " " + personInfo.person_family.family_name + "is a" + personInfo.person_age + " year old " + personInfo.person_gender + "."}</DivIconInfo>
-              </div>
-              <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
-                <DivIconInfo iconType="GrapeIcon">{personInfo.person_skills.person_skills_gatherer_level + " Gatherer level"}</DivIconInfo>
-                <DivIconInfo iconType="TreesIcon">{personInfo.person_skills.person_skills_lumberjack_level + " Lumberjack level"}</DivIconInfo>
-                <DivIconInfo iconType="HardHatIcon">{personInfo.person_skills.person_skills_builder_level + " Builder level"}</DivIconInfo>
-              </div>
+              <DivIconInfo iconType="UserIcon">{personInfo.person_name + " " + personInfo.person_family.family_name + "is a" + personInfo.person_age + " year old " + personInfo.person_gender + "."}</DivIconInfo>
             </div>
-          </a>
-        </Link>
+            <div className="grid sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+              <DivIconInfo iconType="GrapeIcon">{personInfo.person_skills.person_skills_gatherer_level + " Gatherer level"}</DivIconInfo>
+              <DivIconInfo iconType="TreesIcon">{personInfo.person_skills.person_skills_lumberjack_level + " Lumberjack level"}</DivIconInfo>
+              <DivIconInfo iconType="HardHatIcon">{personInfo.person_skills.person_skills_builder_level + " Builder level"}</DivIconInfo>
+            </div>
+          </div>
+        </StyledLink>
     </main>
   )
 }
