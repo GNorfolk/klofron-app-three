@@ -9,6 +9,7 @@ import { Container } from '@/components/component/container'
 import { HeaderTwo } from '@/components/ui/header'
 import { Form, Input, Select } from '@/components/ui/form'
 import { ListItem, Small } from '@/components/ui/text'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -57,17 +58,37 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
   }
 }
 
-function ResourceInfo({data}) {
+function ResourceInfo({ data }) {
   return (
     <Container>
       <HeaderTwo>Resource Info</HeaderTwo>
-      <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
-      { data.house_people.map(({ person_name, person_food, person_wood }) => (
-        <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
-      ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-2/5 font-medium border-r">Name</TableHead>
+            <TableHead className="w-3/10 font-medium border-r">Food</TableHead>
+            <TableHead className="w-3/10 font-medium">Wood</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow key={0}>
+            <TableCell className="w-2/5 font-medium border-r">{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</TableCell>
+            <TableCell className="w-3/10 border-r">{data.house_food.resource_volume}</TableCell>
+            <TableCell className="w-3/10">{data.house_wood.resource_volume}</TableCell>
+          </TableRow>
+          { data.house_people.map(({ person_id, person_name, person_food, person_wood, person_family }) => (
+            <TableRow key={person_id}>
+              <TableCell className="w-2/5 font-medium border-r">{person_name + " " + person_family.family_name}</TableCell>
+              <TableCell className="w-3/10 border-r">{person_food.resource_volume}</TableCell>
+              <TableCell className="w-3/10">{person_wood.resource_volume}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Container>
   )
 }
+
 
 function ManageResources({ data, router, queryClient }) {
   type Inputs = {
