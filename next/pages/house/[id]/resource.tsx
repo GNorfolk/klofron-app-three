@@ -64,7 +64,7 @@ function ResourceInfo({ data }) {
       <HeaderTwo>Resource Info</HeaderTwo>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className='hover:bg-muted/0'>
             <TableHead className="w-2/5 font-medium border-r">Name</TableHead>
             <TableHead className="w-3/10 font-medium border-r">Food</TableHead>
             <TableHead className="w-3/10 font-medium">Wood</TableHead>
