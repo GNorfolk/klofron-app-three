@@ -1,4 +1,4 @@
-import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon, UserIcon, ChurchIcon, UsersIcon, HandPlatterIcon, BuildingIcon, BoxIcon, BedIcon, WarehouseIcon, TruckIcon } from '../ui/icon'
+import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon, UserIcon, ChurchIcon, UsersIcon, HandPlatterIcon, BuildingIcon, BoxIcon, BedIcon, WarehouseIcon, TruckIcon, MicroscopeIcon, HomeIcon } from '../ui/icon'
 
 export function DivIconInfo({ children, iconType } : { children: string, iconType: string }) {
   return (
@@ -25,6 +25,7 @@ export function CustomIcon({ iconType, style }) {
     case 'BedIcon': return <BedIcon className={style} />
     case 'WarehouseIcon': return <WarehouseIcon className={style} />
     case 'TruckIcon': return <TruckIcon className={style} />
-    default: return <UserIcon className={style} />
+    case 'HomeIcon': return <HomeIcon className={style} />
+    default: return <MicroscopeIcon className={style} />
   }
 }

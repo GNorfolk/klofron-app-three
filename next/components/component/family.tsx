@@ -1,5 +1,3 @@
-import Link from 'next/link'
-import { UsersIcon, HomeIcon } from '../ui/icon'
 import { HeaderOne, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
 import { StyledLink } from '../ui/link'
