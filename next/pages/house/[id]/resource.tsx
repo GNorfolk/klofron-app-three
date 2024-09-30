@@ -35,62 +35,6 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
         ),
     })
 
-    const decreaseWood = useMutation({
-      mutationFn: (id) => {
-        return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
-          action: "decrement",
-          house_id: id,
-          type_name: "wood"
-        })
-      },
-    })
-
-    const decreaseFood = useMutation({
-      mutationFn: (id) => {
-        return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
-          action: "decrement",
-          house_id: id,
-          type_name: "food"
-        })
-      },
-    })
-
-    type Inputs = {
-      person_id: number
-      house_id: number
-      resource_type: string
-      resource_volume: number
-    }
-
-    const {
-      register,
-      handleSubmit,
-      watch,
-      formState: { errors },
-    } = useForm<Inputs>()
-
-    const onDeposit: SubmitHandler<Inputs> = (formData) => {
-      onSubmit(formData, true)
-    }
-
-    const onWithdraw: SubmitHandler<Inputs> = (formData) => {
-      onSubmit(formData, false)
-    }
-
-    const onSubmit = (inputs, deposit) => {
-      axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
-        person_id: inputs.person_id,
-        house_id: router.query.id,
-        resource_type: inputs.resource_type,
-        resource_volume: deposit ? inputs.resource_volume * -1 : inputs.resource_volume
-      }).then(response => {
-        queryClient.invalidateQueries()
-        document.getElementById("cm-" + router.query.id).innerText = ' '
-      }).catch(error => {
-        document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
-      })
-    }
-
     if (isLoading) return (
       <div>
         <HeaderTwo>Resource Info</HeaderTwo>
@@ -102,65 +46,132 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
     if (data.house_family.family_user_id === userId) { 
       return (
         <BoxLayoutSingle>
-          <Container>
-            <HeaderTwo>Resource Info</HeaderTwo>
-            <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
-            { data.house_people.map(({ person_name, person_food, person_wood }) => (
-              <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
-            ))}
-          </Container>
-          <Container>
-            <HeaderTwo>Manage Resources</HeaderTwo>
-            {
-              data.house_people.length > 0 ?
-                <div>
-                  <Form<Inputs> onSubmit={[{ name: "Desposit", func: onDeposit }, { name: "Withdraw", func: onWithdraw }]} styling={"grid gap-4 sm:grid-cols-3"}>
-                    <Select name="person_id">
-                      { data.house_people.map(({ person_id, person_name }) => (
-                        <option value={person_id}>{person_name}</option>
-                      ))}
-                    </Select>
-                    <Select name="resource_type">
-                      <option value="food">Food</option>
-                      <option value="wood">Wood</option>
-                    </Select>
-                    <Input name="resource_volume" defaultValue="1" />
-                  </Form>
-                  <Small uid={router.query.id}></Small>
-                </div>
-              :
-                <div>
-                  <p>This house does not have any people in it.</p>
-                </div>
-            }
-          </Container>
-          <Container>
-            <HeaderTwo>Delete Resources</HeaderTwo>
-            <ul className="list-none p-0 m-0">
-              <ListItem>
-                <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
-                  () => {
-                      decreaseWood.mutate(data.house_id, { onSettled: (res) => {
-                      queryClient.invalidateQueries()
-                    }})
-                  }
-                } >Decrease Wood</button></p>
-              </ListItem>
-              <ListItem>
-                <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
-                  () => {
-                      decreaseFood.mutate(data.house_id, { onSettled: (res) => {
-                      queryClient.invalidateQueries()
-                    }})
-                  }
-                } >Decrease Food</button></p>
-              </ListItem>
-            </ul>
-          </Container>
+          <ResourceInfo data={data} />
+          <ManageResources data={data} router={router} queryClient={queryClient} />
+          <DeleteResources data={data} queryClient={queryClient} />
         </BoxLayoutSingle>
       )
     } else {
       router.push('/')
     }
   }
+}
+
+function ResourceInfo({data}) {
+  return (
+    <Container>
+      <HeaderTwo>Resource Info</HeaderTwo>
+      <p>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name} has {data.house_food.resource_volume} food and {data.house_wood.resource_volume} wood in storage!</p>
+      { data.house_people.map(({ person_name, person_food, person_wood }) => (
+        <p>{person_name} has {person_food.resource_volume} food and {person_wood.resource_volume} wood.</p>
+      ))}
+    </Container>
+  )
+}
+
+function ManageResources({ data, router, queryClient }) {
+  type Inputs = {
+    person_id: number
+    house_id: number
+    resource_type: string
+    resource_volume: number
+  }
+
+  const onDeposit: SubmitHandler<Inputs> = (formData) => {
+    onSubmit(formData, true)
+  }
+
+  const onWithdraw: SubmitHandler<Inputs> = (formData) => {
+    onSubmit(formData, false)
+  }
+
+  const onSubmit = (inputs, deposit) => {
+    axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+      person_id: inputs.person_id,
+      house_id: router.query.id,
+      resource_type: inputs.resource_type,
+      resource_volume: deposit ? inputs.resource_volume * -1 : inputs.resource_volume
+    }).then(response => {
+      queryClient.invalidateQueries()
+      document.getElementById("cm-" + router.query.id).innerText = ' '
+    }).catch(error => {
+      document.getElementById("cm-" + router.query.id).innerText = error.response.data.message
+    })
+  }
+
+  return (
+    <Container>
+      <HeaderTwo>Manage Resources</HeaderTwo>
+      {
+        data.house_people.length > 0 ?
+          <div>
+            <Form<Inputs> onSubmit={[{ name: "Desposit", func: onDeposit }, { name: "Withdraw", func: onWithdraw }]} styling={"grid gap-4 sm:grid-cols-3"}>
+              <Select name="person_id">
+                { data.house_people.map(({ person_id, person_name }) => (
+                  <option value={person_id}>{person_name}</option>
+                ))}
+              </Select>
+              <Select name="resource_type">
+                <option value="food">Food</option>
+                <option value="wood">Wood</option>
+              </Select>
+              <Input name="resource_volume" defaultValue="1" />
+            </Form>
+            <Small uid={router.query.id}></Small>
+          </div>
+        :
+          <div>
+            <p>This house does not have any people in it.</p>
+          </div>
+      }
+    </Container>
+  )
+}
+
+function DeleteResources({ data, queryClient }) {
+  const decreaseWood = useMutation({
+    mutationFn: (id) => {
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+        action: "decrement",
+        house_id: id,
+        type_name: "wood"
+      })
+    },
+  })
+
+  const decreaseFood = useMutation({
+    mutationFn: (id) => {
+      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
+        action: "decrement",
+        house_id: id,
+        type_name: "food"
+      })
+    },
+  })
+
+  return (
+    <Container>
+      <HeaderTwo>Delete Resources</HeaderTwo>
+      <ul className="list-none p-0 m-0">
+        <ListItem>
+          <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
+            () => {
+                decreaseWood.mutate(data.house_id, { onSettled: (res) => {
+                queryClient.invalidateQueries()
+              }})
+            }
+          } >Decrease Wood</button></p>
+        </ListItem>
+        <ListItem>
+          <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
+            () => {
+                decreaseFood.mutate(data.house_id, { onSettled: (res) => {
+                queryClient.invalidateQueries()
+              }})
+            }
+          } >Decrease Food</button></p>
+        </ListItem>
+      </ul>
+    </Container>
+  )
 }
