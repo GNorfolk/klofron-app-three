@@ -10,7 +10,7 @@ import { PersonListing } from '@/components/component/person'
 import { HouseListing } from '@/components/component/house'
 import { GrayButton } from "@/components/ui/button"
 import { HeaderOne } from "@/components/ui/header"
-import { Small } from "@/components/ui/text"
+import { ListItem, Small } from "@/components/ui/text"
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -109,7 +109,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
       <Container>
         <HeaderOne>House Info</HeaderOne>
         <ul className="list-none p-0 m-0">
-          <li className="mt-0 mx-0 mb-5">
+          <ListItem>
             <p>This family does not own any houses.</p>
             {
               unnamedBoolean ?
@@ -121,7 +121,7 @@ function ListFamilyHouses({ data, queryClient = null, familyId, unnamedBoolean =
                 </div>
               : null
             }
-          </li>
+          </ListItem>
         </ul>
       </Container>
     )
@@ -170,7 +170,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
       <Container>
         <HeaderOne>Person Info</HeaderOne>
         <ul className="list-none p-0 m-0">
-          <li className="mt-0 mx-0 mb-5">
+          <ListItem>
             <p>This family does not have any people in it.</p>
             {
               unnamedBoolean ?
@@ -182,7 +182,7 @@ function ListFamilyPeople({ data, queryClient = null, familyId, unnamedBoolean =
                 </div>
               : null
             }
-          </li>
+          </ListItem>
         </ul>
       </Container>
     )

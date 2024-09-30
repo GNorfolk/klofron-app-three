@@ -8,7 +8,7 @@ import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { HeaderTwo } from '@/components/ui/header'
 import { Form, Input, Select } from '@/components/ui/form'
-import { Small } from '@/components/ui/text'
+import { ListItem, Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -137,7 +137,7 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
           <Container>
             <HeaderTwo>Delete Resources</HeaderTwo>
             <ul className="list-none p-0 m-0">
-              <li className="mt-0 mx-0 mb-5">
+              <ListItem>
                 <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
                   () => {
                       decreaseWood.mutate(data.house_id, { onSettled: (res) => {
@@ -145,8 +145,8 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
                     }})
                   }
                 } >Decrease Wood</button></p>
-              </li>
-              <li className="mt-0 mx-0 mb-5">
+              </ListItem>
+              <ListItem>
                 <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
                   () => {
                       decreaseFood.mutate(data.house_id, { onSettled: (res) => {
@@ -154,7 +154,7 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
                     }})
                   }
                 } >Decrease Food</button></p>
-              </li>
+              </ListItem>
             </ul>
           </Container>
         </BoxLayoutSingle>

@@ -8,6 +8,7 @@ import { BoxLayout } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { BetrothalInfo } from '@/components/component/betrothal'
 import { HeaderTwo } from '@/components/ui/header'
+import { ListItem } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -74,7 +75,7 @@ function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
       <ul className="list-none p-0 m-0">
         {
           currentAction ? <>
-            <li className="mt-0 mx-0 mb-5" key={currentAction.action_id}>
+            <ListItem key={currentAction.action_id}>
               <p>Action with id {currentAction.action_id} of type {currentAction.action_type_name} was started {currentAction.action_started_time_ago} ago.</p>
               <button onClick={
                 () => {
@@ -83,7 +84,7 @@ function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
                   }})
                 }
               } >Cancel Action</button>
-            </li>
+            </ListItem>
           </> : <>
           <p>No actions currently in progress!</p>
           </>
@@ -108,7 +109,7 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
         <HeaderTwo>Next Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
           {nextActions.map(({ action_id, action_type_name, action_created_at }, index) => (
-            <li className="mt-0 mx-0 mb-5" key={action_id}>
+            <ListItem key={action_id}>
               <p>Action with id {action_id} of type {action_type_name} is number {index + 1} in the queue.</p>
               <button onClick={
                 () => {
@@ -117,7 +118,7 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
                   }})
                 }
               } >Cancel Action</button>
-            </li>
+            </ListItem>
           ))}
         </ul>
       </Container>
@@ -127,9 +128,9 @@ function ListPersonActionsNext({ nextActions, queryClient }) {
       <Container>
         <HeaderTwo>Next Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
-            <li className="mt-0 mx-0 mb-5">
+            <ListItem>
               <p>This person has no future actions initiated.</p>
-            </li>
+            </ListItem>
         </ul>
       </Container>
     )
@@ -144,9 +145,9 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
         <HeaderTwo>Previous Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
           {fivePreviousActions.map(({ action_id, action_type_name, action_started_time_ago, action_finish_reason }) => (
-            <li className="mt-0 mx-0 mb-5" key={action_id}>
+            <ListItem key={action_id}>
               <p>Action with id {action_id} of type {action_type_name} was started {action_started_time_ago} ago and finished with reason {action_finish_reason}.</p>
-            </li>
+            </ListItem>
           ))}
         </ul>
       </Container>
@@ -156,9 +157,9 @@ function ListPersonActionsPrevious({ previousActions, personId }) {
       <Container>
         <HeaderTwo>Previous Actions</HeaderTwo>
         <ul className="list-none p-0 m-0">
-            <li className="mt-0 mx-0 mb-5">
+            <ListItem>
               <p>This person has no past actions initiated.</p>
-            </li>
+            </ListItem>
         </ul>
       </Container>
     )
@@ -210,7 +211,7 @@ function ListPersonInfo({ data, queryClient }) {
     <Container>
       <HeaderTwo>Person Info</HeaderTwo>
       <ul className="list-none p-0 m-0">
-        <li className="mt-0 mx-0 mb-5" key={data.person_id}>
+        <ListItem key={data.person_id}>
           {
             data.person_partner_id ?
               <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old and is married to <Link href={"/person/" + data.person_partner_id}>{data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</Link>.</p>
@@ -221,7 +222,7 @@ function ListPersonInfo({ data, queryClient }) {
           {
             data.person_house_id ? <p>{data.person_name} lives at <Link href={"/house/" + data.person_house_id}>{data.person_house.house_address.house_address_number + " " + data.person_house.house_address.house_address_road.house_road_name}</Link>.</p> : <p>{data.person_name} is homeless.</p>
           }
-        </li>
+        </ListItem>
       </ul>
     </Container>
   )

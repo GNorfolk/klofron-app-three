@@ -4,8 +4,16 @@ export function Paragraph({ children } : { children: string }) {
   )
 }
 
-export function Small({ children = null, uid }) {
+export function Small({ children, uid } : { children?: React.ReactNode, uid: string | number }) {
   return (
     <small className="text-gray-500" id={"cm-" + String(uid)}>{children}</small>
+  )
+}
+
+export function ListItem({ children, key } : { children: React.ReactNode, key?: string }) {
+  return (
+    <li className="mt-0 mx-0 mb-5" key={key}>
+      {children}
+    </li>
   )
 }

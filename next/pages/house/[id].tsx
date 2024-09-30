@@ -9,7 +9,7 @@ import { Container } from '@/components/component/container'
 import { HouseInfo } from '@/components/component/house'
 import { PersonListing } from '@/components/component/person'
 import { HeaderTwo } from '@/components/ui/header'
-import { Paragraph, Small } from '@/components/ui/text'
+import { ListItem, Paragraph, Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -82,9 +82,9 @@ function ListHousePeople({ peopleData, queryClient, userId = null, router }) {
         <Container>
           <HeaderTwo>Person Info</HeaderTwo>
           <ul className="list-none p-0 m-0">
-              <li className="mt-0 mx-0 mb-5">
+              <ListItem>
                 <p>This house does not contain any people.</p>
-              </li>
+              </ListItem>
           </ul>
         </Container>
       )
@@ -115,9 +115,9 @@ function ListHouseTrades({ data, router }) {
           <HeaderTwo>Trade Info</HeaderTwo>
           <ul className="list-none p-0 m-0">
             {data.map(({ trade_id, trade_offered_type, trade_offered_volume, trade_requested_type, trade_requested_volume }) => (
-              <li className="mt-0 mx-0 mb-5" key={trade_id}>
+              <ListItem key={trade_id}>
                 <p>Trade with id {trade_id} offers {trade_offered_volume} {trade_offered_type} in return for {trade_requested_volume} {trade_requested_type}.</p>
-              </li>
+              </ListItem>
             ))}
           </ul>
         </Container>
@@ -127,9 +127,9 @@ function ListHouseTrades({ data, router }) {
         <Container>
           <HeaderTwo>Trade Info</HeaderTwo>
           <ul className="list-none p-0 m-0">
-            <li className="mt-0 mx-0 mb-5">
+            <ListItem>
               <Paragraph>No trades active at this house.</Paragraph>
-            </li>
+            </ListItem>
           </ul>
         </Container>
       )
