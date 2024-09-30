@@ -12,14 +12,8 @@ export function FamilyListing({ familyData }) {
           <a className="p-6 pt-2 pb-2">
             <HeaderThree>{"The " + family_name + " family"}</HeaderThree>
             <div className="grid grid-cols-2">
-              <DivIconInfo>
-                <UsersIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{family_people.length} people</span>
-              </DivIconInfo>
-              <DivIconInfo>
-                <HomeIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{family_houses.length} houses</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="UsersIcon">{family_people.length + " people"}</DivIconInfo>
+              <DivIconInfo iconType="HomeIcon">{family_houses.length + " houses"}</DivIconInfo>
             </div>
           </a>
         </Link>

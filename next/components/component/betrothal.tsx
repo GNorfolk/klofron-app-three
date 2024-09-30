@@ -1,6 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
-import { ChurchIcon, UserIcon, GrapeIcon, TreesIcon, HardHatIcon } from '../ui/icon'
 import { Button } from "../ui/button"
 import { HeaderTwo } from "../ui/header"
 import { DivIconInfo } from '../ui/div'
@@ -15,10 +14,7 @@ export function BetrothalInfo({ personInfo }) {
         <Link href={"/person/" + personInfo.person_id + "/betrothal"}>
           <a className="p-6 pt-2 pb-2">
             <div className="flex">
-              <DivIconInfo>
-                <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
-                <span className='whitespace-nowrap'>{personInfo.person_name} has {personInfo.person_betrothal_receipts.length} betrothals.</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="ChurchIcon">{personInfo.person_name + " has " + personInfo.person_betrothal_receipts.length + " betrothals."}</DivIconInfo>
             </div>
           </a>
         </Link>
@@ -35,10 +31,7 @@ export function BetrothalListing({ familyPeople, accepterId = null }) {
         <Link href={"/person/" + person_id + "/betrothal"}>
           <a className="p-6 pt-2 pb-2">
             <div className="flex">
-              <DivIconInfo>
-                <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
-                <span className='whitespace-nowrap'>{person_name} has {person_betrothal_receipts.length} betrothals.</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="ChurchIcon">{person_name + " has " + person_betrothal_receipts.length + " betrothals."}</DivIconInfo>
             </div>
           </a>
         </Link>
@@ -58,10 +51,7 @@ export function BetrothalEligibleListing({ familyPeople, accepterId = null }) {
         <Link href={"/person/" + person_id + "/betrothal"}>
           <a className="p-6 pt-2 pb-2">
             <div className="flex">
-              <DivIconInfo>
-                <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
-                <span className='whitespace-nowrap'>{person_name} is eligible for betrothal.</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="ChurchIcon">{person_name + " is eligible for betrothal."}</DivIconInfo>
             </div>
           </a>
         </Link>
@@ -83,10 +73,7 @@ export function BetrothalCreationListing({ peopleData, familyId }) {
         <Link href={person_id.toString()}>
           <a className="p-6 pt-2 pb-2">
             <div className="flex">
-              <DivIconInfo>
-                <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
-                <span className='whitespace-nowrap'>{person_name} {person_family.family_name} is {person_gender} and {person_age} years old.</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="ChurchIcon">{person_name + " " + person_family.family_name + " is " + person_gender + " and " + person_age + " years old."}</DivIconInfo>
             </div>
           </a>
         </Link>
@@ -180,10 +167,7 @@ export function BetrothalReciepts({ receipts }) {
         <Link href="#">
           <a className="p-6 pt-2 pb-2">
             <div className="flex">
-              <DivIconInfo>
-                <ChurchIcon className="w-5 h-5 min-w-5 min-h-5 mx-2" />
-                <span className='whitespace-nowrap'>{betrothal_proposer_person.person_name} {betrothal_proposer_person.person_family.family_name} & {betrothal_dowry.betrothal_dowry_person.person_name} {betrothal_dowry.betrothal_dowry_person.person_family.family_name}.</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="ChurchIcon">{betrothal_proposer_person.person_name + " " + betrothal_proposer_person.person_family.family_name + " & " + betrothal_dowry.betrothal_dowry_person.person_name + " " + betrothal_dowry.betrothal_dowry_person.person_family.family_name + "."}</DivIconInfo>
             </div>
           </a>
         </Link>

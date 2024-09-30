@@ -7,7 +7,6 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
-import { MapPinIcon } from "@/components/ui/icon"
 import { HeaderTwo } from '@/components/ui/header'
 import { DivIconInfo } from '@/components/ui/div'
 import { Paragraph, Small } from '@/components/ui/text'
@@ -82,13 +81,11 @@ export function DescribeFamilyTravel({ queryClient, userId, router }) {
             {
               data.family_people.length > 0 ? 
                 data.family_people.map(({ person_name, person_house_id, person_house }) => (
-                  person_house_id ? <DivIconInfo>
-                    <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                    <span className='whitespace-nowrap'>{person_name} lives at {person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name}.</span>
-                  </DivIconInfo> : <DivIconInfo>
-                    <MapPinIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                    <span className='whitespace-nowrap'>{person_name} is unhoused.</span>
-                  </DivIconInfo>
+                  person_house_id ? <>
+                    <DivIconInfo iconType="MapPinIcon">{person_name + " lives at " + person_house.house_address.house_address_number + " " + person_house.house_address.house_address_road.house_road_name + "."}</DivIconInfo>
+                  </> : <>
+                    <DivIconInfo iconType="MapPinIcon">{person_name + " is unhoused."}</DivIconInfo>
+                  </>
                 ))
               :
                 <Paragraph>This family does not have any people in it.</Paragraph>

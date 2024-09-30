@@ -12,18 +12,9 @@ export function HouseListing({ houseData }) {
           <a className="p-6 pt-2 pb-2">
             <HeaderThree>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</HeaderThree>
             <div className="grid grid-cols-3">
-              <DivIconInfo>
-                <UsersIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{house_people.length} people</span>
-              </DivIconInfo>
-              <DivIconInfo>
-                <HandPlatterIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{house_food.resource_volume} Food</span>
-              </DivIconInfo>
-              <DivIconInfo>
-                <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-                <span className='whitespace-nowrap'>{house_wood.resource_volume} Wood</span>
-              </DivIconInfo>
+              <DivIconInfo iconType="UsersIcon">{house_people.length + " people"}</DivIconInfo>
+              <DivIconInfo iconType="HandPlatterIcon">{house_food.resource_volume + " Food"}</DivIconInfo>
+              <DivIconInfo iconType="TreesIcon">{house_wood.resource_volume + " Wood"}</DivIconInfo>
             </div>
           </a>
         </Link>
@@ -40,38 +31,14 @@ export function HouseInfo({ houseData }) {
   return (
     <main>
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4">
-        <DivIconInfo>
-          <BedIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_rooms} Bed</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <UsersIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_people.length} people</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <BuildingIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_rooms - houseData.house_people.length} Room</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <HandPlatterIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_food.resource_volume} Food</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <TreesIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_wood.resource_volume} Wood</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <TruckIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>0 Trade</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <WarehouseIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_storage} Storage</span>
-        </DivIconInfo>
-        <DivIconInfo>
-          <BoxIcon className="w-5 h-5 min-w-5 min-h-5 mr-2" />
-          <span className='whitespace-nowrap'>{houseData.house_storage - houseData.house_food.resource_volume - houseData.house_wood.resource_volume} Capacity</span>
-        </DivIconInfo>
+        <DivIconInfo iconType="BedIcon">{houseData.house_rooms + " Bed"}</DivIconInfo>
+        <DivIconInfo iconType="UsersIcon">{houseData.house_people.length + " people"}</DivIconInfo>
+        <DivIconInfo iconType="BuildingIcon">{houseData.house_rooms - houseData.house_people.length + " Room"}</DivIconInfo>
+        <DivIconInfo iconType="HandPlatterIcon">{houseData.house_food.resource_volume + " Food"}</DivIconInfo>
+        <DivIconInfo iconType="TreesIcon">{houseData.house_wood.resource_volume + " Wood"}</DivIconInfo>
+        <DivIconInfo iconType="TruckIcon">0 Trade</DivIconInfo>
+        <DivIconInfo iconType="WarehouseIcon">{houseData.house_storage + " Storage"}</DivIconInfo>
+        <DivIconInfo iconType="BoxIcon">{(houseData.house_storage - houseData.house_food.resource_volume - houseData.house_wood.resource_volume) + " Capacity"}</DivIconInfo>
       </div>
     </main>
   )
