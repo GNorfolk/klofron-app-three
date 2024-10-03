@@ -9,6 +9,7 @@ import { Container } from '@/components/component/container'
 import { BetrothalInfo } from '@/components/component/betrothal'
 import { HeaderTwo } from '@/components/ui/header'
 import { ListItem } from '@/components/ui/text'
+import { DivIconInfo } from '@/components/ui/div'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -210,20 +211,13 @@ function ListPersonInfo({ data, queryClient }) {
   return (
     <Container>
       <HeaderTwo>Person Info</HeaderTwo>
-      <ul className="list-none p-0 m-0">
-        <ListItem key={data.person_id}>
-          {
-            data.person_partner_id ?
-              <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old and is married to <Link href={"/person/" + data.person_partner_id}>{data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</Link>.</p>
-            :
-            <p>{data.person_name} {data.person_family_name} is {data.person_gender} and {data.person_age} years old.</p>
-          }
-          <p>{data.person_name}'s father is <Link href={"/person/" + data.person_father.person_id}><a onClick={(e) => queryClient.invalidateQueries()}>{data.person_father.person_name + ' ' + data.person_father.person_family.family_name}</a></Link> and their mother is <Link href={"/person/" + data.person_mother.person_id}><a onClick={(e) => queryClient.invalidateQueries()}>{data.person_mother.person_name + ' ' + data.person_mother.person_family.family_name}</a></Link>.</p>
-          {
-            data.person_house_id ? <p>{data.person_name} lives at <Link href={"/house/" + data.person_house_id}>{data.person_house.house_address.house_address_number + " " + data.person_house.house_address.house_address_road.house_road_name}</Link>.</p> : <p>{data.person_name} is homeless.</p>
-          }
-        </ListItem>
-      </ul>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+        <DivIconInfo iconType="UserIcon">{data.person_name + " " + data.person_family.family_name + " is " + data.person_gender + " and " + data.person_age + " years old."}</DivIconInfo>
+        <DivIconInfo iconType="ChurchIcon">{data.person_name + " " + data.person_family.family_name + " is  married to " + data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</DivIconInfo>
+        <DivIconInfo iconType="UsersIcon">{data.person_name + "'s father is " + data.person_father.person_name + " " + data.person_father.person_family.family_name}</DivIconInfo>
+        <DivIconInfo iconType="UsersIcon">{data.person_name + "'s mother is " + data.person_mother.person_name + " " + data.person_mother.person_family.family_name}</DivIconInfo>
+        <DivIconInfo iconType="MapPinIcon">{data.person_name + " lives at " + data.person_house.house_address.house_address_number + " " + data.person_house.house_address.house_address_road.house_road_name}</DivIconInfo>
+      </div>
     </Container>
   )
 }
