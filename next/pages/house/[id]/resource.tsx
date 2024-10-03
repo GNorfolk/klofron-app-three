@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
-import { useForm, SubmitHandler } from "react-hook-form"
+import { SubmitHandler } from "react-hook-form"
 import axios from 'axios'
 import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
@@ -10,6 +10,8 @@ import { HeaderTwo } from '@/components/ui/header'
 import { Form, Input, Select } from '@/components/ui/form'
 import { ListItem, Small } from '@/components/ui/text'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { MinusIcon } from "@/components/ui/icon"
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -173,24 +175,42 @@ function DeleteResources({ data, queryClient }) {
   return (
     <Container>
       <HeaderTwo>Delete Resources</HeaderTwo>
-      <ul className="list-none p-0 m-0">
+      <ul className="list-none p-0 m-0 grid grid-cols-1 md:grid-cols-2 gap-6">
         <ListItem>
-          <p>Wood: {data.house_wood.resource_volume} in storage! <button onClick={
-            () => {
-                decreaseWood.mutate(data.house_id, { onSettled: (res) => {
-                queryClient.invalidateQueries()
-              }})
-            }
-          } >Decrease Wood</button></p>
+          <div className="bg-background rounded-lg shadow-lg p-6 bg-slate-700">
+            <div className="flex items-center justify-between my-2">
+              <h3 className="text-lg font-semibold text-white">Wood</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-300 font-medium">{data.house_wood.resource_volume} in storage!</span>
+                <Button variant="outline" size="sm" onClick={ () => {
+                  decreaseWood.mutate(data.house_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries();
+                  }});
+                }}>
+                  <MinusIcon className="w-4 h-4" />
+                  <span className='p-1'>Discard</span>
+                </Button>
+              </div>
+            </div>
+          </div>
         </ListItem>
         <ListItem>
-          <p>Food: {data.house_food.resource_volume} in storage! <button onClick={
-            () => {
-                decreaseFood.mutate(data.house_id, { onSettled: (res) => {
-                queryClient.invalidateQueries()
-              }})
-            }
-          } >Decrease Food</button></p>
+          <div className="bg-background rounded-lg shadow-lg p-6 bg-slate-700">
+            <div className="flex items-center justify-between my-2">
+              <h3 className="text-lg font-semibold text-white">Food</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-300 font-medium">{data.house_food.resource_volume} in storage!</span>
+                <Button variant="outline" size="sm" onClick={ () => {
+                  decreaseFood.mutate(data.house_id, { onSettled: (res) => {
+                    queryClient.invalidateQueries();
+                  }});
+                }}>
+                  <MinusIcon className="w-4 h-4" />
+                  <span className='p-1'>Discard</span>
+                </Button>
+              </div>
+            </div>
+          </div>
         </ListItem>
       </ul>
     </Container>
