@@ -10,6 +10,7 @@ import { BetrothalInfo } from '@/components/component/betrothal'
 import { HeaderTwo } from '@/components/ui/header'
 import { ListItem } from '@/components/ui/text'
 import { DivIconInfo } from '@/components/ui/div'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -44,7 +45,7 @@ export function DescribePerson({ queryClient, status, userId = null, router }) {
         <BoxLayout left={
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
-            <ListPersonSkills queryClient={queryClient} data={data.person_skills}/>
+            <ListPersonSkills personSkills={data.person_skills} />
             { status === "authenticated" && userId == data.person_family.family_user_id ? <ListPersonBetrothals data={data} router={router} /> : <></> }
             <DescribePersonTeacher data={data} personId={router.query.person_id} />
           </div>
@@ -222,19 +223,40 @@ function ListPersonInfo({ data, queryClient }) {
   )
 }
 
-function ListPersonSkills({ data, queryClient }) {
+function ListPersonSkills({ personSkills }) {
   return (
     <Container>
       <HeaderTwo>Skills Info</HeaderTwo>
-      <p>Gatherer level: {data.person_skills_gatherer_level}.</p>
-      <p>Exp to next level: {Math.pow(2, data.person_skills_gatherer_level + 1) - data.person_skills_gatherer_experience}</p>
-      <p>Lumberjack level: {data.person_skills_lumberjack_level}.</p>
-      <p>Exp to next level: {Math.pow(2, data.person_skills_lumberjack_level + 1) - data.person_skills_lumberjack_experience}</p>
-      <p>Builder level: {data.person_skills_builder_level}.</p>
-      <p>Exp to next level: {Math.pow(2, data.person_skills_builder_level + 1) - data.person_skills_builder_experience}</p>
+      <Table>
+        <TableHeader>
+          <TableRow className='hover:bg-muted/0'>
+            <TableHead className="w-2/5 font-medium border-r">Skill</TableHead>
+            <TableHead className="w-3/10 font-medium border-r">Level</TableHead>
+            <TableHead className="w-3/10 font-medium">Level-up XP</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow key="gatherer">
+            <TableCell className="w-2/5 font-medium border-r">Gatherer</TableCell>
+            <TableCell className="w-3/10 border-r">{personSkills.person_skills_gatherer_level}</TableCell>
+            <TableCell className="w-3/10">{Math.pow(2, personSkills.person_skills_gatherer_level + 1) - personSkills.person_skills_gatherer_experience}</TableCell>
+          </TableRow>
+          <TableRow key="lumberjack">
+            <TableCell className="w-2/5 font-medium border-r">Lumberjack</TableCell>
+            <TableCell className="w-3/10 border-r">{personSkills.person_skills_lumberjack_level}</TableCell>
+            <TableCell className="w-3/10">{Math.pow(2, personSkills.person_skills_lumberjack_level + 1) - personSkills.person_skills_lumberjack_experience}</TableCell>
+          </TableRow>
+          <TableRow key="builder">
+            <TableCell className="w-2/5 font-medium border-r">Builder</TableCell>
+            <TableCell className="w-3/10 border-r">{personSkills.person_skills_builder_level}</TableCell>
+            <TableCell className="w-3/10">{Math.pow(2, personSkills.person_skills_builder_level + 1) - personSkills.person_skills_builder_experience}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </Container>
   )
 }
+
 
 function DescribePersonTeacher({ data, personId }) {
   return (
