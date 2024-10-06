@@ -25,7 +25,6 @@ export function Register({ queryClient }) {
       }).catch(error => {
         document.getElementById("cm-register").innerText = error.response.data.message
       })
-      console.log(res)
     }
     return (
       <div className="w-full max-w-md mx-auto p-6 space-y-8 rounded-md shadow bg-background">

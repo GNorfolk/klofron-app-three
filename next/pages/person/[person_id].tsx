@@ -40,7 +40,7 @@ export function DescribePerson({ queryClient, status, userId = null, router }) {
     if (isLoading) return (
       <BoxLayoutSingle>
         <Container>
-          <HeaderOne>Person Data</HeaderOne>
+          <HeaderTwo>Person Data</HeaderTwo>
           <Paragraph>Loading...</Paragraph>
         </Container>
       </BoxLayoutSingle>
@@ -48,7 +48,7 @@ export function DescribePerson({ queryClient, status, userId = null, router }) {
     if (error) return (
       <BoxLayoutSingle>
         <Container>
-          <HeaderOne>Person Data</HeaderOne>
+          <HeaderTwo>Person Data</HeaderTwo>
           <Paragraph>Failed to load!</Paragraph>
         </Container>
       </BoxLayoutSingle>

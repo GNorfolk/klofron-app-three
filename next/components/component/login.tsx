@@ -15,7 +15,6 @@ export function Login() {
       password: userInfo.password,
       callbackUrl: "/"
     })
-    console.log(res)
   }
   return (
     <div className="w-full max-w-md mx-auto p-6 space-y-8 rounded-md shadow bg-background">

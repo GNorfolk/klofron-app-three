@@ -39,7 +39,7 @@ export function DescribeHouse({ queryClient, userId, router }) {
     if (isLoading) return (
       <BoxLayoutSingle>
         <Container>
-          <HeaderOne>House Data</HeaderOne>
+          <HeaderTwo>House Data</HeaderTwo>
           <Paragraph>Loading...</Paragraph>
         </Container>
       </BoxLayoutSingle>
@@ -47,7 +47,7 @@ export function DescribeHouse({ queryClient, userId, router }) {
     if (error) return (
       <BoxLayoutSingle>
         <Container>
-          <HeaderOne>House Data</HeaderOne>
+          <HeaderTwo>House Data</HeaderTwo>
           <Paragraph>Failed to load!</Paragraph>
         </Container>
       </BoxLayoutSingle>

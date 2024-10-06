@@ -10,7 +10,7 @@ import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { FamilyListing } from '@/components/component/family'
 import { GrayButton } from "@/components/ui/button"
-import { HeaderOne } from "@/components/ui/header"
+import { HeaderOne, HeaderTwo } from "@/components/ui/header"
 import { Paragraph, Small } from "@/components/ui/text"
 
 let userId
@@ -37,7 +37,7 @@ export default function Main({ client, router }) {
     <BaseLayout>
       <BoxLayoutSingle>
         <Container>
-          <HeaderOne>User Data</HeaderOne>
+          <HeaderTwo>User Data</HeaderTwo>
           <Paragraph>Loading...</Paragraph>
         </Container>
       </BoxLayoutSingle>
@@ -83,7 +83,7 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
     <BoxLayoutSingle>
       <Container>
         <HeaderOne>Families</HeaderOne>
-        <p>Loading...</p>
+        <Paragraph>Loading...</Paragraph>
       </Container>
     </BoxLayoutSingle>
   )
@@ -91,11 +91,11 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
     <BoxLayoutSingle>
       <Container>
         <HeaderOne>Families</HeaderOne>
-        <p>Failed to load!</p>
+        <Paragraph>Failed to load!</Paragraph>
       </Container>
     </BoxLayoutSingle>
   )
-  
+
   if (userId) {
     return (
       <BoxLayoutSingle>

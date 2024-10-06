@@ -9,7 +9,7 @@ import { Container } from '@/components/component/container'
 import { PersonListing } from '@/components/component/person'
 import { HouseListing } from '@/components/component/house'
 import { GrayButton } from "@/components/ui/button"
-import { HeaderOne } from "@/components/ui/header"
+import { HeaderOne, HeaderTwo } from "@/components/ui/header"
 import { ListItem, Paragraph, Small } from "@/components/ui/text"
 
 export default function Main({ client, router }) {
@@ -38,20 +38,20 @@ export function DescribeFamily({ queryClient, userId, router }) {
     })
 
     if (isLoading) return (
-      <Container>
-        <BoxLayoutSingle>
-          <HeaderOne>Family Data</HeaderOne>
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Family Data</HeaderTwo>
           <Paragraph>Loading...</Paragraph>
-        </BoxLayoutSingle>
-      </Container>
+        </Container>
+      </BoxLayoutSingle>
     )
     if (error) return (
-      <Container>
-        <BoxLayoutSingle>
-          <HeaderOne>Family Data</HeaderOne>
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Family Data</HeaderTwo>
           <Paragraph>Failed to load!</Paragraph>
-        </BoxLayoutSingle>
-      </Container>
+        </Container>
+      </BoxLayoutSingle>
     )
     
     if (data.family_user_id === userId) {
