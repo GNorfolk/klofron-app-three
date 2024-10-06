@@ -7,6 +7,7 @@ import { FamilyListing } from '@/components/component/family'
 import { PersonListing } from '@/components/component/person'
 import { HouseListing } from '@/components/component/house'
 import { HeaderOne, HeaderTwo } from '@/components/ui/header'
+import { Paragraph } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   return (
@@ -46,14 +47,17 @@ function ListAllFamilies({ queryClient = null, userId = null }) {
   })
 
   if (isLoading) return (
-    <div>
-      <Container>
-        <HeaderOne>Families</HeaderOne>
-        <p>Loading...</p>
-      </Container>
-    </div>
+    <Container>
+      <HeaderOne>Families</HeaderOne>
+      <Paragraph>Loading...</Paragraph>
+    </Container>
   )
-  if (error) return <div>Failed to load</div>
+  if (error) return (
+    <Container>
+      <HeaderOne>Families</HeaderOne>
+      <Paragraph>Failed to load!</Paragraph>
+    </Container>
+  )
 
   return (
     <Container>
@@ -72,12 +76,17 @@ function ListAllHouses() {
   })
 
   if (isLoading) return (
-    <div>
+    <Container>
       <HeaderTwo>Houses</HeaderTwo>
-      <p>Loading...</p>
-    </div>
+      <Paragraph>Loading...</Paragraph>
+    </Container>
   )
-  if (error) return <div>Failed to load</div>
+  if (error) return (
+    <Container>
+      <HeaderTwo>Houses</HeaderTwo>
+      <Paragraph>Failed to load!</Paragraph>
+    </Container>
+  )
 
   return (
     <Container>
@@ -96,14 +105,17 @@ function ListAllPeople() {
   })
 
   if (isLoading) return (
-    <div>
+    <Container>
       <HeaderTwo>People</HeaderTwo>
-      <p>Loading...</p>
-    </div>
+      <Paragraph>Loading...</Paragraph>
+    </Container>
   )
-  if (error) return <div>Failed to load</div>
-
-  console.log(data)
+  if (error) return (
+    <Container>
+      <HeaderTwo>People</HeaderTwo>
+      <Paragraph>Failed to load!</Paragraph>
+    </Container>
+  )
 
   return (
     <Container>

@@ -11,7 +11,7 @@ import { Container } from '@/components/component/container'
 import { FamilyListing } from '@/components/component/family'
 import { GrayButton } from "@/components/ui/button"
 import { HeaderOne } from "@/components/ui/header"
-import { Small } from "@/components/ui/text"
+import { Paragraph, Small } from "@/components/ui/text"
 
 let userId
 
@@ -33,7 +33,16 @@ export default function Main({ client, router }) {
       </BaseLayout>
     )
   }
-  return <div>Loading...</div>
+  return (
+    <BaseLayout>
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderOne>User Data</HeaderOne>
+          <Paragraph>Loading...</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    </BaseLayout>
+  )
 }
 
 export function ListAllFamilies({ queryClient = null, userId = null }) {
@@ -71,13 +80,22 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
   }
 
   if (isLoading) return (
-    <div>
-      <HeaderOne>Families</HeaderOne>
-      <p>Loading...</p>
-    </div>
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderOne>Families</HeaderOne>
+        <p>Loading...</p>
+      </Container>
+    </BoxLayoutSingle>
   )
-  if (error) return <div>Failed to load</div>
-
+  if (error) return (
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderOne>Families</HeaderOne>
+        <p>Failed to load!</p>
+      </Container>
+    </BoxLayoutSingle>
+  )
+  
   if (userId) {
     return (
       <BoxLayoutSingle>

@@ -4,13 +4,13 @@ import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { useForm, SubmitHandler } from "react-hook-form"
-import { BoxLayout } from '@/components/component/box-layout'
+import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { PersonListing } from '@/components/component/person'
 import { HouseListing } from '@/components/component/house'
 import { GrayButton } from "@/components/ui/button"
 import { HeaderOne } from "@/components/ui/header"
-import { ListItem, Small } from "@/components/ui/text"
+import { ListItem, Paragraph, Small } from "@/components/ui/text"
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -37,13 +37,26 @@ export function DescribeFamily({ queryClient, userId, router }) {
         ),
     })
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Failed to load</div>
-
+    if (isLoading) return (
+      <Container>
+        <BoxLayoutSingle>
+          <HeaderOne>Family Data</HeaderOne>
+          <Paragraph>Loading...</Paragraph>
+        </BoxLayoutSingle>
+      </Container>
+    )
+    if (error) return (
+      <Container>
+        <BoxLayoutSingle>
+          <HeaderOne>Family Data</HeaderOne>
+          <Paragraph>Failed to load!</Paragraph>
+        </BoxLayoutSingle>
+      </Container>
+    )
+    
     if (data.family_user_id === userId) {
       return (
         <QueryClientProvider client={queryClient}>
-          {/* <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1> */}
           <BoxLayout left={
             <div>
               <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={true} />
@@ -61,7 +74,6 @@ export function DescribeFamily({ queryClient, userId, router }) {
     } else {
       return (
         <QueryClientProvider client={queryClient}>
-          {/* <h1 className="text-4xl leading-tight font-extrabold tracking-tighter my-4 mx-0" key={data.family_id}>The {data.family_name} family</h1> */}
           <BoxLayout left={
             <ListFamilyPeople data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={false} />
           } right={

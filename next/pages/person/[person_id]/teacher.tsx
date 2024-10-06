@@ -10,7 +10,7 @@ import { GrayButton } from "@/components/ui/button"
 import { PersonListing, PersonInfo } from '@/components/component/person'
 import { HeaderOne, HeaderTwo } from '@/components/ui/header'
 import { StyledSelect } from '@/components/ui/input'
-import { Small } from '@/components/ui/text'
+import { Paragraph, Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   const { status, data } = useSession()
@@ -38,12 +38,21 @@ export function DescribePersonTeacher({ userId, queryClient, router }) {
     })
 
     if (isLoading) return (
-      <div>
-        <HeaderTwo>Betrothal Info</HeaderTwo>
-        <p>Loading...</p>
-      </div>
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Betrothal Info</HeaderTwo>
+          <Paragraph>Loading...</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
     )
-    if (error) return <div>Failed to load</div>
+    if (error) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Betrothal Info</HeaderTwo>
+          <Paragraph>Failed to load!</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
 
     return (
       <QueryClientProvider client={queryClient}>

@@ -5,6 +5,7 @@ import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { PersonListing } from '@/components/component/person'
 import { HeaderTwo } from '@/components/ui/header'
+import { Paragraph } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   return (
@@ -29,14 +30,21 @@ export function ListAllPeople() {
   })
 
   if (isLoading) return (
-    <div>
-      <HeaderTwo>People</HeaderTwo>
-      <p>Loading...</p>
-    </div>
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderTwo>People</HeaderTwo>
+        <Paragraph>Loading...</Paragraph>
+      </Container>
+    </BoxLayoutSingle>
   )
-  if (error) return <div>Failed to load</div>
-
-  console.log(data)
+  if (error) return (
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderTwo>People</HeaderTwo>
+        <Paragraph>Failed to load!</Paragraph>
+      </Container>
+    </BoxLayoutSingle>
+  )
 
   return (
     <BoxLayoutSingle>

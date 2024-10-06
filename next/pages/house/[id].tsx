@@ -4,11 +4,11 @@ import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { GrayButton } from "@/components/ui/button"
-import { BoxLayout } from '@/components/component/box-layout'
+import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { HouseInfo } from '@/components/component/house'
 import { PersonListing } from '@/components/component/person'
-import { HeaderTwo } from '@/components/ui/header'
+import { HeaderOne, HeaderTwo } from '@/components/ui/header'
 import { ListItem, Paragraph, Small } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
@@ -36,8 +36,22 @@ export function DescribeHouse({ queryClient, userId, router }) {
         ),
     })
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Failed to load</div>
+    if (isLoading) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderOne>House Data</HeaderOne>
+          <Paragraph>Loading...</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
+    if (error) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderOne>House Data</HeaderOne>
+          <Paragraph>Failed to load!</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
 
     const house_id = data.house_id
 

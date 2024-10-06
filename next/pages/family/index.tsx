@@ -8,7 +8,7 @@ import { Container } from '@/components/component/container'
 import { FamilyListing } from '@/components/component/family'
 import { GrayButton } from "@/components/ui/button"
 import { HeaderOne } from "@/components/ui/header"
-import { Small } from "@/components/ui/text"
+import { Paragraph, Small } from "@/components/ui/text"
 
 export default function Home({ client, router }) {
   return (
@@ -58,12 +58,21 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
   }
 
   if (isLoading) return (
-    <div>
-      <HeaderOne>Families</HeaderOne>
-      <p>Loading...</p>
-    </div>
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderOne>Families</HeaderOne>
+        <Paragraph>Loading...</Paragraph>
+      </Container>
+    </BoxLayoutSingle>
   )
-  if (error) return <div>Failed to load</div>
+  if (error) return (
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderOne>Families</HeaderOne>
+        <Paragraph>Failed to load!</Paragraph>
+      </Container>
+    </BoxLayoutSingle>
+  )
 
   if (userId) {
     return (
@@ -86,9 +95,11 @@ export function ListAllFamilies({ queryClient = null, userId = null }) {
     )
   } else {
     return (
-      <Container>
-        <FamilyListing familyData={data} />
-      </Container>
+      <BoxLayoutSingle>
+        <Container>
+          <FamilyListing familyData={data} />
+        </Container>
+      </BoxLayoutSingle>
     )
   }
 }

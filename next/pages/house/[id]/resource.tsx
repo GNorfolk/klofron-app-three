@@ -8,7 +8,7 @@ import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { HeaderTwo } from '@/components/ui/header'
 import { Form, Input, Select } from '@/components/ui/form'
-import { ListItem, Small } from '@/components/ui/text'
+import { ListItem, Paragraph, Small } from '@/components/ui/text'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { MinusIcon } from "@/components/ui/icon"
@@ -39,12 +39,21 @@ export function DescribeHouseResources({ queryClient, userId, router }) {
     })
 
     if (isLoading) return (
-      <div>
-        <HeaderTwo>Resource Info</HeaderTwo>
-        <p>Loading...</p>
-      </div>
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Resource Info</HeaderTwo>
+          <Paragraph>Loading...</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
     )
-    if (error) return <div>Failed to load</div>
+    if (error) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Resource Info</HeaderTwo>
+          <Paragraph>Failed to load!</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
 
     if (data.house_family.family_user_id === userId) { 
       return (

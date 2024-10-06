@@ -4,11 +4,11 @@ import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { FormEventHandler, useState } from "react"
-import { BoxLayout } from '@/components/component/box-layout'
+import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { BetrothalInfo } from '@/components/component/betrothal'
-import { HeaderTwo } from '@/components/ui/header'
-import { ListItem } from '@/components/ui/text'
+import { HeaderOne, HeaderTwo } from '@/components/ui/header'
+import { ListItem, Paragraph } from '@/components/ui/text'
 import { DivIconInfo } from '@/components/ui/div'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 
@@ -37,8 +37,22 @@ export function DescribePerson({ queryClient, status, userId = null, router }) {
         ),
     })
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Failed to load</div>
+    if (isLoading) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderOne>Person Data</HeaderOne>
+          <Paragraph>Loading...</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
+    if (error) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderOne>Person Data</HeaderOne>
+          <Paragraph>Failed to load!</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
 
     return (
       <QueryClientProvider client={queryClient}>

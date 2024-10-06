@@ -5,6 +5,7 @@ import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { HouseListing } from '@/components/component/house'
 import { HeaderTwo } from '@/components/ui/header'
+import { Paragraph } from '@/components/ui/text'
 
 export default function Main({ client, router }) {
   return (
@@ -29,12 +30,21 @@ export function ListAllHouses() {
   })
 
   if (isLoading) return (
-    <div>
-      <HeaderTwo>Houses</HeaderTwo>
-      <p>Loading...</p>
-    </div>
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderTwo>Houses</HeaderTwo>
+        <Paragraph>Loading...</Paragraph>
+      </Container>
+    </BoxLayoutSingle>
   )
-  if (error) return <div>Failed to load</div>
+  if (error) return (
+    <BoxLayoutSingle>
+      <Container>
+        <HeaderTwo>Houses</HeaderTwo>
+        <Paragraph>Failed to load!</Paragraph>
+      </Container>
+    </BoxLayoutSingle>
+  )
 
   return (
     <BoxLayoutSingle>

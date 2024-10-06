@@ -50,7 +50,6 @@ export function DescribeFamilyTravel({ queryClient, userId, router }) {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = (formData) => {
-      console.log("formData: " + JSON.stringify(formData));
       if (formData.person_id) {
         axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + formData.person_id, {
           house_id: formData.house_id
@@ -66,12 +65,21 @@ export function DescribeFamilyTravel({ queryClient, userId, router }) {
     }
 
     if (isLoading) return (
-      <div>
-        <HeaderTwo>Travel Info</HeaderTwo>
-        <p>Loading...</p>
-      </div>
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Travel Info</HeaderTwo>
+          <Paragraph>Loading...</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
     )
-    if (error) return <div>Failed to load</div>
+    if (error) return (
+      <BoxLayoutSingle>
+        <Container>
+          <HeaderTwo>Travel Info</HeaderTwo>
+          <Paragraph>Failed to load!</Paragraph>
+        </Container>
+      </BoxLayoutSingle>
+    )
 
     if (data.family_user_id === userId) {
       return (
