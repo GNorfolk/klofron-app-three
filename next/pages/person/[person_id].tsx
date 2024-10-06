@@ -214,7 +214,7 @@ function ListPersonInfo({ data, queryClient }) {
       <HeaderTwo>Person Info</HeaderTwo>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
         <DivIconInfo iconType="UserIcon">{data.person_name + " " + data.person_family.family_name + " is " + data.person_gender + " and " + data.person_age + " years old."}</DivIconInfo>
-        <DivIconInfo iconType="ChurchIcon">{data.person_name + " " + data.person_family.family_name + " is  married to " + data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</DivIconInfo>
+        { data.person_partner_id ? <DivIconInfo iconType="ChurchIcon">{data.person_name + " " + data.person_family.family_name + " is  married to " + data.person_partner.person_name + " " + data.person_partner.person_family.family_name}</DivIconInfo> : null }
         <DivIconInfo iconType="UsersIcon">{data.person_name + "'s father is " + data.person_father.person_name + " " + data.person_father.person_family.family_name}</DivIconInfo>
         <DivIconInfo iconType="UsersIcon">{data.person_name + "'s mother is " + data.person_mother.person_name + " " + data.person_mother.person_family.family_name}</DivIconInfo>
         <DivIconInfo iconType="MapPinIcon">{data.person_name + " lives at " + data.person_house.house_address.house_address_number + " " + data.person_house.house_address.house_address_road.house_road_name}</DivIconInfo>
