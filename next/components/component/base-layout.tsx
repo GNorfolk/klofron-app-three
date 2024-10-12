@@ -19,19 +19,15 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
           <nav className="flex-1 py-4">
             <ul className="grid gap-1">
               <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                <Link href="/">
-                  <a className="flex">
-                    <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                    <span className='ml-2'>Home</span>
-                  </a>
+                <Link href="/" className="flex">
+                  <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                  <span className='ml-2'>Home</span>
                 </Link>
               </li>
               <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                <Link href="/directory">
-                  <a className="flex">
-                    <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                    <span className='ml-2'>Directory</span>
-                  </a>
+                <Link href="/directory" className="flex">
+                  <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                  <span className='ml-2'>Directory</span>
                 </Link>
               </li>
               { status === "authenticated" ? (
@@ -55,11 +51,9 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
       </div>
       <div className="flex flex-col">
         <header className="flex h-16 items-center justify-between border-b border-gray-800 bg-black px-4 dark:border-gray-700 dark:bg-gray-950 md:hidden">
-          <Link href="/">
-            <a className="flex items-center gap-2 font-semibold">
-              <MountainIcon className="h-6 w-6" />
-              <span className="text-gray-500 dark:text-gray-50">klofroN</span>
-            </a>
+          <Link href="/" className="flex items-center gap-2 font-semibold">
+            <MountainIcon className="h-6 w-6" />
+            <span className="text-gray-500 dark:text-gray-50">klofroN</span>
           </Link>
           <Sheet>
             <SheetTrigger asChild>
@@ -78,19 +72,15 @@ export function BaseLayout({ children } : { children: React.ReactNode }) {
               <nav className="flex-1 py-4">
                 <ul className="grid gap-1">
                   <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                    <Link href="/">
-                      <a className="flex">
-                        <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                        <span className='ml-2'>Home</span>
-                      </a>
+                    <Link href="/" className="flex">
+                      <HomeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                      <span className='ml-2'>Home</span>
                     </Link>
                   </li>
                   <li className="flex items-center gap-3 px-6 py-2 text-gray-500 hover:bg-gray-900 hover:text-gray-400 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50">
-                    <Link href="/directory">
-                      <a className="flex">
-                        <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
-                        <span className='ml-2'>Directory</span>
-                      </a>
+                    <Link href="/directory" className="flex">
+                      <MicroscopeIcon className="w-5 h-5 min-w-5 min-h-5" />
+                      <span className='ml-2'>Directory</span>
                     </Link>
                   </li>
                   { status === "authenticated" ? (
