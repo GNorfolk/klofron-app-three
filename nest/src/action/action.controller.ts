@@ -43,3 +43,17 @@ export class ActionController {
     }
   }
 }
+
+@Controller({
+  path: 'action',
+  version: '3',
+})
+export class ActionControllerv3 {
+  constructor(private readonly actionService: ActionService) {}
+
+  // curl --request POST localhost:5000/v3/action --header "Content-Type: application/json" --data '{"action_queue_id": 144, "action_type_id": 1}'
+  @Post()
+  async create(@Body() action: CreateActionDto) {
+    return await this.actionService.create(action, true);
+  }
+}

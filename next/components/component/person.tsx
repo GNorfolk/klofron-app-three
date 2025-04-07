@@ -24,7 +24,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
   }
 
   const onSubmit = (formData: Inputs, addToQueue: number) => {
-    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/action', {
+    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v3/action', {
       action_queue_id: formData.action_queue_id,
       action_type_id: formData.action_type_id,
       action_add_to_queue: addToQueue

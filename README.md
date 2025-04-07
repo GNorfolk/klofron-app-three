@@ -136,7 +136,7 @@ UPDATE person SET created_at = created_at - INTERVAL 1 DAY;
 ```
 - Move forwards in time:
 ```sql
-UPDATE person SET last_action = last_action - INTERVAL 8 HOUR;
+UPDATE action SET started_at = started_at - INTERVAL 9 HOUR;
 ```
 
 **How to start next server:**

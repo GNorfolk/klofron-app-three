@@ -18,7 +18,7 @@ export class ActionService {
     private dataSource: DataSource
   ) {}
 
-  async create(action: CreateActionDto) {
+  async create(action: CreateActionDto, doTheThing: boolean = false) {
     const queryRunner = this.dataSource.createQueryRunner();
     let result;
     await queryRunner.connect();
@@ -46,6 +46,8 @@ export class ActionService {
         } else {
           throw "Cannot add action to queue when an action is not in progress!"
         }
+      } else if (doTheThing) {
+        result = await this.utilityDoTheThing(queryRunner, action, person)
       } else if (person.person_students.length > 0) {
         result = await this.utilityCreateActionStudents(queryRunner, action, person)
       } else {
@@ -127,6 +129,32 @@ export class ActionService {
     } else {
       throw "Invalid action_type_id, got: " + action.action_type_id;
     }
+    action.action_started_at = new Date();
+    return await queryRunner.manager.save(Action, action);
+  }
+
+  async utilityDoTheThing(queryRunner, action: CreateActionDto, person: Person) {
+    if (person.person_deleted_at) throw "Person is deceased!";
+    // ToDo: Set this to check action_cooldown
+    // if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
+    if (action.action_type_id == -1) {
+      throw "Cannot perform action when teacher is set!"
+    } else if (action.action_type_id == 1) {
+      await this.getFood(queryRunner, person);
+    } else if (action.action_type_id == 2) {
+      await this.getWood(queryRunner, person);
+    } else if (action.action_type_id == 3) {
+      await this.increaseStorage(queryRunner, person);
+    } else if (action.action_type_id == 4) {
+      await this.increaseRooms(queryRunner, person);
+    } else if (action.action_type_id == 5) {
+      await this.createHouse(queryRunner, person);
+    } else if (action.action_type_id == 6) {
+      // Do nothing
+    } else {
+      throw "Invalid action_type_id, got: " + action.action_type_id;
+    }
+    // ToDo: Set this to create action_cooldown
     action.action_started_at = new Date();
     return await queryRunner.manager.save(Action, action);
   }
@@ -565,6 +593,134 @@ export class ActionService {
       await queryRunner.release();
       throw err
     }
+  }
+
+  async getFood(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
+    // ToDo: Sort out how to implement multiplier on all functions
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_gatherer_level)
+    const house = person.person_house
+    if (diceRoll && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
+      await queryRunner.manager.increment(Resource, {
+        resource_type_name: "food",
+        resource_house_id: person.person_house_id
+      }, "resource_volume", 2);
+      console.log("GetFoodDone")
+    } else {
+      console.log("GetFoodNotDone")
+    }
+    await queryRunner.manager.increment(PersonSkills, {
+      person_skills_id: person.person_skills_id
+    }, "person_skills_gatherer_experience", experience_multiplier);
+  }
+
+  async getWood(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
+    const requiredFood = 1 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    const food = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "food",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredFood);
+    if (food.affected != 1) throw "Cannot decrement house resources!"
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_lumberjack_level)
+    if (diceRoll && person.person_house.house_storage >= person.person_house.house_food.resource_volume + person.person_house.house_wood.resource_volume + 1) {
+      await queryRunner.manager.increment(Resource, {
+        resource_type_name: "wood",
+        resource_house_id: person.person_house_id
+      }, "resource_volume", 1);
+      console.log("GetWoodDone")
+    } else {
+      console.log("GetWoodNotDone")
+    }
+    await queryRunner.manager.increment(PersonSkills, {
+      person_skills_id: person.person_skills_id
+    }, "person_skills_lumberjack_experience", experience_multiplier);
+  }
+
+  async increaseStorage(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
+    const requiredWood = ( multiplier * ( person.person_house.house_storage / 3 ) ) + ( ( multiplier * ( multiplier + 1 ) ) / 2 );
+    const requiredFood = 1 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
+    const food = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "food",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredFood);
+    const wood = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "wood",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredWood);
+    if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
+    if (diceRoll) {
+      await queryRunner.manager.increment(House, {
+        house_id: person.person_house_id
+      }, "house_storage", 3);
+      console.log("IncreaseStorageDone")
+    } else {
+      console.log("IncreaseStorageNotDone")
+    }
+    await queryRunner.manager.increment(PersonSkills, {
+      person_skills_id: person.person_skills_id
+    }, "person_skills_builder_experience", experience_multiplier);
+  }
+
+  async increaseRooms(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
+    const requiredWood = ( 2 * multiplier * person.person_house.house_rooms ) + ( multiplier * ( multiplier + 1 ) );
+    const requiredFood = 1 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
+    const food = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "food",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredFood);
+    const wood = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "wood",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredWood);
+    if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
+    if (diceRoll) {
+      await queryRunner.manager.increment(House, {
+        house_id: person.person_house_id
+      }, "house_rooms", 1);
+      console.log("IncreaseRoomsDone")
+    } else {
+      console.log("IncreaseRoomsNotDone")
+    }
+    await queryRunner.manager.increment(PersonSkills, {
+      person_skills_id: person.person_skills_id
+    }, "person_skills_builder_experience", experience_multiplier);
+  }
+
+  async createHouse(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
+    let result;
+    const requiredWood = 12 * multiplier;
+    const requiredFood = 3 * multiplier;
+    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
+    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
+    const food = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "food",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredFood);
+    const wood = await queryRunner.manager.decrement(Resource, {
+      resource_type_name: "wood",
+      resource_house_id: person.person_house_id
+    }, "resource_volume", requiredWood);
+    if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
+    if (diceRoll) {
+      result = await this.houseService.createHouse(result, queryRunner, {
+          house_family_id: person.person_family_id,
+          house_rooms: 2
+        }
+      )
+      console.log("CreateHouseDone")
+    } else {
+      console.log("CreateHouseNotDone")
+    }
+    await queryRunner.manager.increment(PersonSkills, {
+      person_skills_id: person.person_skills_id
+    }, "person_skills_builder_experience", experience_multiplier);
   }
 
   async utilityGetDiceRoll(skillLevel: number) {
