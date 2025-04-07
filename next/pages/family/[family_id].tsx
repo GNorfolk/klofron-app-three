@@ -61,8 +61,8 @@ export function DescribeFamily({ queryClient, userId, router }) {
             <div>
               <ListFamilyHouses data={data} queryClient={queryClient} familyId={router.query.family_id} unnamedBoolean={true} />
               <ListFamilyTravel data={data} router={router} />
-              {/* <ListFamilyBetrothals data={data} router={router} /> */}
-              {/* <CreateFamilyBetrothals data={data} router={router} /> */}
+              <ListFamilyBetrothals data={data} router={router} />
+              <CreateFamilyBetrothals data={data} router={router} />
             </div>
           } right={
             <div>

@@ -60,7 +60,7 @@ export function DescribePerson({ queryClient, status, userId = null, router }) {
           <div>
             <ListPersonInfo queryClient={queryClient} data={data}/>
             <ListPersonSkills personSkills={data.person_skills} />
-            {/* { status === "authenticated" && userId == data.person_family.family_user_id ? <ListPersonBetrothals data={data} router={router} /> : <></> } */}
+            { status === "authenticated" && userId == data.person_family.family_user_id ? <ListPersonBetrothals data={data} router={router} /> : <></> }
             <DescribePersonTeacher data={data} personId={router.query.person_id} />
           </div>
         } right={
@@ -186,8 +186,7 @@ function ListPersonBetrothals({ data, router }) {
   if (router.isReady) {
     return (
       <Container>
-        {/* <BetrothalInfo personInfo={data} /> */}
-        Nothing to see here
+        <BetrothalInfo personInfo={data} />
       </Container>
     )
   }

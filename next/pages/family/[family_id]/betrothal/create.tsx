@@ -54,8 +54,7 @@ export function CreateFamilyBetrothals({ queryClient, userId, router }) {
     return (
       <BoxLayoutSingle>
         <Container>
-          {/* <BetrothalCreationListing peopleData={data} familyId={router.query.family_id} /> */}
-          Nothing to see here
+          <BetrothalCreationListing peopleData={data} familyId={router.query.family_id} />
         </Container>
       </BoxLayoutSingle>
     )
