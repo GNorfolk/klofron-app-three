@@ -39,7 +39,7 @@ export function ListAllEntities({ queryClient }) {
 
 function ListAllFamilies({ queryClient = null, userId = null }) {
   const { isLoading, error, data } = useQuery({
-    queryKey: ['familiesData'],
+    queryKey: ['directoryFamiliesData'],
     queryFn: () =>
       fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family').then(
         (res) => res.json(),
@@ -68,7 +68,7 @@ function ListAllFamilies({ queryClient = null, userId = null }) {
 
 function ListAllHouses() {
   const { isLoading, error, data } = useQuery({
-    queryKey: ['housesData'],
+    queryKey: ['directoryHousesData'],
     queryFn: () =>
       fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house').then(
         (res) => res.json(),
@@ -97,7 +97,7 @@ function ListAllHouses() {
 
 function ListAllPeople() {
   const { isLoading, error, data } = useQuery({
-    queryKey: ['listAllPeopleData'],
+    queryKey: ['directoryPeopleData'],
     queryFn: () =>
       fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person').then(
         (res) => res.json(),

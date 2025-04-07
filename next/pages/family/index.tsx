@@ -26,7 +26,7 @@ export default function Home({ client, router }) {
 export function ListAllFamilies({ queryClient = null, userId = null }) {
   const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
   const { isLoading, error, data } = useQuery({
-    queryKey: ['familiesData'],
+    queryKey: ['familyFamiliesData'],
     queryFn: () =>
       fetch(process.env.NEXT_PUBLIC_API_HOST + fetchQuery).then(
         (res) => res.json(),
