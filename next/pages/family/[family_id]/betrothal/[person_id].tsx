@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useQuery, QueryClientProvider } from '@tanstack/react-query'
 import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
-import { BoxLayout } from '@/components/component/box-layout'
+import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { BetrothalCreation } from '@/components/component/betrothal'
 import { PersonInfo } from '@/components/component/person'
@@ -28,11 +28,16 @@ export function CreateBetrothal({ queryClient, userId, router }) {
   if (router.isReady) {
     return (
       <QueryClientProvider client={queryClient}>
-        <BoxLayout left={
+        {/* <BoxLayout left={
           <CreateBetrothalInfo personId={router.query.person_id} />
         } right={
           <CreateBetrothalForm familyId={router.query.family_id} personId={router.query.person_id} queryClient={queryClient} />
-        } />
+        } /> */}
+        <BoxLayoutSingle>
+          <Container>
+            Nothing to see here
+          </Container>
+        </BoxLayoutSingle>
       </QueryClientProvider>
     )
   }

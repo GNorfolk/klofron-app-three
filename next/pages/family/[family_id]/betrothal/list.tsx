@@ -54,12 +54,13 @@ export function DescribeFamilyBetrothals({ queryClient, userId, router }) {
     if (data.family_user_id === userId) {
       return (
         <BoxLayoutSingle>
-          <Container>
+          {/* <Container>
             <BetrothalListing familyPeople={data.family_people} />
           </Container>
           <Container>
             <BetrothalEligibleListing familyPeople={data.family_people} />
-          </Container>
+          </Container> */}
+          <Container>Nothing to see here</Container>
         </BoxLayoutSingle>
       )
     } else {
