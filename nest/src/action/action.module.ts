@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Action } from './entities/Action';
 import { ActionQueue } from './entities/ActionQueue';
 import { HouseModule } from '../house/house.module';
+import { ActionCooldown } from './entities/ActionCooldown';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Action, ActionQueue]),
+    TypeOrmModule.forFeature([Action, ActionQueue, ActionCooldown]),
     HouseModule
   ],
   controllers: [ActionController, ActionControllerv3],

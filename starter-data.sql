@@ -97,6 +97,13 @@ CREATE TABLE `action_queue` (
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `action_cooldown` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `queue_id` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- USER -- -- -- -- --
 CREATE TABLE `user` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

@@ -136,7 +136,7 @@ export class ActionService {
   async utilityDoTheThing(queryRunner, action: CreateActionDto, person: Person) {
     if (person.person_deleted_at) throw "Person is deceased!";
     // ToDo: Set this to check action_cooldown
-    // if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
+    if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
     } else if (action.action_type_id == 1) {

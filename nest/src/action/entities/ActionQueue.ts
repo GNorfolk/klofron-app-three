@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation, OneToMany, JoinColumn, OneToOne } from "typeorm";
 import { Person } from "../../person/entities/Person";
 import { Action } from "./Action";
+import { ActionCooldown } from "./ActionCooldown";
 
 @Entity("action_queue", { schema: "ka3" })
 export class ActionQueue {
@@ -29,4 +30,7 @@ export class ActionQueue {
 
   @OneToMany(() => Action, (action) => action.action_queue_next)
   action_queue_next_actions: Relation<Action>[];
+
+  @OneToOne(() => ActionCooldown, (action_cooldown) => action_cooldown.action_cooldown_queue)
+  action_queue_action_cooldown: Relation<ActionCooldown>;
 }
