@@ -2,6 +2,14 @@
 DROP TABLE person;
 DROP TABLE house;
 DROP TABLE family;
+-- -- -- -- -- USER -- -- -- -- --
+CREATE TABLE `user` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(155) NOT NULL UNIQUE,
+    `password` VARCHAR(155) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- FAMILY -- -- -- -- --
 CREATE TABLE `family` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -11,6 +19,17 @@ CREATE TABLE `family` (
     FOREIGN KEY (`user_id`) REFERENCES user(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- HOUSE -- -- -- -- --
+CREATE TABLE `house_road` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `road_name` VARCHAR(155) NOT NULL,
+    `capacity` INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `house_address` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `number` INT NOT NULL,
+    `road_id` INT NOT NULL,
+    FOREIGN KEY (`road_id`) REFERENCES house_road(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `house` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(155) NOT NULL DEFAULT 'House',
@@ -24,17 +43,6 @@ CREATE TABLE `house` (
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`address_id`) REFERENCES house_address(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `house_road` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `road_name` VARCHAR(155) NOT NULL,
-    `capacity` INT NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `house_address` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `number` INT NOT NULL,
-    `road_id` INT NOT NULL,
-    FOREIGN KEY (`road_id`) REFERENCES house_road(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `house_road_name` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(155) NOT NULL,
@@ -45,7 +53,45 @@ CREATE TABLE `house_road_type` (
     `name` VARCHAR(155) NOT NULL,
     `capacity` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- -- -- -- -- ACTION -- -- -- -- --
+CREATE TABLE `action_queue` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `action` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `queue_id` INT NOT NULL,
+    `type_id` INT NOT NULL,
+    `infinite` BOOL NOT NULL DEFAULT 0,
+    `experience_multiplier` INT NOT NULL DEFAULT 1,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `started_at` TIMESTAMP,
+    `completed_at` TIMESTAMP,
+    `cancelled_at` TIMESTAMP,
+    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `action_cooldown` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `queue_id` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- PERSON -- -- -- -- --
+CREATE TABLE `person_name` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(155) NOT NULL,
+    `gender` VARCHAR(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `person_skills` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `gatherer_experience` INT NOT NULL DEFAULT 1,
+    `lumberjack_experience` INT NOT NULL DEFAULT 1,
+    `builder_experience` INT NOT NULL DEFAULT 1,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `person` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(155) NOT NULL,
@@ -64,53 +110,6 @@ CREATE TABLE `person` (
     FOREIGN KEY (`house_id`) REFERENCES house(`id`),
     FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`),
     FOREIGN KEY (`action_queue_id`) REFERENCES action_queue(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `person_name` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(155) NOT NULL,
-    `gender` VARCHAR(155) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `person_skills` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `gatherer_experience` INT NOT NULL DEFAULT 1,
-    `lumberjack_experience` INT NOT NULL DEFAULT 1,
-    `builder_experience` INT NOT NULL DEFAULT 1,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- -- -- -- -- ACTION -- -- -- -- --
-CREATE TABLE `action` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `queue_id` INT NOT NULL,
-    `type_id` INT NOT NULL,
-    `infinite` BOOL NOT NULL DEFAULT 0,
-    `experience_multiplier` INT NOT NULL DEFAULT 1,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `started_at` TIMESTAMP,
-    `completed_at` TIMESTAMP,
-    `cancelled_at` TIMESTAMP,
-    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `action_queue` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `action_cooldown` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `queue_id` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- -- -- -- -- USER -- -- -- -- --
-CREATE TABLE `user` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(155) NOT NULL UNIQUE,
-    `password` VARCHAR(155) NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- TRADE -- -- -- -- --
 CREATE TABLE `trade` (
@@ -147,6 +146,14 @@ CREATE TABLE `move_house` (
     `cancelled_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- Betrothal -- -- -- -- --
+CREATE TABLE `betrothal_dowry` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `person_id` INT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `accepted_at` TIMESTAMP,
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `betrothal` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `proposer_person_id` INT NOT NULL,
@@ -158,12 +165,4 @@ CREATE TABLE `betrothal` (
     FOREIGN KEY (`proposer_person_id`) REFERENCES person(`id`),
     FOREIGN KEY (`recipient_person_id`) REFERENCES person(`id`),
     FOREIGN KEY (`dowry_id`) REFERENCES betrothal_dowry(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `betrothal_dowry` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `person_id` INT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `accepted_at` TIMESTAMP,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
