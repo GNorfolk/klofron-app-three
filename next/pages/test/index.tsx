@@ -11,12 +11,13 @@ import { Paragraph } from '@/components/ui/text'
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 
 
-export default function Main({ client, router, familiesData }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Main({ client, router, familiesData, housesData }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>
         <BoxLayoutSingle>
           <ListAllFamilies familiesData={familiesData} />
+          <ListAllHouses housesData={housesData} />
         </BoxLayoutSingle>
       </QueryClientProvider>
       <div className="mt-12 mx-0 mb-0">
@@ -42,21 +43,42 @@ function ListAllFamilies({ familiesData }) {
   )
 }
 
+function ListAllHouses({ housesData }) {
+  if (!housesData)
+    return (
+      <Container>
+        <HeaderOne>Houses</HeaderOne>
+        <Paragraph>Failed to load!</Paragraph>
+      </Container>
+    )
+
+  return (
+    <Container>
+      <HouseListing houseData={housesData} />
+    </Container>
+  )
+}
+
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v2/family`)
-    const familiesData = await res.json()
+    const resFamily = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v2/family`)
+    const resHouse = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v2/house`)
+
+    const familiesData = await resFamily.json()
+    const housesData = await resHouse.json()
 
     return {
       props: {
         familiesData,
+        housesData
       },
     }
   } catch (error) {
-    console.error('Failed to fetch families data:', error)
+    console.error('Failed to fetch data:', error)
     return {
       props: {
         familiesData: null,
+        housesData: null
       },
     }
   }

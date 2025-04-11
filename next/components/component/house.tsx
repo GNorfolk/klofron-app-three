@@ -8,7 +8,7 @@ export function HouseListing({ houseData }) {
   return (
     <main>
       <HeaderOne>Houses</HeaderOne>
-      { houseData.length > 0 ? houseData.map(({ house_id, house_address, house_food, house_wood, house_people }) => (
+      { houseData?.length > 0 ? houseData.map(({ house_id, house_address, house_food, house_wood, house_people }) => (
         <StyledLink href={`/house/${house_id}`}>
           <HeaderThree>{house_address.house_address_number + " " + house_address.house_address_road.house_road_name}</HeaderThree>
           <div className="grid grid-cols-3">
