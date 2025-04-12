@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { BaseLayout } from '@/components/component/base-layout'
-import { QueryClientProvider, useQuery, QueryClient } from '@tanstack/react-query'
+import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { BoxLayout } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { FamilyListing } from '@/components/component/family'
@@ -8,20 +8,12 @@ import { PersonListing } from '@/components/component/person'
 import { HouseListing } from '@/components/component/house'
 import { HeaderOne, HeaderTwo } from '@/components/ui/header'
 import { Paragraph } from '@/components/ui/text'
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 
-export default function Main({ client, router, familiesData, housesData, peopleData }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Main({ client, router }) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>
-        <BoxLayout left={
-          <div>
-            <ListAllFamilies familiesData={familiesData} />
-            <ListAllHouses housesData={housesData} />
-          </div>
-        } right={
-          <ListAllPeople peopleData={peopleData} />
-        }/>
+        <ListAllEntities queryClient={client} />
       </QueryClientProvider>
       <div className="mt-12 mx-0 mb-0">
         <Link href="/">← Back to home</Link>
@@ -30,80 +22,104 @@ export default function Main({ client, router, familiesData, housesData, peopleD
   )
 }
 
-function ListAllFamilies({ familiesData }) {
-  if (!familiesData)
-    return (
-      <Container>
-        <HeaderOne>Families</HeaderOne>
-        <Paragraph>Failed to load!</Paragraph>
-      </Container>
-    )
+export function ListAllEntities({ queryClient }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BoxLayout left={
+        <div>
+          <ListAllFamilies />
+          <ListAllHouses />
+        </div>
+      } right={
+        <ListAllPeople />
+      }/>
+    </QueryClientProvider>
+  )
+}
+
+function ListAllFamilies({ queryClient = null, userId = null }) {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['directoryFamiliesData'],
+    queryFn: () =>
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/family').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isLoading) return (
+    <Container>
+      <HeaderOne>Families</HeaderOne>
+      <Paragraph>Loading...</Paragraph>
+    </Container>
+  )
+  if (error) return (
+    <Container>
+      <HeaderOne>Families</HeaderOne>
+      <Paragraph>Failed to load!</Paragraph>
+    </Container>
+  )
 
   return (
     <Container>
-      <FamilyListing familyData={familiesData} />
+      <FamilyListing familyData={data} />
     </Container>
   )
 }
 
-function ListAllHouses({ housesData }) {
-  if (!housesData)
-    return (
-      <Container>
-        <HeaderOne>Houses</HeaderOne>
-        <Paragraph>Failed to load!</Paragraph>
-      </Container>
-    )
+function ListAllHouses() {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['directoryHousesData'],
+    queryFn: () =>
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/house').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isLoading) return (
+    <Container>
+      <HeaderTwo>Houses</HeaderTwo>
+      <Paragraph>Loading...</Paragraph>
+    </Container>
+  )
+  if (error) return (
+    <Container>
+      <HeaderTwo>Houses</HeaderTwo>
+      <Paragraph>Failed to load!</Paragraph>
+    </Container>
+  )
 
   return (
     <Container>
-      <HouseListing houseData={housesData} />
+      <HouseListing houseData={data} />
     </Container>
   )
 }
 
-function ListAllPeople({ peopleData }) {
-  if (!peopleData)
-    return (
-      <Container>
-        <HeaderOne>People</HeaderOne>
-        <Paragraph>Failed to load!</Paragraph>
-      </Container>
-    )
+function ListAllPeople() {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['directoryPeopleData'],
+    queryFn: () =>
+      fetch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isLoading) return (
+    <Container>
+      <HeaderTwo>People</HeaderTwo>
+      <Paragraph>Loading...</Paragraph>
+    </Container>
+  )
+  if (error) return (
+    <Container>
+      <HeaderTwo>People</HeaderTwo>
+      <Paragraph>Failed to load!</Paragraph>
+    </Container>
+  )
 
   return (
     <Container>
-      <PersonListing personData={peopleData} />
+      <PersonListing personData={data} />
     </Container>
   )
-}
-
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const resFamily = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v2/family`)
-    const resHouse = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v2/house`)
-    const resPerson = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v2/person`)
-
-    const familiesData = await resFamily.json()
-    const housesData = await resHouse.json()
-    const peopleData = await resPerson.json()
-
-    return {
-      props: {
-        familiesData,
-        housesData,
-        peopleData,
-      },
-    }
-  } catch (error) {
-    console.error('Failed to fetch data:', error)
-    return {
-      props: {
-        familiesData: null,
-        housesData: null,
-        peopleData: null,
-      },
-    }
-  }
 }
