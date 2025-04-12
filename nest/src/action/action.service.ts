@@ -9,6 +9,7 @@ import { PersonSkills } from '../person/entities/PersonSkills';
 import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { HouseService } from '../house/house.service';
+import { ActionCooldown } from './entities/ActionCooldown';
 
 @Injectable()
 export class ActionService {
@@ -28,6 +29,7 @@ export class ActionService {
         .createQueryBuilder(Person, "person")
         .innerJoinAndSelect("person.person_action_queue", "queue")
         .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+        .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.finish_at > NOW()")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_students", "student")
@@ -135,7 +137,7 @@ export class ActionService {
 
   async utilityDoTheThing(queryRunner, action: CreateActionDto, person: Person) {
     if (person.person_deleted_at) throw "Person is deceased!";
-    // ToDo: Set this to check action_cooldown
+    if (person.person_action_queue.action_queue_action_cooldown) throw "Action cooldown still in progress!";
     if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
@@ -154,8 +156,14 @@ export class ActionService {
     } else {
       throw "Invalid action_type_id, got: " + action.action_type_id;
     }
-    // ToDo: Set this to create action_cooldown
+    const actionFinishAt = new Date()
+    actionFinishAt.setHours(actionFinishAt.getHours() + 8);
+    queryRunner.manager.save(ActionCooldown, {
+      action_cooldown_queue_id: action.action_queue_id,
+      action_cooldown_finish_at: actionFinishAt
+    });
     action.action_started_at = new Date();
+    action.action_completed_at = new Date();
     return await queryRunner.manager.save(Action, action);
   }
 
