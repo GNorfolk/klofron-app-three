@@ -202,7 +202,7 @@ CREATE TABLE `action_cooldown` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `queue_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `finish_at` TIMESTAMP NOT NULL,
+    `done_at` TIMESTAMP NOT NULL,
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

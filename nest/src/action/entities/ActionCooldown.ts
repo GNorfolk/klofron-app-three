@@ -17,8 +17,8 @@ export class ActionCooldown {
   @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP", nullable: false })
   action_cooldown_created_at: Date;
 
-  @Column("timestamp", { name: "finish_at", nullable: false })
-  action_cooldown_finish_at: Date;
+  @Column("timestamp", { name: "done_at", nullable: false })
+  action_cooldown_done_at: Date;
 
   @Column("timestamp", { name: "deleted_at", nullable: true })
   action_cooldown_deleted_at: Date | null;

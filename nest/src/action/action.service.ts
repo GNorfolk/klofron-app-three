@@ -29,7 +29,7 @@ export class ActionService {
         .createQueryBuilder(Person, "person")
         .innerJoinAndSelect("person.person_action_queue", "queue")
         .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
-        .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.finish_at > NOW()")
+        .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("person.person_students", "student")
@@ -156,11 +156,11 @@ export class ActionService {
     } else {
       throw "Invalid action_type_id, got: " + action.action_type_id;
     }
-    const actionFinishAt = new Date()
-    actionFinishAt.setHours(actionFinishAt.getHours() + 8);
+    const actionDoneAt = new Date()
+    actionDoneAt.setHours(actionDoneAt.getHours() + 8);
     queryRunner.manager.save(ActionCooldown, {
       action_cooldown_queue_id: action.action_queue_id,
-      action_cooldown_finish_at: actionFinishAt
+      action_cooldown_done_at: actionDoneAt
     });
     action.action_started_at = new Date();
     action.action_completed_at = new Date();
