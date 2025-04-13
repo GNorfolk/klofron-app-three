@@ -30,9 +30,12 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
       action_add_to_queue: addToQueue
     }).then(response => {
       queryClient.invalidateQueries()
-      document.getElementById("cm-" + formData.action_queue_id).innerText = ' '
+      const cooldown = response.data.cooldown
+      const diceroll = response.data.diceroll
+      console.log(diceroll)
+      document.getElementById("cm-" + formData.action_queue_id).innerText = "win: " + diceroll.success + " with black[" + diceroll.black + "+" + diceroll.skill + "] and red[" + diceroll.red + "] and " + cooldown.action_cooldown_done_at + " cooldown!"
     }).catch(error => {
-      document.getElementById("cm-" + formData.action_queue_id).innerText = error.response.data.message
+      document.getElementById("cm-" + formData.action_queue_id).innerText = error.response?.data.message
     })
   }
 
