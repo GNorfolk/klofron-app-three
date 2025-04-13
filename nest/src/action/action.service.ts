@@ -19,7 +19,7 @@ export class ActionService {
     private dataSource: DataSource
   ) {}
 
-  async create(action: CreateActionDto, doTheThing: boolean = false) {
+  async create(action: CreateActionDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     let result;
     await queryRunner.connect();
@@ -51,7 +51,7 @@ export class ActionService {
       } else if (person.person_students.length > 0) {
         result = await this.utilityCreateActionStudents(queryRunner, action, person)
       } else {
-        result = await this.utilityDoTheThing(queryRunner, action, person)
+        result = await this.utilityPerformActionSingle(queryRunner, action, person)
       }
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -133,7 +133,7 @@ export class ActionService {
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityDoTheThing(queryRunner, action: CreateActionDto, person: Person) {
+  async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person) {
     if (person.person_deleted_at) throw "Person is deceased!";
     if (person.person_action_queue.action_queue_action_cooldown) throw "Action cooldown still in progress!";
     if (action.action_type_id == -1) {
