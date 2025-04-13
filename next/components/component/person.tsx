@@ -32,8 +32,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
       queryClient.invalidateQueries()
       const cooldown = response.data.cooldown
       const diceroll = response.data.diceroll
-      console.log(diceroll)
-      document.getElementById("cm-" + formData.action_queue_id).innerText = "win: " + diceroll.success + " with black[" + diceroll.black + "+" + diceroll.skill + "] and red[" + diceroll.red + "] and " + cooldown.action_cooldown_done_at + " cooldown!"
+      document.getElementById("cm-" + formData.action_queue_id).innerText = "win: " + diceroll.success + " with black[" + diceroll.black + "+" + diceroll.skill + "] and red[" + diceroll.red + "] and " + cooldown.action_cooldown_duration_hours + " cooldown!"
     }).catch(error => {
       document.getElementById("cm-" + formData.action_queue_id).innerText = error.response?.data.message
     })

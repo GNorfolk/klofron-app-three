@@ -13,6 +13,9 @@ export class ActionCooldown {
   @Column("int", { name: "queue_id" })
   action_cooldown_queue_id: number;
 
+  @Column("int", { name: "duration_hours" })
+  action_cooldown_duration_hours: number;
+
   @Column("timestamp", { name: "created_at", default: () => "CURRENT_TIMESTAMP", nullable: false })
   action_cooldown_created_at: Date;
 

@@ -155,10 +155,11 @@ export class ActionService {
       throw "Invalid action_type_id, got: " + action.action_type_id;
     }
     const actionDoneAt = new Date()
-    actionDoneAt.setHours(actionDoneAt.getHours() + 8);
+    actionDoneAt.setHours(actionDoneAt.getHours() + diceroll.hours);
     const cooldown = await queryRunner.manager.save(ActionCooldown, {
       action_cooldown_queue_id: action.action_queue_id,
-      action_cooldown_done_at: actionDoneAt
+      action_cooldown_done_at: actionDoneAt,
+      action_cooldown_duration_hours: diceroll.hours
     });
     return {
       cooldown: cooldown,
@@ -738,11 +739,13 @@ export class ActionService {
   async utilityGetDiceRoll(skillLevel: number) {
     const blackRoll = Math.floor(12 * Math.random() + 1);
     const redRoll = Math.floor(12 * Math.random() + 1);
+    const diff = Math.floor((blackRoll + skillLevel - redRoll) / 3)
     return {
       success: blackRoll + skillLevel > redRoll,
       black: blackRoll,
       skill: skillLevel,
-      red: redRoll
+      red: redRoll,
+      hours: 8 - diff
     };
   }
 

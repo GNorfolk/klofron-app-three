@@ -201,6 +201,7 @@ ALTER TABLE user DROP COLUMN username;
 CREATE TABLE `action_cooldown` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `queue_id` INT NOT NULL,
+    `duration_hours` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `done_at` TIMESTAMP NOT NULL,
     `deleted_at` TIMESTAMP,
