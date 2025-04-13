@@ -31,7 +31,7 @@ export class PersonService {
         .createQueryBuilder(House, "house")
         .leftJoinAndSelect("house.house_people", "person", "person.person_partner_id IS NOT NULL")
         .innerJoinAndSelect("person.person_action_queue", "queue")
-        .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+        .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
         .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
         .where("house.house_id = :id", { id: house_id })
         .getOne();
@@ -57,7 +57,7 @@ export class PersonService {
         resource_house_id: house_id
       }, "resource_volume", 2);
       if (resource.affected != 1) throw "Cannot decrement house resrouces!"
-      if (mother.person_action_queue.action_queue_current_action || father.person_action_queue.action_queue_current_action) throw "Parent already has an action in progress!"
+      if (mother.person_action_queue.action_queue_action_cooldown || father.person_action_queue.action_queue_action_cooldown) throw "Parent already has an action in progress!"
       await queryRunner.manager.save(Action, {
         action_queue_id: mother.person_action_queue_id,
         action_type_id: 6
@@ -187,7 +187,7 @@ export class PersonService {
       .innerJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
       .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .innerJoinAndSelect("person.person_action_queue", "queue")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
       .where("person.person_deleted_at IS NULL")
     if (query?.house_id) {
       people = people.andWhere("person.person_house_id = :house_id", { house_id: query.house_id })
@@ -205,7 +205,7 @@ export class PersonService {
       .innerJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_previous_actions", "previous_actions", "previous_actions.cancelled_at IS NOT NULL OR previous_actions.completed_at IS NOT NULL")
       .leftJoinAndSelect("queue.action_queue_next_actions", "next_actions", "next_actions.started_at IS NULL AND next_actions.cancelled_at IS NULL AND next_actions.completed_at IS NULL")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
       .innerJoinAndSelect("person.person_family", "person_family")
       .innerJoinAndSelect("person_family.family_people", "family_people")
       .innerJoinAndSelect("family_people.person_skills", "family_people_skills")

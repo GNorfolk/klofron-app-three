@@ -89,8 +89,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                     </form>
                   </FormProvider>
                   {
-                    queryClient && person_action_queue.action_queue_current_action?.action_time_remaining ? <>
-                      <small className="text-gray-500 ml-2">{person_name} is performing {person_action_queue.action_queue_current_action.action_type_name} completing in {person_action_queue.action_queue_current_action.action_time_remaining}. </small>
+                    queryClient && person_action_queue.action_queue_action_cooldown?.action_cooldown_time_remaining ? <>
+                      <small className="text-gray-500 ml-2">{person_name}'s cooldown will complete in {person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining}. </small>
                     </> : <></>
                   }
                   <Small uid={person_action_queue_id}></Small>

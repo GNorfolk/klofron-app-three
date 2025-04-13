@@ -96,7 +96,7 @@ export class HouseService {
       .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
       .leftJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_next_actions", "next_actions", "next_actions.started_at IS NULL AND next_actions.cancelled_at IS NULL AND next_actions.completed_at IS NULL")
-      .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+      .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
       .leftJoinAndSelect("person.person_skills", "person_skills")
       .orderBy('person.id', 'ASC')
       .where("house.house_id = :id", { id: id })

@@ -1,12 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation, OneToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Relation, OneToOne, JoinColumn, AfterLoad } from "typeorm";
 import { ActionQueue } from "./ActionQueue";
+
+const hour_in_ms = 3600 * 1000
 
 @Entity("action_cooldown", { schema: "ka3" })
 export class ActionCooldown {
-  protected action_cooldown_started_time_ago: string;
   protected action_cooldown_time_remaining: string;
-  protected action_cooldown_finish_reason: string;
-  protected action_cooldown_type_name: string;
 
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   action_cooldown_id: number;
@@ -26,4 +25,15 @@ export class ActionCooldown {
   @OneToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_action_cooldown)
   @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
   action_cooldown_queue: Relation<ActionQueue>;
+
+  @AfterLoad()
+  calculateActionTimeRemaining(): void {
+    const hours = ((new Date(this.action_cooldown_created_at)).valueOf() - (new Date().valueOf() - (8 * hour_in_ms)).valueOf()) / hour_in_ms
+    const minutes = hours > 1 ?  (hours - Math.floor(hours)) * 60 : hours * 60
+    if (hours >= 0 && minutes >= 0 && this.action_cooldown_deleted_at == null)  {
+      this.action_cooldown_time_remaining = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
+    } else {
+      this.action_cooldown_time_remaining = null
+    }
+  }
 }
