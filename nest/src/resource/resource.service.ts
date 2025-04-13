@@ -51,7 +51,7 @@ export class ResourceService {
         .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
         .where("person.person_id = :id", { id: body.person_id })
         .getOne()
-      if (person.person_action_queue.action_queue_action_cooldown) throw "Person cannot move resources while performing an action!"
+      if (person.person_action_queue.action_queue_action_cooldown) throw "Person cannot move resources while in action cooldown!"
       if (person.person_food.resource_volume + person.person_wood.resource_volume > 3) throw "Person has too many resources!"
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")

@@ -57,7 +57,7 @@ export class PersonService {
         resource_house_id: house_id
       }, "resource_volume", 2);
       if (resource.affected != 1) throw "Cannot decrement house resrouces!"
-      if (mother.person_action_queue.action_queue_action_cooldown || father.person_action_queue.action_queue_action_cooldown) throw "Parent already has an action in progress!"
+      if (mother.person_action_queue.action_queue_action_cooldown || father.person_action_queue.action_queue_action_cooldown) throw "Parent is still in action cooldown!"
       await queryRunner.manager.save(Action, {
         action_queue_id: mother.person_action_queue_id,
         action_type_id: 6
