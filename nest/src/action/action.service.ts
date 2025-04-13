@@ -43,17 +43,15 @@ export class ActionService {
       if (action.action_add_to_queue) {
         if (person.person_teacher_id) {
           throw "Cannot queue action when teacher is set!"
-        } else if (person.person_action_queue.action_queue_current_action) {
+        } else if (person.person_action_queue.action_queue_action_cooldown) {
           result = await queryRunner.manager.save(Action, action);
         } else {
-          throw "Cannot add action to queue when an action is not in progress!"
+          throw "Cannot add action to queue when person is not in cooldown already!"
         }
-      } else if (doTheThing) {
-        result = await this.utilityDoTheThing(queryRunner, action, person)
       } else if (person.person_students.length > 0) {
         result = await this.utilityCreateActionStudents(queryRunner, action, person)
       } else {
-        result = await this.utilityCreateActionSingle(queryRunner, action, person)
+        result = await this.utilityDoTheThing(queryRunner, action, person)
       }
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -138,7 +136,6 @@ export class ActionService {
   async utilityDoTheThing(queryRunner, action: CreateActionDto, person: Person) {
     if (person.person_deleted_at) throw "Person is deceased!";
     if (person.person_action_queue.action_queue_action_cooldown) throw "Action cooldown still in progress!";
-    if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
     } else if (action.action_type_id == 1) {
@@ -158,13 +155,10 @@ export class ActionService {
     }
     const actionDoneAt = new Date()
     actionDoneAt.setHours(actionDoneAt.getHours() + 8);
-    queryRunner.manager.save(ActionCooldown, {
+    return await queryRunner.manager.save(ActionCooldown, {
       action_cooldown_queue_id: action.action_queue_id,
       action_cooldown_done_at: actionDoneAt
     });
-    action.action_started_at = new Date();
-    action.action_completed_at = new Date();
-    return await queryRunner.manager.save(Action, action);
   }
 
   async utilityPrepareGetWoodAction(queryRunner, person: Person, multiplier = 1) {
