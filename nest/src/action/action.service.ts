@@ -109,30 +109,6 @@ export class ActionService {
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityCreateActionSingle(queryRunner, action: CreateActionDto, person: Person) {
-    if (person.person_deleted_at) throw "Person is deceased!";
-    if (person.person_action_queue.action_queue_current_action) throw "Action already in progress!";
-    if (action.action_type_id == -1) {
-      throw "Cannot perform action when teacher is set!"
-    } else if (action.action_type_id == 1) {
-      // Do nothing
-    } else if (action.action_type_id == 2) {
-      await this.utilityPrepareGetWoodAction(queryRunner, person);
-    } else if (action.action_type_id == 3) {
-      await this.utilityPrepareIncreaseStorageAction(queryRunner, person);
-    } else if (action.action_type_id == 4) {
-      await this.utilityPrepareIncreaseRoomsAction(queryRunner, person);
-    } else if (action.action_type_id == 5) {
-      await this.utilityPrepareCreateHouseAction(queryRunner, person);
-    } else if (action.action_type_id == 6) {
-      // Do nothing
-    } else {
-      throw "Invalid action_type_id, got: " + action.action_type_id;
-    }
-    action.action_started_at = new Date();
-    return await queryRunner.manager.save(Action, action);
-  }
-
   async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person) {
     let diceroll;
     if (person.person_deleted_at) throw "Person is deceased!";
@@ -745,7 +721,7 @@ export class ActionService {
       black: blackRoll,
       skill: skillLevel,
       red: redRoll,
-      hours: 8 - diff
+      hours: diff > 0 ? 8 - diff : 8
     };
   }
 

@@ -31,7 +31,7 @@ export class ActionCooldown {
 
   @AfterLoad()
   calculateActionTimeRemaining(): void {
-    const hours = ((new Date(this.action_cooldown_created_at)).valueOf() - (new Date().valueOf() - (8 * hour_in_ms)).valueOf()) / hour_in_ms
+    const hours = ((new Date(this.action_cooldown_done_at)).valueOf() - new Date().valueOf()) / hour_in_ms
     const minutes = hours > 1 ?  (hours - Math.floor(hours)) * 60 : hours * 60
     if (hours >= 0 && minutes >= 0 && this.action_cooldown_deleted_at == null)  {
       this.action_cooldown_time_remaining = Math.floor(hours) + "hrs " + Math.floor(minutes) + "mins"
