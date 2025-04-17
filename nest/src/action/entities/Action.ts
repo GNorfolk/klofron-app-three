@@ -50,6 +50,10 @@ export class Action {
   @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
   action_queue_next: Relation<ActionQueue>;
 
+  @ManyToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_actions)
+  @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
+  action_queue: Relation<ActionQueue>;
+
   @AfterLoad()
   calculateActionStartedTimeAgo(): void {
     if (this.action_started_at) {

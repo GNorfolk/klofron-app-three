@@ -15,6 +15,7 @@ import { ActionCooldown } from './entities/ActionCooldown';
 export class ActionService {
   constructor(
     @InjectRepository(Action) private actionRepository: Repository<Action>,
+    @InjectRepository(ActionCooldown) private actionCooldownRepository: Repository<ActionCooldown>,
     private houseService: HouseService,
     private dataSource: DataSource
   ) {}
@@ -349,6 +350,26 @@ export class ActionService {
         console.log("Something went wrong: " + err)
       }
     }
+  }
+
+  async updateQueueNextAction() {
+
+    const cooldowns = await this.actionCooldownRepository
+      .createQueryBuilder("cooldown")
+      .innerJoinAndSelect("cooldown.action_cooldown_queue", "queue")
+      .leftJoinAndSelect("queue.action_queue_actions", "actions", "actions.started_at is null and actions.cancelled_at is null")
+      .where("cooldown.done_at < NOW() AND cooldown.deleted_at is null")
+      .getMany();
+    for (const cooldown of cooldowns) {
+      try {
+        console.log(cooldown.action_cooldown_queue.action_queue_actions[0])
+        await this.actionCooldownRepository.update(cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
+        // run action
+      } catch {
+        console.log("Failed to run action with id " + cooldown.action_cooldown_queue.action_queue_actions[0].action_id)
+      }
+    }
+    return 0
   }
 
   async updateProcessGetFood(actionId: number) {

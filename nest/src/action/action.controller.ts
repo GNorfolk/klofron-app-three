@@ -50,4 +50,10 @@ export class ActionControllerv3 {
   async create(@Body() action: CreateActionDto) {
     return await this.actionService.create(action);
   }
+
+  // curl --request PATCH localhost:5000/v3/action
+  @Patch()
+  update(@Req() req) {
+    return this.actionService.updateQueueNextAction()
+  }
 }
