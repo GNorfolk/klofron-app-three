@@ -32,7 +32,8 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
       queryClient.invalidateQueries()
       const cooldown = response.data.cooldown
       const diceroll = response.data.diceroll
-      document.getElementById("cm-" + formData.action_queue_id).innerText = "win: " + diceroll.success + " with black[" + diceroll.black + "+" + diceroll.skill + "] and red[" + diceroll.red + "] and " + cooldown.action_cooldown_duration_hours + " cooldown!"
+      // ToDo: Replace with message in <small> element
+      document.getElementById("cm-" + formData.action_queue_id).innerText = response.data?.cooldown ? "Rolled black[" + diceroll.black + "+" + diceroll.skill + "] and red[" + diceroll.red + "]" : " "
     }).catch(error => {
       document.getElementById("cm-" + formData.action_queue_id).innerText = error.response?.data.message
     })
