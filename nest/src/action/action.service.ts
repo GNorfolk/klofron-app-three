@@ -41,7 +41,7 @@ export class ActionService {
         .where("person.person_action_queue_id = :id", { id: action.action_queue_id })
         .getOne();
       if (!person) throw "Action person cannot be found on the backend!"
-      if (action.action_add_to_queue) {
+      if (action?.action_add_to_queue) {
         if (person.person_teacher_id) {
           throw "Cannot queue action when teacher is set!"
         } else if (person.person_action_queue.action_queue_action_cooldown) {
@@ -353,23 +353,30 @@ export class ActionService {
   }
 
   async updateQueueNextAction() {
-
     const cooldowns = await this.actionCooldownRepository
       .createQueryBuilder("cooldown")
       .innerJoinAndSelect("cooldown.action_cooldown_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_actions", "actions", "actions.started_at is null and actions.cancelled_at is null")
+      .innerJoinAndSelect("queue.action_queue_person", "person")
       .where("cooldown.done_at < NOW() AND cooldown.deleted_at is null")
       .getMany();
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
     for (const cooldown of cooldowns) {
+      const action = cooldown.action_cooldown_queue.action_queue_actions[0]
       try {
-        console.log(cooldown.action_cooldown_queue.action_queue_actions[0])
-        await this.actionCooldownRepository.update(cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
-        // run action
-      } catch {
-        console.log("Failed to run action with id " + cooldown.action_cooldown_queue.action_queue_actions[0].action_id)
+        await queryRunner.startTransaction();
+        await queryRunner.manager.update(ActionCooldown, cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
+        await this.utilityPerformActionSingle(queryRunner, action, cooldown.action_cooldown_queue.action_queue_person)
+        await queryRunner.commitTransaction();
+      } catch (err) {
+        console.log("Failed to run action with id " + action.action_id + " with error: " + err)
+        await queryRunner.rollbackTransaction();
       }
     }
-    return 0
+    await queryRunner.release();
+    return "Done: " + cooldowns.length
   }
 
   async updateProcessGetFood(actionId: number) {

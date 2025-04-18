@@ -4,6 +4,6 @@ export class CreateActionDto {
   action_queue_id: number
   action_experience_multiplier: number
   action_started_at: Date
-  action_add_to_queue: number
+  action_add_to_queue?: number
   action_completed_at?: Date
 }
