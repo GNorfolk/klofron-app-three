@@ -11,12 +11,14 @@ import { House } from '../house/entities/House';
 import { HouseService } from '../house/house.service';
 import { ActionCooldown } from './entities/ActionCooldown';
 import { ActionQueue } from './entities/ActionQueue';
+import { ActionDiceroll } from './entities/ActionDiceroll';
 
 @Injectable()
 export class ActionService {
   constructor(
     @InjectRepository(Action) private actionRepository: Repository<Action>,
     @InjectRepository(ActionCooldown) private actionCooldownRepository: Repository<ActionCooldown>,
+    @InjectRepository(ActionDiceroll) private actionDicerollRepository: Repository<ActionDiceroll>,
     private houseService: HouseService,
     private dataSource: DataSource
   ) {}
@@ -133,7 +135,7 @@ export class ActionService {
       throw "Invalid action_type_id, got: " + action.action_type_id;
     }
     const actionDoneAt = new Date()
-    actionDoneAt.setHours(actionDoneAt.getHours() + diceroll.hours);
+    actionDoneAt.setHours(actionDoneAt.getHours() + diceroll.action_diceroll_cooldown_hours);
     if (action?.action_id) {
       await queryRunner.manager.update(Action, action.action_id, {
         action_started_at: new Date(),
@@ -143,12 +145,11 @@ export class ActionService {
     const cooldown = await queryRunner.manager.save(ActionCooldown, {
       action_cooldown_queue_id: action.action_queue_id,
       action_cooldown_done_at: actionDoneAt,
-      action_cooldown_duration_hours: diceroll.hours
+      action_cooldown_duration_hours: diceroll.action_diceroll_cooldown_hours,
+      action_cooldown_diceroll_id: diceroll.action_diceroll_id
     });
-    return {
-      cooldown: cooldown,
-      diceroll: diceroll
-    };
+    cooldown.action_cooldown_diceroll = diceroll
+    return cooldown;
   }
 
   async utilityPrepareGetWoodAction(queryRunner, person: Person, multiplier = 1) {
@@ -622,7 +623,7 @@ export class ActionService {
     // ToDo: Sort out how to implement multiplier on all functions
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_gatherer_level)
     const house = person.person_house
-    if (diceRoll.success && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
+    if (diceRoll.action_diceroll_success && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
       await queryRunner.manager.increment(Resource, {
         resource_type_name: "food",
         resource_house_id: person.person_house_id
@@ -646,7 +647,7 @@ export class ActionService {
     }, "resource_volume", requiredFood);
     if (food.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_lumberjack_level)
-    if (diceRoll.success && person.person_house.house_storage >= person.person_house.house_food.resource_volume + person.person_house.house_wood.resource_volume + 1) {
+    if (diceRoll.action_diceroll_success && person.person_house.house_storage >= person.person_house.house_food.resource_volume + person.person_house.house_wood.resource_volume + 1) {
       await queryRunner.manager.increment(Resource, {
         resource_type_name: "wood",
         resource_house_id: person.person_house_id
@@ -676,7 +677,7 @@ export class ActionService {
     }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
-    if (diceRoll.success) {
+    if (diceRoll.action_diceroll_success) {
       await queryRunner.manager.increment(House, {
         house_id: person.person_house_id
       }, "house_storage", 3);
@@ -705,7 +706,7 @@ export class ActionService {
     }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
-    if (diceRoll.success) {
+    if (diceRoll.action_diceroll_success) {
       await queryRunner.manager.increment(House, {
         house_id: person.person_house_id
       }, "house_rooms", 1);
@@ -735,7 +736,7 @@ export class ActionService {
     }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
-    if (diceRoll.success) {
+    if (diceRoll.action_diceroll_success) {
       result = await this.houseService.createHouse(result, queryRunner, {
           house_family_id: person.person_family_id,
           house_rooms: 2
@@ -755,13 +756,14 @@ export class ActionService {
     const blackRoll = Math.floor(12 * Math.random() + 1);
     const redRoll = Math.floor(12 * Math.random() + 1);
     const diff = Math.floor((blackRoll + skillLevel - redRoll) / 3)
-    return {
-      success: blackRoll + skillLevel > redRoll,
-      black: blackRoll,
-      skill: skillLevel,
-      red: redRoll,
-      hours: diff > 0 ? 8 - diff : 8
-    };
+    return this.actionDicerollRepository.save({
+      action_diceroll_created_at: new Date(),
+      action_diceroll_success: blackRoll + skillLevel > redRoll,
+      action_diceroll_black_roll: blackRoll,
+      action_diceroll_skill_level: skillLevel,
+      action_diceroll_red_roll: redRoll,
+      action_diceroll_cooldown_hours: diff > 0 ? 8 - diff : 8
+    });
   }
 
   async utilityCalculateExperienceMultiplier(studentsLength: number, teacherSkillLevel: number) {

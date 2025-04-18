@@ -6,10 +6,11 @@ import { Action } from './entities/Action';
 import { ActionQueue } from './entities/ActionQueue';
 import { HouseModule } from '../house/house.module';
 import { ActionCooldown } from './entities/ActionCooldown';
+import { ActionDiceroll } from './entities/ActionDiceroll';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Action, ActionQueue, ActionCooldown]),
+    TypeOrmModule.forFeature([Action, ActionQueue, ActionCooldown, ActionDiceroll]),
     HouseModule
   ],
   controllers: [ActionController, ActionControllerv3],

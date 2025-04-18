@@ -30,10 +30,9 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
       action_add_to_queue: addToQueue
     }).then(response => {
       queryClient.invalidateQueries()
-      const cooldown = response.data.cooldown
-      const diceroll = response.data.diceroll
+      const diceroll = response.data.action_cooldown_diceroll
       // ToDo: Replace with message in <small> element
-      document.getElementById("cm-" + formData.action_queue_id).innerText = response.data?.cooldown ? "Rolled black[" + diceroll.black + "+" + diceroll.skill + "] and red[" + diceroll.red + "]" : " "
+      document.getElementById("cm-" + formData.action_queue_id).innerText = response.data?.action_cooldown_diceroll ? "Rolled black[" + diceroll.action_diceroll_black_roll + "+" + diceroll.action_diceroll_skill_level + "] and red[" + diceroll.action_diceroll_red_roll + "]" : " "
     }).catch(error => {
       document.getElementById("cm-" + formData.action_queue_id).innerText = error.response?.data.message
     })

@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation, OneToOne, JoinColumn, AfterLoad } from "typeorm";
 import { ActionQueue } from "./ActionQueue";
+import { ActionDiceroll } from "./ActionDiceroll";
 
 const hour_in_ms = 3600 * 1000
 
@@ -12,6 +13,9 @@ export class ActionCooldown {
 
   @Column("int", { name: "queue_id" })
   action_cooldown_queue_id: number;
+
+  @Column("int", { name: "diceroll_id" })
+  action_cooldown_diceroll_id: number;
 
   @Column("int", { name: "duration_hours" })
   action_cooldown_duration_hours: number;
@@ -28,6 +32,10 @@ export class ActionCooldown {
   @OneToOne(() => ActionQueue, (actionQueue) => actionQueue.action_queue_action_cooldown)
   @JoinColumn([{ name: "queue_id", referencedColumnName: "action_queue_id" }])
   action_cooldown_queue: Relation<ActionQueue>;
+  
+  @OneToOne(() => ActionDiceroll, (actionDiceroll) => actionDiceroll.action_diceroll_action_cooldown)
+  @JoinColumn([{ name: "diceroll_id", referencedColumnName: "action_diceroll_id" }])
+  action_cooldown_diceroll: Relation<ActionDiceroll>;
 
   @AfterLoad()
   calculateActionTimeRemaining(): void {
