@@ -134,6 +134,12 @@ export class ActionService {
     }
     const actionDoneAt = new Date()
     actionDoneAt.setHours(actionDoneAt.getHours() + diceroll.hours);
+    if (action?.action_id) {
+      await queryRunner.manager.update(Action, action.action_id, {
+        action_started_at: new Date(),
+        action_completed_at: new Date(),
+      })
+    }
     const cooldown = await queryRunner.manager.save(ActionCooldown, {
       action_cooldown_queue_id: action.action_queue_id,
       action_cooldown_done_at: actionDoneAt,
@@ -373,10 +379,10 @@ export class ActionService {
       try {
         await queryRunner.startTransaction();
         await queryRunner.manager.update(ActionCooldown, cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
-        await this.utilityPerformActionSingle(queryRunner, action, cooldown.action_cooldown_queue.action_queue_person, cooldown.action_cooldown_queue)
+        if (action) await this.utilityPerformActionSingle(queryRunner, action, cooldown.action_cooldown_queue.action_queue_person, cooldown.action_cooldown_queue)
         await queryRunner.commitTransaction();
       } catch (err) {
-        console.log("Failed to run action with id " + action.action_id + " with error: " + err)
+        console.log(err)
         await queryRunner.rollbackTransaction();
       }
     }
