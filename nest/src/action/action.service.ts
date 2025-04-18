@@ -10,6 +10,7 @@ import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { HouseService } from '../house/house.service';
 import { ActionCooldown } from './entities/ActionCooldown';
+import { ActionQueue } from './entities/ActionQueue';
 
 @Injectable()
 export class ActionService {
@@ -52,7 +53,7 @@ export class ActionService {
       } else if (person.person_students.length > 0) {
         result = await this.utilityCreateActionStudents(queryRunner, action, person)
       } else {
-        result = await this.utilityPerformActionSingle(queryRunner, action, person)
+        result = await this.utilityPerformActionSingle(queryRunner, action, person, person.person_action_queue)
       }
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -110,10 +111,10 @@ export class ActionService {
     return await queryRunner.manager.save(Action, action);
   }
 
-  async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person) {
+  async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person, queue: ActionQueue) {
     let diceroll;
     if (person.person_deleted_at) throw "Person is deceased!";
-    if (person.person_action_queue.action_queue_action_cooldown) throw "Action cooldown still in progress!";
+    if (queue.action_queue_action_cooldown) throw "Action cooldown still in progress!";
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
     } else if (action.action_type_id == 1) {
@@ -358,6 +359,10 @@ export class ActionService {
       .innerJoinAndSelect("cooldown.action_cooldown_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_actions", "actions", "actions.started_at is null and actions.cancelled_at is null")
       .innerJoinAndSelect("queue.action_queue_person", "person")
+      .leftJoinAndSelect("person.person_house", "house")
+      .leftJoinAndSelect("person.person_skills", "skills")
+      .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
+      .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
       .where("cooldown.done_at < NOW() AND cooldown.deleted_at is null")
       .getMany();
 
@@ -368,7 +373,7 @@ export class ActionService {
       try {
         await queryRunner.startTransaction();
         await queryRunner.manager.update(ActionCooldown, cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
-        await this.utilityPerformActionSingle(queryRunner, action, cooldown.action_cooldown_queue.action_queue_person)
+        await this.utilityPerformActionSingle(queryRunner, action, cooldown.action_cooldown_queue.action_queue_person, cooldown.action_cooldown_queue)
         await queryRunner.commitTransaction();
       } catch (err) {
         console.log("Failed to run action with id " + action.action_id + " with error: " + err)
