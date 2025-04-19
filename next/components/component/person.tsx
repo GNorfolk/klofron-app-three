@@ -30,9 +30,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
       action_add_to_queue: addToQueue
     }).then(response => {
       queryClient.invalidateQueries()
-      const diceroll = response.data.action_cooldown_diceroll
-      // ToDo: Replace with message in <small> element
-      document.getElementById("cm-" + formData.action_queue_id).innerText = response.data?.action_cooldown_diceroll ? "Rolled black[" + diceroll.action_diceroll_black_roll + "+" + diceroll.action_diceroll_skill_level + "] and red[" + diceroll.action_diceroll_red_roll + "]" : " "
+      document.getElementById("cm-" + formData.action_queue_id).innerText = " "
     }).catch(error => {
       document.getElementById("cm-" + formData.action_queue_id).innerText = error.response?.data.message
     })
@@ -89,7 +87,7 @@ export function PersonListing({ personData, familyName = null, queryClient = nul
                   </FormProvider>
                   {
                     queryClient && person_action_queue.action_queue_action_cooldown?.action_cooldown_time_remaining ? <>
-                      <small className="text-gray-500 ml-2">{person_name}'s cooldown will complete in {person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining}. </small>
+                      <small className="text-gray-500 ml-2">{person_name} rolled black[{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_black_roll}+{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_skill_level}] against red[{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_red_roll}] and has {person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining} cooldown. </small>
                     </> : <></>
                   }
                   <Small uid={person_action_queue_id}></Small>
