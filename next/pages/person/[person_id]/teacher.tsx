@@ -3,7 +3,7 @@ import { useQuery, QueryClientProvider } from '@tanstack/react-query'
 import { BaseLayout } from '@/components/component/base-layout'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
 import { BoxLayoutSingle } from '@/components/component/box-layout'
 import { Container } from '@/components/component/container'
 import { GrayButton } from "@/components/ui/button"
@@ -100,12 +100,7 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
     person_teacher_id: number
   }
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>()
+  const methods = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
     axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + personId, {
@@ -121,18 +116,20 @@ function SelectPersonTeacher({ data, queryClient, personId }) {
   return (
     <Container>
       <HeaderOne>Select Teacher</HeaderOne>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <StyledSelect fieldName="person_teacher_id" fieldRequired={false}>
-            {
-              filteredList.map(({ person_id, person_name }) => (
-                <option value={person_id}>{person_name}</option>
-              ))
-            }
-          </StyledSelect>{ errors.person_teacher_id && <span className='whitespace-nowrap'>This field is required</span> }
-          <GrayButton text="Select Teacher" />
-        </div>
-      </form>
+      <FormProvider {...methods}>
+        <form className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <StyledSelect fieldName="person_teacher_id" fieldRequired={true}>
+              {
+                filteredList.map(({ person_id, person_name }) => (
+                  <option value={person_id}>{person_name}</option>
+                ))
+              }
+            </StyledSelect>
+            <GrayButton onClick={methods.handleSubmit(onSubmit)} text="Select Teacher" />
+          </div>
+        </form>
+      </FormProvider>
       <Small uid={personId}></Small>
     </Container>
   )
@@ -150,7 +147,7 @@ function RemovePersonTeacher({ queryClient, personId }) {
     formState: { errors },
   } = useForm<Inputs>()
 
-  const onSubmit: SubmitHandler<Inputs> = (formData) => {
+  const onSubmit: SubmitHandler<Inputs> = () => {
     axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + personId, {
       person_teacher_id: -1
     }).then(response => {
