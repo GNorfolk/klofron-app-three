@@ -71,22 +71,23 @@ CREATE TABLE `action` (
     `cancelled_at` TIMESTAMP,
     FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `action_cooldown` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `queue_id` INT NOT NULL,
-    `diceroll_id` INT NOT NULL,
-    `duration_hours` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `done_at` TIMESTAMP NOT NULL,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `action_diceroll` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `black_roll` INT NOT NULL,
     `skill_level` INT NOT NULL,
     `red_roll` INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `action_cooldown` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `queue_id` INT NOT NULL,
+    `diceroll_id` INT,
+    `duration_hours` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `done_at` TIMESTAMP NOT NULL,
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`),
+    FOREIGN KEY (`diceroll_id`) REFERENCES action_diceroll(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- PERSON -- -- -- -- --
 CREATE TABLE `person_name` (

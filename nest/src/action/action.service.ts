@@ -131,7 +131,11 @@ export class ActionService {
     }
     const actionDoneAt = new Date()
     actionDoneAt.setHours(actionDoneAt.getHours() + 8);
-    return 0;
+    return await queryRunner.manager.save(ActionCooldown, {
+      action_cooldown_queue_id: action.action_queue_id,
+      action_cooldown_done_at: actionDoneAt,
+      action_cooldown_duration_hours: 8
+    });
   }
 
   async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person, queue: ActionQueue) {
