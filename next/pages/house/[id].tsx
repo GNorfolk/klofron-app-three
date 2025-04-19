@@ -154,7 +154,9 @@ function ListHouseTrades({ data, router }) {
 function CreatePerson({ houseId, queryClient }) {
   const createPerson = useMutation({
     mutationFn: (house_id) => {
-      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person/' + house_id)
+      return axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v2/person', {
+        house_id: house_id
+      })
     },
   })
 

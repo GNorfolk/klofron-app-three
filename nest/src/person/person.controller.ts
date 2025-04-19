@@ -19,15 +19,15 @@ import { Person } from './entities/Person';
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
-  // curl --request POST localhost:5000/v2/person --header "Content-Type: application/json" --data '[{"person_name": "one", "person_family_id": 44, "person_father_id": 1, "person_mother_id": 2, "person_gender": "female"},{"person_name": "two", "person_family_id": 44, "person_father_id": 1, "person_mother_id": 2, "person_gender": "male"}]'
   @Post()
-  async createCouple(@Body() couple: CreatePersonDto[]) {
-    return await this.personService.createCouple(couple);
-  }
-
-  @Post(':id')
-  async createPerson(@Param('id') id: number, @Body() person: CreatePersonDto) {
-    return await this.personService.createPerson(id, person);
+  async create(@Body() body, @Req() req) {
+    if(req.body?.house_id) {
+      const person: CreatePersonDto = body;
+      return await this.personService.createPerson(req.body.house_id, person);
+    } else {
+      const couple: CreatePersonDto[] = body;
+      return await this.personService.createCouple(couple);
+    }
   }
 
   @Get()
