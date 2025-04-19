@@ -10,6 +10,7 @@ import { Resource } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { Action } from '../action/entities/Action';
 import { ActionQueue } from '../action/entities/ActionQueue';
+import { ActionCooldown } from 'src/action/entities/ActionCooldown';
 
 @Injectable()
 export class PersonService {
@@ -58,13 +59,17 @@ export class PersonService {
       }, "resource_volume", 2);
       if (resource.affected != 1) throw "Cannot decrement house resrouces!"
       if (mother.person_action_queue.action_queue_action_cooldown || father.person_action_queue.action_queue_action_cooldown) throw "Parent is still in action cooldown!"
-      await queryRunner.manager.save(Action, {
-        action_queue_id: mother.person_action_queue_id,
-        action_type_id: 6
+      const actionDoneAt = new Date()
+      actionDoneAt.setHours(actionDoneAt.getHours() + 8);
+      await queryRunner.manager.save(ActionCooldown, {
+        action_cooldown_queue_id: mother.person_action_queue_id,
+        action_cooldown_done_at: actionDoneAt,
+        action_cooldown_duration_hours: 8
       });
-      await queryRunner.manager.save(Action, {
-        action_queue_id: father.person_action_queue_id,
-        action_type_id: 6
+      await queryRunner.manager.save(ActionCooldown, {
+        action_cooldown_queue_id: father.person_action_queue_id,
+        action_cooldown_done_at: actionDoneAt,
+        action_cooldown_duration_hours: 8
       });
       person.person_gender = Math.floor(Math.random() * 2) == 0 ? 'male' : 'female'
       const person_name = await queryRunner.manager
