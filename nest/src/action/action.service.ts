@@ -36,11 +36,15 @@ export class ActionService {
         .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("person.person_skills", "skills")
-        .leftJoinAndSelect("person.person_students", "student")
-        .leftJoinAndSelect("student.person_action_queue", "student_queue")
-        .leftJoinAndSelect("student_queue.action_queue_current_action", "student_current_action", "student_current_action.started_at IS NOT NULL AND student_current_action.cancelled_at IS NULL AND student_current_action.completed_at IS NULL")
         .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+        .leftJoinAndSelect("person.person_students", "student")
+        .leftJoinAndSelect("student.person_action_queue", "student_queue")
+        .leftJoinAndSelect("student.person_skills", "student_skills")
+        .leftJoinAndSelect("student.person_house", "student_house")
+        .leftJoinAndSelect("student_house.house_food", "student_food", "food.type_name = 'food'")
+        .leftJoinAndSelect("student_house.house_wood", "student_wood", "wood.type_name = 'wood'")
+        .leftJoinAndSelect("student_queue.action_queue_action_cooldown", "student_cooldown", "student_cooldown.created_at IS NOT NULL AND student_cooldown.done_at > NOW()")
         .where("person.person_action_queue_id = :id", { id: action.action_queue_id })
         .getOne();
       if (!person) throw "Action person cannot be found on the backend!"
@@ -53,7 +57,7 @@ export class ActionService {
           throw "Cannot add action to queue when person is not in cooldown already!"
         }
       } else if (person.person_students.length > 0) {
-        result = await this.utilityCreateActionStudents(queryRunner, action, person)
+        result = await this.utilityPerformActionStudents(queryRunner, action, person)
       } else {
         result = await this.utilityPerformActionSingle(queryRunner, action, person, person.person_action_queue)
       }
@@ -111,6 +115,23 @@ export class ActionService {
     action.action_type_id = 7;
     action.action_started_at = new Date();
     return await queryRunner.manager.save(Action, action);
+  }
+
+  async utilityPerformActionStudents(queryRunner, action: CreateActionDto, person: Person) {
+    const aliveStudents = person.person_students.filter(student => student.person_deleted_at == null)
+    if (person.person_students.length != aliveStudents.length) throw "One or more students are deceased!"
+    const availableStudents = person.person_students.filter(student => !student.person_action_queue.action_queue_action_cooldown)
+    if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
+    const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
+    if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
+    for (const student of person.person_students) {
+      let student_action = structuredClone(action);
+      student_action.action_queue_id = student.person_action_queue_id;
+      await this.utilityPerformActionSingle(queryRunner, student_action, student, student.person_action_queue)
+    }
+    const actionDoneAt = new Date()
+    actionDoneAt.setHours(actionDoneAt.getHours() + 8);
+    return 0;
   }
 
   async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person, queue: ActionQueue) {
