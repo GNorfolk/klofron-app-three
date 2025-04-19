@@ -1,6 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateActionDto } from './dto/create-action.dto';
-import { UpdateActionDto } from './dto/update-action.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, IsNull } from 'typeorm';
 import { Action } from './entities/Action';
@@ -72,51 +71,6 @@ export class ActionService {
     }
   }
 
-  async utilityCreateActionStudents(queryRunner, action: CreateActionDto, person: Person) {
-    const aliveStudents = person.person_students.filter(student => student.person_deleted_at == null)
-    if (person.person_students.length != aliveStudents.length) throw "One or more students are deceased!"
-    const availableStudents = person.person_students.filter(student => !student.person_action_queue.action_queue_current_action)
-    if (person.person_students.length != availableStudents.length) throw "One or more students have running actions!"
-    const colocatedStudents = person.person_students.filter(student => student.person_house_id == person.person_house_id)
-    if (person.person_students.length != colocatedStudents.length) throw "One or more students are not colocated with their teacher!"
-    if (action.action_type_id == -1) {
-      throw "Cannot perform action when teacher is set!"
-    } else if (action.action_type_id == 1) {
-      // Do nothing
-    } else if (action.action_type_id == 2) {
-      await this.utilityPrepareGetWoodAction(queryRunner, person, person.person_students.length);
-    } else if (action.action_type_id == 3) {
-      await this.utilityPrepareIncreaseStorageAction(queryRunner, person, person.person_students.length);
-    } else if (action.action_type_id == 4) {
-      await this.utilityPrepareIncreaseRoomsAction(queryRunner, person, person.person_students.length);
-    } else if (action.action_type_id == 5) {
-      await this.utilityPrepareCreateHouseAction(queryRunner, person, person.person_students.length);
-    } else if (action.action_type_id == 6) {
-      // Do nothing
-    } else {
-      throw "Invalid action_type_id, got: " + action.action_type_id;
-    }
-    for (const student of person.person_students) {
-      let student_action = structuredClone(action);
-      student_action.action_id = null;
-      student_action.action_queue_id = student.person_action_queue_id;
-      student_action.action_started_at = new Date();
-      if (student_action.action_type_id == 1) {
-        student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_gatherer_level);
-      } else if (student_action.action_type_id == 2) {
-        student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_lumberjack_level);
-      } else if (student_action.action_type_id == 3 || student_action.action_type_id == 4 || student_action.action_type_id == 5) {
-        student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, person.person_skills.person_skills_builder_level);
-      } else {
-        student_action.action_experience_multiplier = 1
-      }
-      await queryRunner.manager.save(Action, student_action);
-    }
-    action.action_type_id = 7;
-    action.action_started_at = new Date();
-    return await queryRunner.manager.save(Action, action);
-  }
-
   async utilityPerformActionStudents(queryRunner, action: CreateActionDto, person: Person) {
     const aliveStudents = person.person_students.filter(student => student.person_deleted_at == null)
     if (person.person_students.length != aliveStudents.length) throw "One or more students are deceased!"
@@ -127,6 +81,7 @@ export class ActionService {
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
       student_action.action_queue_id = student.person_action_queue_id;
+      student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, student_action.action_type_id, student.person_skills);
       await this.utilityPerformActionSingle(queryRunner, student_action, student, student.person_action_queue)
     }
     const actionDoneAt = new Date()
@@ -177,64 +132,6 @@ export class ActionService {
     return cooldown;
   }
 
-  async utilityPrepareGetWoodAction(queryRunner, person: Person, multiplier = 1) {
-    const requiredFood = 1 * multiplier;
-    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
-    const food = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "food",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredFood);
-    if (food.affected != 1) throw "Cannot decrement house resources!"
-  }
-
-  async utilityPrepareIncreaseStorageAction(queryRunner, person: Person, multiplier = 1) {
-    const requiredWood = ( multiplier * ( person.person_house.house_storage / 3 ) ) + ( ( multiplier * ( multiplier + 1 ) ) / 2 );
-    const requiredFood = 1 * multiplier;
-    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
-    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
-    const food = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "food",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredFood);
-    const wood = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "wood",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredWood);
-    if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
-  }
-
-  async utilityPrepareIncreaseRoomsAction(queryRunner, person: Person, multiplier = 1) {
-    const requiredWood = ( 2 * multiplier * person.person_house.house_rooms ) + ( multiplier * ( multiplier + 1 ) );
-    const requiredFood = 1 * multiplier;
-    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
-    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
-    const food = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "food",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredFood);
-    const wood = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "wood",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredWood);
-    if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
-  }
-
-  async utilityPrepareCreateHouseAction(queryRunner, person: Person, multiplier = 1) {
-    const requiredWood = 12 * multiplier;
-    const requiredFood = 3 * multiplier;
-    if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
-    if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
-    const food = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "food",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredFood);
-    const wood = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "wood",
-      resource_house_id: person.person_house_id
-    }, "resource_volume", requiredWood);
-    if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
-  }
-
   async findAll(query): Promise<Action[]> {
     let actions =  this.actionRepository
       .createQueryBuilder("action")
@@ -260,32 +157,6 @@ export class ActionService {
       },
     });
   }
-
-  // async updateCancelPersonAction(person_id: number) {
-  //   const queryRunner = this.dataSource.createQueryRunner();
-  //   let cancel;
-  //   await queryRunner.connect();
-  //   await queryRunner.startTransaction();
-  //   try {
-  //     const person = await queryRunner.manager
-  //       .createQueryBuilder(Person, "person")
-  //       .innerJoinAndSelect("person.person_action_queue", "queue")
-  //       .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
-  //       .where("person.person_id = :id", { id: person_id })
-  //       .getOne();
-  //     if (!person.person_action_queue.action_queue_current_action) throw "No actions cancellable!";
-  //     cancel = await queryRunner.manager.update(Action, person.person_action_queue.action_queue_current_action.action_id, { action_cancelled_at: new Date() });
-  //     if (cancel.affected != 1) throw "Unable to cancel action!";
-  //     await queryRunner.commitTransaction();
-  //     await queryRunner.release();
-  //     return [cancel];
-  //   } catch (err) {
-  //     console.log(err);
-  //     await queryRunner.rollbackTransaction();
-  //     await queryRunner.release();
-  //     throw new BadRequestException(err);
-  //   }
-  // }
 
   async updateCancelAction(action_id: number, cancelQueue: boolean) {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -324,67 +195,6 @@ export class ActionService {
     }
   }
 
-  // curl --request PATCH localhost:5000/v2/action
-  async updateProcessActions() {
-    const actions = await this.actionRepository
-      .createQueryBuilder("action")
-      .innerJoinAndSelect("action.action_queue_previous", "queue")
-      .leftJoinAndSelect("queue.action_queue_next_actions", "next_actions", "next_actions.started_at IS NULL AND next_actions.cancelled_at IS NULL AND next_actions.completed_at IS NULL")
-      .innerJoinAndSelect("queue.action_queue_person", "person")
-      .leftJoinAndSelect("person.person_house", "house")
-      .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-      .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-      .where("action.started_at IS NOT NULL AND action.cancelled_at IS NULL AND action.completed_at IS NULL AND action.started_at + INTERVAL 8 HOUR < now()")
-      .getMany();
-    console.log("There are " + actions.length + " actions!")
-    for (const action of actions) {
-      try {
-        if (action.action_queue_previous.action_queue_person.person_deleted_at) {
-          await this.actionRepository.update(action.action_id, { action_cancelled_at: new Date() });
-          throw "Person is deceased!"
-        }
-        if (action.action_type_id == 1) {
-          await this.updateProcessGetFood(action.action_id)
-        } else if (action.action_type_id == 2) {
-          await this.updateProcessGetWood(action.action_id)
-        } else if (action.action_type_id == 3) {
-          await this.updateProcessIncreaseStorage(action.action_id)
-        } else if (action.action_type_id == 4) {
-          await this.updateProcessIncreaseRooms(action.action_id)
-        } else if (action.action_type_id == 5) {
-          await this.updateProcessCreateHouse(action.action_id)
-        } else if (action.action_type_id == 6) {
-          await this.updateProcessBirthRecovery(action.action_id)
-        } else if (action.action_type_id == 7) {
-          await this.updateProcessTeachStudents(action.action_id)
-        } else {
-          console.log("pass")
-        }
-        if (action.action_queue_previous.action_queue_next_actions.length > 0) {
-          try {
-            await this.create(
-              {
-                action_id: action.action_queue_previous.action_queue_next_actions[0].action_id,
-                action_type_id: action.action_queue_previous.action_queue_next_actions[0].action_type_id,
-                action_queue_id: action.action_queue_previous.action_queue_next_actions[0].action_queue_id,
-                action_experience_multiplier: action.action_queue_previous.action_queue_next_actions[0].action_experience_multiplier,
-                action_started_at: new Date(),
-                action_add_to_queue: 0
-              }
-            );
-          } catch {
-            for (const actions of action.action_queue_previous.action_queue_next_actions) {
-              await this.updateCancelAction(actions.action_id, false);
-            }
-          }
-        }
-      }
-      catch (err) {
-        console.log("Something went wrong: " + err)
-      }
-    }
-  }
-
   async updateQueueNextAction() {
     const cooldowns = await this.actionCooldownRepository
       .createQueryBuilder("cooldown")
@@ -416,236 +226,7 @@ export class ActionService {
     return "Done: " + cooldowns.length
   }
 
-  async updateProcessGetFood(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const action = await this.actionRepository
-        .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue_previous", "queue")
-        .innerJoinAndSelect("queue.action_queue_person", "person")
-        .leftJoinAndSelect("person.person_skills", "skills")
-        .leftJoinAndSelect("person.person_house", "house")
-        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-        .where("action.action_id = :id", { id: actionId })
-        .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_gatherer_level)
-      const house = action.action_queue_previous.action_queue_person.person_house
-      if (diceRoll && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
-        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-        await queryRunner.manager.increment(Resource, {
-          resource_type_name: "food",
-          resource_house_id: action.action_queue_previous.action_queue_person.person_house_id
-        }, "resource_volume", 2);
-        console.log("GetFoodDone")
-      } else {
-        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
-        console.log("GetFoodNotDone")
-      }
-      await queryRunner.manager.increment(PersonSkills, {
-        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_gatherer_experience", action.action_experience_multiplier);
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async updateProcessGetWood(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const action = await this.actionRepository
-        .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue_previous", "queue")
-        .innerJoinAndSelect("queue.action_queue_person", "person")
-        .leftJoinAndSelect("person.person_skills", "skills")
-        .leftJoinAndSelect("person.person_house", "house")
-        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
-        .where("action.action_id = :id", { id: actionId })
-        .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_lumberjack_level)
-      const house = action.action_queue_previous.action_queue_person.person_house
-      if (diceRoll && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 1) {
-        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-        await queryRunner.manager.increment(Resource, {
-          resource_type_name: "wood",
-          resource_house_id: action.action_queue_previous.action_queue_person.person_house_id
-        }, "resource_volume", 1);
-        console.log("GetWoodDone")
-      } else {
-        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
-        console.log("GetWoodNotDone")
-      }
-      await queryRunner.manager.increment(PersonSkills, {
-        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_lumberjack_experience", action.action_experience_multiplier);
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async updateProcessIncreaseStorage(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const action = await this.actionRepository
-        .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue_previous", "queue")
-        .innerJoinAndSelect("queue.action_queue_person", "person")
-        .leftJoinAndSelect("person.person_skills", "skills")
-        .where("action.action_id = :id", { id: actionId })
-        .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_builder_level)
-      if (diceRoll) {
-        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-        await queryRunner.manager.increment(House, {
-          house_id: action.action_queue_previous.action_queue_person.person_house_id
-        }, "house_storage", 3);
-        console.log("IncreaseStorageDone")
-      } else {
-        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
-        console.log("IncreaseStorageNotDone")
-      }
-      await queryRunner.manager.increment(PersonSkills, {
-        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_builder_experience", action.action_experience_multiplier);
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async updateProcessIncreaseRooms(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const action = await this.actionRepository
-        .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue_previous", "queue")
-        .innerJoinAndSelect("queue.action_queue_person", "person")
-        .leftJoinAndSelect("person.person_skills", "skills")
-        .where("action.action_id = :id", { id: actionId })
-        .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_builder_level)
-      if (diceRoll) {
-        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-        await queryRunner.manager.increment(House, {
-          house_id: action.action_queue_previous.action_queue_person.person_house_id
-        }, "house_rooms", 1);
-        console.log("IncreaseRoomsDone")
-      } else {
-        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
-        console.log("IncreaseRoomsNotDone")
-      }
-      await queryRunner.manager.increment(PersonSkills, {
-        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_builder_experience", action.action_experience_multiplier);
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async updateProcessCreateHouse(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    let result
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const action = await this.actionRepository
-        .createQueryBuilder("action")
-        .innerJoinAndSelect("action.action_queue_previous", "queue")
-        .innerJoinAndSelect("queue.action_queue_person", "person")
-        .leftJoinAndSelect("person.person_skills", "skills")
-        .where("action.action_id = :id", { id: actionId })
-        .getOne();
-      const diceRoll = await this.utilityGetDiceRoll(action.action_queue_previous.action_queue_person.person_skills.person_skills_builder_level)
-      if (diceRoll) {
-        await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-        result = await this.houseService.createHouse(result, queryRunner, {
-            house_family_id: action.action_queue_previous.action_queue_person.person_family_id,
-            house_rooms: 2
-          }
-        )
-        console.log("CreateHouseDone")
-      } else {
-        await queryRunner.manager.update(Action, actionId, { action_cancelled_at: new Date() });
-        console.log("CreateHouseNotDone")
-      }
-      await queryRunner.manager.increment(PersonSkills, {
-        person_skills_id: action.action_queue_previous.action_queue_person.person_skills_id
-      }, "person_skills_builder_experience", action.action_experience_multiplier);
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-      return result
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async updateProcessBirthRecovery(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-      console.log("BirthRecoveryDone")
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async updateProcessTeachStudents(actionId: number) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      await queryRunner.manager.update(Action, actionId, { action_completed_at: new Date() });
-      console.log("TeachStudentsDone")
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    } catch (err) {
-      console.log(err);
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      throw err
-    }
-  }
-
-  async getFood(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
-    // ToDo: Sort out how to implement multiplier on all functions
+  async getFood(queryRunner, person: Person, experience_multiplier = 1) {
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_gatherer_level)
     const house = person.person_house
     if (diceRoll.action_diceroll_success && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
@@ -663,8 +244,8 @@ export class ActionService {
     return diceRoll;
   }
 
-  async getWood(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
-    const requiredFood = 1 * multiplier;
+  async getWood(queryRunner, person: Person, experience_multiplier = 1) {
+    const requiredFood = 1;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "food",
@@ -687,9 +268,9 @@ export class ActionService {
     return diceRoll;
   }
 
-  async increaseStorage(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
-    const requiredWood = ( multiplier * ( person.person_house.house_storage / 3 ) ) + ( ( multiplier * ( multiplier + 1 ) ) / 2 );
-    const requiredFood = 1 * multiplier;
+  async increaseStorage(queryRunner, person: Person, experience_multiplier = 1) {
+    const requiredWood = ( person.person_house.house_storage / 3 ) + 1;
+    const requiredFood = 1;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
@@ -716,9 +297,9 @@ export class ActionService {
     return diceRoll;
   }
 
-  async increaseRooms(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
-    const requiredWood = ( 2 * multiplier * person.person_house.house_rooms ) + ( multiplier * ( multiplier + 1 ) );
-    const requiredFood = 1 * multiplier;
+  async increaseRooms(queryRunner, person: Person, experience_multiplier = 1) {
+    const requiredWood = ( 2 * person.person_house.house_rooms ) + 2;
+    const requiredFood = 1;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
@@ -745,10 +326,10 @@ export class ActionService {
     return diceRoll;
   }
 
-  async createHouse(queryRunner, person: Person, multiplier = 1, experience_multiplier = 1) {
+  async createHouse(queryRunner, person: Person, experience_multiplier = 1) {
     let result;
-    const requiredWood = 12 * multiplier;
-    const requiredFood = 3 * multiplier;
+    const requiredWood = 12;
+    const requiredFood = 3;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
@@ -791,7 +372,17 @@ export class ActionService {
     });
   }
 
-  async utilityCalculateExperienceMultiplier(studentsLength: number, teacherSkillLevel: number) {
+  async utilityCalculateExperienceMultiplier(studentsLength: number, actionTypeId: number, teacherSkills: PersonSkills) {
+    let teacherSkillLevel;
+    if (actionTypeId == 1) {
+      teacherSkillLevel = teacherSkills.person_skills_gatherer_level
+    } else if (actionTypeId == 2) {
+      teacherSkillLevel = teacherSkills.person_skills_lumberjack_level
+    } else if (actionTypeId == 3 || actionTypeId == 4 || actionTypeId == 5) {
+      teacherSkillLevel =teacherSkills.person_skills_builder_level
+    } else {
+      teacherSkillLevel = 1
+    }
     if (teacherSkillLevel > studentsLength) {
       return teacherSkillLevel + 1 - studentsLength;
     } else {
