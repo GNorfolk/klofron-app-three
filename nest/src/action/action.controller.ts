@@ -25,8 +25,6 @@ export class ActionController {
   update(@Req() req) {
     if (req.body.action == "cancel") {
       return "Deprecated!"
-    } else {
-      return this.actionService.updateProcessActions()
     }
   }
 

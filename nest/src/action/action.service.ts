@@ -81,7 +81,7 @@ export class ActionService {
     for (const student of person.person_students) {
       let student_action = structuredClone(action);
       student_action.action_queue_id = student.person_action_queue_id;
-      student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, student_action.action_type_id, student.person_skills);
+      student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, student_action.action_type_id, person.person_skills);
       await this.utilityPerformActionSingle(queryRunner, student_action, student, student.person_action_queue)
     }
     const actionDoneAt = new Date()
@@ -100,15 +100,15 @@ export class ActionService {
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
     } else if (action.action_type_id == 1) {
-      diceroll = await this.getFood(queryRunner, person);
+      diceroll = await this.getFood(queryRunner, person, action.action_experience_multiplier);
     } else if (action.action_type_id == 2) {
-      diceroll = await this.getWood(queryRunner, person);
+      diceroll = await this.getWood(queryRunner, person, action.action_experience_multiplier);
     } else if (action.action_type_id == 3) {
-      diceroll = await this.increaseStorage(queryRunner, person);
+      diceroll = await this.increaseStorage(queryRunner, person, action.action_experience_multiplier);
     } else if (action.action_type_id == 4) {
-      diceroll = await this.increaseRooms(queryRunner, person);
+      diceroll = await this.increaseRooms(queryRunner, person, action.action_experience_multiplier);
     } else if (action.action_type_id == 5) {
-      diceroll = await this.createHouse(queryRunner, person);
+      diceroll = await this.createHouse(queryRunner, person, action.action_experience_multiplier);
     } else if (action.action_type_id == 6) {
       // Do nothing
     } else {
@@ -379,7 +379,7 @@ export class ActionService {
     } else if (actionTypeId == 2) {
       teacherSkillLevel = teacherSkills.person_skills_lumberjack_level
     } else if (actionTypeId == 3 || actionTypeId == 4 || actionTypeId == 5) {
-      teacherSkillLevel =teacherSkills.person_skills_builder_level
+      teacherSkillLevel = teacherSkills.person_skills_builder_level
     } else {
       teacherSkillLevel = 1
     }
