@@ -132,11 +132,11 @@ mysql -u root -p ka3
 **How to increment time for testing:**
 - Make people older:
 ```sql
-UPDATE person SET created_at = created_at - INTERVAL 1 DAY;
+UPDATE person SET created_at = created_at - INTERVAL 8 HOUR;
 ```
 - Move forwards in time:
 ```sql
-UPDATE action SET started_at = started_at - INTERVAL 8 HOUR;
+UPDATE action_cooldown SET done_at = done_at - INTERVAL 8 HOUR;
 ```
 
 **How to start next server:**

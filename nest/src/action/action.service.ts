@@ -328,8 +328,8 @@ export class ActionService {
 
   async createHouse(queryRunner, person: Person, experience_multiplier = 1) {
     let result;
-    const requiredWood = 12;
-    const requiredFood = 3;
+    const requiredWood = 0;
+    const requiredFood = 0;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     if (person.person_house.house_wood.resource_volume < requiredWood) throw "Not enough wood, " + requiredWood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
@@ -345,7 +345,8 @@ export class ActionService {
     if (diceRoll.action_diceroll_success) {
       result = await this.houseService.createHouse(result, queryRunner, {
           house_family_id: person.person_family_id,
-          house_rooms: 2
+          house_rooms: 0,
+          house_storage: 0
         }
       )
       console.log("CreateHouseDone")

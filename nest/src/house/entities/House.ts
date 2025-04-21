@@ -21,10 +21,10 @@ export class House {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   house_id: number;
 
-  @Column("int", { name: "rooms" })
+  @Column("int", { name: "rooms", default: () => 1, })
   house_rooms: number;
 
-  @Column("int", { name: "storage" })
+  @Column("int", { name: "storage", default: () => 6, })
   house_storage: number;
 
   @Column("int", { name: "family_id" })
