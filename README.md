@@ -203,6 +203,8 @@ CREATE TABLE `person_haulage` (
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ALTER TABLE `person` ADD `haulage_id` INT;
+ALTER TABLE `person` ADD FOREIGN KEY (`haulage_id`) REFERENCES person_haulage(`id`);
 ```
 
 # save

@@ -120,12 +120,14 @@ CREATE TABLE `person` (
     `gender` VARCHAR(155) NOT NULL,
     `house_id` INT,
     `skills_id` INT NOT NULL,
+    `haulage_id` INT,
     `action_queue_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`house_id`) REFERENCES house(`id`),
     FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`),
+    FOREIGN KEY (`haulage_id`) REFERENCES person_haulage(`id`),
     FOREIGN KEY (`action_queue_id`) REFERENCES action_queue(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- TRADE -- -- -- -- --
