@@ -162,16 +162,16 @@ curl --request PATCH localhost:5000/v2/action
 
 **How to backup and restore DB:**
 ```bash
-mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2025-04-10.sql
-sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2025-04-10.sql
-sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2025-04-10.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-04-10.sql
-sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2025-04-10.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-04-10.sql
-sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' dump-2025-04-10.sql
-aws s3 cp dump-2025-04-10.sql s3://ka3-db-dumps
-aws s3 cp s3://ka3-db-dumps/dump-2025-04-10.sql .
-mysql -u root -p ka3 < dump-2025-04-10.sql
+mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2025-04-22.sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2025-04-22.sql
+sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2025-04-22.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-04-22.sql
+sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2025-04-22.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-04-22.sql
+sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' dump-2025-04-22.sql
+aws s3 cp dump-2025-04-22.sql s3://ka3-db-dumps
+aws s3 cp s3://ka3-db-dumps/dump-2025-04-22.sql .
+mysql -u root -p ka3 < dump-2025-04-22.sql
 ```
 
 **How to generate NestJS resource:**
@@ -197,25 +197,6 @@ curl --request PATCH localhost:5000/v2/action
 
 # MySQL
 ```sql
-ALTER TABLE user DROP COLUMN username;
-CREATE TABLE `action_diceroll` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `black_roll` INT NOT NULL,
-    `skill_level` INT NOT NULL,
-    `red_roll` INT NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `action_cooldown` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `queue_id` INT NOT NULL,
-    `diceroll_id` INT,
-    `duration_hours` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `done_at` TIMESTAMP NOT NULL,
-    `deleted_at` TIMESTAMP,
-    FOREIGN KEY (`queue_id`) REFERENCES action_queue(`id`),
-    FOREIGN KEY (`diceroll_id`) REFERENCES action_diceroll(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 # save
