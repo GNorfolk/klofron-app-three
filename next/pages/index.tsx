@@ -46,7 +46,7 @@ export default function Main({ client, router }) {
 }
 
 export function ListAllFamilies({ queryClient = null, userId = null }) {
-  const fetchQuery = userId ? '/v2/family?show_empty=false&user_id=' + userId : '/v2/family'
+  const fetchQuery = userId ? '/v2/family?show_empty=true&user_id=' + userId : '/v2/family'
   const { isLoading, error, data } = useQuery({
     queryKey: ['indexFamiliesData'],
     queryFn: () =>
