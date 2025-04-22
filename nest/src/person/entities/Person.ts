@@ -17,6 +17,7 @@ import { ActionQueue } from "../../action/entities/ActionQueue";
 import { PersonSkills } from "./PersonSkills"
 import { Betrothal } from "src/betrothal/entities/Betrothal";
 import { BetrothalDowry } from "src/betrothal/entities/BetrothalDowry";
+import { PersonHaulage } from "./PersonHaulage";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -80,21 +81,21 @@ export class Person {
   @OneToMany(() => Resource, (resource) => resource.resource_person)
   person_resources: Relation<Resource>[];
 
-  @ManyToOne(() => Person, (person) => person.person_id, { // Note: person.person_id can be person.person_father_id or person.person_family_id and it doesn't make a difference
+  @ManyToOne(() => Person, (person) => person.person_id, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "father_id", referencedColumnName: "person_id" }])
   person_father: Relation<Person>;
 
-  @ManyToOne(() => Person, (person) => person.person_id, { // Note: person.person_id can be person.person_mother_id or person.person_family_id and it doesn't make a difference
+  @ManyToOne(() => Person, (person) => person.person_id, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "mother_id", referencedColumnName: "person_id" }])
   person_mother: Relation<Person>;
 
-  @ManyToOne(() => Person, (person) => person.person_id, { // Note: person.person_id can be person.person_partner_id or person.person_family_id and it doesn't make a difference
+  @ManyToOne(() => Person, (person) => person.person_id, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
@@ -130,9 +131,16 @@ export class Person {
   @Column("int", { name: "skills_id" })
   person_skills_id: number;
 
+  @Column("int", { name: "haulage_id" })
+  person_haulage_id: number;
+
   @OneToOne(() => PersonSkills, (personSkills) => personSkills.person_skills_person)
   @JoinColumn([{ name: "skills_id", referencedColumnName: "person_skills_id" }])
   person_skills: Relation<PersonSkills>;
+
+  @OneToOne(() => PersonHaulage, (personHaulage) => personHaulage.person_haulage_person)
+  @JoinColumn([{ name: "haulage_id", referencedColumnName: "person_haulage_id" }])
+  person_haulage: Relation<PersonHaulage>;
 
   @AfterLoad()
   calculateAge(): void {

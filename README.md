@@ -197,6 +197,12 @@ curl --request PATCH localhost:5000/v2/action
 
 # MySQL
 ```sql
+CREATE TABLE `person_haulage` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `storage` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 # save

@@ -103,6 +103,12 @@ CREATE TABLE `person_skills` (
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `person_haulage` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `storage` INT NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `person` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(155) NOT NULL,
