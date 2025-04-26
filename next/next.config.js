@@ -12,6 +12,7 @@ module.exports = {
 		esmExternals: false, // optional
 		externalDir: true, // optional
 	},
+  transpilePackages: ['react-hexgrid'],
   async headers() {
     return [
       {
