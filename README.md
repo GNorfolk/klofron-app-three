@@ -213,7 +213,7 @@ CREATE TABLE `hex` (
     `land` TINYINT(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 INSERT INTO hex (q_coordinate, r_coordinate, s_coordinate, land) VALUES 
-    -- (0,0,0,1),
+    (0,0,0,1),
     (0,-1,1,1),
     (0,1,-1,0),
     (1,-1,0,1),
