@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, DataSource } from 'typeorm';
+import { Hex } from './entities/Hex';
 
 @Injectable()
 export class HexService {
-  findAll() {
-    return `This action returns all hex`;
+  constructor(
+    @InjectRepository(Hex) private hexRepository: Repository<Hex>,
+  ) {}
+
+  async findAll() {
+    return await this.hexRepository.find()
+
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} hex`;
+  async findOne(id: number) {
+    return await this.hexRepository.findOneBy({
+      hex_id: id,
+  })
   }
 }
