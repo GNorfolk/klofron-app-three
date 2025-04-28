@@ -63,7 +63,7 @@ CREATE TABLE `action` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `queue_id` INT NOT NULL,
     `type_id` INT NOT NULL,
-    `infinite` BOOL NOT NULL DEFAULT 0,
+    `infinite` TINYINT(1) NOT NULL DEFAULT 0,
     `experience_multiplier` INT NOT NULL DEFAULT 1,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `started_at` TIMESTAMP,
@@ -184,4 +184,12 @@ CREATE TABLE `betrothal` (
     FOREIGN KEY (`proposer_person_id`) REFERENCES person(`id`),
     FOREIGN KEY (`recipient_person_id`) REFERENCES person(`id`),
     FOREIGN KEY (`dowry_id`) REFERENCES betrothal_dowry(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- -- -- -- -- HEX -- -- -- -- --
+CREATE TABLE `hex` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `q_coordinate` INT NOT NULL,
+    `r_coordinate` INT NOT NULL,
+    `s_coordinate` INT NOT NULL,
+    `land` TINYINT(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

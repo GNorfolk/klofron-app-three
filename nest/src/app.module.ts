@@ -10,6 +10,7 @@ import { ActionModule } from './action/action.module';
 import { MoveHouseModule } from './move-house/move-house.module';
 import { BetrothalModule } from './betrothal/betrothal.module';
 import { AuthModule } from './auth/auth.module';
+import { HexModule } from './hex/hex.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AuthModule } from './auth/auth.module';
     MoveHouseModule,
     BetrothalModule,
     AuthModule,
+    HexModule,
   ],
   controllers: [],
   providers: [],
