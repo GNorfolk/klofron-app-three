@@ -20,19 +20,21 @@ export default function Main({ client, router }) {
 }
 
 export function ShowHexMap({}) {
+  const fill = {
+    land: 'fill-green-800',
+    water: 'fill-blue-300',
+  }
   return (
     <div>
       <HexGrid width={1200} height={500} viewBox="-50 -50 100 100">
-        <Layout size={{ x: 10, y: 10 }} flat={true} spacing={1.1} origin={{ x: 0, y: 0 }}>
-          <Hexagon q={0} r={0} s={0} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={0} r={-1} s={1} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={0} r={1} s={-1} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={1} r={-1} s={0} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={1} r={0} s={-1} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={-1} r={1} s={0} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={-1} r={0} s={1} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Hexagon q={-2} r={0} s={1} className='fill-slate-700 stroke-slate-500 stroke-[0.5]' />
-          <Path start={new Hex(0, 0, 0)} end={new Hex(-2, 0, 1)} />
+        <Layout size={{ x: 5, y: 5 }} flat={false} spacing={1.08} origin={{ x: 0, y: 0 }}>
+          <Hexagon q={0} r={0} s={0} className={fill.land + ' stroke-slate-500 stroke-[0.2]'} />
+          <Hexagon q={0} r={-1} s={1} className={fill.land + ' stroke-slate-500 stroke-[0.2]'} />
+          <Hexagon q={0} r={1} s={-1} className={fill.water + ' stroke-slate-500 stroke-[0.2]'} />
+          <Hexagon q={1} r={-1} s={0} className={fill.land + ' stroke-slate-500 stroke-[0.2]'} />
+          <Hexagon q={1} r={0} s={-1} className={fill.land + ' stroke-slate-500 stroke-[0.2]'} />
+          <Hexagon q={-1} r={1} s={0} className={fill.water + ' stroke-slate-500 stroke-[0.2]'} />
+          <Hexagon q={-1} r={0} s={1} className={fill.land + ' stroke-slate-500 stroke-[0.2]'} />
         </Layout>
       </HexGrid>
     </div>
