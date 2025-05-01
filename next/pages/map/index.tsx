@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import Link from 'next/link'
 import { BaseLayout } from '@/components/component/base-layout'
-import { QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { HexGrid, Layout, Hexagon, Text, Pattern, Path, Hex, GridGenerator } from 'react-hexgrid';
+import axios from 'axios'
 
 export default function Main({ client, router }) {
   return (
     <BaseLayout>
       <QueryClientProvider client={client}>
         <BoxLayoutSingle>
-          <ShowHexMap theRouter={router} />
+          <ShowHexMap theRouter={router} client={client} />
         </BoxLayoutSingle>
       </QueryClientProvider>
       <div className="mt-12 mx-0 mb-0">
@@ -20,7 +21,7 @@ export default function Main({ client, router }) {
   )
 }
 
-export function ShowHexMap({ theRouter }) {
+export function ShowHexMap({ theRouter, client }) {
   if (theRouter.isReady) {
     const [qDiff, setQDiff] = useState(0);
     const [rDiff, setRDiff] = useState(0);
@@ -45,6 +46,19 @@ export function ShowHexMap({ theRouter }) {
       </div>
     )
 
+    type HexData = {
+      hex_q_coordinate: number;
+      hex_r_coordinate: number;
+      hex_s_coordinate: number;
+      hex_land: boolean;
+    };
+
+    const createHex = useMutation({
+      mutationFn: (dataObject: HexData) => {
+        return axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/v1/hex`, dataObject);
+      },
+    });
+
     const size = 2.5;
     const spacing = 1.1;
     const xDiff = spacing * (-size * Math.sqrt(3) * (qDiff + rDiff/2));
@@ -56,7 +70,22 @@ export function ShowHexMap({ theRouter }) {
         <HexGrid width={1200} height={800} viewBox="-50 -50 100 100">
           <Layout size={{ x: size, y: size }} flat={false} spacing={spacing} origin={{ x: xDiff, y: yDiff }}>
             {
-              hexagons.map((hex, i) => <Hexagon q={hex.q + qDiff} r={hex.r + rDiff} s={hex.s} className={getColour(null, "gray") + ' stroke-slate-500 stroke-[0.2]'} />)
+              hexagons.map((hex, i) => <Hexagon q={hex.q + qDiff} r={hex.r + rDiff} s={hex.s} className={getColour(null, "gray") + ' stroke-slate-500 stroke-[0.2]'} onClick={(event) => {
+                const dataObject = {
+                  hex_q_coordinate: hex.q,
+                  hex_r_coordinate: hex.r,
+                  hex_s_coordinate: hex.s,
+                  hex_land: !event.shiftKey ? true : false
+                }
+                createHex.mutate(dataObject, { onSettled: (data, error: any) => {
+                  client.invalidateQueries()
+                  if (error) {
+                    console.log(error.response.data.message)
+                  } else {
+                    console.log("yay")
+                  }
+                }})
+              }} />)
             }
             {
               data.map(({ hex_id, hex_q_coordinate, hex_r_coordinate, hex_s_coordinate, hex_land }) => (
