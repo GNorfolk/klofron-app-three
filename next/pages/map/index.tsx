@@ -21,10 +21,13 @@ export default function Main({ client, router }) {
 
 export function ShowHexMap({ theRouter }) {
   if (theRouter.isReady) {
+    const qDiff = 0;
+    const rDiff = 0;
+    const fetchQuery = '/v1/hex?q=' + qDiff + '&r=' + rDiff;
     const { isLoading, error, data } = useQuery({
       queryKey: ['mapData'],
       queryFn: () =>
-        fetch(process.env.NEXT_PUBLIC_API_HOST + '/v1/hex').then(
+        fetch(process.env.NEXT_PUBLIC_API_HOST + fetchQuery).then(
           (res) => res.json(),
         ),
     })
@@ -40,17 +43,18 @@ export function ShowHexMap({ theRouter }) {
       </div>
     )
 
-    const hexagons = GridGenerator.hexagon(11);
-    const qDiff = 10;
-    const rDiff = -10;
-    const sDiff = 0;
+    const edge = 7;
+    const size = 2.5;
+    const xDiff = -size * Math.sqrt(3) * (qDiff + rDiff/2);
+    const yDiff = -size * 3/2 * rDiff;
+    const hexagons = GridGenerator.hexagon(edge);
 
     return (
       <div>
         <HexGrid width={1200} height={800} viewBox="-50 -50 100 100">
-          <Layout size={{ x: 2.5, y: 2.5 }} flat={false} spacing={1.1} origin={{ x: -25, y: 40 }}>
+          <Layout size={{ x: size, y: size }} flat={false} spacing={1.1} origin={{ x: xDiff, y: yDiff }}>
             {
-              hexagons.map((hex, i) => <Hexagon q={hex.q + qDiff} r={hex.r + rDiff} s={hex.s + sDiff} className={getColour(null, "gray") + ' stroke-slate-500 stroke-[0.2]'} />)
+              hexagons.map((hex, i) => <Hexagon q={hex.q + qDiff} r={hex.r + rDiff} s={hex.s} className={getColour(null, "gray") + ' stroke-slate-500 stroke-[0.2]'} />)
             }
             {
               data.map(({ hex_id, hex_q_coordinate, hex_r_coordinate, hex_s_coordinate, hex_land }) => (
@@ -59,12 +63,12 @@ export function ShowHexMap({ theRouter }) {
                 }} />
               ))
             }
-            <Hexagon q={11 + qDiff} r={-11 + rDiff} s={0 + sDiff} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />)
-            <Hexagon q={11 + qDiff} r={0 + rDiff} s={-11 + sDiff} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />)
-            <Hexagon q={0 + qDiff} r={11 + rDiff} s={-11 + sDiff} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />)
-            <Hexagon q={0 + qDiff} r={-11 + rDiff} s={11 + sDiff} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />)
-            <Hexagon q={-11 + qDiff} r={11 + rDiff} s={0 + sDiff} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />)
-            <Hexagon q={-11 + qDiff} r={0 + rDiff} s={11 + sDiff} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />)
+            <Hexagon q={edge + qDiff} r={-edge + rDiff} s={0} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
+            <Hexagon q={edge + qDiff} r={0 + rDiff} s={-edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
+            <Hexagon q={0 + qDiff} r={edge + rDiff} s={-edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
+            <Hexagon q={0 + qDiff} r={-edge + rDiff} s={edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
+            <Hexagon q={-edge + qDiff} r={edge + rDiff} s={0} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
+            <Hexagon q={-edge + qDiff} r={0 + rDiff} s={edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
           </Layout>
         </HexGrid>
       </div>
