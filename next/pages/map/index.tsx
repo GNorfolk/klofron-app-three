@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Link from 'next/link'
 import { BaseLayout } from '@/components/component/base-layout'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
@@ -21,11 +22,12 @@ export default function Main({ client, router }) {
 
 export function ShowHexMap({ theRouter }) {
   if (theRouter.isReady) {
-    const qDiff = 0;
-    const rDiff = 0;
-    const fetchQuery = '/v1/hex?q=' + qDiff + '&r=' + rDiff;
+    const [qDiff, setQDiff] = useState(0);
+    const [rDiff, setRDiff] = useState(0);
+    const edge = 5;
+    const fetchQuery = '/v1/hex?q=' + qDiff + '&r=' + rDiff + '&max=' + edge;
     const { isLoading, error, data } = useQuery({
-      queryKey: ['mapData'],
+      queryKey: ['mapData', qDiff, rDiff],
       queryFn: () =>
         fetch(process.env.NEXT_PUBLIC_API_HOST + fetchQuery).then(
           (res) => res.json(),
@@ -43,16 +45,16 @@ export function ShowHexMap({ theRouter }) {
       </div>
     )
 
-    const edge = 7;
     const size = 2.5;
-    const xDiff = -size * Math.sqrt(3) * (qDiff + rDiff/2);
-    const yDiff = -size * 3/2 * rDiff;
+    const spacing = 1.1;
+    const xDiff = spacing * (-size * Math.sqrt(3) * (qDiff + rDiff/2));
+    const yDiff = spacing * (-size * 3/2 * rDiff);
     const hexagons = GridGenerator.hexagon(edge);
 
     return (
       <div>
         <HexGrid width={1200} height={800} viewBox="-50 -50 100 100">
-          <Layout size={{ x: size, y: size }} flat={false} spacing={1.1} origin={{ x: xDiff, y: yDiff }}>
+          <Layout size={{ x: size, y: size }} flat={false} spacing={spacing} origin={{ x: xDiff, y: yDiff }}>
             {
               hexagons.map((hex, i) => <Hexagon q={hex.q + qDiff} r={hex.r + rDiff} s={hex.s} className={getColour(null, "gray") + ' stroke-slate-500 stroke-[0.2]'} />)
             }
@@ -63,12 +65,18 @@ export function ShowHexMap({ theRouter }) {
                 }} />
               ))
             }
-            <Hexagon q={edge + qDiff} r={-edge + rDiff} s={0} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
-            <Hexagon q={edge + qDiff} r={0 + rDiff} s={-edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
-            <Hexagon q={0 + qDiff} r={edge + rDiff} s={-edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
-            <Hexagon q={0 + qDiff} r={-edge + rDiff} s={edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
-            <Hexagon q={-edge + qDiff} r={edge + rDiff} s={0} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
-            <Hexagon q={-edge + qDiff} r={0 + rDiff} s={edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} />
+            <Hexagon q={edge + qDiff} r={0 + rDiff} s={-edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} onClick={() => setQDiff(q => q + 1)} />
+            <Hexagon q={-edge + qDiff} r={0 + rDiff} s={edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} onClick={() => setQDiff(q => q - 1)} />
+            <Hexagon q={0 + qDiff} r={edge + rDiff} s={-edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} onClick={() => setRDiff(r => r + 1)} />
+            <Hexagon q={0 + qDiff} r={-edge + rDiff} s={edge} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} onClick={() => setRDiff(r => r - 1)} />
+            <Hexagon q={edge + qDiff} r={-edge + rDiff} s={0} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} onClick={() => {
+              setQDiff(q => q + 1);
+              setRDiff(r => r - 1);
+            }} />
+            <Hexagon q={-edge + qDiff} r={edge + rDiff} s={0} className={getColour(null, "orange") + ' stroke-slate-500 stroke-[0.2]'} onClick={() => {
+              setQDiff(q => q - 1);
+              setRDiff(r => r + 1);
+            }} />
           </Layout>
         </HexGrid>
       </div>
@@ -84,6 +92,8 @@ function getColour(isLand?: boolean, colour?: string) {
       return 'fill-gray-500'
     } else if (colour == "orange") {
       return 'fill-orange-800'
+    } else if (colour == "red") {
+      return 'fill-red-800'
     }
   }
 }
