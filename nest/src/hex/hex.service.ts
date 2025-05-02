@@ -30,8 +30,38 @@ export class HexService {
   }
   }
 
-  async findAll() {
-    return await this.hexRepository.find()
+  async findAll(filters?: {
+    qMin?: number;
+    qMax?: number;
+    rMin?: number;
+    rMax?: number;
+    sMin?: number;
+    sMax?: number;
+  }) {
+    const query = this.hexRepository.createQueryBuilder('hex');
+
+    if (filters?.qMin !== undefined) {
+      query.andWhere('hex.hex_q_coordinate >= :qMin', { qMin: filters.qMin });
+    }
+    if (filters?.qMax !== undefined) {
+      query.andWhere('hex.hex_q_coordinate <= :qMax', { qMax: filters.qMax });
+    }
+
+    if (filters?.rMin !== undefined) {
+      query.andWhere('hex.hex_r_coordinate >= :rMin', { rMin: filters.rMin });
+    }
+    if (filters?.rMax !== undefined) {
+      query.andWhere('hex.hex_r_coordinate <= :rMax', { rMax: filters.rMax });
+    }
+
+    if (filters?.sMin !== undefined) {
+      query.andWhere('hex.hex_s_coordinate >= :sMin', { sMin: filters.sMin });
+    }
+    if (filters?.sMax !== undefined) {
+      query.andWhere('hex.hex_s_coordinate <= :sMax', { sMax: filters.sMax });
+    }
+
+    return await query.getMany();
   }
 
   async findOne(id: number) {

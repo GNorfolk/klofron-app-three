@@ -24,9 +24,9 @@ export default function Main({ client, router }) {
 export function ShowHexMap({ theRouter, client }) {
   const [qDiff, setQDiff] = useState(0);
   const [rDiff, setRDiff] = useState(0);
-  const edge = 5;
+  const edge = 11;
 
-  const fetchQuery = `/v1/hex?q=${qDiff}&r=${rDiff}&max=${edge}`;
+  const fetchQuery = `/v1/hex?q=${qDiff}&r=${rDiff}&s=${-qDiff-rDiff}&max=${edge}`;
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['mapData', qDiff, rDiff],

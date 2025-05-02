@@ -1,6 +1,7 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Query } from '@nestjs/common';
 import { HexService } from './hex.service';
 import { CreateHexDto } from './dto/create-hex.dto';
+import { Hex } from './entities/Hex';
 
 @Controller({
   path: 'hex',
@@ -15,8 +16,21 @@ export class HexController {
   }
 
   @Get()
-  findAll() {
-    return this.hexService.findAll();
+  async findAll(@Query() query): Promise<Hex[]> {
+    const { q, r, s, max } = query;
+    const qNum = Number(q);
+    const rNum = Number(r);
+    const sNum = Number(s);
+    const maxNum = Number(max);
+
+    return this.hexService.findAll({
+      qMin: qNum - maxNum,
+      qMax: qNum + maxNum,
+      rMin: rNum - maxNum,
+      rMax: rNum + maxNum,
+      sMin: sNum - maxNum,
+      sMax: sNum + maxNum,
+    });
   }
 
   @Get(':id')
