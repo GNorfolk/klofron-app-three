@@ -191,5 +191,6 @@ CREATE TABLE `hex` (
     `q_coordinate` INT NOT NULL,
     `r_coordinate` INT NOT NULL,
     `s_coordinate` INT NOT NULL,
-    `land` TINYINT(1) NOT NULL DEFAULT 0
+    `land` TINYINT(1) NOT NULL DEFAULT 0,
+    UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

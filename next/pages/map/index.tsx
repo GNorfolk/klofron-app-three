@@ -73,9 +73,9 @@ export function ShowHexMap({ theRouter, client }) {
               className={getColour(null, 'gray') + ' stroke-slate-500 stroke-[0.2]'}
               onClick={(event) => {
                 const dataObject: HexData = {
-                  hex_q_coordinate: hex.q,
-                  hex_r_coordinate: hex.r,
-                  hex_s_coordinate: hex.s,
+                  hex_q_coordinate: hex.q + qDiff,
+                  hex_r_coordinate: hex.r + rDiff,
+                  hex_s_coordinate: hex.s - qDiff - rDiff,
                   hex_land: !event.shiftKey,
                 };
                 createHex.mutate(dataObject, {
@@ -99,7 +99,24 @@ export function ShowHexMap({ theRouter, client }) {
               r={hex_r_coordinate}
               s={hex_s_coordinate}
               className={getColour(hex_land) + ' stroke-slate-500 stroke-[0.2]'}
-              onClick={() => theRouter.push(`/map/${hex_id}`)}
+              onClick={(event) => {
+                const dataObject: HexData = {
+                  hex_q_coordinate: hex_q_coordinate,
+                  hex_r_coordinate: hex_r_coordinate,
+                  hex_s_coordinate: hex_s_coordinate,
+                  hex_land: !event.shiftKey,
+                };
+                createHex.mutate(dataObject, {
+                  onSettled: (data, error: any) => {
+                    client.invalidateQueries({ queryKey: ['mapData'] });
+                    if (error) {
+                      console.log(error.response?.data?.message ?? 'Unknown error');
+                    } else {
+                      console.log('Created!');
+                    }
+                  },
+                });
+              }}
             />
           ))}
           {/* Navigation hexes */}

@@ -197,29 +197,15 @@ curl --request PATCH localhost:5000/v2/action
 
 # MySQL
 ```sql
-CREATE TABLE `person_haulage` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `storage` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-ALTER TABLE `person` ADD `haulage_id` INT;
-ALTER TABLE `person` ADD FOREIGN KEY (`haulage_id`) REFERENCES person_haulage(`id`);
+DROP TABLE hex;
 CREATE TABLE `hex` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `q_coordinate` INT NOT NULL,
     `r_coordinate` INT NOT NULL,
     `s_coordinate` INT NOT NULL,
-    `land` TINYINT(1) NOT NULL DEFAULT 0
+    `land` TINYINT(1) NOT NULL DEFAULT 0,
+    UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO hex (q_coordinate, r_coordinate, s_coordinate, land) VALUES 
-    (0,0,0,1),
-    (0,-1,1,1),
-    (0,1,-1,0),
-    (1,-1,0,1),
-    (1,0,-1,1),
-    (-1,1,0,0),
-    (-1,0,1,1);
 ```
 
 # save
