@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link'
 import { BaseLayout } from '@/components/component/base-layout'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
 import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { HexGrid, Layout, Hexagon, Text, Pattern, Path, Hex, GridGenerator } from 'react-hexgrid';
 import axios from 'axios'
+import { useRouter } from 'next/router';
 
 export default function Main({ client, router }) {
   return (
@@ -26,7 +27,17 @@ export function ShowHexMap({ theRouter, client }) {
   const [rDiff, setRDiff] = useState(0);
   const edge = 11;
 
-  const fetchQuery = `/v1/hex?q=${qDiff}&r=${rDiff}&s=${-qDiff-rDiff}&max=${edge}`;
+  useEffect(() => {
+    if (theRouter.isReady) {
+      const q = Number(theRouter.query.q);
+      const r = Number(theRouter.query.r);
+
+      if (!isNaN(q)) setQDiff(q);
+      if (!isNaN(r)) setRDiff(r);
+    }
+  }, [theRouter.isReady, theRouter.query.q, theRouter.query.r]);
+
+  const fetchQuery = `/v1/hex?q=${qDiff}&r=${rDiff}&s=${-qDiff - rDiff}&max=${edge}`;
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['mapData', qDiff, rDiff],
