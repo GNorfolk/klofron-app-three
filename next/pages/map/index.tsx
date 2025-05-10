@@ -5,7 +5,6 @@ import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-quer
 import { BoxLayout, BoxLayoutSingle } from '@/components/component/box-layout'
 import { HexGrid, Layout, Hexagon, Text, Pattern, Path, Hex, GridGenerator } from 'react-hexgrid';
 import axios from 'axios'
-import { useRouter } from 'next/router';
 
 export default function Main({ client, router }) {
   return (
@@ -83,22 +82,26 @@ export function ShowHexMap({ theRouter, client }) {
               s={hex.s}
               className={getColour(null, 'gray') + ' stroke-slate-500 stroke-[0.2]'}
               onClick={(event) => {
-                const dataObject: HexData = {
-                  hex_q_coordinate: hex.q + qDiff,
-                  hex_r_coordinate: hex.r + rDiff,
-                  hex_s_coordinate: hex.s - qDiff - rDiff,
-                  hex_land: !event.shiftKey,
-                };
-                createHex.mutate(dataObject, {
-                  onSettled: (data, error: any) => {
-                    client.invalidateQueries({ queryKey: ['mapData'] });
-                    if (error) {
-                      console.log(error.response?.data?.message ?? 'Unknown error');
-                    } else {
-                      console.log('Created!');
-                    }
-                  },
-                });
+                if (event.metaKey) {
+                  theRouter.push(`/map?q=${hex.q + qDiff}&r=${hex.r + rDiff}`);
+                } else {
+                  const dataObject: HexData = {
+                    hex_q_coordinate: hex.q + qDiff,
+                    hex_r_coordinate: hex.r + rDiff,
+                    hex_s_coordinate: hex.s - qDiff - rDiff,
+                    hex_land: !event.shiftKey,
+                  };
+                  createHex.mutate(dataObject, {
+                    onSettled: (data, error: any) => {
+                      client.invalidateQueries({ queryKey: ['mapData'] });
+                      if (error) {
+                        console.log(error.response?.data?.message ?? 'Unknown error');
+                      } else {
+                        console.log('Created!');
+                      }
+                    },
+                  });
+                }
               }}
             />
           ))}
@@ -111,22 +114,26 @@ export function ShowHexMap({ theRouter, client }) {
               s={hex_s_coordinate}
               className={getColour(hex_land) + ' stroke-slate-500 stroke-[0.2]'}
               onClick={(event) => {
-                const dataObject: HexData = {
-                  hex_q_coordinate: hex_q_coordinate,
-                  hex_r_coordinate: hex_r_coordinate,
-                  hex_s_coordinate: hex_s_coordinate,
-                  hex_land: !event.shiftKey,
-                };
-                createHex.mutate(dataObject, {
-                  onSettled: (data, error: any) => {
-                    client.invalidateQueries({ queryKey: ['mapData'] });
-                    if (error) {
-                      console.log(error.response?.data?.message ?? 'Unknown error');
-                    } else {
-                      console.log('Created!');
-                    }
-                  },
-                });
+                if (event.metaKey) {
+                  theRouter.push(`/map?q=${hex_q_coordinate}&r=${hex_r_coordinate}`);
+                } else {
+                  const dataObject: HexData = {
+                    hex_q_coordinate: hex_q_coordinate,
+                    hex_r_coordinate: hex_r_coordinate,
+                    hex_s_coordinate: hex_s_coordinate,
+                    hex_land: !event.shiftKey,
+                  };
+                  createHex.mutate(dataObject, {
+                    onSettled: (data, error: any) => {
+                      client.invalidateQueries({ queryKey: ['mapData'] });
+                      if (error) {
+                        console.log(error.response?.data?.message ?? 'Unknown error');
+                      } else {
+                        console.log('Created!');
+                      }
+                    },
+                  });
+                }
               }}
             />
           ))}
