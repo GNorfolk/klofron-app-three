@@ -80,7 +80,7 @@ export function ShowHexMap({ theRouter, client }) {
               q={hex.q + qDiff}
               r={hex.r + rDiff}
               s={hex.s}
-              className={getColour(null, 'gray') + ' stroke-slate-500 stroke-[0.2]'}
+              className={getColour(false) + ' stroke-slate-500 stroke-[0.2]'}
               onClick={(event) => {
                 if (event.metaKey) {
                   theRouter.push(`/map?q=${hex.q + qDiff}&r=${hex.r + rDiff}`);
@@ -91,16 +91,6 @@ export function ShowHexMap({ theRouter, client }) {
                     hex_s_coordinate: hex.s - qDiff - rDiff,
                     hex_land: !event.shiftKey,
                   };
-                  createHex.mutate(dataObject, {
-                    onSettled: (data, error: any) => {
-                      client.invalidateQueries({ queryKey: ['mapData'] });
-                      if (error) {
-                        console.log(error.response?.data?.message ?? 'Unknown error');
-                      } else {
-                        console.log('Created!');
-                      }
-                    },
-                  });
                 }
               }}
             />
@@ -123,16 +113,6 @@ export function ShowHexMap({ theRouter, client }) {
                     hex_s_coordinate: hex_s_coordinate,
                     hex_land: !event.shiftKey,
                   };
-                  createHex.mutate(dataObject, {
-                    onSettled: (data, error: any) => {
-                      client.invalidateQueries({ queryKey: ['mapData'] });
-                      if (error) {
-                        console.log(error.response?.data?.message ?? 'Unknown error');
-                      } else {
-                        console.log('Created!');
-                      }
-                    },
-                  });
                 }
               }}
             />
