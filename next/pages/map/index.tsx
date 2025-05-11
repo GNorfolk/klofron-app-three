@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link'
 import { BaseLayout } from '@/components/component/base-layout'
 import { QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
@@ -22,6 +22,7 @@ export default function Main({ client, router }) {
 }
 
 export function ShowHexMap({ theRouter, client }) {
+  const containerRef = useRef(null);
   const [qDiff, setQDiff] = useState(0);
   const [rDiff, setRDiff] = useState(0);
   const edge = 11;
@@ -58,6 +59,26 @@ export function ShowHexMap({ theRouter, client }) {
     },
   });
 
+  const handleDownloadSVG = () => {
+    const svg = containerRef.current?.querySelector('svg');
+    if (!svg) {
+      console.error('SVG not found');
+      return;
+    }
+  
+    const styledSvg = inlineStyles(svg);
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(styledSvg);
+    const blob = new Blob([svgString], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+  
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'hexgrid-with-style.svg';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (!theRouter.isReady) return null;
 
   if (isLoading) return <p>Loading...</p>;
@@ -70,7 +91,7 @@ export function ShowHexMap({ theRouter, client }) {
   const hexagons = GridGenerator.hexagon(edge);
 
   return (
-    <div>
+    <div ref={containerRef}>
       <HexGrid width={1200} height={800} viewBox="-50 -50 100 100">
         <Layout size={{ x: size, y: size }} flat={false} spacing={spacing} origin={{ x: xDiff, y: yDiff }}>
           {/* Background hexes */}
@@ -132,6 +153,9 @@ export function ShowHexMap({ theRouter, client }) {
           }} />
         </Layout>
       </HexGrid>
+      <button onClick={handleDownloadSVG} style={{ marginTop: '10rem' }}>
+        Download as SVG
+      </button>
     </div>
   );
 }
@@ -148,4 +172,25 @@ function getColour(isLand?: boolean, colour?: string) {
       return 'fill-red-800'
     }
   }
+}
+
+function inlineStyles(svg) {
+  const copy = svg.cloneNode(true);
+
+  const allElements = copy.querySelectorAll('*');
+  const originalElements = svg.querySelectorAll('*');
+  const computedStyles = [];
+
+  for (let i = 0; i < allElements.length; i++) {
+    const original = originalElements[i];
+    const computed = window.getComputedStyle(original);
+    const copyEl = allElements[i];
+
+    for (let j = 0; j < computed.length; j++) {
+      const key = computed[j];
+      copyEl.style[key] = computed.getPropertyValue(key);
+    }
+  }
+
+  return copy;
 }
