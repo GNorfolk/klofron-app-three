@@ -25,7 +25,8 @@ export function ShowHexMap({ theRouter, client }) {
   const containerRef = useRef(null);
   const [qDiff, setQDiff] = useState(0);
   const [rDiff, setRDiff] = useState(0);
-  const edge = 11;
+  // Set edge = 72 for full map
+  const edge = 5;
 
   useEffect(() => {
     if (theRouter.isReady) {
@@ -84,6 +85,7 @@ export function ShowHexMap({ theRouter, client }) {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Oh dear</p>;
 
+  // set size = 1.5 and spacing = 1.0 for full map
   const size = 2.5;
   const spacing = 1.1;
   const xDiff = spacing * (-size * Math.sqrt(3) * (qDiff + rDiff / 2));
@@ -92,6 +94,7 @@ export function ShowHexMap({ theRouter, client }) {
 
   return (
     <div ref={containerRef}>
+      {/* Set viewbox of -150 -150 300 300 with origin q = -30 and r = -7 for full map */}
       <HexGrid width={1200} height={800} viewBox="-50 -50 100 100">
         <Layout size={{ x: size, y: size }} flat={false} spacing={spacing} origin={{ x: xDiff, y: yDiff }}>
           {/* Background hexes */}
@@ -153,7 +156,7 @@ export function ShowHexMap({ theRouter, client }) {
           }} />
         </Layout>
       </HexGrid>
-      <button onClick={handleDownloadSVG} style={{ marginTop: '10rem' }}>
+      <button onClick={handleDownloadSVG} style={{ marginTop: '1rem' }}>
         Download as SVG
       </button>
     </div>
