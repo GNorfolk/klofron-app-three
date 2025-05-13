@@ -44,7 +44,7 @@ resource "aws_lambda_permission" "main" {
     action = "lambda:InvokeFunction"
     function_name = aws_lambda_function.main.function_name
     principal = "apigateway.amazonaws.com"
-    source_arn = "${data.aws_apigatewayv2_api.main.execution_arn}/*/*"
+    source_arn = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
 }
 
 resource "aws_security_group" "lambda" {
