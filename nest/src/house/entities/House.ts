@@ -40,7 +40,7 @@ export class House {
   house_created_at: Date;
 
   @Column("timestamp", { name: "deleted_at" })
-  family_deleted_at: Date;
+  house_deleted_at: Date;
 
   @ManyToOne(() => Family, (family) => family.family_houses, {
     onDelete: "NO ACTION",

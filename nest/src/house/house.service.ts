@@ -78,6 +78,7 @@ export class HouseService {
         const exclude_ids = query?.exclude_ids.split(",")
         houses = houses.where("house.house_id NOT IN (:...ids)", { ids: exclude_ids })
       }
+      houses = houses.andWhere("house.house_deleted_at IS NULL")
     return await houses.getMany();
   }
 
