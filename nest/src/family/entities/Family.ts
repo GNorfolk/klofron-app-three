@@ -17,6 +17,9 @@ export class Family {
   })
   family_created_at: Date;
 
+  @Column("timestamp", { name: "deleted_at" })
+  family_deleted_at: Date;
+
   @OneToMany(() => House, (house) => house.house_family)
   family_houses: Relation<House>[];
 

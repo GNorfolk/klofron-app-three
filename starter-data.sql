@@ -16,6 +16,7 @@ CREATE TABLE `family` (
     `name` VARCHAR(155) NOT NULL UNIQUE,
     `user_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES user(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- HOUSE -- -- -- -- --
@@ -40,6 +41,7 @@ CREATE TABLE `house` (
     `wood` INT NOT NULL DEFAULT 0,
     `family_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`address_id`) REFERENCES house_address(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

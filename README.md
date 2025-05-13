@@ -206,6 +206,10 @@ CREATE TABLE `hex` (
     `land` TINYINT(1) NOT NULL DEFAULT 0,
     UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ALTER TABLE house ADD COLUMN deleted_at TIMESTAMP;
+ALTER TABLE family ADD COLUMN deleted_at TIMESTAMP;
+UPDATE house h LEFT JOIN person p ON h.id = p.house_id AND p.deleted_at IS NULL SET h.deleted_at = NOW() WHERE p.id IS NULL AND h.deleted_at IS NULL;
+UPDATE family f LEFT JOIN person p ON f.id = p.family_id AND p.deleted_at IS NULL SET f.deleted_at = NOW() WHERE p.id IS NULL AND f.deleted_at IS NULL;
 ```
 
 # save
