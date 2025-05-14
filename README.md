@@ -139,6 +139,12 @@ UPDATE person SET created_at = created_at - INTERVAL 8 HOUR;
 UPDATE action_cooldown SET done_at = done_at - INTERVAL 8 HOUR;
 ```
 
+**How to soft delete empty houses and families:**
+```sql
+UPDATE house h LEFT JOIN person p ON h.id = p.house_id AND p.deleted_at IS NULL SET h.deleted_at = NOW() WHERE p.id IS NULL AND h.deleted_at IS NULL;
+UPDATE family f LEFT JOIN person p ON f.id = p.family_id AND p.deleted_at IS NULL SET f.deleted_at = NOW() WHERE p.id IS NULL AND f.deleted_at IS NULL;
+```
+
 **How to start next server:**
 - Next: npm run dev
 - Node: npm start
@@ -197,19 +203,6 @@ curl --request PATCH localhost:5000/v2/action
 
 # MySQL
 ```sql
-DROP TABLE hex;
-CREATE TABLE `hex` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `q_coordinate` INT NOT NULL,
-    `r_coordinate` INT NOT NULL,
-    `s_coordinate` INT NOT NULL,
-    `land` TINYINT(1) NOT NULL DEFAULT 0,
-    UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-ALTER TABLE house ADD COLUMN deleted_at TIMESTAMP;
-ALTER TABLE family ADD COLUMN deleted_at TIMESTAMP;
-UPDATE house h LEFT JOIN person p ON h.id = p.house_id AND p.deleted_at IS NULL SET h.deleted_at = NOW() WHERE p.id IS NULL AND h.deleted_at IS NULL;
-UPDATE family f LEFT JOIN person p ON f.id = p.family_id AND p.deleted_at IS NULL SET f.deleted_at = NOW() WHERE p.id IS NULL AND f.deleted_at IS NULL;
 ```
 
 # save
