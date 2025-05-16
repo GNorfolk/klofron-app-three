@@ -1,4 +1,3 @@
-import { BriefcaseIcon, MapPinIcon, TreesIcon, HardHatIcon, GrapeIcon, UserIcon } from '../ui/icon'
 import axios from 'axios'
 import { GrayButton } from "../ui/button"
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
@@ -6,36 +5,9 @@ import { HeaderOne, HeaderTwo, HeaderThree } from '../ui/header'
 import { DivIconInfo } from '../ui/div'
 import { StyledSelect } from '../ui/input'
 import { Small } from '../ui/text'
-import Link from 'next/link'
 import { StyledLink } from '../ui/link'
 
 export function PersonListing({ personData, familyName = null, queryClient = null, userId = null }) {
-  type Inputs = {
-    action_type_id: number,
-    action_queue_id: number
-  }
-
-  const onAction: SubmitHandler<Inputs> = (formData) => {
-    onSubmit(formData, 0)
-  }
-
-  const onQueue: SubmitHandler<Inputs> = (formData) => {
-    onSubmit(formData, 1)
-  }
-
-  const onSubmit = (formData: Inputs, addToQueue: number) => {
-    axios.post(process.env.NEXT_PUBLIC_API_HOST + '/v3/action', {
-      action_queue_id: formData.action_queue_id,
-      action_type_id: formData.action_type_id,
-      action_add_to_queue: addToQueue
-    }).then(response => {
-      queryClient.invalidateQueries()
-      document.getElementById("cm-" + formData.action_queue_id).innerText = " "
-    }).catch(error => {
-      document.getElementById("cm-" + formData.action_queue_id).innerText = error.response?.data.message
-    })
-  }
-
   return (
     <main>
       <HeaderOne>People</HeaderOne>
