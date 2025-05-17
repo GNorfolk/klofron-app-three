@@ -173,16 +173,18 @@ SELECT CONCAT('INSERT INTO hex (q_coordinate, r_coordinate, s_coordinate) VALUES
 
 **How to backup and restore DB:**
 ```bash
-mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p ka3 > dump-2025-04-22.sql
-sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2025-04-22.sql
-sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2025-04-22.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-04-22.sql
-sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2025-04-22.sql
-sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-04-22.sql
-sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' dump-2025-04-22.sql
-aws s3 cp dump-2025-04-22.sql s3://ka3-db-dumps
-aws s3 cp s3://ka3-db-dumps/dump-2025-04-22.sql .
-mysql -u root -p ka3 < dump-2025-04-22.sql
+# Run on EC2
+mysqldump -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS ka3 > dump-2025-05-17.sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i dump-2025-05-17.sql
+sed -i 's/SET @MYSQLDUMP_TEMP_LOG_BIN/-- SET @MYSQLDUMP_TEMP_LOG_BIN/g' dump-2025-05-17.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-05-17.sql
+sed -i 's/SET @@GLOBAL.GTID_PURGED/-- SET @@GLOBAL.GTID_PURGED/g' dump-2025-05-17.sql
+sed -i 's/SET @@SESSION.SQL_LOG_BIN/-- SET @@SESSION.SQL_LOG_BIN/g' dump-2025-05-17.sql
+sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' dump-2025-05-17.sql
+aws s3 cp dump-2025-05-17.sql s3://ka3-db-dumps
+# Run on local
+aws s3 cp s3://ka3-db-dumps/dump-2025-05-17.sql .
+mysql -u root -ppassword ka3 < dump-2025-05-17.sql
 ```
 
 **How to generate NestJS resource:**
@@ -201,9 +203,9 @@ FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
 WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 'person';
 ```
 
-**How to run action processing locally:**
+**How to connect to aws database:**
 ```bash
-curl --request PATCH localhost:5000/v2/action
+mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS ka3
 ```
 
 # MySQL
