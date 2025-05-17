@@ -162,6 +162,11 @@ AWS_PROFILE=react-app sam local invoke
 curl --request PATCH localhost:5000/v2/action
 ```
 
+**How to generate sql for restoring hex table on aws:**
+```sql
+SELECT CONCAT('INSERT INTO hex (q_coordinate, r_coordinate, s_coordinate) VALUES ("', q_coordinate, '", "', r_coordinate, '", "', s_coordinate, '", "', land, '");') FROM hex;
+```
+
 **How to deploy CFN app:**
 - aws cloudformation package --template-file samTemplate.cf-template.yml --s3-bucket klofron-nextjs-deployment --output-template-file packaged-template.yaml
 - aws cloudformation deploy --template-file /Users/g.norfolk/git/react-app/next/packaged-template.yaml --stack-name react-app --region eu-west-1 --capabilities CAPABILITY_IAM
