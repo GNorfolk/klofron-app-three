@@ -18,6 +18,7 @@ import { PersonSkills } from "./PersonSkills"
 import { Betrothal } from "src/betrothal/entities/Betrothal";
 import { BetrothalDowry } from "src/betrothal/entities/BetrothalDowry";
 import { PersonHaulage } from "./PersonHaulage";
+import { Hex } from "src/hex/entities/Hex";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -64,7 +65,14 @@ export class Person {
   @Column("int", { name: "action_queue_id" })
   person_action_queue_id: number;
 
-  @ManyToOne(() => Family, (family) => family.family_people, { //////////////////////////
+  @Column("int", { name: "hex_id", nullable: false })
+  person_hex_id: number;
+
+  @ManyToOne(() => Hex)
+  @JoinColumn({ name: 'hex_id' }) // maps foreign key to Hex.id
+  person_hex: Hex;
+
+  @ManyToOne(() => Family, (family) => family.family_people, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })

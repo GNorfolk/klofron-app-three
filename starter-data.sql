@@ -19,6 +19,22 @@ CREATE TABLE `family` (
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES user(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- -- -- -- -- HEX -- -- -- -- --
+CREATE TABLE `hex` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `q_coordinate` INT NOT NULL,
+    `r_coordinate` INT NOT NULL,
+    `s_coordinate` INT NOT NULL,
+    `land` TINYINT(1) NOT NULL DEFAULT 0,
+    UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `hex_bonus` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `hex_id` INT NOT NULL,
+    `type` ENUM('bamboo', 'berry', 'flint') NOT NULL,
+    `value` INT NOT NULL,
+    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- HOUSE -- -- -- -- --
 CREATE TABLE `house_road` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -40,10 +56,12 @@ CREATE TABLE `house` (
     `food` INT NOT NULL DEFAULT 0,
     `wood` INT NOT NULL DEFAULT 0,
     `family_id` INT NOT NULL,
+    `hex_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
-    FOREIGN KEY (`address_id`) REFERENCES house_address(`id`)
+    FOREIGN KEY (`address_id`) REFERENCES house_address(`id`),
+    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `house_road_name` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -124,13 +142,15 @@ CREATE TABLE `person` (
     `skills_id` INT NOT NULL,
     `haulage_id` INT,
     `action_queue_id` INT NOT NULL,
+    `hex_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `deleted_at` TIMESTAMP,
     FOREIGN KEY (`family_id`) REFERENCES family(`id`),
     FOREIGN KEY (`house_id`) REFERENCES house(`id`),
     FOREIGN KEY (`skills_id`) REFERENCES person_skills(`id`),
     FOREIGN KEY (`haulage_id`) REFERENCES person_haulage(`id`),
-    FOREIGN KEY (`action_queue_id`) REFERENCES action_queue(`id`)
+    FOREIGN KEY (`action_queue_id`) REFERENCES action_queue(`id`),
+    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- TRADE -- -- -- -- --
 CREATE TABLE `trade` (
@@ -186,20 +206,4 @@ CREATE TABLE `betrothal` (
     FOREIGN KEY (`proposer_person_id`) REFERENCES person(`id`),
     FOREIGN KEY (`recipient_person_id`) REFERENCES person(`id`),
     FOREIGN KEY (`dowry_id`) REFERENCES betrothal_dowry(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- -- -- -- -- HEX -- -- -- -- --
-CREATE TABLE `hex` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `q_coordinate` INT NOT NULL,
-    `r_coordinate` INT NOT NULL,
-    `s_coordinate` INT NOT NULL,
-    `land` TINYINT(1) NOT NULL DEFAULT 0,
-    UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `hex_bonus` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `hex_id` INT NOT NULL,
-    `type` ENUM('bamboo', 'berry', 'flint') NOT NULL,
-    `value` INT NOT NULL,
-    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

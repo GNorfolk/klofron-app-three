@@ -14,6 +14,7 @@ import { Person } from "../../person/entities/Person";
 import { Resource } from "../../resource/entities/Resource";
 import { Trade } from "../../trade/entities/Trade";
 import { HouseAddress } from "./HouseAddress";
+import { Hex } from "src/hex/entities/Hex";
 
 @Index("house_family_id", ["house_family_id"], {})
 @Entity("house", { schema: "ka3" })
@@ -32,6 +33,13 @@ export class House {
 
   @Column("int", { name: "address_id" })
   house_address_id: number;
+
+  @Column("int", { name: "hex_id", nullable: false })
+  house_hex_id: number;
+
+  @ManyToOne(() => Hex)
+  @JoinColumn({ name: 'hex_id' }) // maps foreign key to Hex.id
+  house_hex: Hex;
 
   @Column("timestamp", {
     name: "created_at",
