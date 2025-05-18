@@ -38,7 +38,8 @@ export class HexService {
     sMin?: number;
     sMax?: number;
   }) {
-    const query = this.hexRepository.createQueryBuilder('hex');
+    const query = this.hexRepository.createQueryBuilder('hex')
+      .leftJoinAndSelect("hex.hex_bonuses", "bonus");
 
     if (filters?.qMin !== undefined) {
       query.andWhere('hex.hex_q_coordinate >= :qMin', { qMin: filters.qMin });

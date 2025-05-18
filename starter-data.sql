@@ -196,3 +196,10 @@ CREATE TABLE `hex` (
     `land` TINYINT(1) NOT NULL DEFAULT 0,
     UNIQUE KEY unique_hex_coordinates (q_coordinate, r_coordinate, s_coordinate)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `hex_bonus` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `hex_id` INT NOT NULL,
+    `type` ENUM('bamboo', 'berry', 'flint') NOT NULL,
+    `value` INT NOT NULL,
+    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

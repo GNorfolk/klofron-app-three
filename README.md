@@ -210,6 +210,16 @@ mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS k
 
 # MySQL
 ```sql
+CREATE TABLE `hex_bonus` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `hex_id` INT NOT NULL,
+    `type` ENUM('bamboo', 'berry', 'flint') NOT NULL,
+    `value` INT NOT NULL,
+    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'bamboo', 2);
+INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'berry', 2);
+INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'flint', 1);
 ```
 
 # save
