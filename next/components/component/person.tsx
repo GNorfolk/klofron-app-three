@@ -93,7 +93,7 @@ function PersonCard({ person, familyName, queryClient, userId }) {
             </div>
           </> : <>
             <div className="grid grid-cols-2">
-              <DivIconInfo iconType="BriefcaseIcon">{person_action_queue.action_queue_current_action ? "One Current Action" : "No Current Action"}</DivIconInfo>
+              <DivIconInfo iconType="BriefcaseIcon">{person_action_queue.action_queue_action_cooldown != null ? person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining + " cooldown" : "Available for work"}</DivIconInfo>
               <DivIconInfo iconType="MapPinIcon">{person_house?.house_address.house_address_number + " " + person_house?.house_address.house_address_road.house_road_name}</DivIconInfo>
             </div>
           </>

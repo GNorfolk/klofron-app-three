@@ -65,49 +65,13 @@ export function DescribePerson({ queryClient, status, userId = null, router }) {
           </div>
         } right={
           <div>
-            <ListPersonActionsCurrent currentAction={data.person_action_queue?.action_queue_current_action} queryClient={queryClient} personId={router.query.person_id} />
             <ListPersonActionsNext nextActions={data.person_action_queue.action_queue_next_actions} queryClient={queryClient} />
             <ListPersonActionsPrevious previousActions={data.person_action_queue.action_queue_previous_actions} personId={router.query.person_id} />
-            <RenamePerson queryClient={queryClient} personId={router.query.person_id} />
           </div>
         } />
       </QueryClientProvider>
     )
   }
-}
-
-function ListPersonActionsCurrent({ currentAction, queryClient, personId }) {
-  const cancelAction = useMutation({
-    mutationFn: (id) => {
-      return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/action/' + id, {
-        action: "cancel"
-      })
-    },
-  })
-
-  return (
-    <Container>
-      <HeaderTwo>Current Action</HeaderTwo>
-      <ul className="list-none p-0 m-0">
-        {
-          currentAction ? <>
-            <ListItem key={currentAction.action_id}>
-              <p>Action with id {currentAction.action_id} of type {currentAction.action_type_name} was started {currentAction.action_started_time_ago} ago.</p>
-              <button onClick={
-                () => {
-                    cancelAction.mutate(currentAction.action_id, { onSettled: (res) => {
-                    queryClient.invalidateQueries()
-                  }})
-                }
-              } >Cancel Action</button>
-            </ListItem>
-          </> : <>
-          <p>No actions currently in progress!</p>
-          </>
-        }
-      </ul>
-    </Container>
-  )
 }
 
 function ListPersonActionsNext({ nextActions, queryClient }) {
