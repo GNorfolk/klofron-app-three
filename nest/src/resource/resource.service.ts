@@ -45,21 +45,19 @@ export class ResourceService {
       if (inc.affected != 1 || dec.affected != 1) throw "Cannot update Person and House resources!"
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
-        .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
-        .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
+        .leftJoinAndSelect("person.person_resources", "person_resources")
         .innerJoinAndSelect("person.person_action_queue", "queue")
         .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
         .where("person.person_id = :id", { id: body.person_id })
         .getOne()
       if (person.person_action_queue.action_queue_action_cooldown) throw "Person cannot move resources while in action cooldown!"
-      if (person.person_food.resource_volume + person.person_wood.resource_volume > 3) throw "Person has too many resources!"
+      if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume > 3) throw "Person has too many resources!"
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")
-        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+        .innerJoinAndSelect("house.house_resources", "resources")
         .where("house.house_id = :id", { id: body.house_id })
         .getOne()
-      if (house.house_food.resource_volume + house.house_wood.resource_volume > house.house_storage) throw "House has too many resources!"
+      if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume > house.house_storage) throw "House has too many resources!"
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return [inc, dec];
@@ -79,12 +77,11 @@ export class ResourceService {
     try {
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")
-        .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-        .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+        .innerJoinAndSelect("house.house_resources", "resources")
         .where("house.house_id = :id", { id: house_id })
         .getOne()
-      if (resource_type == "food" && house.house_food.resource_volume < 1) throw "House cannot decrement food below zero!"
-      if (resource_type == "wood" && house.house_wood.resource_volume < 1) throw "House cannot decrement wood below zero!"
+      if (resource_type == "berry" && house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 1) throw "House cannot decrement berry below zero!"
+      if (resource_type == "bamboo" && house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume < 1) throw "House cannot decrement bamboo below zero!"
       dec = await queryRunner.manager.decrement(Resource, {
         resource_type_name: resource_type,
         resource_house_id: house_id

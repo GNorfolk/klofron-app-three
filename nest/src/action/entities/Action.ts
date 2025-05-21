@@ -85,8 +85,8 @@ export class Action {
   @AfterLoad()
   calculateActionTypeName(): void {
     switch(this.action_type_id) {
-      case 1: { this.action_type_name = "Get Food"; break }
-      case 2: { this.action_type_name = "Get Wood"; break }
+      case 1: { this.action_type_name = "Get Berry"; break }
+      case 2: { this.action_type_name = "Get Bamboo"; break }
       case 3: { this.action_type_name = "Increase Storage"; break }
       case 4: { this.action_type_name = "Increase Rooms"; break }
       case 5: { this.action_type_name = "Create House"; break }

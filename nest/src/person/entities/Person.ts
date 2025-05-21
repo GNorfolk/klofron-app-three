@@ -130,12 +130,6 @@ export class Person {
   @OneToMany(() => BetrothalDowry, (betrothal_dowry) => betrothal_dowry.betrothal_dowry_person)
   person_betrothal_dowrys: Relation<BetrothalDowry>[];
 
-  @OneToOne(() => Resource, (resource) => resource.resource_person)
-  person_wood: Relation<Resource>;
-
-  @OneToOne(() => Resource, (resource) => resource.resource_person)
-  person_food: Relation<Resource>;
-
   @Column("int", { name: "skills_id" })
   person_skills_id: number;
 

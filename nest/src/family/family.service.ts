@@ -38,8 +38,7 @@ export class FamilyService {
     let family = this.familyRepository
       .createQueryBuilder("family")
       .leftJoinAndSelect("family.family_people", "person", "person.deleted_at IS NULL")
-      .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
-      .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
+      .leftJoinAndSelect("person.person_resources", "person_resources")
       .leftJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
       .leftJoinAndSelect("family.family_houses", "house")
@@ -53,8 +52,7 @@ export class FamilyService {
       .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
       .leftJoinAndSelect("betrothal.betrothal_dowry", "dowry")
       .leftJoinAndSelect("dowry.betrothal_dowry_person", "dowry_person")
-      .leftJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
-      .leftJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
+      .leftJoinAndSelect("house.house_resources", "house_resources")
       .where("family.id = :id", { id: id })
     return await family.getOne();
   }

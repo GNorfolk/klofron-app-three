@@ -77,21 +77,21 @@ function ResourceInfo({ data }) {
         <TableHeader>
           <TableRow className='hover:bg-muted/0'>
             <TableHead className="w-2/5 font-medium border-r">Name</TableHead>
-            <TableHead className="w-3/10 font-medium border-r">Food</TableHead>
-            <TableHead className="w-3/10 font-medium">Wood</TableHead>
+            <TableHead className="w-3/10 font-medium border-r">Berry</TableHead>
+            <TableHead className="w-3/10 font-medium">Bamboo</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow key={0}>
             <TableCell className="w-2/5 font-medium border-r">{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name}</TableCell>
-            <TableCell className="w-3/10 border-r">{data.house_food.resource_volume}</TableCell>
-            <TableCell className="w-3/10">{data.house_wood.resource_volume}</TableCell>
+            <TableCell className="w-3/10 border-r">{data.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume}</TableCell>
+            <TableCell className="w-3/10">{data.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume}</TableCell>
           </TableRow>
-          { data.house_people.map(({ person_id, person_name, person_food, person_wood, person_family }) => (
+          { data.house_people.map(({ person_id, person_name, person_resources, person_family }) => (
             <TableRow key={person_id}>
               <TableCell className="w-2/5 font-medium border-r">{person_name + " " + person_family.family_name}</TableCell>
-              <TableCell className="w-3/10 border-r">{person_food.resource_volume}</TableCell>
-              <TableCell className="w-3/10">{person_wood.resource_volume}</TableCell>
+              <TableCell className="w-3/10 border-r">{person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume}</TableCell>
+              <TableCell className="w-3/10">{person_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -144,8 +144,8 @@ function ManageResources({ data, router, queryClient }) {
                 ))}
               </Select>
               <Select name="resource_type">
-                <option value="food">Food</option>
-                <option value="wood">Wood</option>
+                <option value="berry">Berry</option>
+                <option value="bamboo">Bamboo</option>
               </Select>
               <Input name="resource_volume" defaultValue="1" />
             </Form>
@@ -161,22 +161,22 @@ function ManageResources({ data, router, queryClient }) {
 }
 
 function DeleteResources({ data, queryClient }) {
-  const decreaseWood = useMutation({
+  const decreaseBamboo = useMutation({
     mutationFn: (id) => {
       return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
         action: "decrement",
         house_id: id,
-        type_name: "wood"
+        type_name: "bamboo"
       })
     },
   })
 
-  const decreaseFood = useMutation({
+  const decreaseBerry = useMutation({
     mutationFn: (id) => {
       return axios.patch(process.env.NEXT_PUBLIC_API_HOST + '/v2/resource', {
         action: "decrement",
         house_id: id,
-        type_name: "food"
+        type_name: "berry"
       })
     },
   })
@@ -188,11 +188,11 @@ function DeleteResources({ data, queryClient }) {
         <ListItem>
           <div className="bg-background rounded-lg shadow-lg p-6 bg-slate-700">
             <div className="flex items-center justify-between my-2">
-              <h3 className="text-lg font-semibold text-white">Wood</h3>
+              <h3 className="text-lg font-semibold text-white">Bamboo</h3>
               <div className="flex items-center gap-2">
-                <span className="text-gray-300 font-medium">{data.house_wood.resource_volume} in storage!</span>
+                <span className="text-gray-300 font-medium">{data.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume} in storage!</span>
                 <Button variant="outline" size="sm" onClick={ () => {
-                  decreaseWood.mutate(data.house_id, { onSettled: (res) => {
+                  decreaseBamboo.mutate(data.house_id, { onSettled: (res) => {
                     queryClient.invalidateQueries();
                   }});
                 }}>
@@ -206,11 +206,11 @@ function DeleteResources({ data, queryClient }) {
         <ListItem>
           <div className="bg-background rounded-lg shadow-lg p-6 bg-slate-700">
             <div className="flex items-center justify-between my-2">
-              <h3 className="text-lg font-semibold text-white">Food</h3>
+              <h3 className="text-lg font-semibold text-white">Berry</h3>
               <div className="flex items-center gap-2">
-                <span className="text-gray-300 font-medium">{data.house_food.resource_volume} in storage!</span>
+                <span className="text-gray-300 font-medium">{data.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume} in storage!</span>
                 <Button variant="outline" size="sm" onClick={ () => {
-                  decreaseFood.mutate(data.house_id, { onSettled: (res) => {
+                  decreaseBerry.mutate(data.house_id, { onSettled: (res) => {
                     queryClient.invalidateQueries();
                   }});
                 }}>

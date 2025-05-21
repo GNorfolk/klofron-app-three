@@ -63,12 +63,6 @@ export class House {
   @OneToMany(() => Resource, (resource) => resource.resource_house)
   house_resources: Relation<Resource>[];
 
-  @OneToOne(() => Resource, (resource) => resource.resource_house)
-  house_wood: Relation<Resource>;
-
-  @OneToOne(() => Resource, (resource) => resource.resource_house)
-  house_food: Relation<Resource>;
-
   @OneToMany(() => Trade, (trade) => trade.trade_house)
   house_trades: Relation<Trade>[];
 

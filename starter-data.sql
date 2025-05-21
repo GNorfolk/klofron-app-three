@@ -53,8 +53,6 @@ CREATE TABLE `house` (
     `address_id` INT NOT NULL,
     `rooms` INT NOT NULL DEFAULT 1,
     `storage` INT NOT NULL DEFAULT 6,
-    `food` INT NOT NULL DEFAULT 0,
-    `wood` INT NOT NULL DEFAULT 0,
     `family_id` INT NOT NULL,
     `hex_id` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
@@ -169,7 +167,7 @@ CREATE TABLE `trade` (
 -- -- -- -- -- RESOURCE -- -- -- -- --
 CREATE TABLE `resource` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `type_name` VARCHAR(155) NOT NULL,
+    `type_name` ENUM('bamboo', 'berry', 'flint') NOT NULL,
     `volume` INT UNSIGNED NOT NULL DEFAULT 0,
     `house_id` INT,
     `person_id` INT,

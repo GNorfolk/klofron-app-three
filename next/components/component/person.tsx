@@ -111,8 +111,8 @@ function PersonCard({ person, familyName, queryClient, userId }) {
                     <option selected disabled value="-1">Unavailable</option>
                   ) : (
                     <>
-                      <option value="1">Get Food</option>
-                      <option value="2">Get Wood</option>
+                      <option value="1">Get Berry</option>
+                      <option value="2">Get Bamboo</option>
                       <option value="3">Increase Storage</option>
                       <option value="4">Increase Rooms</option>
                       <option value="5">Create House</option>

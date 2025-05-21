@@ -45,16 +45,16 @@ export class HouseService {
     });
     house.house_address_id = houseAddress.house_address_id
     result = await queryRunner.manager.save(House, house);
-    const food = {
-      resource_type_name: "food",
+    const berry = {
+      resource_type_name: "berry",
       resource_house_id: result.house_id
     }
-    const wood = {
-      resource_type_name: "wood",
+    const bamboo = {
+      resource_type_name: "bamboo",
       resource_house_id: result.house_id
     }
-    await queryRunner.manager.save(Resource, food);
-    await queryRunner.manager.save(Resource, wood);
+    await queryRunner.manager.save(Resource, berry);
+    await queryRunner.manager.save(Resource, bamboo);
     return result;
   }
 
@@ -63,8 +63,7 @@ export class HouseService {
       .createQueryBuilder("house")
       .innerJoinAndSelect("house.house_address", "address")
       .innerJoinAndSelect("address.house_address_road", "road")
-      .innerJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
-      .innerJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
+      .innerJoinAndSelect("house.house_resources", "resources")
       .innerJoinAndSelect("house.house_family", "family")
       .leftJoinAndSelect("house.house_people", "person")
       if (query?.family_id && query?.exclude_ids) {
@@ -87,14 +86,12 @@ export class HouseService {
       .createQueryBuilder("house")
       .innerJoinAndSelect("house.house_address", "address")
       .innerJoinAndSelect("address.house_address_road", "road")
-      .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
-      .innerJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'wood'")
+      .innerJoinAndSelect("house.house_resources", "house_resources")
       .innerJoinAndSelect("house.house_family", "house_family")
       .leftJoinAndSelect("house.house_people", "person")
       .leftJoinAndSelect("house.house_trades", "trade")
       .leftJoinAndSelect("person.person_family", "person_family")
-      .leftJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
-      .leftJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
+      .leftJoinAndSelect("person.person_resources", "person_resources")
       .leftJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_next_actions", "next_actions", "next_actions.started_at IS NULL AND next_actions.cancelled_at IS NULL AND next_actions.completed_at IS NULL")
       .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")

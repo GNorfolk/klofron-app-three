@@ -23,7 +23,7 @@ export class MoveHouseService {
       move = await queryRunner.manager.save(MoveHouse, moveHouse);
       person = await queryRunner.manager.update(Person, moveHouse.move_house_person_id, { person_house_id: null });
       resource = await queryRunner.manager.decrement(Resource, {
-        resource_type_name: "food",
+        resource_type_name: "berry",
         resource_person_id: moveHouse.move_house_person_id
       }, "resource_volume", 1);
       if (resource.affected != 1) throw "Cannot decrement person resrouces!"

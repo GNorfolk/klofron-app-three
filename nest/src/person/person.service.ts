@@ -33,7 +33,7 @@ export class PersonService {
         .leftJoinAndSelect("house.house_people", "person", "person.person_partner_id IS NOT NULL")
         .innerJoinAndSelect("person.person_action_queue", "queue")
         .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
-        .innerJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
+        .innerJoinAndSelect("house.house_resources", "house_resources")
         .where("house.house_id = :id", { id: house_id })
         .getOne();
       // TODO: Add where clause on house_people so that it doesn't return children
@@ -52,9 +52,9 @@ export class PersonService {
         .where("person.house_id = :id", { id: house_id })
         .getMany()
       if (house_people.length >= house.house_rooms) throw "Not enough rooms!"
-      if (house.house_food.resource_volume < 2) throw "Not enough food!"
+      if (house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 2) throw "Not enough berry!"
       const resource = await queryRunner.manager.decrement(Resource, {
-        resource_type_name: "food",
+        resource_type_name: "berry",
         resource_house_id: house_id
       }, "resource_volume", 2);
       if (resource.affected != 1) throw "Cannot decrement house resrouces!"
@@ -91,11 +91,11 @@ export class PersonService {
       person.person_action_queue_id = queue.action_queue_id;
       const result = await queryRunner.manager.save(Person, person);
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "food",
+        resource_type_name: "berry",
         resource_person_id: result.person_id
       });
-      const wood = await queryRunner.manager.save(Resource, {
-        resource_type_name: "wood",
+      await queryRunner.manager.save(Resource, {
+        resource_type_name: "bamboo",
         resource_person_id: result.person_id
       });
       await queryRunner.commitTransaction();
@@ -154,21 +154,21 @@ export class PersonService {
       await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });
       await queryRunner.manager.update(Person, father.person_id, { person_partner_id: mother.person_id });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "food",
+        resource_type_name: "berry",
         resource_person_id: mother.person_id,
         resource_volume: 3
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "wood",
+        resource_type_name: "bamboo",
         resource_person_id: mother.person_id
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "food",
+        resource_type_name: "berry",
         resource_person_id: father.person_id,
         resource_volume: 3
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "wood",
+        resource_type_name: "bamboo",
         resource_person_id: father.person_id
       });
       await queryRunner.commitTransaction();
@@ -189,8 +189,7 @@ export class PersonService {
       .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("house.house_address", "address")
       .leftJoinAndSelect("address.house_address_road", "road")
-      .innerJoinAndSelect("person.person_food", "person_food", "person_food.type_name = 'food'")
-      .innerJoinAndSelect("person.person_wood", "person_wood", "person_wood.type_name = 'wood'")
+      .innerJoinAndSelect("person.person_resources", "person_resources")
       .innerJoinAndSelect("person.person_action_queue", "queue")
       .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
       .where("person.person_deleted_at IS NULL")
@@ -226,8 +225,7 @@ export class PersonService {
       .leftJoinAndSelect("address.house_address_road", "road")
       .leftJoinAndSelect("person.person_partner", "partner")
       .leftJoinAndSelect("partner.person_family", "partner_family")
-      .innerJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'")
-      .innerJoinAndSelect("person.person_food", "food", "food.type_name = 'food'")
+      .innerJoinAndSelect("person.person_resources", "resources")
       .leftJoinAndSelect("person.person_betrothal_receipts", "betrothal", "betrothal.accepted_at IS NULL AND betrothal.deleted_at IS NULL")
       .leftJoinAndSelect("betrothal.betrothal_proposer_person", "betrothal_person")
       .leftJoinAndSelect("betrothal_person.person_family", "betrothal_person_family")
@@ -271,27 +269,25 @@ export class PersonService {
       if (house.house_people.length > house.house_rooms) throw "Too many people live at this address!";
       const person = await queryRunner.manager
         .createQueryBuilder(Person, "person")
-        .innerJoinAndSelect("person.person_wood", "wood", "wood.type_name = 'wood'")
-        .innerJoinAndSelect("person.person_food", "food", "food.type_name = 'food'")
+        .innerJoinAndSelect("person.person_resources", "resources")
         .leftJoinAndSelect("person.person_house", "house")
-        .leftJoinAndSelect("house.house_food", "house_food", "house_food.type_name = 'food'")
-        .leftJoinAndSelect("house.house_wood", "house_wood", "house_wood.type_name = 'food'")
+        .leftJoinAndSelect("house.house_resources", "house_resources")
         .where("person.id = :id", { id: person_id })
         .getOne();
       if (person?.person_house_id == house_id) throw "Person already living at this address!";
       if (person?.person_house_id) {
-        if (person.person_house.house_food.resource_volume < 1) throw "Not enough house food to move!";
+        if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 1) throw "Not enough house berry to move!";
         result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
         const resource = await queryRunner.manager.decrement(Resource, {
-          resource_type_name: "food",
+          resource_type_name: "berry",
           resource_house_id: person.person_house_id
         }, "resource_volume", 1);
         if (resource.affected != 1) throw "Cannot decrement house resrouces!";
       } else {
-        if (person.person_food.resource_volume < 1) throw "Not enough person food to move!";
+        if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 1) throw "Not enough person berry to move!";
         result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
         const resource = await queryRunner.manager.decrement(Resource, {
-          resource_type_name: "food",
+          resource_type_name: "berry",
           resource_person_id: person_id
         }, "resource_volume", 1);
         if (resource.affected != 1) throw "Cannot decrement person resrouces!";
