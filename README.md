@@ -217,15 +217,16 @@ CREATE TABLE `hex_bonus` (
     `value` INT NOT NULL,
     FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'bamboo', 2);
-INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'berry', 2);
-INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'flint', 1);
+INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'bamboo', 3);
+INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'berry', 3);
+INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'flint', 2);
 ALTER TABLE `house` ADD COLUMN `hex_id` INT NOT NULL;
 ALTER TABLE `person` ADD COLUMN `hex_id` INT NOT NULL;
 UPDATE `house` SET `hex_id` = 1;
 UPDATE `person` SET `hex_id` = 1;
 ALTER TABLE `house` ADD CONSTRAINT `fk_house_hex` FOREIGN KEY (`hex_id`) REFERENCES `hex`(`id`);
 ALTER TABLE `person` ADD CONSTRAINT `fk_person_hex` FOREIGN KEY (`hex_id`) REFERENCES `hex`(`id`);
+ALTER TABLE `action_diceroll` ADD COLUMN `hex_bonus` INT NOT NULL;
 ```
 
 # save

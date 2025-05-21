@@ -21,6 +21,9 @@ export class ActionDiceroll {
   @Column("int", { name: "red_roll" })
   action_diceroll_red_roll: number;
 
+  @Column("int", { name: "hex_bonus" })
+  action_diceroll_hex_bonus: number;
+
   @OneToOne(() => ActionCooldown, (action_cooldown) => action_cooldown.action_cooldown_diceroll)
   action_diceroll_action_cooldown: Relation<ActionCooldown>;
 

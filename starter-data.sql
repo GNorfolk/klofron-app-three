@@ -96,7 +96,8 @@ CREATE TABLE `action_diceroll` (
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `black_roll` INT NOT NULL,
     `skill_level` INT NOT NULL,
-    `red_roll` INT NOT NULL
+    `red_roll` INT NOT NULL,
+    `hex_bonus` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `action_cooldown` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

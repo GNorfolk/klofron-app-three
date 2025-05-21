@@ -11,6 +11,7 @@ import { HouseService } from '../house/house.service';
 import { ActionCooldown } from './entities/ActionCooldown';
 import { ActionQueue } from './entities/ActionQueue';
 import { ActionDiceroll } from './entities/ActionDiceroll';
+import { HexBonus } from 'src/hex/entities/HexBonus';
 
 @Injectable()
 export class ActionService {
@@ -35,6 +36,7 @@ export class ActionService {
         .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
         .leftJoinAndSelect("person.person_house", "house")
         .leftJoinAndSelect("house.house_hex", "hex")
+        .leftJoinAndSelect("hex.hex_bonuses", "bonus")
         .leftJoinAndSelect("person.person_skills", "skills")
         .leftJoinAndSelect("house.house_food", "food", "food.type_name = 'food'")
         .leftJoinAndSelect("house.house_wood", "wood", "wood.type_name = 'wood'")
@@ -101,9 +103,9 @@ export class ActionService {
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
     } else if (action.action_type_id == 1) {
-      diceroll = await this.getFood(queryRunner, person, action.action_experience_multiplier);
+      diceroll = await this.getFood(queryRunner, person, action.action_experience_multiplier, person.person_house.house_hex.hex_bonuses);
     } else if (action.action_type_id == 2) {
-      diceroll = await this.getWood(queryRunner, person, action.action_experience_multiplier);
+      diceroll = await this.getWood(queryRunner, person, action.action_experience_multiplier, person.person_house.house_hex.hex_bonuses);
     } else if (action.action_type_id == 3) {
       diceroll = await this.increaseStorage(queryRunner, person, action.action_experience_multiplier);
     } else if (action.action_type_id == 4) {
@@ -228,8 +230,9 @@ export class ActionService {
     return "Done: " + cooldowns.length
   }
 
-  async getFood(queryRunner, person: Person, experience_multiplier = 1) {
-    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_gatherer_level)
+  async getFood(queryRunner, person: Person, experience_multiplier = 1, hexBonuses: HexBonus[]) {
+    const hexBonus = await this.utilityGetBonusValue(hexBonuses, 'berry')
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_gatherer_level, hexBonus)
     const house = person.person_house
     if (diceRoll.action_diceroll_success && house.house_storage >= house.house_food.resource_volume + house.house_wood.resource_volume + 2) {
       await queryRunner.manager.increment(Resource, {
@@ -246,7 +249,8 @@ export class ActionService {
     return diceRoll;
   }
 
-  async getWood(queryRunner, person: Person, experience_multiplier = 1) {
+  async getWood(queryRunner, person: Person, experience_multiplier = 1, hexBonuses: HexBonus[]) {
+    const hexBonus = await this.utilityGetBonusValue(hexBonuses, 'bamboo')
     const requiredFood = 1;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
     const food = await queryRunner.manager.decrement(Resource, {
@@ -254,7 +258,7 @@ export class ActionService {
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredFood);
     if (food.affected != 1) throw "Cannot decrement house resources!"
-    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_lumberjack_level)
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_lumberjack_level, hexBonus)
     if (diceRoll.action_diceroll_success && person.person_house.house_storage >= person.person_house.house_food.resource_volume + person.person_house.house_wood.resource_volume + 1) {
       await queryRunner.manager.increment(Resource, {
         resource_type_name: "wood",
@@ -284,7 +288,7 @@ export class ActionService {
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
-    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
       await queryRunner.manager.increment(House, {
         house_id: person.person_house_id
@@ -300,6 +304,7 @@ export class ActionService {
   }
 
   async increaseRooms(queryRunner, person: Person, experience_multiplier = 1) {
+    const hexBonus = 0
     const requiredWood = ( 2 * person.person_house.house_rooms ) + 2;
     const requiredFood = 1;
     if (person.person_house.house_food.resource_volume < requiredFood) throw "Not enough food, " + requiredFood + " required!"
@@ -313,7 +318,7 @@ export class ActionService {
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
-    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
       await queryRunner.manager.increment(House, {
         house_id: person.person_house_id
@@ -343,7 +348,7 @@ export class ActionService {
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredWood);
     if (food.affected != 1 && wood.affected != 1) throw "Cannot decrement house resources!"
-    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level)
+    const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
       result = await this.houseService.createHouse(result, queryRunner, {
           house_family_id: person.person_family_id,
@@ -361,16 +366,20 @@ export class ActionService {
     return diceRoll;
   }
 
-  async utilityGetDiceRoll(skillLevel: number) {
+  async utilityGetDiceRoll(skillLevel: number, hexBonus: number) {
+    const bonusMap: { [key: number]: number } = { 1: 9, 2: 3, 3: -3, [-1]: 0 };
     const blackRoll = Math.floor(12 * Math.random() + 1);
     const redRoll = Math.floor(12 * Math.random() + 1);
-    const diff = Math.floor((blackRoll + skillLevel - redRoll) / 3)
+    const adjustedBlackRoll = blackRoll + skillLevel
+    const adjustedRedRoll = Math.max(1, redRoll + bonusMap[hexBonus]);
+    const diff = Math.floor((adjustedBlackRoll - adjustedRedRoll) / 3)
     return this.actionDicerollRepository.save({
       action_diceroll_created_at: new Date(),
-      action_diceroll_success: blackRoll + skillLevel > redRoll,
+      action_diceroll_success: adjustedBlackRoll > adjustedRedRoll,
       action_diceroll_black_roll: blackRoll,
       action_diceroll_skill_level: skillLevel,
       action_diceroll_red_roll: redRoll,
+      action_diceroll_hex_bonus: bonusMap[hexBonus],
       action_diceroll_cooldown_hours: diff > 0 ? 8 - diff : 8
     });
   }
@@ -391,5 +400,9 @@ export class ActionService {
     } else {
       return 1;
     }
+  }
+
+  async utilityGetBonusValue(bonuses: HexBonus[], hex_bonus_type: string): Promise<number> {
+    return bonuses.find(b => b.hex_bonus_type === hex_bonus_type)?.hex_bonus_value ?? 0;
   }
 }

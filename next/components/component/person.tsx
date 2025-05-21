@@ -126,7 +126,7 @@ function PersonCard({ person, familyName, queryClient, userId }) {
           </FormProvider>
           {
             queryClient && person_action_queue.action_queue_action_cooldown?.action_cooldown_time_remaining ? person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll_id ? <>
-              <small className="text-gray-500 ml-2">{person_name} rolled black[{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_black_roll}+{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_skill_level}] against red[{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_red_roll}] and has {person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining} cooldown. </small>
+              <small className="text-gray-500 ml-2">{person_name} rolled black[{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_black_roll}+{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_skill_level}] against red[{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_red_roll}+{person_action_queue.action_queue_action_cooldown.action_cooldown_diceroll.action_diceroll_hex_bonus}] and has {person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining} cooldown. </small>
             </> : <>
               <small className="text-gray-500 ml-2">{person_name} performed an action and has {person_action_queue.action_queue_action_cooldown.action_cooldown_time_remaining} cooldown. </small>
             </> : <></>
