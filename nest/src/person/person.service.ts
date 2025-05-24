@@ -81,6 +81,7 @@ export class PersonService {
       person.person_name = person_name.person_name_name
       person.person_mother_id = mother.person_id
       person.person_father_id = father.person_id
+      person.person_hex_id = mother.person_hex_id
       const skills = await queryRunner.manager.save(PersonSkills, {
         person_skills_gatherer_experience: 1,
         person_skills_lumberjack_experience: 1,
@@ -97,6 +98,13 @@ export class PersonService {
       await queryRunner.manager.save(Resource, {
         resource_type_name: "bamboo",
         resource_person_id: result.person_id
+      });
+      const childActionDoneAt = new Date();
+      childActionDoneAt.setHours(childActionDoneAt.getHours() + 24);
+      await queryRunner.manager.save(ActionCooldown, {
+        action_cooldown_queue_id: result.person_action_queue_id,
+        action_cooldown_done_at: childActionDoneAt,
+        action_cooldown_duration_hours: 24
       });
       await queryRunner.commitTransaction();
       await queryRunner.release();

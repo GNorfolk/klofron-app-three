@@ -227,6 +227,8 @@ UPDATE `person` SET `hex_id` = 1;
 ALTER TABLE `house` ADD CONSTRAINT `fk_house_hex` FOREIGN KEY (`hex_id`) REFERENCES `hex`(`id`);
 ALTER TABLE `person` ADD CONSTRAINT `fk_person_hex` FOREIGN KEY (`hex_id`) REFERENCES `hex`(`id`);
 ALTER TABLE `action_diceroll` ADD COLUMN `hex_bonus` INT NOT NULL;
+UPDATE `resource` SET type_name = 'berry' WHERE type_name = 'food';
+UPDATE `resource` SET type_name = 'bamboo' WHERE type_name = 'wood';
 ALTER TABLE `resource` MODIFY COLUMN type_name ENUM('bamboo', 'berry', 'flint') NOT NULL;
 ```
 
