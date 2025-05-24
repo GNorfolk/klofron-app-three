@@ -205,31 +205,12 @@ WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 
 
 **How to connect to aws database:**
 ```bash
+export DB_PASS=$(aws secretsmanager get-secret-value --secret-id 'rds!db-088ff7c4-30ef-4bc2-95c8-23ececf641eb' --region 'eu-west-1' --query 'SecretString' --output text | jq '.password' | tr -d '"')
 mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS ka3
 ```
 
 # MySQL
 ```sql
-CREATE TABLE `hex_bonus` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `hex_id` INT NOT NULL,
-    `type` ENUM('bamboo', 'berry', 'flint') NOT NULL,
-    `value` INT NOT NULL,
-    FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'bamboo', 3);
-INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'berry', 3);
-INSERT INTO hex_bonus (hex_id, type, value) VALUES (1, 'flint', 2);
-ALTER TABLE `house` ADD COLUMN `hex_id` INT NOT NULL;
-ALTER TABLE `person` ADD COLUMN `hex_id` INT NOT NULL;
-UPDATE `house` SET `hex_id` = 1;
-UPDATE `person` SET `hex_id` = 1;
-ALTER TABLE `house` ADD CONSTRAINT `fk_house_hex` FOREIGN KEY (`hex_id`) REFERENCES `hex`(`id`);
-ALTER TABLE `person` ADD CONSTRAINT `fk_person_hex` FOREIGN KEY (`hex_id`) REFERENCES `hex`(`id`);
-ALTER TABLE `action_diceroll` ADD COLUMN `hex_bonus` INT NOT NULL;
-UPDATE `resource` SET type_name = 'berry' WHERE type_name = 'food';
-UPDATE `resource` SET type_name = 'bamboo' WHERE type_name = 'wood';
-ALTER TABLE `resource` MODIFY COLUMN type_name ENUM('bamboo', 'berry', 'flint') NOT NULL;
 ```
 
 # save
