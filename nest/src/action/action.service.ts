@@ -44,6 +44,8 @@ export class ActionService {
         .leftJoinAndSelect("student.person_skills", "student_skills")
         .leftJoinAndSelect("student.person_house", "student_house")
         .leftJoinAndSelect("student_house.house_resources", "student_resources")
+        .leftJoinAndSelect("student_house.house_hex", "student_house_hex")
+        .leftJoinAndSelect("student_house_hex.hex_bonuses", "student_house_bonuses")
         .leftJoinAndSelect("student_queue.action_queue_action_cooldown", "student_cooldown", "student_cooldown.created_at IS NOT NULL AND student_cooldown.done_at > NOW()")
         .where("person.person_action_queue_id = :id", { id: action.action_queue_id })
         .getOne();
@@ -59,7 +61,7 @@ export class ActionService {
       } else if (person.person_students.length > 0) {
         result = await this.utilityPerformActionStudents(queryRunner, action, person)
       } else {
-        result = await this.utilityPerformActionSingle(queryRunner, action, person, person.person_action_queue)
+        result = await this.utilityPerformActionSingle(queryRunner, action, person, person.person_action_queue, null)
       }
       await queryRunner.commitTransaction();
       await queryRunner.release();
@@ -83,7 +85,7 @@ export class ActionService {
       let student_action = structuredClone(action);
       student_action.action_queue_id = student.person_action_queue_id;
       student_action.action_experience_multiplier = await this.utilityCalculateExperienceMultiplier(person.person_students.length, student_action.action_type_id, person.person_skills);
-      await this.utilityPerformActionSingle(queryRunner, student_action, student, student.person_action_queue)
+      await this.utilityPerformActionSingle(queryRunner, student_action, student, student.person_action_queue, person.person_id)
     }
     const actionDoneAt = new Date()
     actionDoneAt.setHours(actionDoneAt.getHours() + 8);
@@ -94,22 +96,26 @@ export class ActionService {
     });
   }
 
-  async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person, queue: ActionQueue) {
+  async utilityPerformActionSingle(queryRunner, action: CreateActionDto, person: Person, queue: ActionQueue, teacherId: number | null) {
     let diceroll;
     if (person.person_deleted_at) throw "Person is deceased!";
     if (queue.action_queue_action_cooldown) throw "Action cooldown still in progress!";
+    if (person.person_teacher_id && person.person_teacher_id != teacherId) throw "Cannot perform action when teacher is set";
+    const multiplier = action.action_experience_multiplier
+    // Might need to do ?? [] if nothing returned
+    const bonus = person.person_house.house_hex.hex_bonuses
     if (action.action_type_id == -1) {
       throw "Cannot perform action when teacher is set!"
     } else if (action.action_type_id == 1) {
-      diceroll = await this.getBerry(queryRunner, person, action.action_experience_multiplier, person.person_house.house_hex.hex_bonuses);
+      diceroll = await this.getBerry(queryRunner, person, multiplier, bonus);
     } else if (action.action_type_id == 2) {
-      diceroll = await this.getBamboo(queryRunner, person, action.action_experience_multiplier, person.person_house.house_hex.hex_bonuses);
+      diceroll = await this.getBamboo(queryRunner, person, multiplier, bonus);
     } else if (action.action_type_id == 3) {
-      diceroll = await this.increaseStorage(queryRunner, person, action.action_experience_multiplier);
+      diceroll = await this.increaseStorage(queryRunner, person, multiplier);
     } else if (action.action_type_id == 4) {
-      diceroll = await this.increaseRooms(queryRunner, person, action.action_experience_multiplier);
+      diceroll = await this.increaseRooms(queryRunner, person, multiplier);
     } else if (action.action_type_id == 5) {
-      diceroll = await this.createHouse(queryRunner, person, action.action_experience_multiplier);
+      diceroll = await this.createHouse(queryRunner, person, multiplier);
     } else if (action.action_type_id == 6) {
       // Do nothing
     } else {
@@ -205,6 +211,7 @@ export class ActionService {
       .leftJoinAndSelect("person.person_house", "house")
       .leftJoinAndSelect("house.house_hex", "hex")
       .leftJoinAndSelect("person.person_skills", "skills")
+      .leftJoinAndSelect("person.person_students", "students")
       .leftJoinAndSelect("house.house_resources", "resources")
       .where("cooldown.done_at < NOW() AND cooldown.deleted_at is null")
       .getMany();
@@ -213,14 +220,42 @@ export class ActionService {
     await queryRunner.connect();
     for (const cooldown of cooldowns) {
       const action = cooldown.action_cooldown_queue.action_queue_actions[0]
-      try {
-        await queryRunner.startTransaction();
+      if (action) {
+        const person = await queryRunner.manager
+          .createQueryBuilder(Person, "person")
+          .innerJoinAndSelect("person.person_action_queue", "queue")
+          .leftJoinAndSelect("queue.action_queue_current_action", "current_action", "current_action.started_at IS NOT NULL AND current_action.cancelled_at IS NULL AND current_action.completed_at IS NULL")
+          .leftJoinAndSelect("queue.action_queue_action_cooldown", "cooldown", "cooldown.created_at IS NOT NULL AND cooldown.done_at > NOW()")
+          .leftJoinAndSelect("person.person_house", "house")
+          .leftJoinAndSelect("house.house_hex", "hex")
+          .leftJoinAndSelect("hex.hex_bonuses", "bonus")
+          .leftJoinAndSelect("person.person_skills", "skills")
+          .leftJoinAndSelect("house.house_resources", "resources")
+          .leftJoinAndSelect("person.person_students", "student")
+          .leftJoinAndSelect("student.person_action_queue", "student_queue")
+          .leftJoinAndSelect("student.person_skills", "student_skills")
+          .leftJoinAndSelect("student.person_house", "student_house")
+          .leftJoinAndSelect("student_house.house_resources", "student_resources")
+          .leftJoinAndSelect("student_house.house_hex", "student_house_hex")
+          .leftJoinAndSelect("student_house_hex.hex_bonuses", "student_house_bonuses")
+          .leftJoinAndSelect("student_queue.action_queue_action_cooldown", "student_cooldown", "student_cooldown.created_at IS NOT NULL AND student_cooldown.done_at > NOW()")
+          .where("person.person_id = :id", { id: cooldown.action_cooldown_queue.action_queue_person.person_id })
+          .getOne();
+        try {
+          await queryRunner.startTransaction();
+          await queryRunner.manager.update(ActionCooldown, cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
+          if (person.person_students.length > 0) {
+            await this.utilityPerformActionStudents(queryRunner, action, person)
+          } else {
+            await this.utilityPerformActionSingle(queryRunner, action, person, cooldown.action_cooldown_queue, null)
+          }
+          await queryRunner.commitTransaction();
+        } catch (err) {
+          console.log(err)
+          await queryRunner.rollbackTransaction();
+        }
+      } else {
         await queryRunner.manager.update(ActionCooldown, cooldown.action_cooldown_id, { action_cooldown_deleted_at: new Date() });
-        if (action) await this.utilityPerformActionSingle(queryRunner, action, cooldown.action_cooldown_queue.action_queue_person, cooldown.action_cooldown_queue)
-        await queryRunner.commitTransaction();
-      } catch (err) {
-        console.log(err)
-        await queryRunner.rollbackTransaction();
       }
     }
     await queryRunner.release();
