@@ -310,16 +310,16 @@ export class ActionService {
     const requiredBirch = ( person.person_house.house_storage / 3 ) + 1;
     const requiredBerry = 1;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
-    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough bamboo, " + requiredBirch + " required!"
+    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough birch, " + requiredBirch + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "berry",
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBerry);
-    const bamboo = await queryRunner.manager.decrement(Resource, {
+    const birch = await queryRunner.manager.decrement(Resource, {
       resource_type_name: 'birch',
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBirch);
-    if (berry.affected != 1 && bamboo.affected != 1) throw "Cannot decrement house resources!"
+    if (berry.affected != 1 && birch.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
       await queryRunner.manager.increment(House, {
@@ -340,16 +340,16 @@ export class ActionService {
     const requiredBirch = ( 2 * person.person_house.house_rooms ) + 2;
     const requiredBerry = 1;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
-    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough bamboo, " + requiredBirch + " required!"
+    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough birch, " + requiredBirch + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "berry",
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBerry);
-    const bamboo = await queryRunner.manager.decrement(Resource, {
+    const birch = await queryRunner.manager.decrement(Resource, {
       resource_type_name: 'birch',
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBirch);
-    if (berry.affected != 1 && bamboo.affected != 1) throw "Cannot decrement house resources!"
+    if (berry.affected != 1 && birch.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
       await queryRunner.manager.increment(House, {
@@ -370,16 +370,16 @@ export class ActionService {
     const requiredBirch = 0;
     const requiredBerry = 0;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
-    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough bamboo, " + requiredBirch + " required!"
+    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough birch, " + requiredBirch + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "berry",
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBerry);
-    const bamboo = await queryRunner.manager.decrement(Resource, {
+    const birch = await queryRunner.manager.decrement(Resource, {
       resource_type_name: 'birch',
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBirch);
-    if (berry.affected != 1 && bamboo.affected != 1) throw "Cannot decrement house resources!"
+    if (berry.affected != 1 && birch.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
       result = await this.houseService.createHouse(result, queryRunner, {
