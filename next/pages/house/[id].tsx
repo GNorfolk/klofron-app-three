@@ -111,7 +111,7 @@ function ListHouseResources({ data, queryClient, userId = null, router }) {
     return (
       <Container>
         <HeaderTwo>Resource Info</HeaderTwo>
-        <Paragraph>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name + " has " + data.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + " berry and " + data.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume + " bamboo in storage!"}</Paragraph>
+        <Paragraph>{data.house_address.house_address_number + " " + data.house_address.house_address_road.house_road_name + " has " + data.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + " berry and " + data.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume + " birch in storage!"}</Paragraph>
         { userId === data.house_family.family_user_id ? <GrayButton
           onClick={ () => router.push(`/house/${router.query.id}/resource`) }
           text="Go to Resource Management page."

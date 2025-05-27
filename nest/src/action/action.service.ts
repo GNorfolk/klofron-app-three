@@ -109,7 +109,7 @@ export class ActionService {
     } else if (action.action_type_id == 1) {
       diceroll = await this.getBerry(queryRunner, person, multiplier, bonus);
     } else if (action.action_type_id == 2) {
-      diceroll = await this.getBamboo(queryRunner, person, multiplier, bonus);
+      diceroll = await this.getBirch(queryRunner, person, multiplier, bonus);
     } else if (action.action_type_id == 3) {
       diceroll = await this.increaseStorage(queryRunner, person, multiplier);
     } else if (action.action_type_id == 4) {
@@ -266,7 +266,7 @@ export class ActionService {
     const hexBonus = await this.utilityGetBonusValue(hexBonuses, 'berry')
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_gatherer_level, hexBonus)
     const house = person.person_house
-    if (diceRoll.action_diceroll_success && house.house_storage >= house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume + 2) {
+    if (diceRoll.action_diceroll_success && house.house_storage >= house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume + 2) {
       await queryRunner.manager.increment(Resource, {
         resource_type_name: "berry",
         resource_house_id: person.person_house_id
@@ -281,8 +281,8 @@ export class ActionService {
     return diceRoll;
   }
 
-  async getBamboo(queryRunner, person: Person, experience_multiplier = 1, hexBonuses: HexBonus[]) {
-    const hexBonus = await this.utilityGetBonusValue(hexBonuses, 'bamboo')
+  async getBirch(queryRunner, person: Person, experience_multiplier = 1, hexBonuses: HexBonus[]) {
+    const hexBonus = await this.utilityGetBonusValue(hexBonuses, 'birch')
     const requiredBerry = 1;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
@@ -291,14 +291,14 @@ export class ActionService {
     }, "resource_volume", requiredBerry);
     if (berry.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_lumberjack_level, hexBonus)
-    if (diceRoll.action_diceroll_success && person.person_house.house_storage >= person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume + 1) {
+    if (diceRoll.action_diceroll_success && person.person_house.house_storage >= person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume + 1) {
       await queryRunner.manager.increment(Resource, {
-        resource_type_name: "bamboo",
+        resource_type_name: 'birch',
         resource_house_id: person.person_house_id
       }, "resource_volume", 1);
-      console.log("getBambooDone")
+      console.log("getBirchDone")
     } else {
-      console.log("getBambooNotDone")
+      console.log("getBirchNotDone")
     }
     await queryRunner.manager.increment(PersonSkills, {
       person_skills_id: person.person_skills_id
@@ -307,18 +307,18 @@ export class ActionService {
   }
 
   async increaseStorage(queryRunner, person: Person, experience_multiplier = 1) {
-    const requiredBamboo = ( person.person_house.house_storage / 3 ) + 1;
+    const requiredBirch = ( person.person_house.house_storage / 3 ) + 1;
     const requiredBerry = 1;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
-    if (person.person_house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume < requiredBamboo) throw "Not enough bamboo, " + requiredBamboo + " required!"
+    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough bamboo, " + requiredBirch + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "berry",
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBerry);
     const bamboo = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "bamboo",
+      resource_type_name: 'birch',
       resource_house_id: person.person_house_id
-    }, "resource_volume", requiredBamboo);
+    }, "resource_volume", requiredBirch);
     if (berry.affected != 1 && bamboo.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
@@ -337,18 +337,18 @@ export class ActionService {
 
   async increaseRooms(queryRunner, person: Person, experience_multiplier = 1) {
     const hexBonus = 0
-    const requiredBamboo = ( 2 * person.person_house.house_rooms ) + 2;
+    const requiredBirch = ( 2 * person.person_house.house_rooms ) + 2;
     const requiredBerry = 1;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
-    if (person.person_house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume < requiredBamboo) throw "Not enough bamboo, " + requiredBamboo + " required!"
+    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough bamboo, " + requiredBirch + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "berry",
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBerry);
     const bamboo = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "bamboo",
+      resource_type_name: 'birch',
       resource_house_id: person.person_house_id
-    }, "resource_volume", requiredBamboo);
+    }, "resource_volume", requiredBirch);
     if (berry.affected != 1 && bamboo.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {
@@ -367,18 +367,18 @@ export class ActionService {
 
   async createHouse(queryRunner, person: Person, experience_multiplier = 1) {
     let result;
-    const requiredBamboo = 0;
+    const requiredBirch = 0;
     const requiredBerry = 0;
     if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < requiredBerry) throw "Not enough berry, " + requiredBerry + " required!"
-    if (person.person_house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume < requiredBamboo) throw "Not enough bamboo, " + requiredBamboo + " required!"
+    if (person.person_house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < requiredBirch) throw "Not enough bamboo, " + requiredBirch + " required!"
     const berry = await queryRunner.manager.decrement(Resource, {
       resource_type_name: "berry",
       resource_house_id: person.person_house_id
     }, "resource_volume", requiredBerry);
     const bamboo = await queryRunner.manager.decrement(Resource, {
-      resource_type_name: "bamboo",
+      resource_type_name: 'birch',
       resource_house_id: person.person_house_id
-    }, "resource_volume", requiredBamboo);
+    }, "resource_volume", requiredBirch);
     if (berry.affected != 1 && bamboo.affected != 1) throw "Cannot decrement house resources!"
     const diceRoll = await this.utilityGetDiceRoll(person.person_skills.person_skills_builder_level, -1)
     if (diceRoll.action_diceroll_success) {

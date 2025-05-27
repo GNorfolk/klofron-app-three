@@ -51,13 +51,13 @@ export class ResourceService {
         .where("person.person_id = :id", { id: body.person_id })
         .getOne()
       if (person.person_action_queue.action_queue_action_cooldown) throw "Person cannot move resources while in action cooldown!"
-      if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume > 3) throw "Person has too many resources!"
+      if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_resources.find(r => r.resource_type_name === 'birch')?.resource_volume > 3) throw "Person has too many resources!"
       const house = await queryRunner.manager
         .createQueryBuilder(House, "house")
         .innerJoinAndSelect("house.house_resources", "resources")
         .where("house.house_id = :id", { id: body.house_id })
         .getOne()
-      if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume > house.house_storage) throw "House has too many resources!"
+      if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + person.person_resources.find(r => r.resource_type_name === 'birch')?.resource_volume > house.house_storage) throw "House has too many resources!"
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return [inc, dec];
@@ -81,7 +81,7 @@ export class ResourceService {
         .where("house.house_id = :id", { id: house_id })
         .getOne()
       if (resource_type == "berry" && house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 1) throw "House cannot decrement berry below zero!"
-      if (resource_type == "bamboo" && house.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume < 1) throw "House cannot decrement bamboo below zero!"
+      if (resource_type == 'birch' && house.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume < 1) throw "House cannot decrement birch below zero!"
       dec = await queryRunner.manager.decrement(Resource, {
         resource_type_name: resource_type,
         resource_house_id: house_id

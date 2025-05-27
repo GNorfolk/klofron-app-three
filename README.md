@@ -211,6 +211,12 @@ mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS k
 
 # MySQL
 ```sql
+ALTER TABLE `hex_bonus` MODIFY COLUMN `type` ENUM('bamboo', 'birch', 'berry', 'flint') NOT NULL;
+UPDATE `hex_bonus` SET `type` = 'birch' WHERE `type` = 'bamboo';
+ALTER TABLE `hex_bonus` MODIFY COLUMN `type` ENUM('birch', 'berry', 'flint') NOT NULL;
+ALTER TABLE `resource` MODIFY COLUMN `type_name` ENUM('bamboo', 'birch', 'berry', 'flint') NOT NULL;
+UPDATE `resource` SET `type_name` = 'birch' WHERE `type_name` = 'bamboo';
+ALTER TABLE `resource` MODIFY COLUMN `type_name` ENUM('birch', 'berry', 'flint') NOT NULL;
 ```
 
 # save

@@ -14,7 +14,7 @@ export function HouseListing({ houseData }) {
           <div className="grid grid-cols-3">
             <DivIconInfo iconType="UsersIcon">{house_people.length + " people"}</DivIconInfo>
             <DivIconInfo iconType="HandPlatterIcon">{house_resources.find(r => r.resource_type_name == 'berry')?.resource_volume + " Berry"}</DivIconInfo>
-            <DivIconInfo iconType="TreesIcon">{house_resources.find(r => r.resource_type_name == 'bamboo')?.resource_volume + " Bamboo"}</DivIconInfo>
+            <DivIconInfo iconType="TreesIcon">{house_resources.find(r => r.resource_type_name == 'birch')?.resource_volume + " Birch"}</DivIconInfo>
           </div>
         </StyledLink>
       )) :
@@ -34,10 +34,10 @@ export function HouseInfo({ houseData }) {
         <DivIconInfo iconType="UsersIcon">{houseData.house_people.length + " people"}</DivIconInfo>
         <DivIconInfo iconType="BuildingIcon">{houseData.house_rooms - houseData.house_people.length + " Room"}</DivIconInfo>
         <DivIconInfo iconType="HandPlatterIcon">{houseData.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume + " Berry"}</DivIconInfo>
-        <DivIconInfo iconType="TreesIcon">{houseData.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume + " Bamboo"}</DivIconInfo>
+        <DivIconInfo iconType="TreesIcon">{houseData.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume + " Birch"}</DivIconInfo>
         <DivIconInfo iconType="TruckIcon">0 Trade</DivIconInfo>
         <DivIconInfo iconType="WarehouseIcon">{houseData.house_storage + " Storage"}</DivIconInfo>
-        <DivIconInfo iconType="BoxIcon">{(houseData.house_storage - houseData.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume - houseData.house_resources.find(r => r.resource_type_name === 'bamboo')?.resource_volume) + " Capacity"}</DivIconInfo>
+        <DivIconInfo iconType="BoxIcon">{(houseData.house_storage - houseData.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume - houseData.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume) + " Capacity"}</DivIconInfo>
       </div>
     </main>
   )

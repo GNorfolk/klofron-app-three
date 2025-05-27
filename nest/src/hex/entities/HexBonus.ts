@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "t
 import { Hex } from "./Hex";
 
 export enum HexBonusType {
-  BAMBOO = 'bamboo',
+  BIRCH = 'birch',
   BERRY = 'berry',
   FLINT = 'flint',
 }

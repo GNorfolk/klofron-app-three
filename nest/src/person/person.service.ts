@@ -96,7 +96,7 @@ export class PersonService {
         resource_person_id: result.person_id
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "bamboo",
+        resource_type_name: 'birch',
         resource_person_id: result.person_id
       });
       const childActionDoneAt = new Date();
@@ -167,7 +167,7 @@ export class PersonService {
         resource_volume: 3
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "bamboo",
+        resource_type_name: 'birch',
         resource_person_id: mother.person_id
       });
       await queryRunner.manager.save(Resource, {
@@ -176,7 +176,7 @@ export class PersonService {
         resource_volume: 3
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "bamboo",
+        resource_type_name: 'birch',
         resource_person_id: father.person_id
       });
       await queryRunner.commitTransaction();

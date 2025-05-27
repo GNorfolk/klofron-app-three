@@ -49,12 +49,12 @@ export class HouseService {
       resource_type_name: "berry",
       resource_house_id: result.house_id
     }
-    const bamboo = {
-      resource_type_name: "bamboo",
+    const birch = {
+      resource_type_name: 'birch',
       resource_house_id: result.house_id
     }
     await queryRunner.manager.save(Resource, berry);
-    await queryRunner.manager.save(Resource, bamboo);
+    await queryRunner.manager.save(Resource, birch);
     return result;
   }
 

@@ -112,7 +112,7 @@ function PersonCard({ person, familyName, queryClient, userId }) {
                   ) : (
                     <>
                       <option value="1">Get Berry</option>
-                      <option value="2">Get Bamboo</option>
+                      <option value="2">Get Birch</option>
                       <option value="3">Increase Storage</option>
                       <option value="4">Increase Rooms</option>
                       <option value="5">Create House</option>
