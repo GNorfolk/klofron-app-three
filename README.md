@@ -203,7 +203,12 @@ FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
 WHERE REFERENCED_TABLE_SCHEMA = (SELECT DATABASE()) AND REFERENCED_TABLE_NAME = 'person';
 ```
 
-**How to connect to aws database:**
+**How to connect to ec2 instance:**
+```bash
+aws ssm start-session --target $(aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --output text)
+```
+
+**How to connect to rds from ec2:**
 ```bash
 export DB_PASS=$(aws secretsmanager get-secret-value --secret-id 'rds!db-088ff7c4-30ef-4bc2-95c8-23ececf641eb' --region 'eu-west-1' --query 'SecretString' --output text | jq '.password' | tr -d '"')
 mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS ka3
@@ -211,13 +216,6 @@ mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS k
 
 # MySQL
 ```sql
-ALTER TABLE `hex_bonus` MODIFY COLUMN `type` ENUM('bamboo', 'birch', 'berry', 'flint') NOT NULL;
-UPDATE `hex_bonus` SET `type` = 'birch' WHERE `type` = 'bamboo';
-ALTER TABLE `hex_bonus` MODIFY COLUMN `type` ENUM('basalt', 'berry', 'birch', 'bread', 'flint ', 'mushroom', 'oak', 'potato', 'sandstone', 'spruce') NOT NULL;
-ALTER TABLE `resource` MODIFY COLUMN `type_name` ENUM('bamboo', 'birch', 'berry', 'flint') NOT NULL;
-UPDATE `resource` SET `type_name` = 'birch' WHERE `type_name` = 'bamboo';
-ALTER TABLE `resource` MODIFY COLUMN `type_name` ENUM('basalt', 'berry', 'birch', 'bread', 'flint ', 'mushroom', 'oak', 'potato', 'sandstone', 'spruce') NOT NULL;
-ALTER TABLE `resource` MODIFY COLUMN `volume` DECIMAL(12,3) UNSIGNED NOT NULL DEFAULT 0;
 ```
 
 # save
