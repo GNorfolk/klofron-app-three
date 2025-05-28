@@ -37,7 +37,7 @@ export function HouseInfo({ houseData }) {
         <DivIconInfo iconType="TreesIcon">{houseData.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume + " Birch"}</DivIconInfo>
         <DivIconInfo iconType="TruckIcon">0 Trade</DivIconInfo>
         <DivIconInfo iconType="WarehouseIcon">{houseData.house_storage + " Storage"}</DivIconInfo>
-        <DivIconInfo iconType="BoxIcon">{(houseData.house_storage - houseData.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume - houseData.house_resources.find(r => r.resource_type_name === 'birch')?.resource_volume) + " Capacity"}</DivIconInfo>
+        <DivIconInfo iconType="BoxIcon">{(houseData.house_storage - houseData.house_resources.reduce((total, resource) => total + resource.resource_volume, 0)) + " Capacity"}</DivIconInfo>
       </div>
     </main>
   )
