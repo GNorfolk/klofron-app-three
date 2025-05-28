@@ -4,7 +4,7 @@ import { UpdateHouseDto } from './dto/update-house.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { House } from './entities/House';
-import { Resource } from '../resource/entities/Resource';
+import { Resource, ResourceTypeName } from '../resource/entities/Resource';
 import { HouseRoadName } from './entities/HouseRoadName';
 import { HouseRoadType } from './entities/HouseRoadType';
 import { HouseRoad } from './entities/HouseRoad';
@@ -46,11 +46,11 @@ export class HouseService {
     house.house_address_id = houseAddress.house_address_id
     result = await queryRunner.manager.save(House, house);
     const berry = {
-      resource_type_name: "berry",
+      resource_type_name: ResourceTypeName.BERRY,
       resource_house_id: result.house_id
     }
     const birch = {
-      resource_type_name: 'birch',
+      resource_type_name: ResourceTypeName.BIRCH,
       resource_house_id: result.house_id
     }
     await queryRunner.manager.save(Resource, berry);

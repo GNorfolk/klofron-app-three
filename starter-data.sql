@@ -31,7 +31,7 @@ CREATE TABLE `hex` (
 CREATE TABLE `hex_bonus` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `hex_id` INT NOT NULL,
-    `type` ENUM('birch', 'berry', 'flint') NOT NULL,
+    `type` ENUM('basalt', 'berry', 'birch', 'bread', 'flint ', 'mushroom', 'oak', 'potato', 'sandstone', 'spruce') NOT NULL,
     `value` INT NOT NULL,
     FOREIGN KEY (`hex_id`) REFERENCES hex(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -167,8 +167,8 @@ CREATE TABLE `trade` (
 -- -- -- -- -- RESOURCE -- -- -- -- --
 CREATE TABLE `resource` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `type_name` ENUM('birch', 'berry', 'flint') NOT NULL,
-    `volume` INT UNSIGNED NOT NULL DEFAULT 0,
+    `type_name` ENUM('basalt', 'berry', 'birch', 'bread', 'flint', 'mushroom', 'oak', 'potato', 'sandstone', 'spruce') NOT NULL,
+    `volume` DECIMAL(12,3) UNSIGNED NOT NULL DEFAULT 0,
     `house_id` INT,
     `person_id` INT,
     `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),

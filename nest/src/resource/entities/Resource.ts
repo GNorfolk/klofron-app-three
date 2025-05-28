@@ -9,6 +9,20 @@ import {
 } from "typeorm";
 import { House } from "../../house/entities/House";
 import { Person } from "../../person/entities/Person";
+import { DecimalColumnTransformer } from "../transformers/decimal";
+
+export enum ResourceTypeName {
+  BASALT = 'basalt',
+  BERRY = 'berry',
+  BIRCH = 'birch',
+  BREAD = 'bread',
+  FLINT = 'flint',
+  MUSHROOM = 'mushroom',
+  OAK = 'oak',
+  POTATO = 'potato',
+  SANDSTONE = 'sandstone',
+  SPRUCE = 'spruce',
+}
 
 @Index("resource_house_id", ["resource_house_id"], {})
 @Index("resource_person_id", ["resource_person_id"], {})
@@ -17,10 +31,10 @@ export class Resource {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   resource_id: number;
 
-  @Column("varchar", { name: "type_name", length: 155 })
-  resource_type_name: string;
+  @Column("enum", { enum: ResourceTypeName, name: "type_name" })
+  resource_type_name: ResourceTypeName;
 
-  @Column("int", { name: "volume", unsigned: true, nullable: false, default: 0 })
+  @Column("decimal", { name: "volume", precision: 12, scale: 3, unsigned: true, default: 0, transformer: new DecimalColumnTransformer() })
   resource_volume: number;
 
   @Column("int", { name: "house_id", nullable: true })

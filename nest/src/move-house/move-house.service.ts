@@ -5,7 +5,7 @@ import { MoveHouse } from './entities/MoveHouse';
 import { Repository, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from '../person/entities/Person';
-import { Resource } from '../resource/entities/Resource';
+import { Resource, ResourceTypeName } from '../resource/entities/Resource';
 
 @Injectable()
 export class MoveHouseService {
@@ -23,7 +23,7 @@ export class MoveHouseService {
       move = await queryRunner.manager.save(MoveHouse, moveHouse);
       person = await queryRunner.manager.update(Person, moveHouse.move_house_person_id, { person_house_id: null });
       resource = await queryRunner.manager.decrement(Resource, {
-        resource_type_name: "berry",
+        resource_type_name: ResourceTypeName.BERRY,
         resource_person_id: moveHouse.move_house_person_id
       }, "resource_volume", 1);
       if (resource.affected != 1) throw "Cannot decrement person resrouces!"

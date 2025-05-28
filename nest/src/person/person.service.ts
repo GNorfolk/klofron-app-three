@@ -6,7 +6,7 @@ import { PersonName } from './entities/PersonName';
 import { PersonSkills } from '../person/entities/PersonSkills';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { Resource } from '../resource/entities/Resource';
+import { Resource, ResourceTypeName } from '../resource/entities/Resource';
 import { House } from '../house/entities/House';
 import { Action } from '../action/entities/Action';
 import { ActionQueue } from '../action/entities/ActionQueue';
@@ -54,7 +54,7 @@ export class PersonService {
       if (house_people.length >= house.house_rooms) throw "Not enough rooms!"
       if (house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 2) throw "Not enough berry!"
       const resource = await queryRunner.manager.decrement(Resource, {
-        resource_type_name: "berry",
+        resource_type_name: ResourceTypeName.BERRY,
         resource_house_id: house_id
       }, "resource_volume", 2);
       if (resource.affected != 1) throw "Cannot decrement house resrouces!"
@@ -92,11 +92,11 @@ export class PersonService {
       person.person_action_queue_id = queue.action_queue_id;
       const result = await queryRunner.manager.save(Person, person);
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "berry",
+        resource_type_name: ResourceTypeName.BERRY,
         resource_person_id: result.person_id
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: 'birch',
+        resource_type_name: ResourceTypeName.BIRCH,
         resource_person_id: result.person_id
       });
       const childActionDoneAt = new Date();
@@ -162,21 +162,21 @@ export class PersonService {
       await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });
       await queryRunner.manager.update(Person, father.person_id, { person_partner_id: mother.person_id });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "berry",
+        resource_type_name: ResourceTypeName.BERRY,
         resource_person_id: mother.person_id,
         resource_volume: 3
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: 'birch',
+        resource_type_name: ResourceTypeName.BIRCH,
         resource_person_id: mother.person_id
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: "berry",
+        resource_type_name: ResourceTypeName.BERRY,
         resource_person_id: father.person_id,
         resource_volume: 3
       });
       await queryRunner.manager.save(Resource, {
-        resource_type_name: 'birch',
+        resource_type_name: ResourceTypeName.BIRCH,
         resource_person_id: father.person_id
       });
       await queryRunner.commitTransaction();
@@ -287,7 +287,7 @@ export class PersonService {
         if (person.person_house.house_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 1) throw "Not enough house berry to move!";
         result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
         const resource = await queryRunner.manager.decrement(Resource, {
-          resource_type_name: "berry",
+          resource_type_name: ResourceTypeName.BERRY,
           resource_house_id: person.person_house_id
         }, "resource_volume", 1);
         if (resource.affected != 1) throw "Cannot decrement house resrouces!";
@@ -295,7 +295,7 @@ export class PersonService {
         if (person.person_resources.find(r => r.resource_type_name === 'berry')?.resource_volume < 1) throw "Not enough person berry to move!";
         result = await queryRunner.manager.update(Person, person_id, { person_house_id: house_id });
         const resource = await queryRunner.manager.decrement(Resource, {
-          resource_type_name: "berry",
+          resource_type_name: ResourceTypeName.BERRY,
           resource_person_id: person_id
         }, "resource_volume", 1);
         if (resource.affected != 1) throw "Cannot decrement person resrouces!";
