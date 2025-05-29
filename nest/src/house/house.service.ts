@@ -45,16 +45,10 @@ export class HouseService {
     });
     house.house_address_id = houseAddress.house_address_id
     result = await queryRunner.manager.save(House, house);
-    const berry = {
-      resource_type_name: ResourceTypeName.BERRY,
+    await queryRunner.manager.save(Resource, Object.values(ResourceTypeName).map(type => ({
+      resource_type_name: type,
       resource_house_id: result.house_id
-    }
-    const birch = {
-      resource_type_name: ResourceTypeName.BIRCH,
-      resource_house_id: result.house_id
-    }
-    await queryRunner.manager.save(Resource, berry);
-    await queryRunner.manager.save(Resource, birch);
+    })));
     return result;
   }
 

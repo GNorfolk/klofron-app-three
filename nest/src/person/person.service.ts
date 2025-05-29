@@ -91,14 +91,10 @@ export class PersonService {
       const queue = await queryRunner.manager.save(ActionQueue, { action_queue_id: null });
       person.person_action_queue_id = queue.action_queue_id;
       const result = await queryRunner.manager.save(Person, person);
-      await queryRunner.manager.save(Resource, {
-        resource_type_name: ResourceTypeName.BERRY,
-        resource_person_id: result.person_id
-      });
-      await queryRunner.manager.save(Resource, {
-        resource_type_name: ResourceTypeName.BIRCH,
-        resource_person_id: result.person_id
-      });
+      await queryRunner.manager.save(Resource, Object.values(ResourceTypeName).map(type => ({
+        resource_type_name: type,
+        resource_house_id: result.person_id
+      })));
       const childActionDoneAt = new Date();
       childActionDoneAt.setHours(childActionDoneAt.getHours() + 24);
       await queryRunner.manager.save(ActionCooldown, {
@@ -161,24 +157,16 @@ export class PersonService {
       father = await queryRunner.manager.save(Person, couple[1]);
       await queryRunner.manager.update(Person, mother.person_id, { person_partner_id: father.person_id });
       await queryRunner.manager.update(Person, father.person_id, { person_partner_id: mother.person_id });
-      await queryRunner.manager.save(Resource, {
-        resource_type_name: ResourceTypeName.BERRY,
-        resource_person_id: mother.person_id,
-        resource_volume: 3
-      });
-      await queryRunner.manager.save(Resource, {
-        resource_type_name: ResourceTypeName.BIRCH,
-        resource_person_id: mother.person_id
-      });
-      await queryRunner.manager.save(Resource, {
-        resource_type_name: ResourceTypeName.BERRY,
-        resource_person_id: father.person_id,
-        resource_volume: 3
-      });
-      await queryRunner.manager.save(Resource, {
-        resource_type_name: ResourceTypeName.BIRCH,
-        resource_person_id: father.person_id
-      });
+      await queryRunner.manager.save(Resource, Object.values(ResourceTypeName).map(type => ({
+        resource_type_name: type,
+        resource_house_id: mother.person_id,
+        ...(type === ResourceTypeName.BERRY && { resource_volume: 3 })
+      })));
+      await queryRunner.manager.save(Resource, Object.values(ResourceTypeName).map(type => ({
+        resource_type_name: type,
+        resource_house_id: father.person_id,
+        ...(type === ResourceTypeName.BERRY && { resource_volume: 3 })
+      })));
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return [mother, father];
