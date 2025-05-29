@@ -15,6 +15,7 @@ import { Resource } from "../../resource/entities/Resource";
 import { Trade } from "../../trade/entities/Trade";
 import { HouseAddress } from "./HouseAddress";
 import { Hex } from "src/hex/entities/Hex";
+import { Tool } from "src/tool/entities/Tool";
 
 @Index("house_family_id", ["house_family_id"], {})
 @Entity("house", { schema: "ka3" })
@@ -69,4 +70,7 @@ export class House {
   @OneToOne(() => HouseAddress, (houseAddress) => houseAddress.house_address_house)
   @JoinColumn([{ name: "address_id", referencedColumnName: "house_address_id" }])
   house_address: Relation<HouseAddress>;
+
+  @OneToMany(() => Tool, tool => tool.house)
+  house_tools: Tool[];
 }

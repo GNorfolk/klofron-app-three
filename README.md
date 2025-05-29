@@ -216,6 +216,25 @@ mysql -h react-app.casjyk0nx1x8.eu-west-1.rds.amazonaws.com -u root -p$DB_PASS k
 
 # MySQL
 ```sql
+CREATE TABLE `tool` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `type` ENUM('axe', 'pickaxe') NOT NULL,
+    `durability` INT NOT NULL,
+    `material` ENUM('basalt', 'flint', 'sandstone') NOT NULL,
+    `handle` ENUM('birch', 'oak', 'spruce'),
+    `house_id` INT,
+    `person_id` INT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`house_id`) REFERENCES house(`id`),
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `tool` (`type`, `durability`, `material`, `handle`, `house_id`, `person_id`) VALUES
+('axe', 96, 'basalt', 'birch', NULL, NULL),
+('pickaxe', 48, 'sandstone', 'oak', NULL, NULL),
+('axe', 32, 'flint', 'spruce', NULL, NULL),
+('pickaxe', 144, 'basalt', 'oak', NULL, NULL),
+('axe', 4, 'sandstone', NULL, NULL, NULL);
 ```
 
 # save

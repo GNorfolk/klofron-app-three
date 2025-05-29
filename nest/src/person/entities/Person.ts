@@ -19,6 +19,7 @@ import { Betrothal } from "src/betrothal/entities/Betrothal";
 import { BetrothalDowry } from "src/betrothal/entities/BetrothalDowry";
 import { PersonHaulage } from "./PersonHaulage";
 import { Hex } from "src/hex/entities/Hex";
+import { Tool } from "src/tool/entities/Tool";
 
 const day_in_ms = 24 * 3600 * 1000
 
@@ -143,6 +144,9 @@ export class Person {
   @OneToOne(() => PersonHaulage, (personHaulage) => personHaulage.person_haulage_person)
   @JoinColumn([{ name: "haulage_id", referencedColumnName: "person_haulage_id" }])
   person_haulage: Relation<PersonHaulage>;
+
+  @OneToMany(() => Tool, tool => tool.person)
+  person_tools: Tool[];
 
   @AfterLoad()
   calculateAge(): void {

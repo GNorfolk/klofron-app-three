@@ -164,6 +164,20 @@ CREATE TABLE `trade` (
     `cancelled_at` TIMESTAMP,
     FOREIGN KEY (`house_id`) REFERENCES house(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- -- -- -- -- TOOL -- -- -- -- --
+CREATE TABLE `tool` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `type` ENUM('axe', 'pickaxe') NOT NULL,
+    `durability` INT NOT NULL,
+    `material` ENUM('basalt', 'flint', 'sandstone') NOT NULL,
+    `handle` ENUM('birch', 'oak', 'spruce'),
+    `house_id` INT,
+    `person_id` INT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` TIMESTAMP,
+    FOREIGN KEY (`house_id`) REFERENCES house(`id`),
+    FOREIGN KEY (`person_id`) REFERENCES person(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- -- -- -- -- RESOURCE -- -- -- -- --
 CREATE TABLE `resource` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

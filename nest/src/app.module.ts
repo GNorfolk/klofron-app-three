@@ -11,6 +11,7 @@ import { MoveHouseModule } from './move-house/move-house.module';
 import { BetrothalModule } from './betrothal/betrothal.module';
 import { AuthModule } from './auth/auth.module';
 import { HexModule } from './hex/hex.module';
+import { ToolModule } from './tool/tool.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { HexModule } from './hex/hex.module';
     BetrothalModule,
     AuthModule,
     HexModule,
+    ToolModule,
   ],
   controllers: [],
   providers: [],
