@@ -11,27 +11,27 @@ export class ToolController {
   constructor(private readonly toolService: ToolService) {}
 
   @Post()
-  create(@Body() createToolDto: CreateToolDto) {
-    return this.toolService.create(createToolDto);
+  async create(@Body() createToolDto: CreateToolDto) {
+    return await this.toolService.create(createToolDto);
   }
 
   @Get()
-  findAll() {
-    return this.toolService.findAll();
+  async findAll() {
+    return await this.toolService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.toolService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.toolService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateToolDto: UpdateToolDto) {
-    return this.toolService.update(+id, updateToolDto);
+  async update(@Param('id') id: string, @Body() updateToolDto: UpdateToolDto) {
+    return await this.toolService.update(+id, updateToolDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.toolService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.toolService.remove(+id);
   }
 }

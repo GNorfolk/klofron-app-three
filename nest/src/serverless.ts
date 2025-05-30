@@ -5,7 +5,6 @@ import { eventContext } from 'aws-serverless-express/middleware';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-
 import express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -20,6 +19,12 @@ async function bootstrapServer(): Promise<Server> {
       AppModule,
       new ExpressAdapter(expressApp),
     );
+    nestApp.useGlobalPipes(new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }));
     nestApp.enableVersioning();
     nestApp.enableCors({
       origin: [
